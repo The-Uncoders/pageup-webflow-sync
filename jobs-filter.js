@@ -1,11 +1,15 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.3
+ * FCTG Careers - Job Filter & Sort System v1.4
  * Custom filtering for the /jobs page
  *
- * Handles: keyword search, city/location filter, brand filter,
- * work type filter, sorting, active filter tags, results count,
- * clear all, and empty state.
+ * Handles: keyword search, city/location filter, country filter,
+ * brand filter, work type filter, sorting, active filter tags,
+ * results count, clear all, and empty state.
  *
+ * v1.4 – Added country filter support.
+ *         Deduplicate filter checkboxes (keep first, hide dupes).
+ *         Hide filter options with zero job listings.
+ *         Add count badges (black pill, white number) next to each option.
  * v1.3 – Fix: strip ALL Finsweet attributes from the page to prevent
  *         MutationObserver infinite loop that crashed the tab.
  *         Cache element refs before stripping so our code still works.
@@ -22,8 +26,9 @@
 
   // ── State ─────────────────────────────────
   var keyword = '';
-  var activeCities = {};   // lowercase label → true
-  var activeBrands = {};   // lowercase label → true
+  var activeCities = {};    // lowercase label → true
+  var activeCountries = {}; // lowercase label → true
+  var activeBrands = {};    // lowercase label → true
   var workType = '';        // '' = all
   var sortMode = 'default';
   var jobs = [];
@@ -120,9 +125,13 @@
         jobs.push(parseCard(items[i], i));
       }
 
+      // Deduplicate filter checkboxes, hide zero-count options, add count badges
+      deduplicateFilters();
+
       // Bind all interactions
       bindSearch();
       bindCheckboxes('input[name="city"]', activeCities);
+      bindCheckboxes('input[name="country"]', activeCountries);
       bindCheckboxes('input[name="brand"]', activeBrands);
       bindRadios();
       bindSort();
@@ -187,6 +196,7 @@
   function applyFilters() {
     var kw = keyword.toLowerCase();
     var hasCities = objSize(activeCities) > 0;
+    var hasCountries = objSize(activeCountries) > 0;
     var hasBrands = objSize(activeBrands) > 0;
     var wt = workType.toLowerCase();
     var count = 0;
@@ -205,6 +215,11 @@
       // City / location (OR within group)
       if (show && hasCities) {
         show = !!activeCities[j.city.toLowerCase()];
+      }
+
+      // Country (OR within group)
+      if (show && hasCountries) {
+        show = !!activeCountries[j.country.toLowerCase()];
       }
 
       // Brand (OR within group)
@@ -273,7 +288,12 @@
     var wrap = cb.closest('.w-checkbox');
     if (!wrap) return '';
     var lbl = wrap.querySelector('.w-form-label');
-    return lbl ? lbl.textContent.trim() : '';
+    if (!lbl) return '';
+    // Clone and strip out count badges so we get only the label text
+    var clone = lbl.cloneNode(true);
+    var badges = clone.querySelectorAll('.filter-count-badge');
+    for (var i = 0; i < badges.length; i++) badges[i].remove();
+    return clone.textContent.trim();
   }
 
   // ── Radio filter (work type) ──────────────
@@ -365,6 +385,11 @@
       filters.push({ type: 'city', label: cityKeys[c], key: cityKeys[c] });
     }
 
+    var countryKeys = Object.keys(activeCountries);
+    for (var co = 0; co < countryKeys.length; co++) {
+      filters.push({ type: 'country', label: countryKeys[co], key: countryKeys[co] });
+    }
+
     var brandKeys = Object.keys(activeBrands);
     for (var b = 0; b < brandKeys.length; b++) {
       filters.push({ type: 'brand', label: brandKeys[b], key: brandKeys[b] });
@@ -407,6 +432,10 @@
         delete activeCities[f.key];
         uncheckByLabel('input[name="city"]', f.key);
         break;
+      case 'country':
+        delete activeCountries[f.key];
+        uncheckByLabel('input[name="country"]', f.key);
+        break;
       case 'brand':
         delete activeBrands[f.key];
         uncheckByLabel('input[name="brand"]', f.key);
@@ -440,6 +469,7 @@
   function clearAll() {
     keyword = '';
     activeCities = {};
+    activeCountries = {};
     activeBrands = {};
     workType = '';
     sortMode = 'default';
@@ -447,7 +477,7 @@
     var inp = document.querySelector('.filters1_keyword-search input');
     if (inp) inp.value = '';
 
-    document.querySelectorAll('input[name="city"], input[name="brand"]').forEach(function (cb) {
+    document.querySelectorAll('input[name="city"], input[name="country"], input[name="brand"]').forEach(function (cb) {
       cb.checked = false;
     });
 
@@ -469,6 +499,57 @@
     }
 
     applyFilters();
+  }
+
+  // ── Deduplicate, hide empty, add count badges ──
+  function deduplicateFilters() {
+    dedupeGroup('input[name="city"]', 'city');
+    dedupeGroup('input[name="country"]', 'country');
+    dedupeGroup('input[name="brand"]', 'brand');
+  }
+
+  function dedupeGroup(selector, field) {
+    // Count how many jobs have each value for this field
+    var counts = {};
+    for (var i = 0; i < jobs.length; i++) {
+      var val = jobs[i][field];
+      if (!val) continue;
+      var key = val.toLowerCase();
+      counts[key] = (counts[key] || 0) + 1;
+    }
+
+    var seen = {};
+    var cbs = document.querySelectorAll(selector);
+    for (var c = 0; c < cbs.length; c++) {
+      var cb = cbs[c];
+      var label = getCheckLabel(cb);
+      if (!label) continue;
+      var key = label.toLowerCase();
+      var wrapper = cb.closest('.w-checkbox');
+      if (!wrapper) continue;
+
+      if (seen[key] || !counts[key]) {
+        // Duplicate or no matching jobs → hide entirely
+        wrapper.style.display = 'none';
+      } else {
+        // First occurrence with jobs → keep visible, add count badge
+        seen[key] = true;
+        addCountBadge(wrapper, counts[key]);
+      }
+    }
+  }
+
+  function addCountBadge(wrapper, count) {
+    var lbl = wrapper.querySelector('.w-form-label');
+    if (!lbl) return;
+    var badge = document.createElement('span');
+    badge.className = 'filter-count-badge';
+    badge.textContent = count;
+    badge.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;'
+      + 'background:#1a1a2e;color:#fff;font-size:11px;line-height:1;'
+      + 'min-width:22px;height:22px;border-radius:11px;padding:0 6px;'
+      + 'margin-left:8px;font-weight:600;letter-spacing:0.02em;';
+    lbl.appendChild(badge);
   }
 
   // ── Helpers ────────────────────────────────
