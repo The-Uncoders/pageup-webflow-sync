@@ -1,11 +1,14 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.4.1
+ * FCTG Careers - Job Filter & Sort System v1.5
  * Custom filtering for the /jobs page
  *
- * Handles: keyword search, city/location filter, country filter,
+ * Handles: keyword search, city/location filter, region filter,
  * brand filter, work type filter, sorting, active filter tags,
  * results count, clear all, and empty state.
  *
+ * v1.5 – Replace Country filter with Region filter to match PageUp ATS.
+ *         Region mapping loaded from region-map.json (CDN).
+ *         Country checkboxes hidden; dynamic region checkboxes injected.
  * v1.4.1 – Hide Webflow's static "1" badge; our dynamic count replaces it.
  * v1.4 – Added country filter support.
  *         Deduplicate filter checkboxes (keep first, hide dupes).
@@ -24,16 +27,18 @@
   var DEBOUNCE = 250;
   var INIT_DELAY = 300; // ms – wait for Finsweet to finish before we init
   var BRAND_MAP_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/brand-map.json';
+  var REGION_MAP_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/region-map.json';
 
   // ── State ─────────────────────────────────
   var keyword = '';
   var activeCities = {};    // lowercase label → true
-  var activeCountries = {}; // lowercase label → true
+  var activeRegions = {};   // lowercase region name → true
   var activeBrands = {};    // lowercase label → true
   var workType = '';        // '' = all
   var sortMode = 'default';
   var jobs = [];
-  var _brandMap = null;    // title → brand name (fetched from CDN)
+  var _brandMap = null;     // title → brand name (fetched from CDN)
+  var _regionMap = null;    // lowercase country → region name (fetched from CDN)
 
   // Cached element references (populated in init, before Finsweet attrs are stripped)
   var _rcEl = null;    // results-count element
@@ -116,11 +121,16 @@
     // Hide the tag template so it doesn't show "Tag" text
     if (tpl) tpl.style.display = 'none';
 
-    // Fetch brand map, then parse cards & bind interactions
-    fetchJSON(BRAND_MAP_URL, function (map) {
-      _brandMap = map || {};
+    // Fetch both maps in parallel, then parse cards & bind interactions
+    var pending = 2;
+    var brandResult = null;
+    var regionResult = null;
 
-      // Parse every job card (brand resolved via map)
+    function afterFetch() {
+      _brandMap = brandResult || {};
+      _regionMap = regionResult || {};
+
+      // Parse every job card (brand resolved via map, region derived from country)
       var items = list.querySelectorAll(':scope > .w-dyn-item');
       for (var i = 0; i < items.length; i++) {
         jobs.push(parseCard(items[i], i));
@@ -129,10 +139,13 @@
       // Deduplicate filter checkboxes, hide zero-count options, add count badges
       deduplicateFilters();
 
+      // Build dynamic region checkboxes (replaces country filter)
+      buildRegionFilter();
+
       // Bind all interactions
       bindSearch();
       bindCheckboxes('input[name="city"]', activeCities);
-      bindCheckboxes('input[name="country"]', activeCountries);
+      bindCheckboxes('input[name="region"]', activeRegions);
       bindCheckboxes('input[name="brand"]', activeBrands);
       bindRadios();
       bindSort();
@@ -140,6 +153,15 @@
 
       // Initial render
       applyFilters();
+    }
+
+    fetchJSON(BRAND_MAP_URL, function (map) {
+      brandResult = map;
+      if (--pending === 0) afterFetch();
+    });
+    fetchJSON(REGION_MAP_URL, function (map) {
+      regionResult = map;
+      if (--pending === 0) afterFetch();
     });
   }
 
@@ -169,13 +191,23 @@
     var brandFromDOM = dwText(dw[2]);
     var brand = (_brandMap && _brandMap[title]) ? _brandMap[title] : brandFromDOM;
 
+    // Extract country and derive region from map
+    var countryRaw = dwText(dw[1]);
+    var regionName = '';
+    if (countryRaw && _regionMap) {
+      regionName = _regionMap[countryRaw.toLowerCase()] || 'Multiple Locations';
+    } else if (!countryRaw) {
+      regionName = 'Multiple Locations';
+    }
+
     return {
       el: el,
       idx: idx,
       title:    title,
       category: qText(el, '.tag'),
       city:     dwText(dw[0]),
-      country:  dwText(dw[1]),
+      country:  countryRaw,
+      region:   regionName,
       brand:    brand,
       workType: dwText(dw[3]),
       summary:  qText(el, '.text-size-regular')
@@ -197,7 +229,7 @@
   function applyFilters() {
     var kw = keyword.toLowerCase();
     var hasCities = objSize(activeCities) > 0;
-    var hasCountries = objSize(activeCountries) > 0;
+    var hasRegions = objSize(activeRegions) > 0;
     var hasBrands = objSize(activeBrands) > 0;
     var wt = workType.toLowerCase();
     var count = 0;
@@ -208,7 +240,7 @@
 
       // Keyword (substring match across all text)
       if (show && kw) {
-        var hay = [j.title, j.category, j.city, j.country,
+        var hay = [j.title, j.category, j.city, j.country, j.region,
                    j.brand, j.workType, j.summary].join(' ').toLowerCase();
         show = hay.indexOf(kw) !== -1;
       }
@@ -218,9 +250,9 @@
         show = !!activeCities[j.city.toLowerCase()];
       }
 
-      // Country (OR within group)
-      if (show && hasCountries) {
-        show = !!activeCountries[j.country.toLowerCase()];
+      // Region (OR within group)
+      if (show && hasRegions) {
+        show = !!activeRegions[j.region.toLowerCase()];
       }
 
       // Brand (OR within group)
@@ -271,7 +303,7 @@
     });
   }
 
-  // ── Checkbox filters (cities & brands) ────
+  // ── Checkbox filters (cities, regions & brands) ────
   function bindCheckboxes(selector, store) {
     document.querySelectorAll(selector).forEach(function (cb) {
       cb.addEventListener('change', function () {
@@ -386,9 +418,9 @@
       filters.push({ type: 'city', label: cityKeys[c], key: cityKeys[c] });
     }
 
-    var countryKeys = Object.keys(activeCountries);
-    for (var co = 0; co < countryKeys.length; co++) {
-      filters.push({ type: 'country', label: countryKeys[co], key: countryKeys[co] });
+    var regionKeys = Object.keys(activeRegions);
+    for (var r = 0; r < regionKeys.length; r++) {
+      filters.push({ type: 'region', label: regionKeys[r], key: regionKeys[r] });
     }
 
     var brandKeys = Object.keys(activeBrands);
@@ -433,9 +465,9 @@
         delete activeCities[f.key];
         uncheckByLabel('input[name="city"]', f.key);
         break;
-      case 'country':
-        delete activeCountries[f.key];
-        uncheckByLabel('input[name="country"]', f.key);
+      case 'region':
+        delete activeRegions[f.key];
+        uncheckByLabel('input[name="region"]', f.key);
         break;
       case 'brand':
         delete activeBrands[f.key];
@@ -470,7 +502,7 @@
   function clearAll() {
     keyword = '';
     activeCities = {};
-    activeCountries = {};
+    activeRegions = {};
     activeBrands = {};
     workType = '';
     sortMode = 'default';
@@ -478,7 +510,7 @@
     var inp = document.querySelector('.filters1_keyword-search input');
     if (inp) inp.value = '';
 
-    document.querySelectorAll('input[name="city"], input[name="country"], input[name="brand"]').forEach(function (cb) {
+    document.querySelectorAll('input[name="city"], input[name="region"], input[name="brand"]').forEach(function (cb) {
       cb.checked = false;
     });
 
@@ -505,8 +537,109 @@
   // ── Deduplicate, hide empty, add count badges ──
   function deduplicateFilters() {
     dedupeGroup('input[name="city"]', 'city');
-    dedupeGroup('input[name="country"]', 'country');
+    // Country checkboxes are fully hidden; region filter built dynamically
+    hideAllCountryCheckboxes();
     dedupeGroup('input[name="brand"]', 'brand');
+  }
+
+  // Hide ALL existing country checkboxes (replaced by dynamic region filter)
+  function hideAllCountryCheckboxes() {
+    var cbs = document.querySelectorAll('input[name="country"]');
+    for (var c = 0; c < cbs.length; c++) {
+      var wrapper = cbs[c].closest('.w-checkbox');
+      if (wrapper) wrapper.style.display = 'none';
+    }
+  }
+
+  // ── Build dynamic region filter ───────────
+  // Replaces the country checkbox list with region checkboxes
+  function buildRegionFilter() {
+    // Count jobs per region
+    var regionCounts = {};
+    for (var i = 0; i < jobs.length; i++) {
+      var r = jobs[i].region;
+      if (!r) continue;
+      var key = r.toLowerCase();
+      regionCounts[key] = (regionCounts[key] || 0) + 1;
+    }
+
+    // Find the container that holds country checkboxes
+    var firstCountryCb = document.querySelector('input[name="country"]');
+    if (!firstCountryCb) return;
+    var container = firstCountryCb.closest('.w-checkbox');
+    if (!container) return;
+    var parent = container.parentElement;
+    if (!parent) return;
+
+    // Rename the filter section heading from "Country" to "Region"
+    renameFilterHeading(parent, 'Region');
+
+    // Sort region names alphabetically
+    var regionNames = Object.keys(regionCounts).sort();
+
+    // Create a checkbox for each region
+    for (var ri = 0; ri < regionNames.length; ri++) {
+      var regionKey = regionNames[ri];
+      var regionLabel = regionCounts[regionKey] ? capitalizeRegion(regionKey) : null;
+      if (!regionLabel) continue;
+
+      var wrapper = document.createElement('label');
+      wrapper.className = 'w-checkbox filters1_checkbox-field';
+
+      var input = document.createElement('input');
+      input.type = 'checkbox';
+      input.name = 'region';
+      input.className = 'w-checkbox-input';
+      input.style.cssText = 'opacity:0;position:absolute;z-index:-1;';
+      wrapper.appendChild(input);
+
+      var span = document.createElement('span');
+      span.className = 'w-form-label';
+      span.textContent = regionLabel;
+      wrapper.appendChild(span);
+
+      // Add count badge
+      addCountBadge(wrapper, regionCounts[regionKey]);
+
+      parent.appendChild(wrapper);
+    }
+  }
+
+  // Capitalize region name properly (handles "uk & europe" → "UK & Europe", etc.)
+  function capitalizeRegion(key) {
+    // Map of lowercase region names to their proper display names
+    var displayNames = {
+      'asia': 'Asia',
+      'australia': 'Australia',
+      'canada': 'Canada',
+      'multiple locations': 'Multiple Locations',
+      'new zealand': 'New Zealand',
+      'south africa': 'South Africa',
+      'uae': 'UAE',
+      'uk & europe': 'UK & Europe',
+      'usa': 'USA'
+    };
+    return displayNames[key] || capitalize(key);
+  }
+
+  // Rename the filter section heading (e.g. "Country" → "Region")
+  function renameFilterHeading(filterParent, newName) {
+    // Walk up to find the dropdown component or filter section header
+    var section = filterParent.closest('.w-dropdown');
+    if (!section) section = filterParent.closest('.filters1_dropdown');
+    if (!section) return;
+
+    // Look for the toggle text
+    var toggle = section.querySelector('.w-dropdown-toggle');
+    if (!toggle) return;
+    var textEls = toggle.querySelectorAll('div');
+    for (var i = 0; i < textEls.length; i++) {
+      var txt = textEls[i].textContent.trim().toLowerCase();
+      if (txt === 'country' || txt === 'countries') {
+        textEls[i].textContent = newName;
+        break;
+      }
+    }
   }
 
   function dedupeGroup(selector, field) {
