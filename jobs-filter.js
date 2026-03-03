@@ -441,7 +441,7 @@
     tag.style.display = 'flex';
 
     var textDiv = document.createElement('div');
-    textDiv.textContent = capitalize(filter.label);
+    textDiv.textContent = filter.type === 'region' ? capitalizeRegion(filter.label) : capitalize(filter.label);
     tag.appendChild(textDiv);
 
     var closeDiv = document.createElement('div');
