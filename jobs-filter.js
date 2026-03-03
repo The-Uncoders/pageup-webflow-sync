@@ -70,13 +70,9 @@
       }
     }
   }
-  // Run immediately + at staggered intervals to catch late Finsweet inits
-  stripFinsweet();
-  setTimeout(stripFinsweet, 0);
-  setTimeout(stripFinsweet, 100);
-  setTimeout(stripFinsweet, 500);
-  setTimeout(stripFinsweet, 1500);
-  setTimeout(stripFinsweet, 3000);
+  // NOTE: Do NOT call stripFinsweet() here — init() must cache element
+  // references first (they use fs-cmsfilter-element selectors). Stripping
+  // happens inside init() after caching, plus delayed follow-ups.
 
   // ── Boot ──────────────────────────────────
   if (document.readyState === 'loading') {
@@ -99,7 +95,12 @@
     _allRadio = document.querySelector('label[fs-cmsfilter-element="reset"] input[type="radio"]');
 
     // Now strip all Finsweet attributes (makes Finsweet completely blind)
+    // + schedule delayed follow-ups to catch any late Finsweet re-inits
     stripFinsweet();
+    setTimeout(stripFinsweet, 0);
+    setTimeout(stripFinsweet, 200);
+    setTimeout(stripFinsweet, 1000);
+    setTimeout(stripFinsweet, 3000);
 
     // Prevent Webflow form submission (filters live inside a form)
     var form = document.querySelector('.filters1_form-block form') ||
