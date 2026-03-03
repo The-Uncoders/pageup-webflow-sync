@@ -1,11 +1,12 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.4
+ * FCTG Careers - Job Filter & Sort System v1.4.1
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter, country filter,
  * brand filter, work type filter, sorting, active filter tags,
  * results count, clear all, and empty state.
  *
+ * v1.4.1 – Hide Webflow's static "1" badge; our dynamic count replaces it.
  * v1.4 – Added country filter support.
  *         Deduplicate filter checkboxes (keep first, hide dupes).
  *         Hide filter options with zero job listings.
@@ -527,6 +528,10 @@
       var key = label.toLowerCase();
       var wrapper = cb.closest('.w-checkbox');
       if (!wrapper) continue;
+
+      // Hide the Webflow-designed static "1" badge (always shows 1)
+      var origBadge = wrapper.querySelector('.icon-1x1-xsmall');
+      if (origBadge) origBadge.style.display = 'none';
 
       if (seen[key] || !counts[key]) {
         // Duplicate or no matching jobs → hide entirely
