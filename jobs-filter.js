@@ -1,5 +1,5 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.0
+ * FCTG Careers - Job Filter & Sort System v1.1
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter, brand filter,
@@ -15,6 +15,7 @@
 
   // ── Config ────────────────────────────────
   var DEBOUNCE = 250;
+  var INIT_DELAY = 300; // ms – wait for Finsweet to finish before we init
 
   // ── State ─────────────────────────────────
   var keyword = '';
@@ -23,24 +24,56 @@
   var workType = '';        // '' = all
   var sortMode = 'default';
   var jobs = [];
+  var _lastCount = -1;     // track last-set results count
+
+  // ── Neutralise Finsweet ───────────────────
+  // Finsweet Attributes v2 uses a global callback queue.
+  // We hook into it to destroy any filter/sort instances it creates,
+  // preventing it from interfering with our custom filters.
+  window.fsAttributes = window.fsAttributes || [];
+  window.fsAttributes.push(['cmsfilter', function (filterInstances) {
+    if (filterInstances && filterInstances.length) {
+      filterInstances.forEach(function (inst) {
+        try { if (typeof inst.destroy === 'function') inst.destroy(); } catch (e) {}
+      });
+    }
+  }]);
+  window.fsAttributes.push(['cmssort', function (sortInstances) {
+    if (sortInstances && sortInstances.length) {
+      sortInstances.forEach(function (inst) {
+        try { if (typeof inst.destroy === 'function') inst.destroy(); } catch (e) {}
+      });
+    }
+  }]);
+
+  // Aggressively remove placeholder IDENTIFIER attributes
+  // Run immediately + at staggered intervals to catch late Finsweet inits
+  function cleanIdentifiers() {
+    document.querySelectorAll('[fs-cmsfilter-field="IDENTIFIER"]').forEach(function (el) {
+      el.removeAttribute('fs-cmsfilter-field');
+    });
+    document.querySelectorAll('[fs-cmssort-field="IDENTIFIER"]').forEach(function (el) {
+      el.removeAttribute('fs-cmssort-field');
+    });
+  }
+  cleanIdentifiers();
+  setTimeout(cleanIdentifiers, 0);
+  setTimeout(cleanIdentifiers, 100);
+  setTimeout(cleanIdentifiers, 500);
+  setTimeout(cleanIdentifiers, 1500);
 
   // ── Boot ──────────────────────────────────
-  // Remove Finsweet placeholder attributes so it doesn't interfere
-  document.querySelectorAll('[fs-cmsfilter-field="IDENTIFIER"]').forEach(function (el) {
-    el.removeAttribute('fs-cmsfilter-field');
-  });
-  document.querySelectorAll('[fs-cmssort-field="IDENTIFIER"]').forEach(function (el) {
-    el.removeAttribute('fs-cmssort-field');
-  });
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 60); });
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, INIT_DELAY); });
   } else {
-    setTimeout(init, 60);
+    setTimeout(init, INIT_DELAY);
   }
 
   // ── Initialise ────────────────────────────
   function init() {
+    // Final cleanup pass
+    cleanIdentifiers();
+
     var list = document.querySelector('.career_list');
     if (!list) return;
 
@@ -66,6 +99,9 @@
     bindRadios();
     bindSort();
     bindClear();
+
+    // Guard results-count against Finsweet overwriting it
+    guardResultsCount();
 
     // Initial render
     applyFilters();
@@ -144,6 +180,7 @@
 
   // ── Results count ─────────────────────────
   function setCount(n) {
+    _lastCount = n;
     var rc = document.querySelector('[fs-cmsfilter-element="results-count"]');
     var ic = document.querySelector('[fs-cmsfilter-element="items-count"]');
     if (rc) rc.textContent = n;
@@ -153,6 +190,18 @@
   function setEmpty(flag) {
     var el = document.querySelector('[fs-cmsfilter-element="empty"]');
     if (el) el.style.display = flag ? 'flex' : 'none';
+  }
+
+  // Use MutationObserver to prevent Finsweet from overwriting results-count
+  function guardResultsCount() {
+    var rc = document.querySelector('[fs-cmsfilter-element="results-count"]');
+    if (!rc || typeof MutationObserver === 'undefined') return;
+    var observer = new MutationObserver(function () {
+      if (_lastCount >= 0 && rc.textContent !== String(_lastCount)) {
+        rc.textContent = _lastCount;
+      }
+    });
+    observer.observe(rc, { childList: true, characterData: true, subtree: true });
   }
 
   // ── Search ────────────────────────────────
