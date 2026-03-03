@@ -1,15 +1,16 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.2
+ * FCTG Careers - Job Filter & Sort System v1.3
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter, brand filter,
  * work type filter, sorting, active filter tags, results count,
  * clear all, and empty state.
  *
- * v1.2 – Brand data is fetched from brand-map.json (CDN) because the
+ * v1.3 – Fix: strip ALL Finsweet attributes from the page to prevent
+ *         MutationObserver infinite loop that crashed the tab.
+ *         Cache element refs before stripping so our code still works.
+ * v1.2 – Brand data fetched from brand-map.json (CDN) because the
  *         Webflow CMS binding on the brand text element is empty.
- *         The map keys are job titles (CMS "name" field) and values
- *         are brand names. Falls back to DOM text if fetch fails.
  */
 (function () {
   'use strict';
@@ -26,8 +27,13 @@
   var workType = '';        // '' = all
   var sortMode = 'default';
   var jobs = [];
-  var _lastCount = -1;     // track last-set results count
   var _brandMap = null;    // title → brand name (fetched from CDN)
+
+  // Cached element references (populated in init, before Finsweet attrs are stripped)
+  var _rcEl = null;    // results-count element
+  var _icEl = null;    // items-count element
+  var _emptyEl = null; // empty-state element
+  var _allRadio = null; // "All" work-type radio (inside fs-cmsfilter reset label)
 
   // ── Neutralise Finsweet ───────────────────
   // Finsweet Attributes v2 uses a global callback queue.
@@ -49,21 +55,28 @@
     }
   }]);
 
-  // Aggressively remove placeholder IDENTIFIER attributes
-  // Run immediately + at staggered intervals to catch late Finsweet inits
-  function cleanIdentifiers() {
-    document.querySelectorAll('[fs-cmsfilter-field="IDENTIFIER"]').forEach(function (el) {
-      el.removeAttribute('fs-cmsfilter-field');
-    });
-    document.querySelectorAll('[fs-cmssort-field="IDENTIFIER"]').forEach(function (el) {
-      el.removeAttribute('fs-cmssort-field');
-    });
+  // Strip ALL Finsweet attributes from the page so Finsweet becomes
+  // completely blind to filter/sort elements. This prevents any
+  // MutationObserver ping-pong between our code and Finsweet.
+  function stripFinsweet() {
+    var attrs = [
+      'fs-cmsfilter-element', 'fs-cmsfilter-field',
+      'fs-cmssort-element', 'fs-cmssort-field'
+    ];
+    for (var a = 0; a < attrs.length; a++) {
+      var els = document.querySelectorAll('[' + attrs[a] + ']');
+      for (var i = 0; i < els.length; i++) {
+        els[i].removeAttribute(attrs[a]);
+      }
+    }
   }
-  cleanIdentifiers();
-  setTimeout(cleanIdentifiers, 0);
-  setTimeout(cleanIdentifiers, 100);
-  setTimeout(cleanIdentifiers, 500);
-  setTimeout(cleanIdentifiers, 1500);
+  // Run immediately + at staggered intervals to catch late Finsweet inits
+  stripFinsweet();
+  setTimeout(stripFinsweet, 0);
+  setTimeout(stripFinsweet, 100);
+  setTimeout(stripFinsweet, 500);
+  setTimeout(stripFinsweet, 1500);
+  setTimeout(stripFinsweet, 3000);
 
   // ── Boot ──────────────────────────────────
   if (document.readyState === 'loading') {
@@ -74,11 +87,19 @@
 
   // ── Initialise ────────────────────────────
   function init() {
-    // Final cleanup pass
-    cleanIdentifiers();
-
     var list = document.querySelector('.career_list');
     if (!list) return;
+
+    // Cache element references BEFORE stripping Finsweet attributes
+    _rcEl = document.querySelector('[fs-cmsfilter-element="results-count"]');
+    _icEl = document.querySelector('[fs-cmsfilter-element="items-count"]');
+    _emptyEl = document.querySelector('[fs-cmsfilter-element="empty"]');
+    var tpl = document.querySelector('[fs-cmsfilter-element="tag-template"]');
+    var resetEls = document.querySelectorAll('a[fs-cmsfilter-element="reset"]');
+    _allRadio = document.querySelector('label[fs-cmsfilter-element="reset"] input[type="radio"]');
+
+    // Now strip all Finsweet attributes (makes Finsweet completely blind)
+    stripFinsweet();
 
     // Prevent Webflow form submission (filters live inside a form)
     var form = document.querySelector('.filters1_form-block form') ||
@@ -86,7 +107,6 @@
     if (form) form.addEventListener('submit', function (e) { e.preventDefault(); });
 
     // Hide the tag template so it doesn't show "Tag" text
-    var tpl = document.querySelector('[fs-cmsfilter-element="tag-template"]');
     if (tpl) tpl.style.display = 'none';
 
     // Fetch brand map, then parse cards & bind interactions
@@ -105,10 +125,7 @@
       bindCheckboxes('input[name="brand"]', activeBrands);
       bindRadios();
       bindSort();
-      bindClear();
-
-      // Guard results-count against Finsweet overwriting it
-      guardResultsCount();
+      bindClear(resetEls);
 
       // Initial render
       applyFilters();
@@ -211,28 +228,12 @@
 
   // ── Results count ─────────────────────────
   function setCount(n) {
-    _lastCount = n;
-    var rc = document.querySelector('[fs-cmsfilter-element="results-count"]');
-    var ic = document.querySelector('[fs-cmsfilter-element="items-count"]');
-    if (rc) rc.textContent = n;
-    if (ic) ic.textContent = jobs.length;
+    if (_rcEl) _rcEl.textContent = n;
+    if (_icEl) _icEl.textContent = jobs.length;
   }
 
   function setEmpty(flag) {
-    var el = document.querySelector('[fs-cmsfilter-element="empty"]');
-    if (el) el.style.display = flag ? 'flex' : 'none';
-  }
-
-  // Use MutationObserver to prevent Finsweet from overwriting results-count
-  function guardResultsCount() {
-    var rc = document.querySelector('[fs-cmsfilter-element="results-count"]');
-    if (!rc || typeof MutationObserver === 'undefined') return;
-    var observer = new MutationObserver(function () {
-      if (_lastCount >= 0 && rc.textContent !== String(_lastCount)) {
-        rc.textContent = _lastCount;
-      }
-    });
-    observer.observe(rc, { childList: true, characterData: true, subtree: true });
+    if (_emptyEl) _emptyEl.style.display = flag ? 'flex' : 'none';
   }
 
   // ── Search ────────────────────────────────
@@ -411,8 +412,7 @@
         break;
       case 'workType':
         workType = '';
-        var allRadio = document.querySelector('label[fs-cmsfilter-element="reset"] input[type="radio"]');
-        if (allRadio) allRadio.checked = true;
+        if (_allRadio) _allRadio.checked = true;
         break;
     }
     applyFilters();
@@ -426,8 +426,9 @@
   }
 
   // ── Clear all ──────────────────────────────
-  function bindClear() {
-    document.querySelectorAll('a[fs-cmsfilter-element="reset"]').forEach(function (btn) {
+  function bindClear(resetEls) {
+    if (!resetEls) return;
+    resetEls.forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         clearAll();
@@ -449,8 +450,7 @@
       cb.checked = false;
     });
 
-    var allRadio = document.querySelector('label[fs-cmsfilter-element="reset"] input[type="radio"]');
-    if (allRadio) allRadio.checked = true;
+    if (_allRadio) _allRadio.checked = true;
 
     // Reset sort toggle text
     var dd = document.querySelector('.dropdown1_component');
