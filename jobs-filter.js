@@ -1,14 +1,15 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.1
+ * FCTG Careers - Job Filter & Sort System v1.2
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter, brand filter,
  * work type filter, sorting, active filter tags, results count,
  * clear all, and empty state.
  *
- * NOTE: For brand filtering to work, bind the hidden "brand" text
- * element on each job card to the CMS "brand-name" field in the
- * Webflow Designer. Same for the hidden "country" text element.
+ * v1.2 – Brand data is fetched from brand-map.json (CDN) because the
+ *         Webflow CMS binding on the brand text element is empty.
+ *         The map keys are job titles (CMS "name" field) and values
+ *         are brand names. Falls back to DOM text if fetch fails.
  */
 (function () {
   'use strict';
@@ -16,6 +17,7 @@
   // ── Config ────────────────────────────────
   var DEBOUNCE = 250;
   var INIT_DELAY = 300; // ms – wait for Finsweet to finish before we init
+  var BRAND_MAP_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/brand-map.json';
 
   // ── State ─────────────────────────────────
   var keyword = '';
@@ -25,6 +27,7 @@
   var sortMode = 'default';
   var jobs = [];
   var _lastCount = -1;     // track last-set results count
+  var _brandMap = null;    // title → brand name (fetched from CDN)
 
   // ── Neutralise Finsweet ───────────────────
   // Finsweet Attributes v2 uses a global callback queue.
@@ -86,38 +89,66 @@
     var tpl = document.querySelector('[fs-cmsfilter-element="tag-template"]');
     if (tpl) tpl.style.display = 'none';
 
-    // Parse every job card
-    var items = list.querySelectorAll(':scope > .w-dyn-item');
-    for (var i = 0; i < items.length; i++) {
-      jobs.push(parseCard(items[i], i));
-    }
+    // Fetch brand map, then parse cards & bind interactions
+    fetchJSON(BRAND_MAP_URL, function (map) {
+      _brandMap = map || {};
 
-    // Bind all interactions
-    bindSearch();
-    bindCheckboxes('input[name="city"]', activeCities);
-    bindCheckboxes('input[name="brand"]', activeBrands);
-    bindRadios();
-    bindSort();
-    bindClear();
+      // Parse every job card (brand resolved via map)
+      var items = list.querySelectorAll(':scope > .w-dyn-item');
+      for (var i = 0; i < items.length; i++) {
+        jobs.push(parseCard(items[i], i));
+      }
 
-    // Guard results-count against Finsweet overwriting it
-    guardResultsCount();
+      // Bind all interactions
+      bindSearch();
+      bindCheckboxes('input[name="city"]', activeCities);
+      bindCheckboxes('input[name="brand"]', activeBrands);
+      bindRadios();
+      bindSort();
+      bindClear();
 
-    // Initial render
-    applyFilters();
+      // Guard results-count against Finsweet overwriting it
+      guardResultsCount();
+
+      // Initial render
+      applyFilters();
+    });
+  }
+
+  // ── Fetch JSON helper ───────────────────
+  function fetchJSON(url, cb) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.timeout = 5000; // 5 s timeout – don't block page if CDN is slow
+    xhr.onload = function () {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try { cb(JSON.parse(xhr.responseText)); } catch (e) { cb(null); }
+      } else {
+        cb(null);
+      }
+    };
+    xhr.onerror = function () { cb(null); };
+    xhr.ontimeout = function () { cb(null); };
+    xhr.send();
   }
 
   // ── Parse a single job card ───────────────
   function parseCard(el, idx) {
     var dw = el.querySelectorAll('.career23_detail-wrapper');
+    var title = qText(el, '.heading-style-h5');
+
+    // Resolve brand: prefer map lookup by title, fall back to DOM text
+    var brandFromDOM = dwText(dw[2]);
+    var brand = (_brandMap && _brandMap[title]) ? _brandMap[title] : brandFromDOM;
+
     return {
       el: el,
       idx: idx,
-      title:    qText(el, '.heading-style-h5'),
+      title:    title,
       category: qText(el, '.tag'),
       city:     dwText(dw[0]),
       country:  dwText(dw[1]),
-      brand:    dwText(dw[2]),
+      brand:    brand,
       workType: dwText(dw[3]),
       summary:  qText(el, '.text-size-regular')
     };
