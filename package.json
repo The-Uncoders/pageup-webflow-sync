@@ -1,0 +1,19 @@
+{
+  "name": "pageup-webflow-sync",
+  "version": "1.0.0",
+  "description": "Automated sync of job listings from PageUp ATS to Webflow CMS",
+  "main": "src/sync.js",
+  "scripts": {
+    "sync": "node src/sync.js",
+    "test-scraper": "node src/test-scraper.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "node-html-parser": "^7.1.0",
+    "playwright": "^1.58.2"
+  }
+}
