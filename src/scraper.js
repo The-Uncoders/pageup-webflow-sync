@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const { parse } = require('node-html-parser');
+const locationToCountry = require('../location-to-country.json');
 
 const BASE_URL = 'https://careers.fctgcareers.com';
 const LISTING_URL = `${BASE_URL}/cw/en/listing/?page=1&page-items=500`;
@@ -306,6 +307,34 @@ function extractJobDetails(html, jobId) {
       country = parts[parts.length - 1];
     } else {
       city = location;
+    }
+  }
+
+  // Fallback: resolve country from location-to-country mapping
+  // This handles locations that are states/territories/provinces/cities without country names
+  // (e.g. "New South Wales" → Australia, "California" → United States)
+  const _knownCountries = new Set(Object.values(locationToCountry).map(c => c.toLowerCase()));
+  if (location && (!country || !_knownCountries.has(country.toLowerCase()))) {
+    let resolved = null;
+
+    // Try the full location string first (handles single-value like "Queensland")
+    resolved = locationToCountry[location.toLowerCase().trim()] || null;
+
+    // Try each comma-separated part (handles "ACT, NSW, NT, ..." multi-location strings)
+    if (!resolved && location.includes(',')) {
+      for (const part of location.split(',').map(p => p.trim())) {
+        const match = locationToCountry[part.toLowerCase()];
+        if (match) { resolved = match; break; }
+      }
+    }
+
+    // Try the city value (handles cases where city was extracted from "City, Suburb")
+    if (!resolved && city) {
+      resolved = locationToCountry[city.toLowerCase().trim()] || null;
+    }
+
+    if (resolved) {
+      country = resolved;
     }
   }
 
