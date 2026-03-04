@@ -455,6 +455,13 @@
 
     // Show/hide "Show More" button
     updateShowMoreButton(end < filteredJobs.length);
+
+    // Tell Webflow IX2 to rescan the DOM so GSAP interactions
+    // (e.g. hover animations) bind to the newly created cards.
+    try {
+      var ix2 = window.Webflow && window.Webflow.require('ix2');
+      if (ix2 && ix2.init) ix2.init();
+    } catch (e) {}
   }
 
   function createCard(job) {
@@ -1085,7 +1092,7 @@
   }
 
   // ── "All Jobs" back button (job template pages) ──
-  // Navigates to /jobs#job-filters so the browser natively scrolls to the
+  // Navigates to /jobs#filters so the browser natively scrolls to the
   // filters section without any programmatic scrolling that could
   // interfere with Webflow page-load animations.
   function setupBackButton() {
@@ -1099,16 +1106,16 @@
     }
     if (!backBtn) return;
 
-    backBtn.setAttribute('href', '/jobs#job-filters');
+    backBtn.setAttribute('href', '/jobs#filters');
     backBtn.addEventListener('click', function (e) {
       e.preventDefault();
       try { sessionStorage.setItem('fctg_back', '1'); } catch (err) {}
-      window.location.href = '/jobs#job-filters';
+      window.location.href = '/jobs#filters';
     });
   }
 
   // ── Handle back navigation: open accordions for active filters ──
-  // Scrolling is handled natively by the #job-filters anchor — no JS scroll needed.
+  // Scrolling is handled natively by the #filters anchor — no JS scroll needed.
   function handleBackNavigation() {
     var isBack = false;
     try {
