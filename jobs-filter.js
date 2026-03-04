@@ -376,8 +376,7 @@
       var cb = inputs[i];
       var label = cb.closest('.w-checkbox');
       if (!label) continue;
-      var badge = label.querySelector('.filter-count') ||
-                  label.querySelector('.icon-1x1-xsmall');
+      var badge = label.querySelector('.filter-count');
       var spanEl = label.querySelector('.w-form-label');
       var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
       var count = counts[key] || 0;
@@ -463,15 +462,21 @@
   }
 
   function reinitWebflow() {
-    try {
-      var wf = window.Webflow || [];
-      if (wf.destroy) wf.destroy();
-      if (wf.ready)   wf.ready();
-      if (wf.require) {
-        var ix2 = wf.require('ix2');
-        if (ix2 && ix2.init) ix2.init();
-      }
-    } catch (e) { /* Webflow not loaded yet — safe to ignore */ }
+    // Use a short delay so the DOM settles after renderCards() adds elements.
+    // Only reinit IX2 (interactions) — do NOT call Webflow.destroy() as that
+    // tears down the entire framework and can break navigation, forms, etc.
+    setTimeout(function () {
+      try {
+        var wf = window.Webflow;
+        if (wf && wf.require) {
+          var ix2 = wf.require('ix2');
+          if (ix2) {
+            ix2.destroy();
+            ix2.init();
+          }
+        }
+      } catch (e) { /* Webflow not loaded yet — safe to ignore */ }
+    }, 100);
   }
 
   function createCard(job) {
@@ -803,7 +808,7 @@
 
     if (count !== undefined && count !== null) {
       var badge = document.createElement('div');
-      badge.className = 'icon-1x1-xsmall background-color-black filter-count';
+      badge.className = 'filter-count';
       badge.textContent = count;
       label.appendChild(badge);
     }
@@ -917,8 +922,7 @@
         wrapper.style.display = 'none';
       } else {
         seen[key] = true;
-        var origBadge = wrapper.querySelector('.filter-count') ||
-                        wrapper.querySelector('.icon-1x1-xsmall');
+        var origBadge = wrapper.querySelector('.filter-count');
         if (origBadge) origBadge.textContent = brandCounts[key];
       }
     }
