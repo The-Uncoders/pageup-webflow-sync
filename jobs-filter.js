@@ -38,6 +38,10 @@
 (function () {
   'use strict';
 
+  // Global guard – prevent double-init when Webflow includes the script twice
+  if (window._fctgFilterLoaded) return;
+  window._fctgFilterLoaded = true;
+
   // ── Config ────────────────────────────────
   var DEBOUNCE = 250;
   var INIT_DELAY = 300;
