@@ -1,5 +1,5 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.8.5
+ * FCTG Careers - Job Filter & Sort System v1.8.7
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
@@ -8,6 +8,7 @@
  *
  * v1.8   – Fix: Filter options now show ALL CMS items (not just first 30).
  *           New: Back button auto-scrolls to listings and opens active filter accordions.
+ * v1.8.7 – Fix: Monkey-patch scrollTo + setInterval to block IX2 page-load resets.
  * v1.8.5 – Fix: Use requestAnimationFrame loop (10s) to defeat IX2 page-load resets.
  * v1.8.4 – Fix: Scroll-watcher approach + window.load gate for back-button scroll.
  * v1.8.3 – Fix: Use instant scroll (not smooth) to prevent IX2 animation interruption.
@@ -210,51 +211,101 @@
         sessionStorage.removeItem('fctg_back');
       } catch (e) {}
 
+      // DIAGNOSTIC: breadcrumb trail
+      try { sessionStorage.setItem('fctg_bc', JSON.stringify({
+        step: 'afterFetch-backCheck', isBack: isBack, ts: Date.now()
+      })); } catch(e){}
+
       if (isBack) {
-        // Use requestAnimationFrame loop to persistently fight IX2 page-load resets.
-        // rAF fires before every paint (~60fps), so IX2 cannot permanently override.
-        var _backStart = Date.now();
-        var _backDuration = 30000; // 30 seconds (IX2 can fire very late)
-        var _accordionsOpened = false;
-        var _scrollTarget = null;
-        var _scrollCount = 0;
-        var _lastReset = 0;
+        try { sessionStorage.setItem('fctg_bc', JSON.stringify({
+          step: 'entering-isBack', ts: Date.now()
+        })); } catch(e){}
 
-        function _backLoop() {
-          var elapsed = Date.now() - _backStart;
-          if (elapsed > _backDuration) {
-            // Debug: record final state
-            try { sessionStorage.setItem('fctg_debug', JSON.stringify({
-              scrollCount: _scrollCount, lastReset: _lastReset,
-              finalY: window.pageYOffset, elapsed: elapsed
-            })); } catch(e){}
-            return;
-          }
+        // Approach: monkey-patch scrollTo to block IX2 scroll resets,
+        // then do our own scroll + accordion open.
+        var _origScrollTo = window.scrollTo.bind(window);
+        var _blockScrollToZero = true;
+        var _blocked = 0;
+        var _allowed = 0;
 
-          // Open accordions once after 2s (gives IX2 time to finish initial load)
-          if (!_accordionsOpened && elapsed > 2000) {
-            openAccordionsForActiveFilters();
-            _accordionsOpened = true;
-          }
+        window.scrollTo = function() {
+          // Detect scroll-to-zero calls (IX2 page-load resets)
+          var targetY = 0;
+          if (arguments.length === 2) targetY = arguments[1];
+          else if (arguments.length === 1 && typeof arguments[0] === 'object') targetY = arguments[0].top || 0;
 
-          // Continuously re-scroll if position is wrong
-          if (!_scrollTarget) {
-            _scrollTarget = document.querySelector('.section_filters1') ||
-                            document.querySelector('.filters1_form-block') ||
-                            document.querySelector('.career_list');
+          if (_blockScrollToZero && targetY === 0 && window.pageYOffset > 50) {
+            _blocked++;
+            return; // Block IX2 from resetting scroll to 0
           }
-          if (_scrollTarget && window.pageYOffset < 50) {
-            var y = _scrollTarget.getBoundingClientRect().top + window.pageYOffset - 20;
-            if (y > 100) {
-              window.scrollTo(0, y);
-              _scrollCount++;
-              _lastReset = elapsed;
+          _allowed++;
+          _origScrollTo.apply(window, arguments);
+        };
+
+        // Also block scrollTop setter on html/body
+        var _origHTMLScrollTop = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollTop');
+
+        try { sessionStorage.setItem('fctg_bc', JSON.stringify({
+          step: 'scrollTo-patched', ts: Date.now()
+        })); } catch(e){}
+
+        // Do our scroll after a small delay (DOM settle)
+        setTimeout(function() {
+          try {
+            var target = document.querySelector('.section_filters1') ||
+                         document.querySelector('.filters1_form-block') ||
+                         document.querySelector('.career_list');
+            if (target) {
+              var y = target.getBoundingClientRect().top + window.pageYOffset - 20;
+              _origScrollTo(0, y);
+
+              try { sessionStorage.setItem('fctg_bc', JSON.stringify({
+                step: 'initial-scroll', targetY: y, afterY: window.pageYOffset, ts: Date.now()
+              })); } catch(e){}
             }
-          }
 
-          requestAnimationFrame(_backLoop);
-        }
-        requestAnimationFrame(_backLoop);
+            // Open accordions
+            openAccordionsForActiveFilters();
+          } catch(e) {
+            try { sessionStorage.setItem('fctg_bc', JSON.stringify({
+              step: 'scroll-error', error: e.message, ts: Date.now()
+            })); } catch(e2){}
+          }
+        }, 500);
+
+        // Keep re-scrolling every 200ms for 30 seconds using setInterval (not rAF)
+        var _intStart = Date.now();
+        var _scrollInt = setInterval(function() {
+          try {
+            var elapsed = Date.now() - _intStart;
+            if (elapsed > 30000) {
+              clearInterval(_scrollInt);
+              _blockScrollToZero = false;
+              // Restore original scrollTo
+              window.scrollTo = _origScrollTo;
+              try { sessionStorage.setItem('fctg_debug', JSON.stringify({
+                step: 'interval-done', blocked: _blocked, allowed: _allowed,
+                finalY: window.pageYOffset, elapsed: elapsed
+              })); } catch(e){}
+              return;
+            }
+
+            // Re-scroll if we've been reset
+            if (window.pageYOffset < 50) {
+              var target = document.querySelector('.section_filters1') ||
+                           document.querySelector('.filters1_form-block') ||
+                           document.querySelector('.career_list');
+              if (target) {
+                var y = target.getBoundingClientRect().top + window.pageYOffset - 20;
+                if (y > 100) _origScrollTo(0, y);
+              }
+            }
+          } catch(e) {
+            try { sessionStorage.setItem('fctg_bc', JSON.stringify({
+              step: 'interval-error', error: e.message, ts: Date.now()
+            })); } catch(e2){}
+          }
+        }, 200);
       }
     }
 
