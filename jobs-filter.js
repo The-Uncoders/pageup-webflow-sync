@@ -48,6 +48,7 @@
   var _collectionPrefix = ''; // e.g. '/jobs/' — extracted from first CMS card's link
   var _allCounts = null;     // derived from allJobs: regions, cities, brands, categories, lookup maps
   var _totalJobs = 0;
+  var _isFirstRender = true; // track first render to defer IX2 rescan
 
   // Cached element references
   var _rcEl = null;
@@ -474,10 +475,23 @@
 
     // Tell Webflow IX2 to rescan the DOM so GSAP interactions
     // (e.g. hover animations) bind to the newly created cards.
-    try {
-      var ix2 = window.Webflow && window.Webflow.require('ix2');
-      if (ix2 && ix2.init) ix2.init();
-    } catch (e) {}
+    // On the FIRST render we defer the rescan so page-load animations
+    // (including ones with 0.6 s+ delays) aren't restarted.  On later
+    // renders (filter changes, "Show More") we rescan immediately.
+    if (_isFirstRender) {
+      _isFirstRender = false;
+      setTimeout(function () {
+        try {
+          var ix2 = window.Webflow && window.Webflow.require('ix2');
+          if (ix2 && ix2.init) ix2.init();
+        } catch (e) {}
+      }, 1500);   // 1.5 s — enough for page-load animations to finish
+    } else {
+      try {
+        var ix2 = window.Webflow && window.Webflow.require('ix2');
+        if (ix2 && ix2.init) ix2.init();
+      } catch (e) {}
+    }
   }
 
   function createCard(job) {
