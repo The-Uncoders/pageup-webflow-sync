@@ -1,11 +1,15 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.5
+ * FCTG Careers - Job Filter & Sort System v1.5.2
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter, region filter,
  * brand filter, work type filter, sorting, active filter tags,
  * results count, clear all, and empty state.
  *
+ * v1.5.2 – Fix: Region accordion collapsed (height:0/overflow:hidden from IX2).
+ *           Fix: Heading rename used wrong CSS class (.w-dropdown vs .filters1_filter-group).
+ *           Rename "Regions" city section to "City" to avoid confusion.
+ * v1.5.1 – Fix: Region tag display uses capitalizeRegion() for proper names.
  * v1.5 – Replace Country filter with Region filter to match PageUp ATS.
  *         Region mapping loaded from region-map.json (CDN).
  *         Country checkboxes hidden; dynamic region checkboxes injected.
@@ -572,7 +576,13 @@
     if (!parent) return;
 
     // Rename the filter section heading from "Country" to "Region"
-    renameFilterHeading(parent, 'Region');
+    renameFilterHeading(parent, 'Country', 'Region');
+
+    // Force the accordion open so region checkboxes are visible
+    expandFilterSection(parent);
+
+    // Rename the city section from "Regions" to "City" (avoid naming confusion)
+    renameCitySectionHeading();
 
     // Sort region names alphabetically
     var regionNames = Object.keys(regionCounts).sort();
@@ -622,21 +632,37 @@
     return displayNames[key] || capitalize(key);
   }
 
-  // Rename the filter section heading (e.g. "Country" → "Region")
-  function renameFilterHeading(filterParent, newName) {
-    // Walk up to find the dropdown component or filter section header
-    var section = filterParent.closest('.w-dropdown');
-    if (!section) section = filterParent.closest('.filters1_dropdown');
-    if (!section) return;
+  // Rename a filter section heading (e.g. "Country" → "Region")
+  function renameFilterHeading(filterParent, oldName, newName) {
+    // Walk up to the filter group and find the heading text div
+    var group = filterParent.closest('.filters1_filter-group');
+    if (!group) return;
+    var heading = group.querySelector('.filters1_filter-group-heading');
+    if (!heading) return;
+    var textEl = heading.querySelector('.text-size-medium-4');
+    if (textEl && textEl.textContent.trim().toLowerCase() === oldName.toLowerCase()) {
+      textEl.textContent = newName;
+    }
+  }
 
-    // Look for the toggle text
-    var toggle = section.querySelector('.w-dropdown-toggle');
-    if (!toggle) return;
-    var textEls = toggle.querySelectorAll('div');
-    for (var i = 0; i < textEls.length; i++) {
-      var txt = textEls[i].textContent.trim().toLowerCase();
-      if (txt === 'country' || txt === 'countries') {
-        textEls[i].textContent = newName;
+  // Force a filter section accordion open (override Webflow IX2 collapsed state)
+  function expandFilterSection(filterParent) {
+    var group = filterParent.closest('.filters1_filter-group');
+    if (!group) return;
+    var options = group.querySelector('.filters1_filter-options');
+    if (options) {
+      options.style.height = 'auto';
+      options.style.overflow = 'visible';
+    }
+  }
+
+  // Rename the "Regions" city section to "City" to avoid confusion with our Region filter
+  function renameCitySectionHeading() {
+    var headings = document.querySelectorAll('.filters1_filter-group-heading');
+    for (var i = 0; i < headings.length; i++) {
+      var textEl = headings[i].querySelector('.text-size-medium-4');
+      if (textEl && textEl.textContent.trim() === 'Regions') {
+        textEl.textContent = 'City';
         break;
       }
     }
