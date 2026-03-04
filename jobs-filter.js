@@ -462,18 +462,43 @@
   }
 
   function reinitWebflow() {
-    // Use a short delay so the DOM settles after renderCards() adds elements.
-    // Only reinit IX2 (interactions) — do NOT call Webflow.destroy() as that
-    // tears down the entire framework and can break navigation, forms, etc.
+    // Re-init IX2 so Designer-set interactions (e.g. GSAP hover on cards)
+    // bind to the newly created DOM elements.  We intentionally do NOT call
+    // ix2.destroy() — that resets ALL interaction state including accordion
+    // open/closed positions.  A plain ix2.init() re-scans the DOM and adds
+    // fresh bindings while leaving the engine running.
+    //
+    // Because ix2.init() resets interaction *instance* state, any accordion
+    // panels the user had open would snap shut.  We save which panels are
+    // open beforehand, then programmatically re-click their headings after
+    // init so IX2's internal state stays in sync with the visual state.
     setTimeout(function () {
       try {
         var wf = window.Webflow;
-        if (wf && wf.require) {
-          var ix2 = wf.require('ix2');
-          if (ix2) {
-            ix2.destroy();
-            ix2.init();
+        if (!wf || !wf.require) return;
+        var ix2 = wf.require('ix2');
+        if (!ix2 || !ix2.init) return;
+
+        // 1. Record which accordion panels are currently open
+        var headings = document.querySelectorAll('.filters1_filter-group-heading');
+        var openIndices = [];
+        for (var i = 0; i < headings.length; i++) {
+          var panel = headings[i].nextElementSibling;
+          if (panel && panel.offsetHeight > 0) {
+            openIndices.push(i);
           }
+        }
+
+        // 2. Re-init IX2 (NO destroy) — binds hover events to new cards
+        ix2.init();
+
+        // 3. Re-open any accordion panels that were open before reinit
+        if (openIndices.length > 0) {
+          setTimeout(function () {
+            for (var i = 0; i < openIndices.length; i++) {
+              headings[openIndices[i]].click();
+            }
+          }, 50);
         }
       } catch (e) { /* Webflow not loaded yet — safe to ignore */ }
     }, 100);
