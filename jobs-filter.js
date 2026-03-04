@@ -455,6 +455,23 @@
 
     // Show/hide "Show More" button
     updateShowMoreButton(end < filteredJobs.length);
+
+    // Re-initialise Webflow interactions (IX2) so that any animations
+    // (hover effects, scroll triggers, etc.) set in the Webflow Designer
+    // are re-bound to the newly created card elements.
+    reinitWebflow();
+  }
+
+  function reinitWebflow() {
+    try {
+      var wf = window.Webflow || [];
+      if (wf.destroy) wf.destroy();
+      if (wf.ready)   wf.ready();
+      if (wf.require) {
+        var ix2 = wf.require('ix2');
+        if (ix2 && ix2.init) ix2.init();
+      }
+    } catch (e) { /* Webflow not loaded yet — safe to ignore */ }
   }
 
   function createCard(job) {
@@ -479,20 +496,15 @@
     var summary = card.querySelector('.text-size-regular');
     if (summary) summary.textContent = job.su;
 
-    // Link — point to the Webflow CMS job-listing page using slug
+    // Link — Since cards are rendered from JSON (not CMS-bound), we must set
+    // the href to replicate what Webflow's CMS binding would produce.
+    // This is the ONLY Webflow behaviour we replicate; everything else
+    // (animations, interactions, styles) is left to Webflow via reinitWebflow().
     var jobHref = job.s ? ('/job-listings/' + job.s) : '';
-    var link = card.querySelector('a');
-    if (link && jobHref) {
-      link.href = jobHref;
-    }
-    // If the card itself is an <a> tag
-    if (card.tagName === 'A' && jobHref) {
-      card.href = jobHref;
-    }
-    // Also handle .w-dyn-item wrapping a link block
-    var linkBlock = card.querySelector('.career23_card-link');
-    if (linkBlock && jobHref) {
-      linkBlock.href = jobHref;
+    if (jobHref) {
+      var links = card.querySelectorAll('a');
+      for (var li = 0; li < links.length; li++) links[li].href = jobHref;
+      if (card.tagName === 'A') card.href = jobHref;
     }
 
     return card;
