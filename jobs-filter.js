@@ -1,5 +1,5 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.8.2
+ * FCTG Careers - Job Filter & Sort System v1.8.3
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
@@ -8,6 +8,7 @@
  *
  * v1.8   – Fix: Filter options now show ALL CMS items (not just first 30).
  *           New: Back button auto-scrolls to listings and opens active filter accordions.
+ * v1.8.3 – Fix: Use instant scroll (not smooth) to prevent IX2 animation interruption.
  * v1.8.2 – Fix: Polling scroll to survive Webflow IX2 scroll-position resets.
  * v1.8.1 – Fix: Use MouseEvent dispatch for IX2 accordion triggers; increase timing.
  * v1.7.3 – Fix: Object reference bug — clearAll() and restoreFilterState()
@@ -211,8 +212,8 @@
         // Delay to let Webflow IX2 fully initialise before triggering accordion clicks
         setTimeout(function () {
           openAccordionsForActiveFilters();
-          setTimeout(scrollToFilters, 600);
-        }, 1000);
+          setTimeout(scrollToFilters, 800);
+        }, 1200);
       }
     }
 
@@ -1059,19 +1060,19 @@
                  document.querySelector('.filters1_form-block') ||
                  document.querySelector('.career_list');
     if (!target) return;
-    var y = target.getBoundingClientRect().top + window.pageYOffset - 20;
-    // Webflow IX2 / lazy-load can reset scroll position after our first attempt.
-    // Poll: keep scrolling until position sticks or we've tried enough times.
+    // Use instant scroll (not smooth) — smooth animations get interrupted
+    // by Webflow IX2 page-load interactions that reset scroll to top.
+    // Poll: keep forcing position until it sticks or max attempts reached.
     var attempts = 0;
-    var maxAttempts = 8;
+    var maxAttempts = 10;
     var iv = setInterval(function () {
       attempts++;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-      // Stop once we're close enough or max attempts reached
+      var y = target.getBoundingClientRect().top + window.pageYOffset - 20;
+      window.scrollTo(0, y);
       if (Math.abs(window.pageYOffset - y) < 80 || attempts >= maxAttempts) {
         clearInterval(iv);
       }
-    }, 300);
+    }, 400);
   }
 
   // ── Session storage: save/restore filter state ──
