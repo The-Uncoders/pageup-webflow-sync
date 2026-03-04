@@ -29,7 +29,7 @@
   var DEBOUNCE = 250;
   var INIT_DELAY = 300;
   var PAGE_SIZE = 30;
-  var ALL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/all-jobs.json?v=3.0';
+  var ALL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/all-jobs.json?v=3.1';
 
   // ── State ─────────────────────────────────
   var keyword = '';
