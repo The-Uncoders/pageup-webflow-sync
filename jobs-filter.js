@@ -1,11 +1,12 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.7
+ * FCTG Careers - Job Filter & Sort System v1.7.1
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v1.7.1 – Fix: Brand badge selector (.filter-count); guard against double init.
  * v1.7   – Fix: Brand filter uses CDN counts (brand-counts.json) for all 370 jobs.
  *           Fix: Hide pagination when JS filters reduce visible results.
  *           New: Save/restore filter state via sessionStorage.
@@ -94,9 +95,13 @@
   }
 
   // ── Initialise ────────────────────────────
+  var _initialised = false;
   function init() {
     // Handle "All Jobs" back button on job template pages
     setupBackButton();
+
+    if (_initialised) return;
+    _initialised = true;
 
     var list = document.querySelector('.career_list');
     if (!list) return;
@@ -855,7 +860,9 @@
       } else {
         seen[key] = true;
         // Update native badge with actual count (preserve designer styling)
-        var origBadge = wrapper.querySelector('.icon-1x1-xsmall');
+        // CMS checkboxes use .filter-count; dynamic ones use .icon-1x1-xsmall
+        var origBadge = wrapper.querySelector('.filter-count') ||
+                        wrapper.querySelector('.icon-1x1-xsmall');
         if (origBadge) origBadge.textContent = counts[key];
       }
     }
