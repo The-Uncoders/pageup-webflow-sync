@@ -1,11 +1,15 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.6.1
+ * FCTG Careers - Job Filter & Sort System v1.6.2
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v1.6.2 – Fix: Checkbox visual state inversion (remove change listener that
+ *           double-toggles w--redirected-checked with Webflow's native handler).
+ *           Fix: Dynamic badge uses 'filter-count' class to match designer styling.
+ *           Fix: Results count shows "Showing X of Y Jobs" format.
  * v1.6.1 – Fix: Detect designer's category group by input name (not heading).
  *           Hides CMS checkboxes, renames heading to "Category", no duplicate.
  * v1.6 – Fix: Region checkboxes use proper Webflow custom checkbox structure.
@@ -277,6 +281,18 @@
   function setCount(n) {
     if (_rcEl) _rcEl.textContent = n;
     if (_icEl) _icEl.textContent = jobs.length;
+
+    // Update parent wrapper to show "Showing X of Y Jobs" format
+    var wrapper = _rcEl ? _rcEl.parentElement : null;
+    if (wrapper && _rcEl && _icEl) {
+      // Preserve the span refs but rebuild surrounding text
+      while (wrapper.firstChild) wrapper.removeChild(wrapper.firstChild);
+      wrapper.appendChild(document.createTextNode('Showing '));
+      wrapper.appendChild(_rcEl);
+      wrapper.appendChild(document.createTextNode(' of '));
+      wrapper.appendChild(_icEl);
+      wrapper.appendChild(document.createTextNode(' Jobs'));
+    }
   }
 
   function setEmpty(flag) {
@@ -560,16 +576,15 @@
 
     if (count !== undefined && count !== null) {
       var badge = document.createElement('div');
-      badge.className = 'icon-1x1-xsmall background-color-black';
+      badge.className = 'icon-1x1-xsmall background-color-black filter-count';
       badge.textContent = count;
       label.appendChild(badge);
     }
 
-    // Sync visual checked state (Webflow JS doesn't know about dynamic elements)
-    input.addEventListener('change', function () {
-      if (input.checked) checkDiv.classList.add('w--redirected-checked');
-      else checkDiv.classList.remove('w--redirected-checked');
-    });
+    // NOTE: Do NOT add a 'change' listener to sync w--redirected-checked here.
+    // Webflow's native JS uses event delegation on .w-checkbox-input--inputType-custom
+    // and already toggles the class on click. Adding our own listener causes a
+    // double-toggle, resulting in an inverted visual state.
 
     return label;
   }
