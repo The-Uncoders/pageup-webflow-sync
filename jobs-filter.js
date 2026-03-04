@@ -1,5 +1,5 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.8
+ * FCTG Careers - Job Filter & Sort System v1.8.1
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
@@ -8,6 +8,7 @@
  *
  * v1.8   – Fix: Filter options now show ALL CMS items (not just first 30).
  *           New: Back button auto-scrolls to listings and opens active filter accordions.
+ * v1.8.1 – Fix: Use MouseEvent dispatch for IX2 accordion triggers; increase timing.
  * v1.7.3 – Fix: Object reference bug — clearAll() and restoreFilterState()
  *           now mutate filter objects in-place instead of reassigning,
  *           preserving closure references from bindCheckboxes().
@@ -206,10 +207,11 @@
       } catch (e) {}
 
       if (isBack) {
+        // Delay to let Webflow IX2 fully initialise before triggering accordion clicks
         setTimeout(function () {
           openAccordionsForActiveFilters();
-          setTimeout(scrollToFilters, 200);
-        }, 300);
+          setTimeout(scrollToFilters, 400);
+        }, 800);
       }
     }
 
@@ -1039,20 +1041,22 @@
                     group.querySelector('.filters1_filter-group-heading');
       if (!heading) continue;
 
-      // Check if accordion is closed — open it by clicking the heading
+      // Check if accordion is closed — open it via MouseEvent dispatch
+      // (Webflow IX2 requires a real MouseEvent, not HTMLElement.click())
       var options = group.querySelector('.filters1_filter-options');
       if (options) {
         var computed = window.getComputedStyle(options);
         if (computed.display === 'none' || computed.height === '0px') {
-          heading.click();
+          heading.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
         }
       }
     }
   }
 
   function scrollToFilters() {
-    var target = document.querySelector('.career_list') ||
-                 document.querySelector('.filters1_form-block');
+    var target = document.querySelector('.section_filters1') ||
+                 document.querySelector('.filters1_form-block') ||
+                 document.querySelector('.career_list');
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
