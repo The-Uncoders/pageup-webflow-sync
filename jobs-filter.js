@@ -1,11 +1,13 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.6
+ * FCTG Careers - Job Filter & Sort System v1.6.1
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v1.6.1 – Fix: Detect designer's category group by input name (not heading).
+ *           Hides CMS checkboxes, renames heading to "Category", no duplicate.
  * v1.6 – Fix: Region checkboxes use proper Webflow custom checkbox structure.
  *         Fix: Stop overriding designer styles – update native badge counts.
  *         Fix: Heading renames use input names (not text) to avoid ambiguity.
@@ -690,15 +692,28 @@
     var catKeys = Object.keys(categoryCounts);
     if (catKeys.length === 0) return;
 
-    // Find existing Category group (user may have added in designer) or create
-    var categoryGroup = findFilterGroupByHeading('Category');
+    // Find existing Category group: first by input name, then by heading text
+    var categoryGroup = findFilterGroupByInputName('category') ||
+                        findFilterGroupByHeading('Category');
     var optionsContainer;
 
     if (categoryGroup) {
+      // Rename heading to "Category" if it's something else (e.g. "Locations")
+      var headingEl = categoryGroup.querySelector('.text-size-medium-4');
+      if (headingEl && headingEl.textContent.trim() !== 'Category') {
+        headingEl.textContent = 'Category';
+      }
       optionsContainer = categoryGroup.querySelector('.filters1_filter-options');
       if (optionsContainer) {
+        // Hide original CMS-bound checkboxes
         var existingList = optionsContainer.querySelector('.w-dyn-list');
         if (existingList) existingList.style.display = 'none';
+        // Also hide any standalone CMS checkboxes that aren't in our dynamic list
+        var existingCbs = optionsContainer.querySelectorAll('input[name="category"]');
+        for (var ec = 0; ec < existingCbs.length; ec++) {
+          var existingWrap = existingCbs[ec].closest('.w-checkbox');
+          if (existingWrap) existingWrap.style.display = 'none';
+        }
       }
     } else {
       categoryGroup = createFilterGroup('Category');
@@ -762,6 +777,12 @@
   }
 
   // ── Filter group helpers ──────────────────
+  function findFilterGroupByInputName(name) {
+    var input = document.querySelector('input[name="' + name + '"]');
+    if (!input) return null;
+    return input.closest('.filters1_filter-group');
+  }
+
   function findFilterGroupByHeading(headingText) {
     var groups = document.querySelectorAll('.filters1_filter-group');
     for (var i = 0; i < groups.length; i++) {
