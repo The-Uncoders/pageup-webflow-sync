@@ -45,6 +45,7 @@
   var currentPage = 1;
 
   var _cardTemplate = null;  // cloned from first CMS card
+  var _collectionPrefix = ''; // e.g. '/jobs/' — extracted from first CMS card's link
   var _allCounts = null;     // derived from allJobs: regions, cities, brands, categories, lookup maps
   var _totalJobs = 0;
 
@@ -196,6 +197,21 @@
   function captureCardTemplate() {
     var firstCard = _listEl.querySelector('.w-dyn-item');
     if (!firstCard) return;
+
+    // Extract the CMS collection path prefix from the first card's link.
+    // Webflow renders href like "/jobs/some-slug" — we grab "/jobs/" so
+    // dynamically created cards automatically match whatever collection
+    // slug is set in Webflow, with no hardcoded path.
+    var firstLink = firstCard.querySelector('a[href]');
+    if (firstLink) {
+      var href = firstLink.getAttribute('href') || '';
+      // href format: "/collection-slug/item-slug" — extract up to the last "/"
+      var lastSlash = href.lastIndexOf('/');
+      if (lastSlash > 0) {
+        _collectionPrefix = href.substring(0, lastSlash + 1); // e.g. "/jobs/"
+      }
+    }
+
     _cardTemplate = firstCard.cloneNode(true);
 
     // Clear all CMS items from the list (we'll render dynamically)
@@ -498,8 +514,10 @@
     if (summary) summary.textContent = job.su;
 
     // Link — Since cards are rendered from JSON (not CMS-bound), we must set
-    // the href to replicate what Webflow's CMS binding would produce.
-    var jobHref = job.s ? ('/jobs/' + job.s) : '';
+    // the href. The collection prefix (e.g. "/jobs/") was extracted from the
+    // first CMS card in captureCardTemplate(), so it auto-adapts if the
+    // Webflow CMS collection slug ever changes.
+    var jobHref = job.s ? (_collectionPrefix + job.s) : '';
     if (jobHref) {
       var links = card.querySelectorAll('a');
       for (var li = 0; li < links.length; li++) links[li].href = jobHref;
