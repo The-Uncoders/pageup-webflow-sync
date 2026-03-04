@@ -1085,7 +1085,7 @@
   }
 
   // ── "All Jobs" back button (job template pages) ──
-  // Navigates to /jobs#filters so the browser natively scrolls to the
+  // Navigates to /jobs#job-filters so the browser natively scrolls to the
   // filters section without any programmatic scrolling that could
   // interfere with Webflow page-load animations.
   function setupBackButton() {
@@ -1099,16 +1099,16 @@
     }
     if (!backBtn) return;
 
-    backBtn.setAttribute('href', '/jobs#filters');
+    backBtn.setAttribute('href', '/jobs#job-filters');
     backBtn.addEventListener('click', function (e) {
       e.preventDefault();
       try { sessionStorage.setItem('fctg_back', '1'); } catch (err) {}
-      window.location.href = '/jobs#filters';
+      window.location.href = '/jobs#job-filters';
     });
   }
 
   // ── Handle back navigation: open accordions for active filters ──
-  // Scrolling is handled natively by the #filters anchor — no JS scroll needed.
+  // Scrolling is handled natively by the #job-filters anchor — no JS scroll needed.
   function handleBackNavigation() {
     var isBack = false;
     try {
