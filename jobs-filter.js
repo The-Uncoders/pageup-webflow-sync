@@ -439,7 +439,6 @@
   }
 
   // ── Dynamic card rendering ────────────────
-  var _reinitTimer = null;
 
   function renderCards() {
     if (!_listEl || !_cardTemplate) return;
@@ -456,55 +455,6 @@
 
     // Show/hide "Show More" button
     updateShowMoreButton(end < filteredJobs.length);
-
-    // Re-init Webflow IX2 so GSAP interactions (hover etc.) bind to new cards
-    scheduleReinitInteractions();
-  }
-
-  // ── Re-init Webflow Interactions (debounced) ──
-  function scheduleReinitInteractions() {
-    clearTimeout(_reinitTimer);
-    _reinitTimer = setTimeout(reinitInteractions, 150);
-  }
-
-  function reinitInteractions() {
-    try {
-      var ix2 = window.Webflow && window.Webflow.require('ix2');
-      if (!ix2 || typeof ix2.init !== 'function') return;
-
-      // Save filter accordion open/close states before IX2 reinit
-      var accordionStates = [];
-      var groups = document.querySelectorAll('.filters1_filter-group');
-      for (var i = 0; i < groups.length; i++) {
-        var heading = groups[i].querySelector('.filters1_filter-group-heading');
-        var options = groups[i].querySelector('.filters1_filter-options');
-        if (heading && options) {
-          var cs = window.getComputedStyle(options);
-          accordionStates.push({
-            heading: heading,
-            options: options,
-            wasOpen: cs.display !== 'none' && cs.height !== '0px'
-          });
-        }
-      }
-
-      // Re-init IX2 — rebinds class-based interactions to new DOM elements
-      ix2.init();
-
-      // Restore accordion states after IX2 reinit settles
-      setTimeout(function () {
-        for (var i = 0; i < accordionStates.length; i++) {
-          var s = accordionStates[i];
-          var cs = window.getComputedStyle(s.options);
-          var isOpen = cs.display !== 'none' && cs.height !== '0px';
-          if (s.wasOpen && !isOpen) {
-            s.heading.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-          } else if (!s.wasOpen && isOpen) {
-            s.heading.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-          }
-        }
-      }, 100);
-    } catch (e) { /* IX2 not available */ }
   }
 
   function createCard(job) {
