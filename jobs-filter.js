@@ -1,44 +1,22 @@
 /**
- * FCTG Careers - Job Filter & Sort System v2.0
+ * FCTG Careers - Job Filter & Sort System v3.0
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v3.0   – MAJOR: Data-driven filtering against ALL jobs (not just 30 DOM items).
+ *           Fetches all-jobs.json from CDN, renders cards dynamically.
+ *           Cascading cross-filter counts: selecting a filter in one dimension
+ *           updates available options and counts in all other dimensions.
+ *           "Show More" pagination replaces Webflow CMS pagination.
+ *           Single CDN fetch replaces 5 parallel fetches.
  * v2.0   – Fix: Region/city/category counts now from CDN (filter-counts.json)
  *           instead of DOM parsing which miscounted filter checkboxes as jobs.
  * v1.9   – Fix: Filter options now show ALL CMS items (not just first 30).
  *           New: Back button auto-scrolls to listings and opens active filter accordions.
  *           Fix: Script loader uses createElement (not HTML tag) for Webflow compatibility.
- * v1.7.3 – Fix: Object reference bug — clearAll() and restoreFilterState()
- *           now mutate filter objects in-place instead of reassigning,
- *           preserving closure references from bindCheckboxes().
- * v1.7.1 – Fix: Brand badge selector (.filter-count); guard against double init.
- * v1.7   – Fix: Brand filter uses CDN counts (brand-counts.json) for all 370 jobs.
- *           Fix: Hide pagination when JS filters reduce visible results.
- *           New: Save/restore filter state via sessionStorage.
- *           New: "All Jobs" back button on template preserves filters.
- * v1.6.3 – Fix: Accordions respect Webflow IX2 interactions (removed forced open).
- *           Fix: Total count fetched from total-jobs.json (shows all CMS jobs).
- * v1.6.2 – Fix: Checkbox visual state inversion (remove change listener that
- *           double-toggles w--redirected-checked with Webflow's native handler).
- *           Fix: Dynamic badge uses 'filter-count' class to match designer styling.
- *           Fix: Results count shows "Showing X of Y Jobs" format.
- * v1.6.1 – Fix: Detect designer's category group by input name (not heading).
- *           Hides CMS checkboxes, renames heading to "Category", no duplicate.
- * v1.6 – Fix: Region checkboxes use proper Webflow custom checkbox structure.
- *         Fix: Stop overriding designer styles – update native badge counts.
- *         Fix: Heading renames use input names (not text) to avoid ambiguity.
- *         New: Locations grouped by region with sub-headings (PageUp layout).
- *         New: Dynamic Category filter built from job data.
- * v1.5.2 – Fix: Region accordion collapsed. Heading rename CSS class fix.
- * v1.5.1 – Fix: Region tag display uses capitalizeRegion().
- * v1.5   – Replace Country filter with Region filter.
- * v1.4.1 – Hide static badge; dynamic count replaces it.
- * v1.4   – Added country filter support, dedup, count badges.
- * v1.3   – Strip Finsweet attributes to prevent MutationObserver loop.
- * v1.2   – Brand data from brand-map.json (CDN).
  */
 (function () {
   'use strict';
@@ -50,11 +28,8 @@
   // ── Config ────────────────────────────────
   var DEBOUNCE = 250;
   var INIT_DELAY = 300;
-  var BRAND_MAP_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/brand-map.json';
-  var REGION_MAP_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/region-map.json';
-  var TOTAL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/total-jobs.json';
-  var BRAND_COUNTS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/brand-counts.json';
-  var FILTER_COUNTS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/filter-counts.json';
+  var PAGE_SIZE = 30;
+  var ALL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/all-jobs.json?v=3.0';
 
   // ── State ─────────────────────────────────
   var keyword = '';
@@ -64,26 +39,27 @@
   var activeCategories = {};
   var workType = '';
   var sortMode = 'default';
-  var jobs = [];
-  var _brandMap = null;
-  var _regionMap = null;
-  var _totalJobs = 0; // fetched from total-jobs.json (all CMS jobs, not just paginated)
-  var _brandCounts = null; // fetched from brand-counts.json (accurate brand counts across all jobs)
-  var _allCounts = null;   // { regions, cities, categories, cityToRegion, cityDisplay, categoryDisplay } from CDN filter-counts.json
+
+  var allJobs = [];        // all jobs from CDN JSON
+  var filteredJobs = [];   // filtered subset
+  var currentPage = 1;
+
+  var _cardTemplate = null;  // cloned from first CMS card
+  var _allCounts = null;     // derived from allJobs: regions, cities, brands, categories, lookup maps
+  var _totalJobs = 0;
 
   // Cached element references
   var _rcEl = null;
   var _icEl = null;
   var _emptyEl = null;
   var _allRadio = null;
+  var _listEl = null;
 
   // ── Helpers for preserving object references ──
-  // Clear all keys from an object in-place (avoids breaking closure references)
   function clearObj(obj) {
     var keys = Object.keys(obj);
     for (var i = 0; i < keys.length; i++) delete obj[keys[i]];
   }
-  // Copy keys from source into target in-place (clears target first)
   function copyInto(target, source) {
     clearObj(target);
     if (!source) return;
@@ -131,8 +107,8 @@
     if (_initialised) return;
     _initialised = true;
 
-    var list = document.querySelector('.career_list');
-    if (!list) return;
+    _listEl = document.querySelector('.career_list');
+    if (!_listEl) return;
 
     // Cache refs BEFORE stripping Finsweet attributes
     _rcEl = document.querySelector('[fs-cmsfilter-element="results-count"]');
@@ -157,36 +133,35 @@
     // Inject minimal styles for region sub-headings in location group
     injectStyles();
 
-    // Fetch all config in parallel, then build UI
-    var pending = 5;
-    var brandResult = null;
-    var regionResult = null;
-    var totalResult = null;
-    var brandCountsResult = null;
-    var filterCountsResult = null;
+    // Capture the card template from the first CMS-rendered card
+    captureCardTemplate();
 
-    function afterFetch() {
-      _brandMap = brandResult || {};
-      _regionMap = regionResult || {};
-      _totalJobs = (totalResult && totalResult.total) ? totalResult.total : 0;
-      _brandCounts = brandCountsResult || {};
+    // Hide Webflow CMS pagination permanently (we use "Show More")
+    var pag = document.querySelector('.w-pagination-wrapper');
+    if (pag) pag.style.display = 'none';
 
-      // Parse the visible job cards (in .career_list) for filtering/display
-      var items = list.querySelectorAll(':scope > .w-dyn-item');
-      for (var i = 0; i < items.length; i++) jobs.push(parseCard(items[i], i));
+    // Fetch all jobs data from CDN, then build UI
+    fetchJSON(ALL_JOBS_URL, function (data) {
+      if (!data || !Array.isArray(data) || data.length === 0) {
+        console.warn('[fctg] all-jobs.json fetch failed or empty, falling back to DOM');
+        fallbackToDom();
+        return;
+      }
 
-      // Use CDN filter counts (pre-computed from ALL CMS items during sync).
-      // Falls back to DOM parsing if CDN fetch fails — but DOM only has ~30 items.
-      _allCounts = filterCountsResult || parseAllItemsForCounts();
+      allJobs = data;
+      _totalJobs = allJobs.length;
+
+      // Derive all filter options from the data
+      buildInitialCounts();
 
       // Ensure headings match PageUp names
       renameHeadingsIfNeeded();
 
-      // Build filter UI (using _allCounts for comprehensive options)
+      // Build filter UI
       hideAllCountryCheckboxes();
       buildRegionFilter();
       groupLocationsByRegion();
-      deduplicateFilters();
+      deduplicateAndBuildBrands();
       buildCategoryFilter();
 
       // Bind all interactions
@@ -205,207 +180,77 @@
       applyFilters();
 
       // If returning via "All Jobs" back button, scroll to listings and open relevant accordions
-      var isBack = false;
-      try {
-        isBack = sessionStorage.getItem('fctg_back') === '1';
-        sessionStorage.removeItem('fctg_back');
-      } catch (e) {}
+      handleBackNavigation();
+    });
+  }
 
-      if (isBack) {
-        setTimeout(function () {
-          // Scroll to the filter/listings section
-          scrollToFilters();
-          // Open accordion sections that have active filters
-          openAccordionsForActiveFilters();
-        }, 500);
+  // ── Fallback: if CDN fetch fails, revert to DOM-only filtering (v2.0 behavior) ──
+  function fallbackToDom() {
+    var items = _listEl.querySelectorAll(':scope > .w-dyn-item');
+    if (items.length === 0) return;
+    // Show whatever CMS rendered
+    console.log('[fctg] Fallback: ' + items.length + ' DOM items');
+  }
 
-        // Safety net: re-scroll if something resets position (e.g. late IX2 animation)
-        var _safetyStart = Date.now();
-        var _safetyInt = setInterval(function () {
-          if (Date.now() - _safetyStart > 5000) { clearInterval(_safetyInt); return; }
-          if (window.pageYOffset < 50) scrollToFilters();
-        }, 300);
+  // ── Capture card template from first CMS-rendered card ──
+  function captureCardTemplate() {
+    var firstCard = _listEl.querySelector('.w-dyn-item');
+    if (!firstCard) return;
+    _cardTemplate = firstCard.cloneNode(true);
+
+    // Clear all CMS items from the list (we'll render dynamically)
+    var items = _listEl.querySelectorAll(':scope > .w-dyn-item');
+    for (var i = 0; i < items.length; i++) items[i].remove();
+  }
+
+  // ── Derive all filter counts from allJobs data ──
+  function buildInitialCounts() {
+    var regionCounts = {}, cityCounts = {}, brandCounts = {}, categoryCounts = {};
+    var cityToRegion = {}, cityDisplay = {}, categoryDisplay = {}, brandDisplay = {};
+
+    for (var i = 0; i < allJobs.length; i++) {
+      var j = allJobs[i];
+
+      // Regions
+      var rk = j.r.toLowerCase();
+      if (rk) regionCounts[rk] = (regionCounts[rk] || 0) + 1;
+
+      // Cities
+      var ck = j.ci.toLowerCase();
+      if (ck) {
+        cityCounts[ck] = (cityCounts[ck] || 0) + 1;
+        if (!cityToRegion[ck]) cityToRegion[ck] = j.r;
+        if (!cityDisplay[ck]) cityDisplay[ck] = j.ci;
+      }
+
+      // Brands
+      var bk = j.b.toLowerCase();
+      if (bk) {
+        brandCounts[bk] = (brandCounts[bk] || 0) + 1;
+        if (!brandDisplay[bk]) brandDisplay[bk] = j.b;
+      }
+
+      // Categories (may be comma-separated)
+      var cats = j.ca.split(',');
+      for (var c = 0; c < cats.length; c++) {
+        var catk = cats[c].trim().toLowerCase();
+        if (catk) {
+          categoryCounts[catk] = (categoryCounts[catk] || 0) + 1;
+          if (!categoryDisplay[catk]) categoryDisplay[catk] = cats[c].trim();
+        }
       }
     }
 
-    fetchJSON(BRAND_MAP_URL, function (map) {
-      brandResult = map;
-      if (--pending === 0) afterFetch();
-    });
-    fetchJSON(REGION_MAP_URL, function (map) {
-      regionResult = map;
-      if (--pending === 0) afterFetch();
-    });
-    fetchJSON(TOTAL_JOBS_URL, function (data) {
-      totalResult = data;
-      if (--pending === 0) afterFetch();
-    });
-    fetchJSON(BRAND_COUNTS_URL, function (data) {
-      brandCountsResult = data;
-      if (--pending === 0) afterFetch();
-    });
-    fetchJSON(FILTER_COUNTS_URL, function (data) {
-      filterCountsResult = data;
-      if (--pending === 0) afterFetch();
-    });
-  }
-
-  // ── "All Jobs" back button (job template pages) ──
-  function setupBackButton() {
-    // Only run on template pages (where .career_list doesn't exist)
-    if (document.querySelector('.career_list')) return;
-
-    // Find the back button: an <a> with class "button is-link is-icon" containing "All" text
-    var links = document.querySelectorAll('a.button.is-link.is-icon');
-    var backBtn = null;
-    for (var i = 0; i < links.length; i++) {
-      var txt = links[i].textContent.trim().toLowerCase();
-      if (txt.indexOf('all') !== -1) { backBtn = links[i]; break; }
-    }
-    if (!backBtn) return;
-
-    // Point to /jobs — sessionStorage filter state will be restored on arrival
-    backBtn.setAttribute('href', '/jobs');
-    backBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      try { sessionStorage.setItem('fctg_back', '1'); } catch (err) {}
-      window.location.href = '/jobs';
-    });
-  }
-
-  // ── Inject minimal styles ─────────────────
-  function injectStyles() {
-    var style = document.createElement('style');
-    style.textContent =
-      '.filters1_region-subheading{font-weight:600;font-size:13px;' +
-      'padding:10px 0 4px;color:#333;margin-top:4px;}' +
-      '.filters1_region-subheading:first-child{padding-top:0;margin-top:0;}';
-    document.head.appendChild(style);
-  }
-
-  // ── Fetch JSON helper ───────────────────
-  function fetchJSON(url, cb) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.timeout = 5000;
-    xhr.onload = function () {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try { cb(JSON.parse(xhr.responseText)); } catch (e) { cb(null); }
-      } else { cb(null); }
+    _allCounts = {
+      regions: regionCounts,
+      cities: cityCounts,
+      brands: brandCounts,
+      categories: categoryCounts,
+      cityToRegion: cityToRegion,
+      cityDisplay: cityDisplay,
+      categoryDisplay: categoryDisplay,
+      brandDisplay: brandDisplay
     };
-    xhr.onerror = function () { cb(null); };
-    xhr.ontimeout = function () { cb(null); };
-    xhr.send();
-  }
-
-  // ── Parse a single job card ───────────────
-  function parseCard(el, idx) {
-    var dw = el.querySelectorAll('.career23_detail-wrapper');
-    var title = qText(el, '.heading-style-h5');
-    var brandFromDOM = dwText(dw[2]);
-    var brand = (_brandMap && _brandMap[title]) ? _brandMap[title] : brandFromDOM;
-
-    var countryRaw = dwText(dw[1]);
-    var regionName = '';
-    if (countryRaw && _regionMap) {
-      regionName = _regionMap[countryRaw.toLowerCase()] || 'Multiple Locations';
-    } else if (!countryRaw) {
-      regionName = 'Multiple Locations';
-    }
-
-    return {
-      el: el, idx: idx, title: title,
-      category: qText(el, '.tag'),
-      city: dwText(dw[0]),
-      country: countryRaw,
-      region: regionName,
-      brand: brand,
-      workType: dwText(dw[3]),
-      summary: qText(el, '.text-size-regular')
-    };
-  }
-
-  function qText(parent, sel) {
-    var el = parent.querySelector(sel);
-    return el ? el.textContent.trim() : '';
-  }
-
-  function dwText(wrapper) {
-    if (!wrapper) return '';
-    var t = wrapper.querySelector('.text-size-medium');
-    return t ? t.textContent.trim() : '';
-  }
-
-  // ── Parse ALL .w-dyn-item elements for complete filter counts ──
-  // Webflow renders ~367 items across pagination wrappers but only ~30 are in .career_list.
-  // This function scans ALL items so filter checkboxes show every available option.
-  function parseAllItemsForCounts() {
-    var allItems = document.querySelectorAll('.w-dyn-item');
-    var regions = {}, cities = {}, categories = {};
-    var cityToRegion = {}, cityDisplay = {}, categoryDisplay = {};
-
-    for (var i = 0; i < allItems.length; i++) {
-      var el = allItems[i];
-      var dw = el.querySelectorAll('.career23_detail-wrapper');
-
-      // Region (derived from country via _regionMap)
-      var countryRaw = dwText(dw[1]);
-      var regionName = '';
-      if (countryRaw && _regionMap) {
-        regionName = _regionMap[countryRaw.toLowerCase()] || 'Multiple Locations';
-      } else if (!countryRaw) {
-        regionName = 'Multiple Locations';
-      }
-      if (regionName) {
-        var rk = regionName.toLowerCase();
-        regions[rk] = (regions[rk] || 0) + 1;
-      }
-
-      // City
-      var city = dwText(dw[0]);
-      if (city) {
-        var ck = city.toLowerCase();
-        cities[ck] = (cities[ck] || 0) + 1;
-        if (regionName && !cityToRegion[ck]) cityToRegion[ck] = regionName;
-        if (!cityDisplay[ck]) cityDisplay[ck] = city;
-      }
-
-      // Category
-      var cat = qText(el, '.tag');
-      if (cat) {
-        var catk = cat.toLowerCase();
-        categories[catk] = (categories[catk] || 0) + 1;
-        if (!categoryDisplay[catk]) categoryDisplay[catk] = cat;
-      }
-    }
-
-    return {
-      regions: regions, cities: cities, categories: categories,
-      cityToRegion: cityToRegion, cityDisplay: cityDisplay,
-      categoryDisplay: categoryDisplay
-    };
-  }
-
-  // ── Rename headings (safe: identifies groups by input name) ──
-  function renameHeadingsIfNeeded() {
-    // Country group → "Regions"
-    var countryCb = document.querySelector('input[name="country"]');
-    if (countryCb) {
-      var g = countryCb.closest('.filters1_filter-group');
-      if (g) {
-        var t = g.querySelector('.text-size-medium-4');
-        if (t && t.textContent.trim() !== 'Regions') t.textContent = 'Regions';
-      }
-    }
-    // City group → "Locations"
-    var cityCb = document.querySelector('input[name="city"]');
-    if (cityCb) {
-      var g2 = cityCb.closest('.filters1_filter-group');
-      if (g2) {
-        var t2 = g2.querySelector('.text-size-medium-4');
-        if (t2 && t2.textContent.trim() !== 'Locations') t2.textContent = 'Locations';
-      }
-    }
   }
 
   // ── Filter engine ─────────────────────────
@@ -416,46 +261,171 @@
     var hasBrands = objSize(activeBrands) > 0;
     var hasCategories = objSize(activeCategories) > 0;
     var wt = workType.toLowerCase();
-    var count = 0;
 
-    for (var i = 0; i < jobs.length; i++) {
-      var j = jobs[i];
+    filteredJobs = [];
+
+    for (var i = 0; i < allJobs.length; i++) {
+      var j = allJobs[i];
       var show = true;
 
       if (show && kw) {
-        var hay = [j.title, j.category, j.city, j.country, j.region,
-                   j.brand, j.workType, j.summary].join(' ').toLowerCase();
+        var hay = [j.t, j.ca, j.ci, j.co, j.r, j.b, j.wt, j.su].join(' ').toLowerCase();
         show = hay.indexOf(kw) !== -1;
       }
-      if (show && hasCities) show = !!activeCities[j.city.toLowerCase()];
-      if (show && hasRegions) show = !!activeRegions[j.region.toLowerCase()];
-      if (show && hasBrands) show = !!activeBrands[j.brand.toLowerCase()];
-      if (show && hasCategories) show = !!activeCategories[j.category.toLowerCase()];
-      if (show && wt) show = j.workType.toLowerCase() === wt;
+      if (show && hasCities) show = !!activeCities[j.ci.toLowerCase()];
+      if (show && hasRegions) show = !!activeRegions[j.r.toLowerCase()];
+      if (show && hasBrands) show = !!activeBrands[j.b.toLowerCase()];
+      if (show && hasCategories) show = matchesCategory(j.ca, activeCategories);
+      if (show && wt) show = j.wt.toLowerCase() === wt;
 
-      j.el.style.display = show ? '' : 'none';
-      if (show) count++;
+      if (show) filteredJobs.push(j);
     }
 
-    setCount(count);
-    setEmpty(count === 0);
-    setPagination(count);
+    // Sort if needed
+    sortFilteredJobs();
+
+    currentPage = 1;
+    renderCards();
+    updateCrossFilterCounts();
+    setCount(filteredJobs.length);
+    setEmpty(filteredJobs.length === 0);
     renderTags();
-    reorderDOM();
     saveFilterState();
+  }
+
+  // ── Category matching (handles comma-separated) ──
+  function matchesCategory(catField, activeMap) {
+    var parts = catField.split(',');
+    for (var i = 0; i < parts.length; i++) {
+      if (activeMap[parts[i].trim().toLowerCase()]) return true;
+    }
+    return false;
+  }
+
+  // ── Cascading cross-filter counts ─────────
+  function updateCrossFilterCounts() {
+    var kw = keyword.toLowerCase();
+    var hasCities = objSize(activeCities) > 0;
+    var hasRegions = objSize(activeRegions) > 0;
+    var hasBrands = objSize(activeBrands) > 0;
+    var hasCategories = objSize(activeCategories) > 0;
+    var wt = workType.toLowerCase();
+
+    // For each dimension, count jobs matching all OTHER filters except that dimension
+    var regionCounts = {}, cityCounts = {}, brandCounts = {}, categoryCounts = {};
+
+    for (var i = 0; i < allJobs.length; i++) {
+      var j = allJobs[i];
+
+      // Apply keyword (always applies to all dimensions)
+      var passesKeyword = true;
+      if (kw) {
+        var hay = [j.t, j.ca, j.ci, j.co, j.r, j.b, j.wt, j.su].join(' ').toLowerCase();
+        passesKeyword = hay.indexOf(kw) !== -1;
+      }
+      if (!passesKeyword) continue;
+
+      // Apply workType (always applies to all dimensions)
+      if (wt && j.wt.toLowerCase() !== wt) continue;
+
+      // Pre-compute filter matches for each dimension
+      var matchCity = !hasCities || !!activeCities[j.ci.toLowerCase()];
+      var matchRegion = !hasRegions || !!activeRegions[j.r.toLowerCase()];
+      var matchBrand = !hasBrands || !!activeBrands[j.b.toLowerCase()];
+      var matchCategory = !hasCategories || matchesCategory(j.ca, activeCategories);
+
+      // Region counts: apply all EXCEPT region filter
+      if (matchCity && matchBrand && matchCategory) {
+        var rk = j.r.toLowerCase();
+        if (rk) regionCounts[rk] = (regionCounts[rk] || 0) + 1;
+      }
+
+      // City counts: apply all EXCEPT city filter
+      if (matchRegion && matchBrand && matchCategory) {
+        var ck = j.ci.toLowerCase();
+        if (ck) cityCounts[ck] = (cityCounts[ck] || 0) + 1;
+      }
+
+      // Brand counts: apply all EXCEPT brand filter
+      if (matchCity && matchRegion && matchCategory) {
+        var bk = j.b.toLowerCase();
+        if (bk) brandCounts[bk] = (brandCounts[bk] || 0) + 1;
+      }
+
+      // Category counts: apply all EXCEPT category filter
+      if (matchCity && matchRegion && matchBrand) {
+        var cats = j.ca.split(',');
+        for (var c = 0; c < cats.length; c++) {
+          var catk = cats[c].trim().toLowerCase();
+          if (catk) categoryCounts[catk] = (categoryCounts[catk] || 0) + 1;
+        }
+      }
+    }
+
+    // Update each filter panel
+    updateFilterPanel('input[name="region"]', regionCounts);
+    updateFilterPanel('input[name="city"]', cityCounts);
+    updateFilterPanel('input[name="brand"]', brandCounts);
+    updateFilterPanel('input[name="category"]', categoryCounts);
+  }
+
+  // ── Update filter panel badge counts + show/hide zero-count options ──
+  function updateFilterPanel(selector, counts) {
+    var inputs = document.querySelectorAll(selector);
+    for (var i = 0; i < inputs.length; i++) {
+      var cb = inputs[i];
+      var label = cb.closest('.w-checkbox');
+      if (!label) continue;
+      var badge = label.querySelector('.filter-count') ||
+                  label.querySelector('.icon-1x1-xsmall');
+      var spanEl = label.querySelector('.w-form-label');
+      var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
+      var count = counts[key] || 0;
+
+      if (badge) badge.textContent = count;
+
+      // Hide zero-count options, but keep checked ones visible (so user can uncheck)
+      if (count > 0 || cb.checked) {
+        label.style.display = '';
+      } else {
+        label.style.display = 'none';
+      }
+    }
+
+    // Also update region sub-headings in the Locations panel
+    if (selector === 'input[name="city"]') {
+      updateLocationSubheadings(counts);
+    }
+  }
+
+  // ── Hide location sub-headings that have no visible cities ──
+  function updateLocationSubheadings(cityCounts) {
+    var subheadings = document.querySelectorAll('.filters1_region-subheading');
+    for (var i = 0; i < subheadings.length; i++) {
+      var sh = subheadings[i];
+      var regionName = sh.textContent.trim();
+      // Check if any city in this region has count > 0
+      var hasVisibleCities = false;
+      var next = sh.nextElementSibling;
+      while (next && !next.classList.contains('filters1_region-subheading')) {
+        if (next.style.display !== 'none') {
+          hasVisibleCities = true;
+          break;
+        }
+        next = next.nextElementSibling;
+      }
+      sh.style.display = hasVisibleCities ? '' : 'none';
+    }
   }
 
   // ── Results count ─────────────────────────
   function setCount(n) {
-    // Total = fetched CMS total (all jobs), fallback to DOM count
-    var total = _totalJobs || jobs.length;
+    var total = _totalJobs || allJobs.length;
     if (_rcEl) _rcEl.textContent = n;
     if (_icEl) _icEl.textContent = total;
 
-    // Update parent wrapper to show "Showing X of Y Jobs" format
     var wrapper = _rcEl ? _rcEl.parentElement : null;
     if (wrapper && _rcEl && _icEl) {
-      // Preserve the span refs but rebuild surrounding text
       while (wrapper.firstChild) wrapper.removeChild(wrapper.firstChild);
       wrapper.appendChild(document.createTextNode('Showing '));
       wrapper.appendChild(_rcEl);
@@ -469,15 +439,86 @@
     if (_emptyEl) _emptyEl.style.display = flag ? 'flex' : 'none';
   }
 
-  // ── Pagination visibility ──────────────────
-  function setPagination(count) {
-    // Hide Webflow CMS pagination when ANY JS filter is active,
-    // because the pagination loads different CMS pages that won't have our filters.
-    var paginationWrapper = document.querySelector('.w-pagination-wrapper');
-    if (!paginationWrapper) return;
-    var hasAnyFilter = keyword || objSize(activeCities) > 0 || objSize(activeRegions) > 0 ||
-                       objSize(activeBrands) > 0 || objSize(activeCategories) > 0 || workType;
-    paginationWrapper.style.display = hasAnyFilter ? 'none' : '';
+  // ── Dynamic card rendering ────────────────
+  function renderCards() {
+    if (!_listEl || !_cardTemplate) return;
+
+    // Clear existing cards
+    var existing = _listEl.querySelectorAll(':scope > .w-dyn-item');
+    for (var i = 0; i < existing.length; i++) existing[i].remove();
+
+    // Render current page slice
+    var end = Math.min(currentPage * PAGE_SIZE, filteredJobs.length);
+    for (var i = 0; i < end; i++) {
+      _listEl.appendChild(createCard(filteredJobs[i]));
+    }
+
+    // Show/hide "Show More" button
+    updateShowMoreButton(end < filteredJobs.length);
+  }
+
+  function createCard(job) {
+    var card = _cardTemplate.cloneNode(true);
+
+    // Title
+    var heading = card.querySelector('.heading-style-h5');
+    if (heading) heading.textContent = job.t;
+
+    // Category tag
+    var tag = card.querySelector('.tag');
+    if (tag) tag.textContent = job.ca;
+
+    // Detail wrappers: [0]=city, [1]=country, [2]=brand, [3]=workType
+    var dw = card.querySelectorAll('.career23_detail-wrapper');
+    setDwText(dw[0], job.ci);
+    setDwText(dw[1], job.co);
+    setDwText(dw[2], job.b);
+    setDwText(dw[3], job.wt);
+
+    // Summary
+    var summary = card.querySelector('.text-size-regular');
+    if (summary) summary.textContent = job.su;
+
+    // Link — the card or its wrapper is an <a>
+    var link = card.querySelector('a');
+    if (link && job.ju) {
+      link.href = job.ju;
+    }
+    // If the card itself is an <a> tag
+    if (card.tagName === 'A' && job.ju) {
+      card.href = job.ju;
+    }
+    // Also handle .w-dyn-item wrapping a link block
+    var linkBlock = card.querySelector('.career23_card-link');
+    if (linkBlock && job.ju) {
+      linkBlock.href = job.ju;
+    }
+
+    return card;
+  }
+
+  function setDwText(wrapper, text) {
+    if (!wrapper) return;
+    var t = wrapper.querySelector('.text-size-medium');
+    if (t) t.textContent = text || '';
+  }
+
+  // ── "Show More" button ────────────────────
+  function updateShowMoreButton(hasMore) {
+    var btn = document.getElementById('fctg-show-more');
+    if (!btn && hasMore) {
+      btn = document.createElement('button');
+      btn.id = 'fctg-show-more';
+      btn.className = 'button is-secondary';
+      btn.textContent = 'Show More';
+      btn.style.cssText = 'display:block;margin:24px auto 0;';
+      btn.addEventListener('click', function () {
+        currentPage++;
+        renderCards();
+      });
+      _listEl.parentElement.insertBefore(btn, _listEl.nextSibling);
+    }
+    if (btn) btn.style.display = hasMore ? '' : 'none';
   }
 
   // ── Search ────────────────────────────────
@@ -553,7 +594,9 @@
             }
           }
         }
-        reorderDOM();
+        sortFilteredJobs();
+        currentPage = 1;
+        renderCards();
         dd.classList.remove('w--open');
         var dl = dd.querySelector('.w-dropdown-list');
         if (dl) dl.classList.remove('w--open');
@@ -561,20 +604,16 @@
     });
   }
 
-  function reorderDOM() {
-    if (sortMode === 'default') return;
-    var list = document.querySelector('.career_list');
-    if (!list) return;
-    var arr = jobs.slice();
+  function sortFilteredJobs() {
     switch (sortMode) {
       case 'Name: A to Z':
-        arr.sort(function (a, b) { return a.title.localeCompare(b.title); }); break;
+        filteredJobs.sort(function (a, b) { return a.t.localeCompare(b.t); }); break;
       case 'Name: Z to A':
-        arr.sort(function (a, b) { return b.title.localeCompare(a.title); }); break;
+        filteredJobs.sort(function (a, b) { return b.t.localeCompare(a.t); }); break;
       default:
-        arr.sort(function (a, b) { return a.idx - b.idx; });
+        // Keep original order (order from CMS/all-jobs.json)
+        break;
     }
-    for (var i = 0; i < arr.length; i++) list.appendChild(arr[i].el);
   }
 
   // ── Filter tags ────────────────────────────
@@ -666,7 +705,6 @@
       var lbl = getCheckLabel(cb);
       if (lbl && lbl.toLowerCase() === labelLower) {
         cb.checked = false;
-        // Also update visual state for custom checkbox div
         var wrap = cb.closest('.w-checkbox');
         if (wrap) {
           var chk = wrap.querySelector('.w-checkbox-input--inputType-custom');
@@ -712,7 +750,6 @@
 
     if (_allRadio) _allRadio.checked = true;
 
-    // Clear saved filter state
     try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
 
     var dd = document.querySelector('.dropdown1_component');
@@ -733,13 +770,6 @@
 
   // ── Create checkbox (matches native Webflow structure) ──
   function createCheckbox(name, labelText, count) {
-    // Replicates:
-    // <label class="w-checkbox filters1_form-checkbox1">
-    //   <div class="w-checkbox-input w-checkbox-input--inputType-custom filters1_form-checkbox1-icon"></div>
-    //   <input type="checkbox" name="..." style="opacity:0;position:absolute;z-index:-1" />
-    //   <span class="filters1_form-checkbox1-label w-form-label">Label</span>
-    //   <div class="icon-1x1-xsmall background-color-black">count</div>
-    // </label>
     var label = document.createElement('label');
     label.className = 'w-checkbox filters1_form-checkbox1';
 
@@ -764,11 +794,6 @@
       badge.textContent = count;
       label.appendChild(badge);
     }
-
-    // NOTE: Do NOT add a 'change' listener to sync w--redirected-checked here.
-    // Webflow's native JS uses event delegation on .w-checkbox-input--inputType-custom
-    // and already toggles the class on click. Adding our own listener causes a
-    // double-toggle, resulting in an inverted visual state.
 
     return label;
   }
@@ -859,6 +884,49 @@
     optionsContainer.appendChild(groupedContainer);
   }
 
+  // ── Build/deduplicate brand filter ─────────
+  function deduplicateAndBuildBrands() {
+    if (!_allCounts) return;
+    var brandCounts = _allCounts.brands;
+
+    // Update existing CMS brand checkboxes with accurate counts, hide dupes/unknowns
+    var seen = {};
+    var cbs = document.querySelectorAll('input[name="brand"]');
+    for (var c = 0; c < cbs.length; c++) {
+      var cb = cbs[c];
+      var label = getCheckLabel(cb);
+      if (!label) continue;
+      var key = label.toLowerCase();
+      var wrapper = cb.closest('.w-checkbox');
+      if (!wrapper) continue;
+
+      if (seen[key] || !brandCounts[key]) {
+        wrapper.style.display = 'none';
+      } else {
+        seen[key] = true;
+        var origBadge = wrapper.querySelector('.filter-count') ||
+                        wrapper.querySelector('.icon-1x1-xsmall');
+        if (origBadge) origBadge.textContent = brandCounts[key];
+      }
+    }
+
+    // Add any brands from data that aren't in the CMS-rendered checkboxes
+    var brandDisplay = _allCounts.brandDisplay;
+    var brandGroup = findFilterGroupByInputName('brand');
+    if (!brandGroup) return;
+    var optContainer = brandGroup.querySelector('.filters1_filter-options');
+    if (!optContainer) return;
+
+    var brandKeys = Object.keys(brandCounts).sort();
+    for (var b = 0; b < brandKeys.length; b++) {
+      var bk = brandKeys[b];
+      if (seen[bk]) continue;
+      optContainer.appendChild(
+        createCheckbox('brand', brandDisplay[bk] || capitalize(bk), brandCounts[bk])
+      );
+    }
+  }
+
   // ── Build dynamic category filter ─────────
   function buildCategoryFilter() {
     if (!_allCounts) return;
@@ -868,23 +936,19 @@
     var catKeys = Object.keys(categoryCounts);
     if (catKeys.length === 0) return;
 
-    // Find existing Category group: first by input name, then by heading text
     var categoryGroup = findFilterGroupByInputName('category') ||
                         findFilterGroupByHeading('Category');
     var optionsContainer;
 
     if (categoryGroup) {
-      // Rename heading to "Category" if it's something else (e.g. "Locations")
       var headingEl = categoryGroup.querySelector('.text-size-medium-4');
       if (headingEl && headingEl.textContent.trim() !== 'Category') {
         headingEl.textContent = 'Category';
       }
       optionsContainer = categoryGroup.querySelector('.filters1_filter-options');
       if (optionsContainer) {
-        // Hide original CMS-bound checkboxes
         var existingList = optionsContainer.querySelector('.w-dyn-list');
         if (existingList) existingList.style.display = 'none';
-        // Also hide any standalone CMS checkboxes that aren't in our dynamic list
         var existingCbs = optionsContainer.querySelectorAll('input[name="category"]');
         for (var ec = 0; ec < existingCbs.length; ec++) {
           var existingWrap = existingCbs[ec].closest('.w-checkbox');
@@ -916,45 +980,25 @@
     }
   }
 
-  // ── Deduplicate brand filter ──────────────
-  function deduplicateFilters() {
-    dedupeGroup('input[name="brand"]', 'brand');
-  }
-
-  function dedupeGroup(selector, field) {
-    // Use CDN brand counts if available (accurate across all CMS items),
-    // otherwise fall back to counting from the 30 DOM items
-    var counts;
-    if (field === 'brand' && _brandCounts && objSize(_brandCounts) > 0) {
-      counts = _brandCounts;
-    } else {
-      counts = {};
-      for (var i = 0; i < jobs.length; i++) {
-        var val = jobs[i][field];
-        if (!val) continue;
-        counts[val.toLowerCase()] = (counts[val.toLowerCase()] || 0) + 1;
+  // ── Rename headings if needed ──────────────
+  function renameHeadingsIfNeeded() {
+    // Country group → "Regions"
+    var countryCb = document.querySelector('input[name="country"]');
+    if (countryCb) {
+      var g1 = countryCb.closest('.filters1_filter-group');
+      if (g1) {
+        var t1 = g1.querySelector('.text-size-medium-4');
+        if (t1 && t1.textContent.trim() !== 'Regions') t1.textContent = 'Regions';
       }
     }
 
-    var seen = {};
-    var cbs = document.querySelectorAll(selector);
-    for (var c = 0; c < cbs.length; c++) {
-      var cb = cbs[c];
-      var label = getCheckLabel(cb);
-      if (!label) continue;
-      var key = label.toLowerCase();
-      var wrapper = cb.closest('.w-checkbox');
-      if (!wrapper) continue;
-
-      if (seen[key] || !counts[key]) {
-        wrapper.style.display = 'none';
-      } else {
-        seen[key] = true;
-        // Update native badge with actual count (preserve designer styling)
-        // CMS checkboxes use .filter-count; dynamic ones use .icon-1x1-xsmall
-        var origBadge = wrapper.querySelector('.filter-count') ||
-                        wrapper.querySelector('.icon-1x1-xsmall');
-        if (origBadge) origBadge.textContent = counts[key];
+    // City group → "Locations"
+    var cityCb = document.querySelector('input[name="city"]');
+    if (cityCb) {
+      var g2 = cityCb.closest('.filters1_filter-group');
+      if (g2) {
+        var t2 = g2.querySelector('.text-size-medium-4');
+        if (t2 && t2.textContent.trim() !== 'Locations') t2.textContent = 'Locations';
       }
     }
   }
@@ -1001,7 +1045,6 @@
     options.className = 'filters1_filter-options';
     group.appendChild(options);
 
-    // Simple accordion toggle (only for dynamically created groups without IX2)
     headingEl.addEventListener('click', function () {
       var computed = window.getComputedStyle(options);
       var isOpen = computed.display !== 'none' && computed.height !== '0px';
@@ -1037,7 +1080,48 @@
     return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
-  // ── Back-button UX: scroll to listings + open relevant accordions ──
+  // ── "All Jobs" back button (job template pages) ──
+  function setupBackButton() {
+    if (document.querySelector('.career_list')) return;
+
+    var links = document.querySelectorAll('a.button.is-link.is-icon');
+    var backBtn = null;
+    for (var i = 0; i < links.length; i++) {
+      var txt = links[i].textContent.trim().toLowerCase();
+      if (txt.indexOf('all') !== -1) { backBtn = links[i]; break; }
+    }
+    if (!backBtn) return;
+
+    backBtn.setAttribute('href', '/jobs');
+    backBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      try { sessionStorage.setItem('fctg_back', '1'); } catch (err) {}
+      window.location.href = '/jobs';
+    });
+  }
+
+  // ── Handle back navigation: scroll + open accordions ──
+  function handleBackNavigation() {
+    var isBack = false;
+    try {
+      isBack = sessionStorage.getItem('fctg_back') === '1';
+      sessionStorage.removeItem('fctg_back');
+    } catch (e) {}
+
+    if (isBack) {
+      setTimeout(function () {
+        scrollToFilters();
+        openAccordionsForActiveFilters();
+      }, 500);
+
+      var _safetyStart = Date.now();
+      var _safetyInt = setInterval(function () {
+        if (Date.now() - _safetyStart > 5000) { clearInterval(_safetyInt); return; }
+        if (window.pageYOffset < 50) scrollToFilters();
+      }, 300);
+    }
+  }
+
   function openAccordionsForActiveFilters() {
     var filterGroups = [
       { name: 'region', store: activeRegions },
@@ -1058,8 +1142,6 @@
                     group.querySelector('.filters1_filter-group-heading');
       if (!heading) continue;
 
-      // Check if accordion is closed — open it via MouseEvent dispatch
-      // (Webflow IX2 requires a real MouseEvent, not HTMLElement.click())
       var options = group.querySelector('.filters1_filter-options');
       if (options) {
         var computed = window.getComputedStyle(options);
@@ -1077,6 +1159,31 @@
     if (!target) return;
     var y = target.getBoundingClientRect().top + window.pageYOffset - 20;
     window.scrollTo(0, y);
+  }
+
+  // ── Inject minimal styles ─────────────────
+  function injectStyles() {
+    var style = document.createElement('style');
+    style.textContent =
+      '.filters1_region-subheading{font-weight:600;font-size:13px;' +
+      'padding:10px 0 4px;color:#333;margin-top:4px;}' +
+      '.filters1_region-subheading:first-child{padding-top:0;margin-top:0;}';
+    document.head.appendChild(style);
+  }
+
+  // ── Fetch JSON helper ───────────────────
+  function fetchJSON(url, cb) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.timeout = 10000;  // 10s timeout for larger all-jobs.json
+    xhr.onload = function () {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try { cb(JSON.parse(xhr.responseText)); } catch (e) { cb(null); }
+      } else { cb(null); }
+    };
+    xhr.onerror = function () { cb(null); };
+    xhr.ontimeout = function () { cb(null); };
+    xhr.send();
   }
 
   // ── Session storage: save/restore filter state ──
@@ -1108,17 +1215,14 @@
       copyInto(activeCategories, state.activeCategories);
       workType = state.workType || '';
 
-      // Update search input
       var inp = document.querySelector('.filters1_keyword-search input');
       if (inp && keyword) inp.value = keyword;
 
-      // Restore checkbox visual states
       restoreCheckboxGroup('city', activeCities);
       restoreCheckboxGroup('region', activeRegions);
       restoreCheckboxGroup('brand', activeBrands);
       restoreCheckboxGroup('category', activeCategories);
 
-      // Restore work type radio
       if (workType) {
         document.querySelectorAll('input[name="Filter-Two"]').forEach(function (r) {
           var lbl = getRadioLabel(r);

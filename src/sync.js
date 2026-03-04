@@ -259,8 +259,9 @@ async function runSync() {
     console.log(`[sync] Deleted ${deleted.length} items.`);
   }
 
-  // Step 10: Regenerate filter-counts.json (used by frontend for accurate filter badges)
-  console.log(`\n[sync] Regenerating filter-counts.json...`);
+  // Step 10: Regenerate all-jobs.json + filter-counts.json
+  console.log(`\n[sync] Regenerating all-jobs.json and filter-counts.json...`);
+  await generateAllJobsJson(client, countryMap);
   await generateFilterCounts(client, countryMap);
 
   // Step 11: Publish site if any changes were made
@@ -347,6 +348,53 @@ async function generateFilterCounts(client, countryMap) {
   const outPath = path.join(__dirname, '..', 'filter-counts.json');
   fs.writeFileSync(outPath, JSON.stringify(counts, null, 2));
   console.log(`[sync] filter-counts.json written (${Object.keys(regions).length} regions, ${Object.keys(cities).length} cities, ${Object.keys(categories).length} categories)`);
+}
+
+async function generateAllJobsJson(client, countryMap) {
+  // Build country ID → name map (inverse of the reference map)
+  const countryItems = await client.getAllCollectionItems(COUNTRY_COLLECTION_ID);
+  const countryIdToName = {};
+  for (const item of countryItems) {
+    const name = item.fieldData?.name;
+    if (name) countryIdToName[item.id] = name;
+  }
+
+  // Fetch all current CMS job items
+  const jobItems = await client.getAllCollectionItems(COLLECTION_ID);
+  const allJobs = [];
+
+  for (const item of jobItems) {
+    const fd = item.fieldData || {};
+
+    // Resolve country reference to region
+    const countryRef = fd.country;
+    const countryName = countryRef ? (countryIdToName[countryRef] || '') : '';
+    let region = '';
+    if (countryName) {
+      region = regionMap[countryName.toLowerCase()] || 'Multiple Locations';
+    } else {
+      region = 'Multiple Locations';
+    }
+
+    const brand = (fd['brand-name'] || '').trim();
+
+    allJobs.push({
+      t: (fd.name || '').trim(),           // title
+      s: (fd.slug || ''),                  // slug
+      ci: (fd.city || '').trim(),          // city
+      co: countryName,                     // country name
+      r: region,                           // region
+      b: brand,                            // brand
+      ca: (fd.category || '').trim(),      // category (may be comma-separated)
+      wt: (fd['work-type'] || '').trim(),  // work type
+      su: (fd.summary || '').trim(),       // summary
+      ju: (fd['job-url'] || ''),           // job URL
+    });
+  }
+
+  const outPath = path.join(__dirname, '..', 'all-jobs.json');
+  fs.writeFileSync(outPath, JSON.stringify(allJobs));
+  console.log(`[sync] all-jobs.json written (${allJobs.length} jobs)`);
 }
 
 module.exports = { runSync };
