@@ -1,7 +1,10 @@
 try { require('dotenv').config(); } catch (_) { /* dotenv optional in CI */ }
 
+const fs = require('fs');
+const path = require('path');
 const { initBrowser, closeBrowser, fetchAllJobIds, scrapeAllJobs } = require('./scraper');
 const { WebflowClient } = require('./webflow');
+const regionMap = require('../region-map.json');
 
 // Configuration
 const COLLECTION_ID = process.env.WEBFLOW_COLLECTION_ID || '69a6a25d0ee880903952732b';
@@ -256,7 +259,11 @@ async function runSync() {
     console.log(`[sync] Deleted ${deleted.length} items.`);
   }
 
-  // Step 10: Publish site if any changes were made
+  // Step 10: Regenerate filter-counts.json (used by frontend for accurate filter badges)
+  console.log(`\n[sync] Regenerating filter-counts.json...`);
+  await generateFilterCounts(client, countryMap);
+
+  // Step 11: Publish site if any changes were made
   const hasChanges = changedIds.length > 0 || removedJobIds.length > 0;
   if (hasChanges) {
     console.log(`\n[sync] Publishing site...`);
@@ -278,6 +285,68 @@ if (require.main === module) {
     await closeBrowser();
     process.exit(1);
   });
+}
+
+async function generateFilterCounts(client, countryMap) {
+  // Build country ID → name map (inverse of the reference map)
+  const countryItems = await client.getAllCollectionItems(COUNTRY_COLLECTION_ID);
+  const countryIdToName = {};
+  for (const item of countryItems) {
+    const name = item.fieldData?.name;
+    if (name) countryIdToName[item.id] = name;
+  }
+
+  // Fetch all current CMS job items
+  const jobItems = await client.getAllCollectionItems(COLLECTION_ID);
+
+  const regions = {};
+  const cities = {};
+  const categories = {};
+  const cityToRegion = {};
+  const cityDisplay = {};
+  const categoryDisplay = {};
+
+  for (const item of jobItems) {
+    const fd = item.fieldData || {};
+
+    // Resolve country reference to region
+    const countryRef = fd.country;
+    const countryName = countryRef ? (countryIdToName[countryRef] || '') : '';
+    let regionName = '';
+    if (countryName) {
+      regionName = regionMap[countryName.toLowerCase()] || 'Multiple Locations';
+    } else {
+      regionName = 'Multiple Locations';
+    }
+
+    const rk = regionName.toLowerCase();
+    regions[rk] = (regions[rk] || 0) + 1;
+
+    // City
+    const city = (fd.city || '').trim();
+    if (city) {
+      const ck = city.toLowerCase();
+      cities[ck] = (cities[ck] || 0) + 1;
+      if (regionName && !cityToRegion[ck]) cityToRegion[ck] = regionName;
+      if (!cityDisplay[ck]) cityDisplay[ck] = city;
+    }
+
+    // Category
+    const cat = (fd.category || '').trim();
+    if (cat) {
+      const catParts = cat.split(',').map(c => c.trim()).filter(Boolean);
+      for (const cp of catParts) {
+        const catk = cp.toLowerCase();
+        categories[catk] = (categories[catk] || 0) + 1;
+        if (!categoryDisplay[catk]) categoryDisplay[catk] = cp;
+      }
+    }
+  }
+
+  const counts = { regions, cities, categories, cityToRegion, cityDisplay, categoryDisplay };
+  const outPath = path.join(__dirname, '..', 'filter-counts.json');
+  fs.writeFileSync(outPath, JSON.stringify(counts, null, 2));
+  console.log(`[sync] filter-counts.json written (${Object.keys(regions).length} regions, ${Object.keys(cities).length} cities, ${Object.keys(categories).length} categories)`);
 }
 
 module.exports = { runSync };

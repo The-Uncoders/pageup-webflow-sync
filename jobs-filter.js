@@ -1,11 +1,13 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.9
+ * FCTG Careers - Job Filter & Sort System v2.0
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v2.0   – Fix: Region/city/category counts now from CDN (filter-counts.json)
+ *           instead of DOM parsing which miscounted filter checkboxes as jobs.
  * v1.9   – Fix: Filter options now show ALL CMS items (not just first 30).
  *           New: Back button auto-scrolls to listings and opens active filter accordions.
  *           Fix: Script loader uses createElement (not HTML tag) for Webflow compatibility.
@@ -52,6 +54,7 @@
   var REGION_MAP_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/region-map.json';
   var TOTAL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/total-jobs.json';
   var BRAND_COUNTS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/brand-counts.json';
+  var FILTER_COUNTS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/filter-counts.json';
 
   // ── State ─────────────────────────────────
   var keyword = '';
@@ -66,7 +69,7 @@
   var _regionMap = null;
   var _totalJobs = 0; // fetched from total-jobs.json (all CMS jobs, not just paginated)
   var _brandCounts = null; // fetched from brand-counts.json (accurate brand counts across all jobs)
-  var _allCounts = null;   // { regions, cities, categories, cityToRegion, cityDisplay, categoryDisplay } from ALL .w-dyn-item elements
+  var _allCounts = null;   // { regions, cities, categories, cityToRegion, cityDisplay, categoryDisplay } from CDN filter-counts.json
 
   // Cached element references
   var _rcEl = null;
@@ -155,11 +158,12 @@
     injectStyles();
 
     // Fetch all config in parallel, then build UI
-    var pending = 4;
+    var pending = 5;
     var brandResult = null;
     var regionResult = null;
     var totalResult = null;
     var brandCountsResult = null;
+    var filterCountsResult = null;
 
     function afterFetch() {
       _brandMap = brandResult || {};
@@ -171,8 +175,9 @@
       var items = list.querySelectorAll(':scope > .w-dyn-item');
       for (var i = 0; i < items.length; i++) jobs.push(parseCard(items[i], i));
 
-      // Parse ALL .w-dyn-item elements on the page for complete filter counts
-      _allCounts = parseAllItemsForCounts();
+      // Use CDN filter counts (pre-computed from ALL CMS items during sync).
+      // Falls back to DOM parsing if CDN fetch fails — but DOM only has ~30 items.
+      _allCounts = filterCountsResult || parseAllItemsForCounts();
 
       // Ensure headings match PageUp names
       renameHeadingsIfNeeded();
@@ -237,6 +242,10 @@
     });
     fetchJSON(BRAND_COUNTS_URL, function (data) {
       brandCountsResult = data;
+      if (--pending === 0) afterFetch();
+    });
+    fetchJSON(FILTER_COUNTS_URL, function (data) {
+      filterCountsResult = data;
       if (--pending === 0) afterFetch();
     });
   }
