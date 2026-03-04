@@ -214,16 +214,25 @@
         // Use requestAnimationFrame loop to persistently fight IX2 page-load resets.
         // rAF fires before every paint (~60fps), so IX2 cannot permanently override.
         var _backStart = Date.now();
-        var _backDuration = 10000; // 10 seconds
+        var _backDuration = 30000; // 30 seconds (IX2 can fire very late)
         var _accordionsOpened = false;
         var _scrollTarget = null;
+        var _scrollCount = 0;
+        var _lastReset = 0;
 
         function _backLoop() {
           var elapsed = Date.now() - _backStart;
-          if (elapsed > _backDuration) return;
+          if (elapsed > _backDuration) {
+            // Debug: record final state
+            try { sessionStorage.setItem('fctg_debug', JSON.stringify({
+              scrollCount: _scrollCount, lastReset: _lastReset,
+              finalY: window.pageYOffset, elapsed: elapsed
+            })); } catch(e){}
+            return;
+          }
 
-          // Open accordions once after 1.5s (gives IX2 time to finish initial load)
-          if (!_accordionsOpened && elapsed > 1500) {
+          // Open accordions once after 2s (gives IX2 time to finish initial load)
+          if (!_accordionsOpened && elapsed > 2000) {
             openAccordionsForActiveFilters();
             _accordionsOpened = true;
           }
@@ -236,7 +245,11 @@
           }
           if (_scrollTarget && window.pageYOffset < 50) {
             var y = _scrollTarget.getBoundingClientRect().top + window.pageYOffset - 20;
-            if (y > 100) window.scrollTo(0, y);
+            if (y > 100) {
+              window.scrollTo(0, y);
+              _scrollCount++;
+              _lastReset = elapsed;
+            }
           }
 
           requestAnimationFrame(_backLoop);
