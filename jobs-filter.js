@@ -1,11 +1,13 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.7.3
+ * FCTG Careers - Job Filter & Sort System v1.8
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v1.8   – Fix: Filter options now show ALL CMS items (not just first 30).
+ *           New: Back button auto-scrolls to listings and opens active filter accordions.
  * v1.7.3 – Fix: Object reference bug — clearAll() and restoreFilterState()
  *           now mutate filter objects in-place instead of reassigning,
  *           preserving closure references from bindCheckboxes().
@@ -63,6 +65,7 @@
   var _regionMap = null;
   var _totalJobs = 0; // fetched from total-jobs.json (all CMS jobs, not just paginated)
   var _brandCounts = null; // fetched from brand-counts.json (accurate brand counts across all jobs)
+  var _allCounts = null;   // { regions, cities, categories, cityToRegion, cityDisplay, categoryDisplay } from ALL .w-dyn-item elements
 
   // Cached element references
   var _rcEl = null;
@@ -163,14 +166,17 @@
       _totalJobs = (totalResult && totalResult.total) ? totalResult.total : 0;
       _brandCounts = brandCountsResult || {};
 
-      // Parse every job card
+      // Parse the visible job cards (in .career_list) for filtering/display
       var items = list.querySelectorAll(':scope > .w-dyn-item');
       for (var i = 0; i < items.length; i++) jobs.push(parseCard(items[i], i));
+
+      // Parse ALL .w-dyn-item elements on the page for complete filter counts
+      _allCounts = parseAllItemsForCounts();
 
       // Ensure headings match PageUp names
       renameHeadingsIfNeeded();
 
-      // Build filter UI
+      // Build filter UI (using _allCounts for comprehensive options)
       hideAllCountryCheckboxes();
       buildRegionFilter();
       groupLocationsByRegion();
@@ -191,6 +197,20 @@
       restoreFilterState();
 
       applyFilters();
+
+      // If returning via "All Jobs" back button, scroll to listings and open relevant accordions
+      var isBack = false;
+      try {
+        isBack = sessionStorage.getItem('fctg_back') === '1';
+        sessionStorage.removeItem('fctg_back');
+      } catch (e) {}
+
+      if (isBack) {
+        setTimeout(function () {
+          openAccordionsForActiveFilters();
+          setTimeout(scrollToFilters, 200);
+        }, 300);
+      }
     }
 
     fetchJSON(BRAND_MAP_URL, function (map) {
@@ -229,6 +249,7 @@
     backBtn.setAttribute('href', '/jobs');
     backBtn.addEventListener('click', function (e) {
       e.preventDefault();
+      try { sessionStorage.setItem('fctg_back', '1'); } catch (err) {}
       window.location.href = '/jobs';
     });
   }
@@ -294,6 +315,56 @@
     if (!wrapper) return '';
     var t = wrapper.querySelector('.text-size-medium');
     return t ? t.textContent.trim() : '';
+  }
+
+  // ── Parse ALL .w-dyn-item elements for complete filter counts ──
+  // Webflow renders ~367 items across pagination wrappers but only ~30 are in .career_list.
+  // This function scans ALL items so filter checkboxes show every available option.
+  function parseAllItemsForCounts() {
+    var allItems = document.querySelectorAll('.w-dyn-item');
+    var regions = {}, cities = {}, categories = {};
+    var cityToRegion = {}, cityDisplay = {}, categoryDisplay = {};
+
+    for (var i = 0; i < allItems.length; i++) {
+      var el = allItems[i];
+      var dw = el.querySelectorAll('.career23_detail-wrapper');
+
+      // Region (derived from country via _regionMap)
+      var countryRaw = dwText(dw[1]);
+      var regionName = '';
+      if (countryRaw && _regionMap) {
+        regionName = _regionMap[countryRaw.toLowerCase()] || 'Multiple Locations';
+      } else if (!countryRaw) {
+        regionName = 'Multiple Locations';
+      }
+      if (regionName) {
+        var rk = regionName.toLowerCase();
+        regions[rk] = (regions[rk] || 0) + 1;
+      }
+
+      // City
+      var city = dwText(dw[0]);
+      if (city) {
+        var ck = city.toLowerCase();
+        cities[ck] = (cities[ck] || 0) + 1;
+        if (regionName && !cityToRegion[ck]) cityToRegion[ck] = regionName;
+        if (!cityDisplay[ck]) cityDisplay[ck] = city;
+      }
+
+      // Category
+      var cat = qText(el, '.tag');
+      if (cat) {
+        var catk = cat.toLowerCase();
+        categories[catk] = (categories[catk] || 0) + 1;
+        if (!categoryDisplay[catk]) categoryDisplay[catk] = cat;
+      }
+    }
+
+    return {
+      regions: regions, cities: cities, categories: categories,
+      cityToRegion: cityToRegion, cityDisplay: cityDisplay,
+      categoryDisplay: categoryDisplay
+    };
   }
 
   // ── Rename headings (safe: identifies groups by input name) ──
@@ -694,13 +765,7 @@
 
   // ── Build dynamic region filter ───────────
   function buildRegionFilter() {
-    var regionCounts = {};
-    for (var i = 0; i < jobs.length; i++) {
-      var r = jobs[i].region;
-      if (!r) continue;
-      var key = r.toLowerCase();
-      regionCounts[key] = (regionCounts[key] || 0) + 1;
-    }
+    var regionCounts = _allCounts ? _allCounts.regions : {};
 
     var firstCountryCb = document.querySelector('input[name="country"]');
     if (!firstCountryCb) return;
@@ -720,18 +785,10 @@
 
   // ── Group locations by region ─────────────
   function groupLocationsByRegion() {
-    var cityCounts = {};
-    var cityToRegion = {};
-    var cityDisplay = {};
-    for (var i = 0; i < jobs.length; i++) {
-      var city = jobs[i].city;
-      var region = jobs[i].region;
-      if (!city) continue;
-      var key = city.toLowerCase();
-      cityCounts[key] = (cityCounts[key] || 0) + 1;
-      if (region && !cityToRegion[key]) cityToRegion[key] = region;
-      if (!cityDisplay[key]) cityDisplay[key] = city;
-    }
+    if (!_allCounts) return;
+    var cityCounts = _allCounts.cities;
+    var cityToRegion = _allCounts.cityToRegion;
+    var cityDisplay = _allCounts.cityDisplay;
 
     var cityInput = document.querySelector('input[name="city"]');
     if (!cityInput) return;
@@ -785,15 +842,9 @@
 
   // ── Build dynamic category filter ─────────
   function buildCategoryFilter() {
-    var categoryCounts = {};
-    var categoryDisplay = {};
-    for (var i = 0; i < jobs.length; i++) {
-      var cat = jobs[i].category;
-      if (!cat) continue;
-      var key = cat.toLowerCase();
-      categoryCounts[key] = (categoryCounts[key] || 0) + 1;
-      if (!categoryDisplay[key]) categoryDisplay[key] = cat;
-    }
+    if (!_allCounts) return;
+    var categoryCounts = _allCounts.categories;
+    var categoryDisplay = _allCounts.categoryDisplay;
 
     var catKeys = Object.keys(categoryCounts);
     if (catKeys.length === 0) return;
@@ -965,6 +1016,46 @@
 
   function capitalize(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  // ── Back-button UX: scroll to listings + open relevant accordions ──
+  function openAccordionsForActiveFilters() {
+    var filterGroups = [
+      { name: 'region', store: activeRegions },
+      { name: 'city', store: activeCities },
+      { name: 'brand', store: activeBrands },
+      { name: 'category', store: activeCategories }
+    ];
+
+    for (var i = 0; i < filterGroups.length; i++) {
+      if (objSize(filterGroups[i].store) === 0) continue;
+
+      var cb = document.querySelector('input[name="' + filterGroups[i].name + '"]');
+      if (!cb) continue;
+      var group = cb.closest('.filters1_filter-group');
+      if (!group) continue;
+
+      var heading = group.querySelector('.filters1_filter-heading') ||
+                    group.querySelector('.filters1_filter-group-heading');
+      if (!heading) continue;
+
+      // Check if accordion is closed — open it by clicking the heading
+      var options = group.querySelector('.filters1_filter-options');
+      if (options) {
+        var computed = window.getComputedStyle(options);
+        if (computed.display === 'none' || computed.height === '0px') {
+          heading.click();
+        }
+      }
+    }
+  }
+
+  function scrollToFilters() {
+    var target = document.querySelector('.career_list') ||
+                 document.querySelector('.filters1_form-block');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   // ── Session storage: save/restore filter state ──
