@@ -306,6 +306,7 @@
     var hasCategories = objSize(activeCategories) > 0;
     var wt = workType.toLowerCase();
     var count = 0;
+    console.log('[FCTG-DEBUG] applyFilters: hasBrands=', hasBrands, 'brandKeys=', Object.keys(activeBrands).join(','), 'jobs=', jobs.length);
 
     for (var i = 0; i < jobs.length; i++) {
       var j = jobs[i];
@@ -388,16 +389,21 @@
 
   // ── Checkbox filters ──────────────────────
   function bindCheckboxes(selector, store) {
+    var count = 0;
     document.querySelectorAll(selector).forEach(function (cb) {
+      count++;
       cb.addEventListener('change', function () {
         var label = getCheckLabel(cb);
-        if (!label) return;
+        console.log('[FCTG-DEBUG] change fired:', selector, 'label=', label, 'checked=', cb.checked, 'storeSize=', objSize(store));
+        if (!label) { console.log('[FCTG-DEBUG] EMPTY LABEL - returning early'); return; }
         var key = label.toLowerCase();
         if (cb.checked) store[key] = true;
         else delete store[key];
+        console.log('[FCTG-DEBUG] after update, storeSize=', objSize(store), 'keys=', Object.keys(store).join(','));
         applyFilters();
       });
     });
+    console.log('[FCTG-DEBUG] bindCheckboxes bound', count, 'listeners for', selector);
   }
 
   function getCheckLabel(cb) {
