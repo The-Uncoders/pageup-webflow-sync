@@ -1,5 +1,5 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.8.4
+ * FCTG Careers - Job Filter & Sort System v1.8.5
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
@@ -8,6 +8,7 @@
  *
  * v1.8   – Fix: Filter options now show ALL CMS items (not just first 30).
  *           New: Back button auto-scrolls to listings and opens active filter accordions.
+ * v1.8.5 – Fix: Use requestAnimationFrame loop (10s) to defeat IX2 page-load resets.
  * v1.8.4 – Fix: Scroll-watcher approach + window.load gate for back-button scroll.
  * v1.8.3 – Fix: Use instant scroll (not smooth) to prevent IX2 animation interruption.
  * v1.8.2 – Fix: Polling scroll to survive Webflow IX2 scroll-position resets.
@@ -210,19 +211,37 @@
       } catch (e) {}
 
       if (isBack) {
-        // Wait for full page load (images, IX2 engine, etc.) then act.
-        // If already loaded, fire after a short delay for IX2 to settle.
-        var doBack = function () {
-          setTimeout(function () {
+        // Use requestAnimationFrame loop to persistently fight IX2 page-load resets.
+        // rAF fires before every paint (~60fps), so IX2 cannot permanently override.
+        var _backStart = Date.now();
+        var _backDuration = 10000; // 10 seconds
+        var _accordionsOpened = false;
+        var _scrollTarget = null;
+
+        function _backLoop() {
+          var elapsed = Date.now() - _backStart;
+          if (elapsed > _backDuration) return;
+
+          // Open accordions once after 1.5s (gives IX2 time to finish initial load)
+          if (!_accordionsOpened && elapsed > 1500) {
             openAccordionsForActiveFilters();
-            scrollToFilters();
-          }, 600);
-        };
-        if (document.readyState === 'complete') {
-          doBack();
-        } else {
-          window.addEventListener('load', doBack);
+            _accordionsOpened = true;
+          }
+
+          // Continuously re-scroll if position is wrong
+          if (!_scrollTarget) {
+            _scrollTarget = document.querySelector('.section_filters1') ||
+                            document.querySelector('.filters1_form-block') ||
+                            document.querySelector('.career_list');
+          }
+          if (_scrollTarget && window.pageYOffset < 50) {
+            var y = _scrollTarget.getBoundingClientRect().top + window.pageYOffset - 20;
+            if (y > 100) window.scrollTo(0, y);
+          }
+
+          requestAnimationFrame(_backLoop);
         }
+        requestAnimationFrame(_backLoop);
       }
     }
 
@@ -1070,20 +1089,7 @@
                  document.querySelector('.career_list');
     if (!target) return;
     var y = target.getBoundingClientRect().top + window.pageYOffset - 20;
-    // Scroll immediately
     window.scrollTo(0, y);
-    // Webflow IX2 page-load animations may reset scroll to top after we scroll.
-    // Watch for scroll-to-top resets and re-scroll. Remove watcher after 6s.
-    var watcher = function () {
-      if (window.pageYOffset < 50) {
-        var yNow = target.getBoundingClientRect().top + window.pageYOffset - 20;
-        window.scrollTo(0, yNow);
-      }
-    };
-    window.addEventListener('scroll', watcher);
-    setTimeout(function () {
-      window.removeEventListener('scroll', watcher);
-    }, 6000);
   }
 
   // ── Session storage: save/restore filter state ──
