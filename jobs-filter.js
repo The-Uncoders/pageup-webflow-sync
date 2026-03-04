@@ -1,11 +1,14 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.7.1
+ * FCTG Careers - Job Filter & Sort System v1.7.3
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v1.7.3 – Fix: Object reference bug — clearAll() and restoreFilterState()
+ *           now mutate filter objects in-place instead of reassigning,
+ *           preserving closure references from bindCheckboxes().
  * v1.7.1 – Fix: Brand badge selector (.filter-count); guard against double init.
  * v1.7   – Fix: Brand filter uses CDN counts (brand-counts.json) for all 370 jobs.
  *           Fix: Hide pagination when JS filters reduce visible results.
@@ -62,6 +65,20 @@
   var _icEl = null;
   var _emptyEl = null;
   var _allRadio = null;
+
+  // ── Helpers for preserving object references ──
+  // Clear all keys from an object in-place (avoids breaking closure references)
+  function clearObj(obj) {
+    var keys = Object.keys(obj);
+    for (var i = 0; i < keys.length; i++) delete obj[keys[i]];
+  }
+  // Copy keys from source into target in-place (clears target first)
+  function copyInto(target, source) {
+    clearObj(target);
+    if (!source) return;
+    var keys = Object.keys(source);
+    for (var i = 0; i < keys.length; i++) target[keys[i]] = source[keys[i]];
+  }
 
   // ── Neutralise Finsweet ───────────────────
   window.fsAttributes = window.fsAttributes || [];
@@ -306,7 +323,6 @@
     var hasCategories = objSize(activeCategories) > 0;
     var wt = workType.toLowerCase();
     var count = 0;
-    console.log('[FCTG-DEBUG] applyFilters: hasBrands=', hasBrands, 'brandKeys=', Object.keys(activeBrands).join(','), 'jobs=', jobs.length);
 
     for (var i = 0; i < jobs.length; i++) {
       var j = jobs[i];
@@ -389,21 +405,16 @@
 
   // ── Checkbox filters ──────────────────────
   function bindCheckboxes(selector, store) {
-    var count = 0;
     document.querySelectorAll(selector).forEach(function (cb) {
-      count++;
       cb.addEventListener('change', function () {
         var label = getCheckLabel(cb);
-        console.log('[FCTG-DEBUG] change fired:', selector, 'label=', label, 'checked=', cb.checked, 'storeSize=', objSize(store));
-        if (!label) { console.log('[FCTG-DEBUG] EMPTY LABEL - returning early'); return; }
+        if (!label) return;
         var key = label.toLowerCase();
         if (cb.checked) store[key] = true;
         else delete store[key];
-        console.log('[FCTG-DEBUG] after update, storeSize=', objSize(store), 'keys=', Object.keys(store).join(','));
         applyFilters();
       });
     });
-    console.log('[FCTG-DEBUG] bindCheckboxes bound', count, 'listeners for', selector);
   }
 
   function getCheckLabel(cb) {
@@ -584,10 +595,10 @@
 
   function clearAll() {
     keyword = '';
-    activeCities = {};
-    activeRegions = {};
-    activeBrands = {};
-    activeCategories = {};
+    clearObj(activeCities);
+    clearObj(activeRegions);
+    clearObj(activeBrands);
+    clearObj(activeCategories);
     workType = '';
     sortMode = 'default';
 
@@ -975,10 +986,10 @@
       if (!saved) return false;
       var state = JSON.parse(saved);
       keyword = state.keyword || '';
-      activeCities = state.activeCities || {};
-      activeRegions = state.activeRegions || {};
-      activeBrands = state.activeBrands || {};
-      activeCategories = state.activeCategories || {};
+      copyInto(activeCities, state.activeCities);
+      copyInto(activeRegions, state.activeRegions);
+      copyInto(activeBrands, state.activeBrands);
+      copyInto(activeCategories, state.activeCategories);
       workType = state.workType || '';
 
       // Update search input
