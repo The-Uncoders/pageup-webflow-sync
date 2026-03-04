@@ -479,19 +479,20 @@
     var summary = card.querySelector('.text-size-regular');
     if (summary) summary.textContent = job.su;
 
-    // Link — the card or its wrapper is an <a>
+    // Link — point to the Webflow CMS job-listing page using slug
+    var jobHref = job.s ? ('/job-listings/' + job.s) : '';
     var link = card.querySelector('a');
-    if (link && job.ju) {
-      link.href = job.ju;
+    if (link && jobHref) {
+      link.href = jobHref;
     }
     // If the card itself is an <a> tag
-    if (card.tagName === 'A' && job.ju) {
-      card.href = job.ju;
+    if (card.tagName === 'A' && jobHref) {
+      card.href = jobHref;
     }
     // Also handle .w-dyn-item wrapping a link block
     var linkBlock = card.querySelector('.career23_card-link');
-    if (linkBlock && job.ju) {
-      linkBlock.href = job.ju;
+    if (linkBlock && jobHref) {
+      linkBlock.href = jobHref;
     }
 
     return card;
