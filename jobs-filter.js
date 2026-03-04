@@ -1,5 +1,5 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.8.1
+ * FCTG Careers - Job Filter & Sort System v1.8.2
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
@@ -8,6 +8,7 @@
  *
  * v1.8   – Fix: Filter options now show ALL CMS items (not just first 30).
  *           New: Back button auto-scrolls to listings and opens active filter accordions.
+ * v1.8.2 – Fix: Polling scroll to survive Webflow IX2 scroll-position resets.
  * v1.8.1 – Fix: Use MouseEvent dispatch for IX2 accordion triggers; increase timing.
  * v1.7.3 – Fix: Object reference bug — clearAll() and restoreFilterState()
  *           now mutate filter objects in-place instead of reassigning,
@@ -210,8 +211,8 @@
         // Delay to let Webflow IX2 fully initialise before triggering accordion clicks
         setTimeout(function () {
           openAccordionsForActiveFilters();
-          setTimeout(scrollToFilters, 400);
-        }, 800);
+          setTimeout(scrollToFilters, 600);
+        }, 1000);
       }
     }
 
@@ -1057,9 +1058,20 @@
     var target = document.querySelector('.section_filters1') ||
                  document.querySelector('.filters1_form-block') ||
                  document.querySelector('.career_list');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    if (!target) return;
+    var y = target.getBoundingClientRect().top + window.pageYOffset - 20;
+    // Webflow IX2 / lazy-load can reset scroll position after our first attempt.
+    // Poll: keep scrolling until position sticks or we've tried enough times.
+    var attempts = 0;
+    var maxAttempts = 8;
+    var iv = setInterval(function () {
+      attempts++;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      // Stop once we're close enough or max attempts reached
+      if (Math.abs(window.pageYOffset - y) < 80 || attempts >= maxAttempts) {
+        clearInterval(iv);
+      }
+    }, 300);
   }
 
   // ── Session storage: save/restore filter state ──
