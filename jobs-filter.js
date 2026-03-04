@@ -499,7 +499,7 @@
 
     // Link — Since cards are rendered from JSON (not CMS-bound), we must set
     // the href to replicate what Webflow's CMS binding would produce.
-    var jobHref = job.s ? ('/job-listings/' + job.s) : '';
+    var jobHref = job.s ? ('/jobs/' + job.s) : '';
     if (jobHref) {
       var links = card.querySelectorAll('a');
       for (var li = 0; li < links.length; li++) links[li].href = jobHref;
