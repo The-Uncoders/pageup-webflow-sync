@@ -1085,6 +1085,9 @@
   }
 
   // ── "All Jobs" back button (job template pages) ──
+  // Navigates to /jobs#filters so the browser natively scrolls to the
+  // filters section without any programmatic scrolling that could
+  // interfere with Webflow page-load animations.
   function setupBackButton() {
     if (document.querySelector('.career_list')) return;
 
@@ -1096,15 +1099,16 @@
     }
     if (!backBtn) return;
 
-    backBtn.setAttribute('href', '/jobs');
+    backBtn.setAttribute('href', '/jobs#filters');
     backBtn.addEventListener('click', function (e) {
       e.preventDefault();
       try { sessionStorage.setItem('fctg_back', '1'); } catch (err) {}
-      window.location.href = '/jobs';
+      window.location.href = '/jobs#filters';
     });
   }
 
-  // ── Handle back navigation: scroll + open accordions ──
+  // ── Handle back navigation: open accordions for active filters ──
+  // Scrolling is handled natively by the #filters anchor — no JS scroll needed.
   function handleBackNavigation() {
     var isBack = false;
     try {
@@ -1114,15 +1118,8 @@
 
     if (isBack) {
       setTimeout(function () {
-        scrollToFilters();
         openAccordionsForActiveFilters();
-      }, 500);
-
-      var _safetyStart = Date.now();
-      var _safetyInt = setInterval(function () {
-        if (Date.now() - _safetyStart > 5000) { clearInterval(_safetyInt); return; }
-        if (window.pageYOffset < 50) scrollToFilters();
-      }, 300);
+      }, 600);
     }
   }
 
@@ -1156,14 +1153,6 @@
     }
   }
 
-  function scrollToFilters() {
-    var target = document.querySelector('.section_filters1') ||
-                 document.querySelector('.filters1_form-block') ||
-                 document.querySelector('.career_list');
-    if (!target) return;
-    var y = target.getBoundingClientRect().top + window.pageYOffset - 20;
-    window.scrollTo(0, y);
-  }
 
   // ── Inject minimal styles ─────────────────
   function injectStyles() {
