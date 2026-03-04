@@ -467,6 +467,17 @@
     var tag = card.querySelector('.tag');
     if (tag) tag.textContent = job.ca;
 
+    // Brand logo image
+    var logoImg = card.querySelector('.career_item-header_image');
+    if (logoImg && job.l) {
+      logoImg.src = job.l;
+      logoImg.alt = job.b || '';
+      logoImg.loading = 'lazy';
+    } else if (logoImg && !job.l) {
+      // No logo available — hide the image to avoid showing wrong brand
+      logoImg.style.display = 'none';
+    }
+
     // Detail wrappers: [0]=city, [1]=country, [2]=brand, [3]=workType
     var dw = card.querySelectorAll('.career23_detail-wrapper');
     setDwText(dw[0], job.ci);

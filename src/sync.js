@@ -359,6 +359,19 @@ async function generateAllJobsJson(client, countryMap) {
     if (name) countryIdToName[item.id] = name;
   }
 
+  // Build brand ID → logo URL map
+  const brandItems = await client.getAllCollectionItems(BRAND_COLLECTION_ID);
+  const brandIdToLogo = {};
+  for (const item of brandItems) {
+    const logo = item.fieldData?.logo;
+    if (logo) {
+      // Webflow Image fields return { url, alt } or sometimes just a URL string
+      const logoUrl = typeof logo === 'string' ? logo : (logo.url || '');
+      if (logoUrl) brandIdToLogo[item.id] = logoUrl;
+    }
+  }
+  console.log(`[sync] Brand logo map: ${Object.keys(brandIdToLogo).length} brands with logos`);
+
   // Fetch all current CMS job items
   const jobItems = await client.getAllCollectionItems(COLLECTION_ID);
   const allJobs = [];
@@ -378,6 +391,10 @@ async function generateAllJobsJson(client, countryMap) {
 
     const brand = (fd['brand-name'] || '').trim();
 
+    // Resolve brand reference to logo URL
+    const brandRef = fd.brand;
+    const logoUrl = brandRef ? (brandIdToLogo[brandRef] || '') : '';
+
     allJobs.push({
       t: (fd.name || '').trim(),           // title
       s: (fd.slug || ''),                  // slug
@@ -389,6 +406,7 @@ async function generateAllJobsJson(client, countryMap) {
       wt: (fd['work-type'] || '').trim(),  // work type
       su: (fd.summary || '').trim(),       // summary
       ju: (fd['job-url'] || ''),           // job URL
+      l: logoUrl,                          // brand logo URL
     });
   }
 
