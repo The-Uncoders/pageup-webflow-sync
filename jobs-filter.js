@@ -1,11 +1,13 @@
 /**
- * FCTG Careers - Job Filter & Sort System v1.6.2
+ * FCTG Careers - Job Filter & Sort System v1.6.3
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v1.6.3 – Fix: Accordions respect Webflow IX2 interactions (removed forced open).
+ *           Fix: Total count fetched from total-jobs.json (shows all CMS jobs).
  * v1.6.2 – Fix: Checkbox visual state inversion (remove change listener that
  *           double-toggles w--redirected-checked with Webflow's native handler).
  *           Fix: Dynamic badge uses 'filter-count' class to match designer styling.
@@ -33,6 +35,7 @@
   var INIT_DELAY = 300;
   var BRAND_MAP_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/brand-map.json';
   var REGION_MAP_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/region-map.json';
+  var TOTAL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/total-jobs.json';
 
   // ── State ─────────────────────────────────
   var keyword = '';
@@ -45,6 +48,7 @@
   var jobs = [];
   var _brandMap = null;
   var _regionMap = null;
+  var _totalJobs = 0; // fetched from total-jobs.json (all CMS jobs, not just paginated)
 
   // Cached element references
   var _rcEl = null;
@@ -111,14 +115,16 @@
     // Inject minimal styles for region sub-headings in location group
     injectStyles();
 
-    // Fetch both maps in parallel, then build UI
-    var pending = 2;
+    // Fetch all config in parallel, then build UI
+    var pending = 3;
     var brandResult = null;
     var regionResult = null;
+    var totalResult = null;
 
     function afterFetch() {
       _brandMap = brandResult || {};
       _regionMap = regionResult || {};
+      _totalJobs = (totalResult && totalResult.total) ? totalResult.total : 0;
 
       // Parse every job card
       var items = list.querySelectorAll(':scope > .w-dyn-item');
@@ -153,6 +159,10 @@
     });
     fetchJSON(REGION_MAP_URL, function (map) {
       regionResult = map;
+      if (--pending === 0) afterFetch();
+    });
+    fetchJSON(TOTAL_JOBS_URL, function (data) {
+      totalResult = data;
       if (--pending === 0) afterFetch();
     });
   }
@@ -279,8 +289,10 @@
 
   // ── Results count ─────────────────────────
   function setCount(n) {
+    // Total = fetched CMS total (all jobs), fallback to DOM count
+    var total = _totalJobs || jobs.length;
     if (_rcEl) _rcEl.textContent = n;
-    if (_icEl) _icEl.textContent = jobs.length;
+    if (_icEl) _icEl.textContent = total;
 
     // Update parent wrapper to show "Showing X of Y Jobs" format
     var wrapper = _rcEl ? _rcEl.parentElement : null;
@@ -615,8 +627,6 @@
     var parent = container.parentElement;
     if (!parent) return;
 
-    expandFilterSection(parent);
-
     var regionNames = Object.keys(regionCounts).sort();
     for (var ri = 0; ri < regionNames.length; ri++) {
       var regionKey = regionNames[ri];
@@ -689,7 +699,6 @@
     }
 
     optionsContainer.appendChild(groupedContainer);
-    expandFilterSection(optionsContainer);
   }
 
   // ── Build dynamic category filter ─────────
@@ -753,8 +762,6 @@
         createCheckbox('category', categoryDisplay[ck] || capitalize(ck), categoryCounts[ck])
       );
     }
-
-    expandFilterSection(optionsContainer);
   }
 
   // ── Deduplicate brand filter ──────────────
@@ -831,15 +838,13 @@
 
     var options = document.createElement('div');
     options.className = 'filters1_filter-options';
-    options.style.height = 'auto';
-    options.style.overflow = 'visible';
     group.appendChild(options);
 
-    // Simple accordion toggle
+    // Simple accordion toggle (only for dynamically created groups without IX2)
     headingEl.addEventListener('click', function () {
-      var isOpen = options.style.height !== '0px';
-      options.style.height = isOpen ? '0px' : 'auto';
-      options.style.overflow = isOpen ? 'hidden' : 'visible';
+      var computed = window.getComputedStyle(options);
+      var isOpen = computed.display !== 'none' && computed.height !== '0px';
+      options.style.display = isOpen ? 'none' : '';
       if (iconClone) {
         iconClone.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
         iconClone.style.transition = 'transform 0.3s ease';
@@ -847,16 +852,6 @@
     });
 
     return group;
-  }
-
-  function expandFilterSection(el) {
-    var group = el.closest ? el.closest('.filters1_filter-group') : null;
-    if (!group) group = el;
-    var options = group.querySelector('.filters1_filter-options');
-    if (options) {
-      options.style.height = 'auto';
-      options.style.overflow = 'visible';
-    }
   }
 
   // ── Region name helpers ───────────────────
