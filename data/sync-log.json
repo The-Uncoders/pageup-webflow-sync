@@ -1,0 +1,47 @@
+[
+  {
+    "id": "2026-03-19T15:06:31.477Z",
+    "startedAt": "2026-03-19T15:06:31.478Z",
+    "finishedAt": "2026-03-19T15:12:29.892Z",
+    "durationMs": 358414,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 390,
+    "cmsItemsBefore": 392,
+    "created": 1,
+    "updated": 1,
+    "deleted": 3,
+    "unchanged": 388,
+    "createdJobs": [
+      {
+        "jobId": "529798",
+        "title": "Flight Centre - Business Intelligence Analyst / Developer II  - Toronto, Canada"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530153",
+        "title": "Flight Centre - Credit & Collections Associate - Toronto, Canada",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "529360",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529782",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529377",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  }
+]
