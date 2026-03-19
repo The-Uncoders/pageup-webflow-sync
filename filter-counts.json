@@ -1,16 +1,17 @@
 {
   "regions": {
+    "uk & europe": 22,
     "canada": 18,
     "south africa": 7,
     "australia": 224,
     "asia": 64,
-    "uk & europe": 21,
     "multiple locations": 1,
     "usa": 42,
     "new zealand": 12,
     "uae": 1
   },
   "cities": {
+    "london": 10,
     "ontario": 10,
     "johannesburg": 4,
     "british columbia": 3,
@@ -26,7 +27,6 @@
     "auckland": 3,
     "invercargill": 1,
     "massachusetts": 4,
-    "london": 9,
     "bangkok": 3,
     "virtual - canada": 2,
     "south east": 1,
@@ -71,22 +71,23 @@
     "new jersey": 1
   },
   "categories": {
+    "finance": 20,
+    "leadership": 31,
     "digital and technology": 32,
     "marketing and communication": 13,
     "sales and customer service": 277,
     "legal": 2,
     "risk and compliance": 2,
     "operations and logistics": 42,
-    "finance": 19,
     "administration": 3,
     "data and business intelligence": 6,
     "people and culture": 8,
     "project and program management": 6,
     "commercial": 25,
-    "leadership": 30,
     "procurement": 4
   },
   "cityToRegion": {
+    "london": "UK & Europe",
     "ontario": "Canada",
     "johannesburg": "South Africa",
     "british columbia": "Canada",
@@ -102,7 +103,6 @@
     "auckland": "New Zealand",
     "invercargill": "New Zealand",
     "massachusetts": "USA",
-    "london": "UK & Europe",
     "bangkok": "Asia",
     "virtual - canada": "Canada",
     "south east": "UK & Europe",
@@ -147,6 +147,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "london": "London",
     "ontario": "Ontario",
     "johannesburg": "Johannesburg",
     "british columbia": "British Columbia",
@@ -162,7 +163,6 @@
     "auckland": "Auckland",
     "invercargill": "Invercargill",
     "massachusetts": "Massachusetts",
-    "london": "London",
     "bangkok": "Bangkok",
     "virtual - canada": "Virtual - Canada",
     "south east": "South East",
@@ -207,19 +207,19 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "finance": "Finance",
+    "leadership": "Leadership",
     "digital and technology": "Digital and Technology",
     "marketing and communication": "Marketing and Communication",
     "sales and customer service": "Sales and Customer Service",
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance",
     "operations and logistics": "Operations and Logistics",
-    "finance": "Finance",
     "administration": "Administration",
     "data and business intelligence": "Data and Business Intelligence",
     "people and culture": "People and Culture",
     "project and program management": "Project and Program Management",
     "commercial": "Commercial",
-    "leadership": "Leadership",
     "procurement": "Procurement"
   }
 }
