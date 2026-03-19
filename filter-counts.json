@@ -1,9 +1,9 @@
 {
   "regions": {
+    "australia": 223,
     "uk & europe": 22,
     "canada": 18,
     "south africa": 6,
-    "australia": 223,
     "asia": 64,
     "multiple locations": 1,
     "usa": 42,
@@ -11,11 +11,11 @@
     "uae": 1
   },
   "cities": {
+    "queensland": 72,
     "london": 10,
     "ontario": 10,
     "british columbia": 3,
     "johannesburg": 3,
-    "queensland": 71,
     "noida": 11,
     "mumbai": 6,
     "bangalore": 2,
@@ -35,7 +35,7 @@
     "kuala lumpur": 4,
     "phuket": 2,
     "virtual - usa": 2,
-    "victoria": 28,
+    "victoria": 27,
     "pennsylvania": 6,
     "new york": 9,
     "bath": 2,
@@ -71,10 +71,10 @@
     "new jersey": 1
   },
   "categories": {
+    "digital and technology": 33,
     "finance": 20,
-    "leadership": 30,
-    "digital and technology": 32,
-    "sales and customer service": 276,
+    "leadership": 29,
+    "sales and customer service": 275,
     "legal": 2,
     "risk and compliance": 2,
     "operations and logistics": 42,
@@ -87,11 +87,11 @@
     "procurement": 4
   },
   "cityToRegion": {
+    "queensland": "Australia",
     "london": "UK & Europe",
     "ontario": "Canada",
     "british columbia": "Canada",
     "johannesburg": "South Africa",
-    "queensland": "Australia",
     "noida": "Asia",
     "mumbai": "Asia",
     "bangalore": "Asia",
@@ -147,11 +147,11 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "queensland": "Queensland",
     "london": "London",
     "ontario": "Ontario",
     "british columbia": "British Columbia",
     "johannesburg": "Johannesburg",
-    "queensland": "Queensland",
     "noida": "Noida",
     "mumbai": "Mumbai",
     "bangalore": "Bangalore",
@@ -207,9 +207,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "digital and technology": "Digital and Technology",
     "finance": "Finance",
     "leadership": "Leadership",
-    "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance",
