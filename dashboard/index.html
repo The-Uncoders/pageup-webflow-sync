@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FCTG Careers — Sync Monitor</title>
+  <style>
+    :root {
+      --green: #22c55e; --yellow: #eab308; --red: #ef4444;
+      --bg: #f8f9fa; --card: #fff; --border: #e5e7eb;
+      --text: #111827; --muted: #6b7280; --dark: #1f2937;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+    /* Header */
+    header { background: var(--dark); color: #fff; padding: 16px 0; margin-bottom: 24px; }
+    header .container { display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 18px; font-weight: 600; }
+    .health-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; margin-right: 10px; }
+    .health-dot.healthy { background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .health-dot.warning { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+    .health-dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); }
+    .health-dot.unknown { background: var(--muted); }
+    .health-label { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+    /* Status Cards */
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .card-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 8px; }
+    .card-value { font-size: 28px; font-weight: 700; }
+    .card-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; }
+    .badge.success { background: #dcfce7; color: #166534; }
+    .badge.error { background: #fef2f2; color: #991b1b; }
+    .badge.warning { background: #fefce8; color: #854d0e; }
+    .badge.running { background: #eff6ff; color: #1e40af; }
+
+    /* Section */
+    .section { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+    .section h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+    /* Log Table */
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+    tr:hover td { background: #f9fafb; }
+    tr.expandable { cursor: pointer; }
+    tr.detail-row td { padding: 12px 24px; background: #f9fafb; font-size: 13px; }
+    tr.detail-row ul { list-style: none; padding: 0; }
+    tr.detail-row li { padding: 3px 0; }
+    tr.detail-row li::before { content: '→ '; color: var(--muted); }
+    .count-cell { text-align: center; min-width: 60px; }
+    .count-cell.positive { color: #166534; font-weight: 600; }
+    .count-cell.negative { color: #991b1b; font-weight: 600; }
+
+    /* Field Config Table */
+    .toggle { position: relative; display: inline-block; width: 42px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle .slider { position: absolute; inset: 0; background: #d1d5db; border-radius: 24px; cursor: pointer; transition: 0.2s; }
+    .toggle .slider::before { content: ''; position: absolute; width: 18px; height: 18px; background: #fff; border-radius: 50%; left: 3px; top: 3px; transition: 0.2s; }
+    .toggle input:checked + .slider { background: var(--green); }
+    .toggle input:checked + .slider::before { transform: translateX(18px); }
+    .toggle input:disabled + .slider { opacity: 0.5; cursor: not-allowed; }
+    .required-badge { font-size: 10px; background: var(--dark); color: #fff; padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
+    .source-tag { font-size: 12px; background: #f3f4f6; color: var(--muted); padding: 2px 8px; border-radius: 4px; font-family: monospace; }
+
+    /* Empty state */
+    .empty { text-align: center; padding: 40px; color: var(--muted); }
+    .empty p { margin-top: 8px; font-size: 14px; }
+
+    @media (max-width: 768px) {
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div style="display:flex;align-items:center">
+        <span class="health-dot unknown" id="health-dot"></span>
+        <h1>FCTG Careers — Sync Monitor</h1>
+      </div>
+      <span class="health-label" id="health-label">Loading...</span>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Status Cards -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Last Sync</div>
+        <div class="card-value" id="last-sync-time">—</div>
+        <div class="card-sub" id="last-sync-detail"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Jobs Synced</div>
+        <div class="card-value" id="jobs-count">—</div>
+        <div class="card-sub" id="jobs-breakdown"></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Next Sync</div>
+        <div class="card-value" id="next-sync-time">—</div>
+        <div class="card-sub" id="next-sync-detail"></div>
+      </div>
+    </div>
+
+    <!-- Sync History -->
+    <div class="section">
+      <h2>📋 Sync History</h2>
+      <div id="log-container"></div>
+    </div>
+
+    <!-- Field Mapping -->
+    <div class="section">
+      <h2>🔗 Field Mapping</h2>
+      <table id="field-table">
+        <thead>
+          <tr>
+            <th>Webflow Field</th>
+            <th>PageUp Source</th>
+            <th>Description</th>
+            <th style="text-align:center">Enabled</th>
+          </tr>
+        </thead>
+        <tbody id="field-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // --- Helpers ---
+    function timeAgo(dateStr) {
+      if (!dateStr) return '—';
+      const diff = Date.now() - new Date(dateStr).getTime();
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return `${mins}m ago`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h ${mins % 60}m ago`;
+      return `${Math.floor(hrs / 24)}d ago`;
+    }
+    function timeUntil(dateStr) {
+      if (!dateStr) return '—';
+      const diff = new Date(dateStr).getTime() - Date.now();
+      if (diff < 0) return 'overdue';
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) return '< 1m';
+      if (mins < 60) return `${mins}m`;
+      return `${Math.floor(mins / 60)}h ${mins % 60}m`;
+    }
+    function formatTime(dateStr) {
+      if (!dateStr) return '';
+      return new Date(dateStr).toLocaleString();
+    }
+    function formatDuration(ms) {
+      if (!ms) return '—';
+      if (ms < 1000) return `${ms}ms`;
+      const secs = Math.round(ms / 1000);
+      if (secs < 60) return `${secs}s`;
+      return `${Math.floor(secs / 60)}m ${secs % 60}s`;
+    }
+    function badgeHtml(status) {
+      return `<span class="badge ${status}">${status}</span>`;
+    }
+
+    // --- Status ---
+    async function loadStatus() {
+      try {
+        const data = await fetch('/api/status').then(r => r.json());
+        const dot = document.getElementById('health-dot');
+        const label = document.getElementById('health-label');
+        dot.className = `health-dot ${data.health}`;
+        label.textContent = data.health === 'healthy' ? 'All systems operational' :
+          data.health === 'warning' ? 'Needs attention' :
+          data.health === 'error' ? 'Sync error' : 'No data yet';
+
+        const last = data.lastRun;
+        if (last) {
+          document.getElementById('last-sync-time').textContent = timeAgo(last.finishedAt || last.startedAt);
+          document.getElementById('last-sync-detail').innerHTML =
+            `${formatTime(last.finishedAt)} · ${formatDuration(last.durationMs)} · ${badgeHtml(last.status)}`;
+
+          document.getElementById('jobs-count').textContent = last.pageupJobsFound || '—';
+          const parts = [];
+          if (last.created > 0) parts.push(`<span class="positive">+${last.created} new</span>`);
+          if (last.deleted > 0) parts.push(`<span class="negative">-${last.deleted} removed</span>`);
+          if (last.updated > 0) parts.push(`~${last.updated} updated`);
+          if (parts.length === 0) parts.push('No changes');
+          document.getElementById('jobs-breakdown').innerHTML = parts.join(' · ');
+        }
+
+        document.getElementById('next-sync-time').textContent = timeUntil(data.nextRunAt);
+        document.getElementById('next-sync-detail').textContent = data.nextRunAt ? formatTime(data.nextRunAt) : '';
+      } catch (e) {
+        console.error('Status load error:', e);
+      }
+    }
+
+    // --- Logs ---
+    async function loadLogs() {
+      try {
+        const logs = await fetch('/api/logs').then(r => r.json());
+        const container = document.getElementById('log-container');
+
+        if (logs.length === 0) {
+          container.innerHTML = '<div class="empty"><p>No sync runs recorded yet.</p><p>Run <code>npm run sync</code> to trigger a sync.</p></div>';
+          return;
+        }
+
+        let html = `<table><thead><tr>
+          <th>Time</th><th>Duration</th><th>Status</th>
+          <th class="count-cell">Created</th><th class="count-cell">Updated</th>
+          <th class="count-cell">Deleted</th><th class="count-cell">Errors</th>
+        </tr></thead><tbody>`;
+
+        for (const log of logs.slice(0, 20)) {
+          const id = log.id.replace(/[:.]/g, '_');
+          html += `<tr class="expandable" onclick="toggleDetail('${id}')">
+            <td>${formatTime(log.startedAt)}</td>
+            <td>${formatDuration(log.durationMs)}</td>
+            <td>${badgeHtml(log.status)}</td>
+            <td class="count-cell ${log.created > 0 ? 'positive' : ''}">${log.created || 0}</td>
+            <td class="count-cell">${log.updated || 0}</td>
+            <td class="count-cell ${log.deleted > 0 ? 'negative' : ''}">${log.deleted || 0}</td>
+            <td class="count-cell ${(log.scrapeErrors?.length || 0) > 0 ? 'negative' : ''}">${log.scrapeErrors?.length || 0}</td>
+          </tr>`;
+
+          // Expandable detail row
+          html += `<tr class="detail-row" id="detail-${id}" style="display:none"><td colspan="7">`;
+
+          if (log.error) {
+            html += `<strong>Error:</strong> ${log.error}<br><br>`;
+          }
+
+          if (log.createdJobs?.length > 0) {
+            html += `<strong>Created (${log.createdJobs.length}):</strong><ul>`;
+            for (const j of log.createdJobs) html += `<li>${j.title} <span style="color:var(--muted)">(${j.jobId})</span></li>`;
+            html += `</ul><br>`;
+          }
+
+          if (log.updatedJobs?.length > 0) {
+            html += `<strong>Updated (${log.updatedJobs.length}):</strong><ul>`;
+            for (const j of log.updatedJobs) {
+              const fields = j.changedFields?.length ? ` — changed: ${j.changedFields.join(', ')}` : '';
+              html += `<li>${j.title} <span style="color:var(--muted)">(${j.jobId})${fields}</span></li>`;
+            }
+            html += `</ul><br>`;
+          }
+
+          if (log.deletedJobs?.length > 0) {
+            html += `<strong>Deleted (${log.deletedJobs.length}):</strong><ul>`;
+            for (const j of log.deletedJobs) html += `<li>${j.title || j.jobId} <span style="color:var(--muted)">(${j.jobId})</span></li>`;
+            html += `</ul><br>`;
+          }
+
+          if (!log.createdJobs?.length && !log.updatedJobs?.length && !log.deletedJobs?.length && !log.error) {
+            html += `<em>No changes in this sync run.</em>`;
+          }
+
+          html += `<div style="margin-top:8px;color:var(--muted);font-size:12px">
+            PageUp jobs found: ${log.pageupJobsFound || '—'} · CMS items before: ${log.cmsItemsBefore || '—'} · Published: ${log.published ? 'Yes' : 'No'}
+          </div>`;
+
+          html += `</td></tr>`;
+        }
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {
+        console.error('Logs load error:', e);
+      }
+    }
+
+    function toggleDetail(id) {
+      const row = document.getElementById('detail-' + id);
+      if (row) row.style.display = row.style.display === 'none' ? '' : 'none';
+    }
+
+    // --- Fields ---
+    async function loadFields() {
+      try {
+        const fields = await fetch('/api/fields').then(r => r.json());
+        const body = document.getElementById('field-body');
+        let html = '';
+
+        for (const [slug, config] of Object.entries(fields)) {
+          const disabledAttr = config.required ? 'disabled' : '';
+          const checkedAttr = config.enabled ? 'checked' : '';
+          const reqBadge = config.required ? '<span class="required-badge">REQUIRED</span>' : '';
+
+          html += `<tr>
+            <td><strong>${slug}</strong>${reqBadge}</td>
+            <td><span class="source-tag">${config.source}</span></td>
+            <td>${config.description}</td>
+            <td style="text-align:center">
+              <label class="toggle">
+                <input type="checkbox" ${checkedAttr} ${disabledAttr}
+                  onchange="toggleField('${slug}', this.checked)">
+                <span class="slider"></span>
+              </label>
+            </td>
+          </tr>`;
+        }
+
+        body.innerHTML = html;
+      } catch (e) {
+        console.error('Fields load error:', e);
+      }
+    }
+
+    async function toggleField(slug, enabled) {
+      try {
+        await fetch(`/api/fields/${slug}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enabled }),
+        });
+      } catch (e) {
+        console.error('Toggle error:', e);
+        loadFields(); // reload to revert
+      }
+    }
+
+    // --- Init ---
+    async function init() {
+      await Promise.all([loadStatus(), loadLogs(), loadFields()]);
+      setInterval(loadStatus, 30000);
+    }
+    init();
+  </script>
+</body>
+</html>

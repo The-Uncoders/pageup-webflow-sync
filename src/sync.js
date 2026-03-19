@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { initBrowser, closeBrowser, fetchAllJobIds, scrapeAllJobs } = require('./scraper');
 const { WebflowClient } = require('./webflow');
+const { SyncLogger } = require('./sync-logger');
 const regionMap = require('../region-map.json');
 
 // Configuration
@@ -129,15 +130,18 @@ function hasChanged(existing, newData) {
   const fieldsToCompare = ['name', 'location', 'work-type', 'category', 'brand-name', 'closing-date'];
   const existingFields = existing.fieldData || {};
 
+  const changed = [];
   for (const field of fieldsToCompare) {
     const existingVal = (existingFields[field] || '').toString().trim();
     const newVal = (newData[field] || '').toString().trim();
-    if (existingVal !== newVal) return true;
+    if (existingVal !== newVal) changed.push(field);
   }
-  return false;
+  return changed.length > 0 ? changed : false;
 }
 
 async function runSync() {
+  const logger = new SyncLogger();
+  logger.start();
   console.log('=== PageUp → Webflow Job Sync ===');
   console.log(`Started at: ${new Date().toISOString()}`);
 
@@ -150,6 +154,7 @@ async function runSync() {
   // Step 1: Initialize browser and fetch all job IDs
   await initBrowser();
   const pageupJobs = await fetchAllJobIds();
+  logger.recordPageupScrape(pageupJobs.length);
 
   // SAFETY GUARD: Abort if PageUp returns 0 jobs to prevent catastrophic deletion
   if (pageupJobs.length === 0) {
@@ -164,6 +169,7 @@ async function runSync() {
 
   // Step 2: Fetch existing CMS items
   const cmsItems = await client.getAllCollectionItems(COLLECTION_ID);
+  logger.recordCmsState(cmsItems.length);
 
   // Step 4: Build reference maps
   const { brandMap, countryMap } = await buildReferenceMaps(client);
@@ -193,6 +199,12 @@ async function runSync() {
   console.log(`  Removed jobs: ${removedJobIds.length}`);
   console.log(`  Existing jobs: ${existingJobs.length}`);
 
+  logger.recordDiff({
+    newJobs: newJobs.map(j => ({ jobId: j.jobId, title: j.title })),
+    removedJobs: removedJobIds.map(r => ({ jobId: r.jobId })),
+    existingCount: existingJobs.length,
+  });
+
   // SAFETY GUARD: Prevent mass deletion (>50% of CMS items)
   if (cmsJobMap.size > 0 && removedJobIds.length > cmsJobMap.size * 0.5) {
     throw new Error(
@@ -218,6 +230,7 @@ async function runSync() {
       const created = await client.createItems(COLLECTION_ID, itemsToCreate);
       console.log(`[sync] Created ${created.length} new CMS items.`);
       changedIds.push(...created.map(c => c.id));
+      logger.recordCreated(newDetails.map(d => ({ jobId: d.jobId, title: d.title })));
     }
   }
 
@@ -233,16 +246,23 @@ async function runSync() {
 
       const newFieldData = buildCmsFieldData(detail, brandMap, countryMap);
 
-      if (hasChanged(cmsItem, newFieldData)) {
+      const changedFields = hasChanged(cmsItem, newFieldData);
+      if (changedFields) {
         itemsToUpdate.push({
           id: cmsItem.id,
           fieldData: newFieldData,
+          _jobId: detail.jobId,
+          _title: detail.title,
+          _changedFields: changedFields,
         });
       }
     }
 
     if (itemsToUpdate.length > 0) {
       console.log(`[sync] Updating ${itemsToUpdate.length} changed CMS items...`);
+      logger.recordUpdated(itemsToUpdate.map(i => ({
+        jobId: i._jobId, title: i._title, changedFields: i._changedFields,
+      })));
       const updated = await client.updateItems(COLLECTION_ID, itemsToUpdate);
       console.log(`[sync] Updated ${updated.length} items.`);
       changedIds.push(...updated.map(u => u.id));
@@ -254,6 +274,7 @@ async function runSync() {
   // Step 9: Remove deleted jobs
   if (removedJobIds.length > 0) {
     console.log(`\n[sync] Removing ${removedJobIds.length} deleted jobs from CMS...`);
+    logger.recordDeleted(removedJobIds.map(r => ({ jobId: r.jobId })));
     const cmsIdsToDelete = removedJobIds.map(r => r.cmsId);
     const deleted = await client.deleteItems(COLLECTION_ID, cmsIdsToDelete);
     console.log(`[sync] Deleted ${deleted.length} items.`);
@@ -269,6 +290,7 @@ async function runSync() {
   if (hasChanges) {
     console.log(`\n[sync] Publishing site...`);
     await client.publishSite();
+    logger.recordPublished(true);
   }
 
   // Cleanup browser
@@ -277,12 +299,20 @@ async function runSync() {
   console.log(`\n=== Sync complete at ${new Date().toISOString()} ===`);
   const updatedCount = Math.max(0, changedIds.length - newJobs.length);
   console.log(`Summary: ${newJobs.length} created, ${removedJobIds.length} removed, ${updatedCount} updated`);
+
+  await logger.finish('success');
 }
 
 // Run if called directly
 if (require.main === module) {
   runSync().catch(async (err) => {
     console.error('[sync] Fatal error:', err);
+    // Try to log the error
+    try {
+      const errorLogger = new SyncLogger();
+      errorLogger.start();
+      await errorLogger.finish('error', err.message);
+    } catch (_) { /* best effort */ }
     await closeBrowser();
     process.exit(1);
   });
