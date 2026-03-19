@@ -1,5 +1,32 @@
 [
   {
+    "id": "2026-03-19T19:25:52.918Z",
+    "startedAt": "2026-03-19T19:25:52.918Z",
+    "finishedAt": "2026-03-19T19:32:19.138Z",
+    "durationMs": 386220,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 391,
+    "cmsItemsBefore": 391,
+    "created": 0,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 390,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "530004",
+        "title": "Solutions Consultant",
+        "changedFields": [
+          "location"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-19T18:09:24.440Z",
     "startedAt": "2026-03-19T18:09:24.440Z",
     "finishedAt": "2026-03-19T18:15:45.817Z",
