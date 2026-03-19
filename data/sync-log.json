@@ -1,5 +1,32 @@
 [
   {
+    "id": "2026-03-19T23:50:38.921Z",
+    "startedAt": "2026-03-19T23:50:38.921Z",
+    "finishedAt": "2026-03-19T23:56:39.409Z",
+    "durationMs": 360488,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 389,
+    "cmsItemsBefore": 389,
+    "created": 0,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 388,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "529483",
+        "title": "Service Product Lead (Workday) - South Bank, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-19T23:20:32.262Z",
     "startedAt": "2026-03-19T23:20:32.263Z",
     "finishedAt": "2026-03-19T23:27:30.504Z",
