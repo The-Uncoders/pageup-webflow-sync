@@ -41,6 +41,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add all-jobs.json filter-counts.json total-jobs.json
+          git add -f data/sync-log.json 2>/dev/null || true
           git diff --staged --quiet || git commit -m "chore: regenerate job data from CMS sync"
 
       - name: Push changes
@@ -52,3 +53,4 @@ jobs:
           curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/all-jobs.json" || true
           curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/filter-counts.json" || true
           curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/total-jobs.json" || true
+          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/data/sync-log.json" || true

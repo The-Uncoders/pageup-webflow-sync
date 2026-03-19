@@ -18,6 +18,12 @@ const FIELD_CONFIG = path.join(DATA_DIR, 'field-config.json');
 const SYNC_INTERVAL_MS = 30 * 60 * 1000; // 30 minutes
 const REPO_DIR = path.join(__dirname, '..');
 
+// CI sync log on CDN
+const CI_LOG_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/data/sync-log.json';
+const CI_REFRESH_INTERVAL = 5 * 60 * 1000; // refresh CI logs every 5 minutes
+let cachedCiLogs = [];
+let lastCiFetch = 0;
+
 // Track manual sync state
 let manualSyncRunning = false;
 let manualSyncOutput = '';
@@ -30,13 +36,59 @@ function ensureDataDir() {
   }
 }
 
-function readLogs() {
+function readLocalLogs() {
   try {
     if (fs.existsSync(LOG_FILE)) {
       return JSON.parse(fs.readFileSync(LOG_FILE, 'utf8'));
     }
   } catch (_) {}
   return [];
+}
+
+async function fetchCiLogs() {
+  // Only re-fetch every 5 minutes
+  if (Date.now() - lastCiFetch < CI_REFRESH_INTERVAL && cachedCiLogs.length > 0) {
+    return cachedCiLogs;
+  }
+  try {
+    const res = await fetch(CI_LOG_URL + '?_t=' + Date.now());
+    if (res.ok) {
+      cachedCiLogs = await res.json();
+      lastCiFetch = Date.now();
+      console.log(`[dashboard] Fetched ${cachedCiLogs.length} CI sync log entries from CDN`);
+    }
+  } catch (err) {
+    console.warn(`[dashboard] Could not fetch CI logs: ${err.message}`);
+  }
+  return cachedCiLogs;
+}
+
+function mergeLogs(localLogs, ciLogs) {
+  // Merge and deduplicate by id, newest first
+  const seen = new Set();
+  const merged = [];
+  // Tag each log with its source
+  for (const log of localLogs) {
+    if (!seen.has(log.id)) {
+      seen.add(log.id);
+      merged.push({ ...log, source: 'local' });
+    }
+  }
+  for (const log of ciLogs) {
+    if (!seen.has(log.id)) {
+      seen.add(log.id);
+      merged.push({ ...log, source: 'ci' });
+    }
+  }
+  // Sort newest first
+  merged.sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt));
+  return merged;
+}
+
+async function readLogs() {
+  const localLogs = readLocalLogs();
+  const ciLogs = await fetchCiLogs();
+  return mergeLogs(localLogs, ciLogs);
 }
 
 function readFieldConfig() {
@@ -61,8 +113,8 @@ app.get('/', (req, res) => {
 });
 
 // GET /api/status — health and timing
-app.get('/api/status', (req, res) => {
-  const logs = readLogs();
+app.get('/api/status', async (req, res) => {
+  const logs = await readLogs();
   const latest = logs[0] || null;
 
   let health = 'unknown';
@@ -82,8 +134,12 @@ app.get('/api/status', (req, res) => {
       health = 'warning';
     }
 
-    // Estimate next run (last run + 30 min)
-    nextRunAt = new Date(lastRunTime + SYNC_INTERVAL_MS).toISOString();
+    // Estimate next run based on most recent CI run (since CI runs every 30 min)
+    const ciLog = logs.find(l => l.source === 'ci');
+    const refTime = ciLog
+      ? new Date(ciLog.finishedAt || ciLog.startedAt).getTime()
+      : lastRunTime;
+    nextRunAt = new Date(refTime + SYNC_INTERVAL_MS).toISOString();
   }
 
   res.json({
@@ -95,14 +151,14 @@ app.get('/api/status', (req, res) => {
 });
 
 // GET /api/logs — all sync runs
-app.get('/api/logs', (req, res) => {
-  const logs = readLogs();
+app.get('/api/logs', async (req, res) => {
+  const logs = await readLogs();
   res.json(logs);
 });
 
 // GET /api/logs/:id — single run detail
-app.get('/api/logs/:id', (req, res) => {
-  const logs = readLogs();
+app.get('/api/logs/:id', async (req, res) => {
+  const logs = await readLogs();
   const log = logs.find(l => l.id === req.params.id);
   if (!log) return res.status(404).json({ error: 'Log not found' });
   res.json(log);

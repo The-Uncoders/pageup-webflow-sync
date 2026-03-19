@@ -43,6 +43,8 @@
     .badge.error { background: #fef2f2; color: #991b1b; }
     .badge.warning { background: #fefce8; color: #854d0e; }
     .badge.running { background: #eff6ff; color: #1e40af; }
+    .badge.ci { background: #f3e8ff; color: #6b21a8; }
+    .badge.local { background: #e0f2fe; color: #0369a1; }
 
     /* Section */
     .section { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 24px; }
@@ -231,8 +233,9 @@
 
         for (const log of logs.slice(0, 20)) {
           const id = log.id.replace(/[:.]/g, '_');
+          const srcBadge = log.source === 'ci' ? ' <span class="badge ci">CI</span>' : log.source === 'local' ? ' <span class="badge local">Local</span>' : '';
           html += `<tr class="expandable" onclick="toggleDetail('${id}')">
-            <td>${formatTime(log.startedAt)}</td>
+            <td>${formatTime(log.startedAt)}${srcBadge}</td>
             <td>${formatDuration(log.durationMs)}</td>
             <td>${badgeHtml(log.status)}</td>
             <td class="count-cell ${log.created > 0 ? 'positive' : ''}">${log.created || 0}</td>
