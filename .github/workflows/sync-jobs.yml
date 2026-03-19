@@ -35,3 +35,20 @@ jobs:
           WEBFLOW_BRAND_COLLECTION_ID: ${{ secrets.WEBFLOW_BRAND_COLLECTION_ID }}
           WEBFLOW_COUNTRY_COLLECTION_ID: ${{ secrets.WEBFLOW_COUNTRY_COLLECTION_ID }}
         run: npm run sync
+
+      - name: Commit updated JSON data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add all-jobs.json filter-counts.json total-jobs.json
+          git diff --staged --quiet || git commit -m "chore: regenerate job data from CMS sync"
+
+      - name: Push changes
+        run: git diff HEAD~1 --quiet || git push
+
+      - name: Purge jsDelivr CDN cache
+        if: success()
+        run: |
+          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/all-jobs.json" || true
+          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/filter-counts.json" || true
+          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/total-jobs.json" || true
