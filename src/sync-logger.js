@@ -1,7 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+// Persistent data directory — iCloud-synced project folder (works across Macs)
+// Falls back to repo-local data/ in CI or if project folder doesn't exist
+const ICLOUD_DATA_DIR = path.join(
+  process.env.HOME || '/tmp',
+  'Desktop', 'Claude Central', 'Page Up Styling', 'data'
+);
+const LOCAL_DATA_DIR = path.join(__dirname, '..', 'data');
+const DATA_DIR = fs.existsSync(path.dirname(ICLOUD_DATA_DIR)) ? ICLOUD_DATA_DIR : LOCAL_DATA_DIR;
 const LOG_FILE = path.join(DATA_DIR, 'sync-log.json');
 const MAX_ENTRIES = 100;
 

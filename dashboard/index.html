@@ -24,6 +24,13 @@
     .health-dot.error { background: var(--red); box-shadow: 0 0 8px var(--red); }
     .health-dot.unknown { background: var(--muted); }
     .health-label { font-size: 13px; color: rgba(255,255,255,0.7); }
+    .sync-btn { background: #fff; color: var(--dark); border: none; padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+    .sync-btn:hover { background: #e5e7eb; }
+    .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .sync-btn .spinner { display: none; width: 14px; height: 14px; border: 2px solid #d1d5db; border-top-color: var(--dark); border-radius: 50%; animation: spin 0.6s linear infinite; }
+    .sync-btn.running .spinner { display: inline-block; }
+    .sync-btn.running .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Status Cards */
     .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
@@ -82,7 +89,14 @@
         <span class="health-dot unknown" id="health-dot"></span>
         <h1>FCTG Careers — Sync Monitor</h1>
       </div>
-      <span class="health-label" id="health-label">Loading...</span>
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="sync-btn" id="sync-btn" onclick="triggerSync()">
+          <span class="btn-text">▶ Run Sync Now</span>
+          <span class="spinner"></span>
+          <span class="running-text" style="display:none">Syncing…</span>
+        </button>
+        <span class="health-label" id="health-label">Loading...</span>
+      </div>
     </div>
   </header>
 
@@ -323,10 +337,75 @@
       }
     }
 
+    // --- Manual Sync ---
+    let syncPolling = false;
+
+    async function triggerSync() {
+      const btn = document.getElementById('sync-btn');
+      try {
+        const res = await fetch('/api/sync', { method: 'POST' });
+        const data = await res.json();
+
+        if (res.status === 409) {
+          // Already running
+          return;
+        }
+        if (!res.ok) {
+          alert(data.error || 'Failed to start sync');
+          return;
+        }
+
+        // Switch button to running state
+        btn.classList.add('running');
+        btn.disabled = true;
+        btn.querySelector('.running-text').style.display = '';
+
+        // Poll for completion
+        syncPolling = true;
+        pollSyncStatus();
+      } catch (e) {
+        console.error('Sync trigger error:', e);
+        alert('Failed to start sync. Is the server running?');
+      }
+    }
+
+    async function pollSyncStatus() {
+      if (!syncPolling) return;
+      try {
+        const data = await fetch('/api/sync/status').then(r => r.json());
+        if (!data.running) {
+          // Sync finished — reset button and refresh data
+          syncPolling = false;
+          const btn = document.getElementById('sync-btn');
+          btn.classList.remove('running');
+          btn.disabled = false;
+          btn.querySelector('.running-text').style.display = 'none';
+          await Promise.all([loadStatus(), loadLogs()]);
+          return;
+        }
+      } catch (e) {
+        console.error('Poll error:', e);
+      }
+      setTimeout(pollSyncStatus, 3000);
+    }
+
     // --- Init ---
     async function init() {
       await Promise.all([loadStatus(), loadLogs(), loadFields()]);
       setInterval(loadStatus, 30000);
+
+      // Check if a sync is already running (e.g. page refreshed mid-sync)
+      try {
+        const data = await fetch('/api/sync/status').then(r => r.json());
+        if (data.running) {
+          const btn = document.getElementById('sync-btn');
+          btn.classList.add('running');
+          btn.disabled = true;
+          btn.querySelector('.running-text').style.display = '';
+          syncPolling = true;
+          pollSyncStatus();
+        }
+      } catch (_) {}
     }
     init();
   </script>
