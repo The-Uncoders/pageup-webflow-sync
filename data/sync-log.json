@@ -1,5 +1,65 @@
 [
   {
+    "id": "2026-03-20T05:11:37.331Z",
+    "startedAt": "2026-03-20T05:11:37.331Z",
+    "finishedAt": "2026-03-20T05:17:52.953Z",
+    "durationMs": 375622,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 389,
+    "cmsItemsBefore": 389,
+    "created": 3,
+    "updated": 2,
+    "deleted": 3,
+    "unchanged": 384,
+    "createdJobs": [
+      {
+        "jobId": "530178",
+        "title": "Sales Travel Consultant - Whitford City, WA"
+      },
+      {
+        "jobId": "530349",
+        "title": "Customer Sales Consultant - Global Touring"
+      },
+      {
+        "jobId": "530350",
+        "title": "After Care Sales Consultant - Global Touring"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530099",
+        "title": "Contract Manager Asia Pacific - South Bank, QLD",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "530143",
+        "title": "Contract Manager Asia Pacific - North Sydney, NSW",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "528739",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "526868",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "530021",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-20T03:41:10.963Z",
     "startedAt": "2026-03-20T03:41:10.963Z",
     "finishedAt": "2026-03-20T03:47:49.200Z",
