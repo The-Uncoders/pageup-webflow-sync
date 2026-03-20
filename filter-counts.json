@@ -7,7 +7,7 @@
     "south africa": 6,
     "asia": 61,
     "multiple locations": 1,
-    "usa": 42,
+    "usa": 41,
     "uae": 1
   },
   "cities": {
@@ -37,7 +37,7 @@
     "virtual - usa": 2,
     "victoria": 27,
     "pennsylvania": 6,
-    "new york": 9,
+    "new york": 8,
     "bath": 2,
     "tokyo": 14,
     "chennai": 2,
@@ -71,7 +71,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 274,
+    "sales and customer service": 273,
     "marketing and communication": 13,
     "finance": 20,
     "leadership": 29,
