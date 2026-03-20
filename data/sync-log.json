@@ -1,5 +1,32 @@
 [
   {
+    "id": "2026-03-20T11:01:47.625Z",
+    "startedAt": "2026-03-20T11:01:47.625Z",
+    "finishedAt": "2026-03-20T11:08:14.902Z",
+    "durationMs": 387277,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 386,
+    "cmsItemsBefore": 386,
+    "created": 0,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 385,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "529860",
+        "title": "Portuguese‑Speaking Corporate Travel Consultant – Edenvale, Johannesburg",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-20T10:02:02.145Z",
     "startedAt": "2026-03-20T10:02:02.145Z",
     "finishedAt": "2026-03-20T10:08:02.463Z",
