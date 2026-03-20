@@ -1,8 +1,8 @@
 {
   "regions": {
+    "uk & europe": 23,
     "australia": 220,
     "new zealand": 13,
-    "uk & europe": 22,
     "canada": 18,
     "south africa": 6,
     "asia": 61,
@@ -10,6 +10,7 @@
     "uae": 1
   },
   "cities": {
+    "south east": 2,
     "queensland": 69,
     "western australia": 23,
     "auckland": 4,
@@ -27,7 +28,6 @@
     "bangalore": 1,
     "bangkok": 3,
     "virtual - canada": 2,
-    "south east": 1,
     "remote": 5,
     "new south wales": 62,
     "kuala lumpur": 4,
@@ -69,8 +69,8 @@
     "new jersey": 1
   },
   "categories": {
+    "marketing and communication": 14,
     "sales and customer service": 273,
-    "marketing and communication": 13,
     "finance": 19,
     "leadership": 27,
     "digital and technology": 29,
@@ -85,6 +85,7 @@
     "procurement": 4
   },
   "cityToRegion": {
+    "south east": "UK & Europe",
     "queensland": "Australia",
     "western australia": "Australia",
     "auckland": "New Zealand",
@@ -102,7 +103,6 @@
     "bangalore": "Asia",
     "bangkok": "Asia",
     "virtual - canada": "Canada",
-    "south east": "UK & Europe",
     "remote": "Australia",
     "new south wales": "Australia",
     "kuala lumpur": "Asia",
@@ -144,6 +144,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "south east": "South East",
     "queensland": "Queensland",
     "western australia": "Western Australia",
     "auckland": "Auckland",
@@ -161,7 +162,6 @@
     "bangalore": "Bangalore",
     "bangkok": "Bangkok",
     "virtual - canada": "Virtual - Canada",
-    "south east": "South East",
     "remote": "Remote",
     "new south wales": "New South Wales",
     "kuala lumpur": "Kuala Lumpur",
@@ -203,8 +203,8 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
-    "sales and customer service": "Sales and Customer Service",
     "marketing and communication": "Marketing and Communication",
+    "sales and customer service": "Sales and Customer Service",
     "finance": "Finance",
     "leadership": "Leadership",
     "digital and technology": "Digital and Technology",
