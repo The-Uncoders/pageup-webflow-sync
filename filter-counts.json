@@ -1,5 +1,6 @@
 {
   "regions": {
+    "new zealand": 13,
     "australia": 223,
     "uk & europe": 22,
     "canada": 18,
@@ -7,10 +8,10 @@
     "asia": 64,
     "multiple locations": 1,
     "usa": 42,
-    "new zealand": 12,
     "uae": 1
   },
   "cities": {
+    "auckland": 4,
     "queensland": 72,
     "london": 10,
     "ontario": 10,
@@ -24,7 +25,6 @@
     "california": 12,
     "western australia": 24,
     "south australia": 16,
-    "auckland": 3,
     "invercargill": 1,
     "massachusetts": 4,
     "bangkok": 3,
@@ -71,6 +71,7 @@
     "new jersey": 1
   },
   "categories": {
+    "marketing and communication": 13,
     "digital and technology": 33,
     "finance": 20,
     "leadership": 29,
@@ -78,7 +79,6 @@
     "legal": 2,
     "risk and compliance": 2,
     "operations and logistics": 42,
-    "marketing and communication": 12,
     "administration": 3,
     "data and business intelligence": 6,
     "people and culture": 8,
@@ -87,6 +87,7 @@
     "procurement": 4
   },
   "cityToRegion": {
+    "auckland": "New Zealand",
     "queensland": "Australia",
     "london": "UK & Europe",
     "ontario": "Canada",
@@ -100,7 +101,6 @@
     "california": "USA",
     "western australia": "Australia",
     "south australia": "Australia",
-    "auckland": "New Zealand",
     "invercargill": "New Zealand",
     "massachusetts": "USA",
     "bangkok": "Asia",
@@ -147,6 +147,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "auckland": "Auckland",
     "queensland": "Queensland",
     "london": "London",
     "ontario": "Ontario",
@@ -160,7 +161,6 @@
     "california": "California",
     "western australia": "Western Australia",
     "south australia": "South Australia",
-    "auckland": "Auckland",
     "invercargill": "Invercargill",
     "massachusetts": "Massachusetts",
     "bangkok": "Bangkok",
@@ -207,6 +207,7 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "marketing and communication": "Marketing and Communication",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
     "leadership": "Leadership",
@@ -214,7 +215,6 @@
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance",
     "operations and logistics": "Operations and Logistics",
-    "marketing and communication": "Marketing and Communication",
     "administration": "Administration",
     "data and business intelligence": "Data and Business Intelligence",
     "people and culture": "People and Culture",
