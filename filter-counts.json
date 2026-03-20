@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 223,
+    "australia": 222,
     "new zealand": 13,
     "uk & europe": 22,
     "canada": 18,
@@ -11,8 +11,8 @@
     "uae": 1
   },
   "cities": {
-    "queensland": 72,
-    "western australia": 24,
+    "queensland": 71,
+    "western australia": 23,
     "auckland": 4,
     "london": 10,
     "ontario": 10,
@@ -31,7 +31,7 @@
     "virtual - canada": 2,
     "south east": 1,
     "remote": 5,
-    "new south wales": 61,
+    "new south wales": 62,
     "kuala lumpur": 4,
     "phuket": 2,
     "virtual - usa": 2,
@@ -71,7 +71,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 275,
+    "sales and customer service": 274,
     "marketing and communication": 13,
     "finance": 20,
     "leadership": 29,

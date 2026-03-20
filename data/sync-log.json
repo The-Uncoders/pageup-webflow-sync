@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-03-20T06:10:27.976Z",
+    "startedAt": "2026-03-20T06:10:27.976Z",
+    "finishedAt": "2026-03-20T06:16:27.352Z",
+    "durationMs": 359376,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 388,
+    "cmsItemsBefore": 389,
+    "created": 0,
+    "updated": 1,
+    "deleted": 1,
+    "unchanged": 387,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "530099",
+        "title": "Contract Manager Asia Pacific - South Bank, QLD",
+        "changedFields": [
+          "location"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530171",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-20T05:11:37.331Z",
     "startedAt": "2026-03-20T05:11:37.331Z",
     "finishedAt": "2026-03-20T05:17:52.953Z",
