@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-21T13:56:22.998Z",
+    "startedAt": "2026-03-21T13:56:22.999Z",
+    "finishedAt": "2026-03-21T14:02:43.595Z",
+    "durationMs": 380596,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 374,
+    "cmsItemsBefore": 375,
+    "created": 0,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 374,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529947",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-21T13:15:21.464Z",
     "startedAt": "2026-03-21T13:15:21.464Z",
     "finishedAt": "2026-03-21T13:21:06.478Z",
