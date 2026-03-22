@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-03-22T11:43:33.191Z",
+    "startedAt": "2026-03-22T11:43:33.191Z",
+    "finishedAt": "2026-03-22T11:49:25.898Z",
+    "durationMs": 352707,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 373,
+    "cmsItemsBefore": 373,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 373,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-22T11:15:21.999Z",
     "startedAt": "2026-03-22T11:15:21.999Z",
     "finishedAt": "2026-03-22T11:21:26.485Z",
