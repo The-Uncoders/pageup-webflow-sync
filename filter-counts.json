@@ -1,7 +1,7 @@
 {
   "regions": {
     "uk & europe": 21,
-    "australia": 219,
+    "australia": 217,
     "new zealand": 11,
     "canada": 16,
     "south africa": 5,
@@ -12,7 +12,7 @@
   "cities": {
     "south east": 2,
     "queensland": 68,
-    "western australia": 23,
+    "western australia": 21,
     "auckland": 3,
     "london": 10,
     "ontario": 9,
@@ -69,7 +69,7 @@
   },
   "categories": {
     "marketing and communication": 11,
-    "sales and customer service": 268,
+    "sales and customer service": 266,
     "finance": 19,
     "leadership": 27,
     "digital and technology": 26,
