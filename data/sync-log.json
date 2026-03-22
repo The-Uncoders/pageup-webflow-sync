@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-03-22T18:59:44.495Z",
+    "startedAt": "2026-03-22T18:59:44.496Z",
+    "finishedAt": "2026-03-22T19:05:40.653Z",
+    "durationMs": 356157,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 373,
+    "cmsItemsBefore": 373,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 373,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-22T18:22:31.127Z",
     "startedAt": "2026-03-22T18:22:31.127Z",
     "finishedAt": "2026-03-22T18:28:22.452Z",
@@ -2070,32 +2089,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-19T19:25:52.918Z",
-    "startedAt": "2026-03-19T19:25:52.918Z",
-    "finishedAt": "2026-03-19T19:32:19.138Z",
-    "durationMs": 386220,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 391,
-    "cmsItemsBefore": 391,
-    "created": 0,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 390,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "530004",
-        "title": "Solutions Consultant",
-        "changedFields": [
-          "location"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
