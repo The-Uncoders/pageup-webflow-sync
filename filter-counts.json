@@ -1,7 +1,7 @@
 {
   "regions": {
-    "uk & europe": 21,
     "australia": 217,
+    "uk & europe": 21,
     "new zealand": 11,
     "canada": 16,
     "south africa": 5,
@@ -10,8 +10,8 @@
     "uae": 1
   },
   "cities": {
-    "south east": 2,
     "queensland": 68,
+    "south east": 2,
     "western australia": 21,
     "auckland": 3,
     "london": 10,
@@ -68,11 +68,11 @@
     "new jersey": 1
   },
   "categories": {
+    "digital and technology": 26,
     "marketing and communication": 11,
     "sales and customer service": 266,
     "finance": 19,
     "leadership": 27,
-    "digital and technology": 26,
     "legal": 2,
     "risk and compliance": 2,
     "operations and logistics": 40,
@@ -84,8 +84,8 @@
     "procurement": 4
   },
   "cityToRegion": {
-    "south east": "UK & Europe",
     "queensland": "Australia",
+    "south east": "UK & Europe",
     "western australia": "Australia",
     "auckland": "New Zealand",
     "london": "UK & Europe",
@@ -142,8 +142,8 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
-    "south east": "South East",
     "queensland": "Queensland",
+    "south east": "South East",
     "western australia": "Western Australia",
     "auckland": "Auckland",
     "london": "London",
@@ -200,11 +200,11 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "digital and technology": "Digital and Technology",
     "marketing and communication": "Marketing and Communication",
     "sales and customer service": "Sales and Customer Service",
     "finance": "Finance",
     "leadership": "Leadership",
-    "digital and technology": "Digital and Technology",
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance",
     "operations and logistics": "Operations and Logistics",
