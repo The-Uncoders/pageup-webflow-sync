@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-22T22:15:10.550Z",
+    "startedAt": "2026-03-22T22:15:10.551Z",
+    "finishedAt": "2026-03-22T22:21:00.945Z",
+    "durationMs": 350394,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 371,
+    "cmsItemsBefore": 372,
+    "created": 0,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 371,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529860",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-22T21:46:28.579Z",
     "startedAt": "2026-03-22T21:46:28.579Z",
     "finishedAt": "2026-03-22T21:52:10.031Z",
@@ -2041,35 +2065,6 @@
       }
     ],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-19T23:20:32.262Z",
-    "startedAt": "2026-03-19T23:20:32.263Z",
-    "finishedAt": "2026-03-19T23:27:30.504Z",
-    "durationMs": 418241,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 389,
-    "cmsItemsBefore": 389,
-    "created": 1,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 388,
-    "createdJobs": [
-      {
-        "jobId": "529483",
-        "title": "Service Product Lead - South Bank, QLD"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "525684",
-        "title": "Unknown"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }

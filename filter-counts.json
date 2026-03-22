@@ -4,7 +4,7 @@
     "australia": 219,
     "new zealand": 11,
     "canada": 16,
-    "south africa": 6,
+    "south africa": 5,
     "asia": 58,
     "usa": 40,
     "uae": 1
@@ -17,7 +17,7 @@
     "london": 10,
     "ontario": 9,
     "british columbia": 2,
-    "johannesburg": 3,
+    "johannesburg": 2,
     "noida": 10,
     "barcelona": 3,
     "mumbai": 4,
@@ -69,7 +69,7 @@
   },
   "categories": {
     "marketing and communication": 11,
-    "sales and customer service": 269,
+    "sales and customer service": 268,
     "finance": 19,
     "leadership": 27,
     "digital and technology": 26,
