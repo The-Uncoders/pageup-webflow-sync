@@ -1,8 +1,8 @@
 {
   "regions": {
-    "australia": 217,
+    "australia": 216,
     "uk & europe": 21,
-    "new zealand": 11,
+    "new zealand": 10,
     "canada": 16,
     "south africa": 5,
     "asia": 58,
@@ -10,7 +10,7 @@
     "uae": 1
   },
   "cities": {
-    "queensland": 68,
+    "queensland": 67,
     "south east": 2,
     "western australia": 21,
     "auckland": 3,
@@ -52,7 +52,6 @@
     "shanghai": 2,
     "kerikeri": 1,
     "singapore": 3,
-    "hamilton": 1,
     "illinois": 3,
     "texas": 1,
     "colorado": 4,
@@ -68,16 +67,16 @@
     "new jersey": 1
   },
   "categories": {
-    "digital and technology": 26,
+    "digital and technology": 25,
     "marketing and communication": 11,
-    "sales and customer service": 266,
+    "sales and customer service": 265,
     "finance": 19,
     "leadership": 27,
     "legal": 2,
     "risk and compliance": 2,
     "operations and logistics": 40,
     "administration": 2,
-    "data and business intelligence": 5,
+    "data and business intelligence": 4,
     "people and culture": 7,
     "project and program management": 6,
     "commercial": 25,
@@ -126,7 +125,6 @@
     "shanghai": "Asia",
     "kerikeri": "New Zealand",
     "singapore": "Asia",
-    "hamilton": "New Zealand",
     "illinois": "USA",
     "texas": "USA",
     "colorado": "USA",
@@ -184,7 +182,6 @@
     "shanghai": "Shanghai",
     "kerikeri": "Kerikeri",
     "singapore": "Singapore",
-    "hamilton": "Hamilton",
     "illinois": "Illinois",
     "texas": "Texas",
     "colorado": "Colorado",
