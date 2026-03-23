@@ -1,7 +1,7 @@
 {
   "regions": {
+    "australia": 217,
     "new zealand": 11,
-    "australia": 216,
     "uk & europe": 21,
     "canada": 16,
     "south africa": 5,
@@ -10,9 +10,10 @@
     "uae": 1
   },
   "cities": {
+    "new south wales": 66,
     "wellington": 1,
-    "queensland": 66,
     "south east": 2,
+    "queensland": 64,
     "western australia": 21,
     "auckland": 3,
     "london": 10,
@@ -30,7 +31,6 @@
     "bangkok": 3,
     "virtual - canada": 2,
     "remote": 5,
-    "new south wales": 63,
     "kuala lumpur": 4,
     "phuket": 2,
     "virtual - usa": 2,
@@ -68,25 +68,26 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 266,
-    "digital and technology": 25,
+    "sales and customer service": 268,
     "marketing and communication": 11,
     "finance": 19,
     "leadership": 27,
+    "digital and technology": 24,
     "legal": 2,
     "risk and compliance": 2,
-    "operations and logistics": 40,
+    "operations and logistics": 39,
     "administration": 2,
     "data and business intelligence": 4,
     "people and culture": 7,
     "project and program management": 6,
-    "commercial": 25,
-    "procurement": 4
+    "commercial": 24,
+    "procurement": 3
   },
   "cityToRegion": {
+    "new south wales": "Australia",
     "wellington": "New Zealand",
-    "queensland": "Australia",
     "south east": "UK & Europe",
+    "queensland": "Australia",
     "western australia": "Australia",
     "auckland": "New Zealand",
     "london": "UK & Europe",
@@ -104,7 +105,6 @@
     "bangkok": "Asia",
     "virtual - canada": "Canada",
     "remote": "Australia",
-    "new south wales": "Australia",
     "kuala lumpur": "Asia",
     "phuket": "Asia",
     "virtual - usa": "USA",
@@ -142,9 +142,10 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new south wales": "New South Wales",
     "wellington": "Wellington",
-    "queensland": "Queensland",
     "south east": "South East",
+    "queensland": "Queensland",
     "western australia": "Western Australia",
     "auckland": "Auckland",
     "london": "London",
@@ -162,7 +163,6 @@
     "bangkok": "Bangkok",
     "virtual - canada": "Virtual - Canada",
     "remote": "Remote",
-    "new south wales": "New South Wales",
     "kuala lumpur": "Kuala Lumpur",
     "phuket": "Phuket",
     "virtual - usa": "Virtual - USA",
@@ -201,10 +201,10 @@
   },
   "categoryDisplay": {
     "sales and customer service": "Sales and Customer Service",
-    "digital and technology": "Digital and Technology",
     "marketing and communication": "Marketing and Communication",
     "finance": "Finance",
     "leadership": "Leadership",
+    "digital and technology": "Digital and Technology",
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance",
     "operations and logistics": "Operations and Logistics",

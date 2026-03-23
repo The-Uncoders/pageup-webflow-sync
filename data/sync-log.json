@@ -1,5 +1,46 @@
 [
   {
+    "id": "2026-03-23T04:03:10.718Z",
+    "startedAt": "2026-03-23T04:03:10.718Z",
+    "finishedAt": "2026-03-23T04:09:05.120Z",
+    "durationMs": 354402,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 369,
+    "cmsItemsBefore": 368,
+    "created": 3,
+    "updated": 0,
+    "deleted": 2,
+    "unchanged": 366,
+    "createdJobs": [
+      {
+        "jobId": "529516",
+        "title": "Customer Solutions Manager (Group Travel) - North Sydney, NSW"
+      },
+      {
+        "jobId": "529752",
+        "title": "Foreign Currency Sales Consultant (Part Time) – Travel Money Oz – Rouse Hill, NSW"
+      },
+      {
+        "jobId": "530170",
+        "title": "Customer Solutions Manager (Events) - North Sydney, NSW"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529483",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529793",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-23T01:13:48.711Z",
     "startedAt": "2026-03-23T01:13:48.711Z",
     "finishedAt": "2026-03-23T01:19:41.793Z",
@@ -2012,38 +2053,6 @@
     "deletedJobs": [
       {
         "jobId": "530117",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-20T06:10:27.976Z",
-    "startedAt": "2026-03-20T06:10:27.976Z",
-    "finishedAt": "2026-03-20T06:16:27.352Z",
-    "durationMs": 359376,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 388,
-    "cmsItemsBefore": 389,
-    "created": 0,
-    "updated": 1,
-    "deleted": 1,
-    "unchanged": 387,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "530099",
-        "title": "Contract Manager Asia Pacific - South Bank, QLD",
-        "changedFields": [
-          "location"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "530171",
         "title": "Unknown"
       }
     ],
