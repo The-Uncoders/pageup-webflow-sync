@@ -2,7 +2,7 @@
   "regions": {
     "australia": 219,
     "new zealand": 11,
-    "uk & europe": 21,
+    "uk & europe": 20,
     "canada": 16,
     "south africa": 5,
     "asia": 56,
@@ -16,7 +16,7 @@
     "south east": 2,
     "western australia": 21,
     "auckland": 3,
-    "london": 10,
+    "london": 9,
     "ontario": 9,
     "british columbia": 2,
     "johannesburg": 2,
@@ -78,7 +78,7 @@
     "operations and logistics": 37,
     "administration": 2,
     "data and business intelligence": 4,
-    "people and culture": 7,
+    "people and culture": 6,
     "project and program management": 6,
     "commercial": 24,
     "procurement": 3

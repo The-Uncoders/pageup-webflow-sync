@@ -1,5 +1,66 @@
 [
   {
+    "id": "2026-03-23T10:54:10.003Z",
+    "startedAt": "2026-03-23T10:54:10.003Z",
+    "finishedAt": "2026-03-23T11:00:02.630Z",
+    "durationMs": 352627,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 369,
+    "created": 0,
+    "updated": 3,
+    "deleted": 1,
+    "unchanged": 365,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "529969",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name",
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "529976",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name",
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "529439",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name",
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530305",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-23T10:00:07.503Z",
     "startedAt": "2026-03-23T10:00:07.503Z",
     "finishedAt": "2026-03-23T10:06:02.096Z",
@@ -2036,25 +2097,6 @@
     "startedAt": "2026-03-20T12:34:16.743Z",
     "finishedAt": "2026-03-20T12:40:15.451Z",
     "durationMs": 358708,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 386,
-    "cmsItemsBefore": 386,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 386,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-20T11:50:45.337Z",
-    "startedAt": "2026-03-20T11:50:45.337Z",
-    "finishedAt": "2026-03-20T11:57:14.487Z",
-    "durationMs": 389150,
     "status": "success",
     "error": null,
     "pageupJobsFound": 386,
