@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-03-23T22:57:07.216Z",
+    "startedAt": "2026-03-23T22:57:07.216Z",
+    "finishedAt": "2026-03-23T23:02:56.767Z",
+    "durationMs": 349551,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 369,
+    "cmsItemsBefore": 366,
+    "created": 3,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 366,
+    "createdJobs": [
+      {
+        "jobId": "530363",
+        "title": "Foreign Currency Sales Consultant (Casual) – Travel Money Oz – Erina, NSW"
+      },
+      {
+        "jobId": "530364",
+        "title": "Foreign Currency Sales Consultant – Travel Money Oz – Erina, NSW"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-23T22:21:01.580Z",
     "startedAt": "2026-03-23T22:21:01.580Z",
     "finishedAt": "2026-03-23T22:26:47.539Z",
@@ -2149,25 +2181,6 @@
     "startedAt": "2026-03-20T22:17:48.226Z",
     "finishedAt": "2026-03-20T22:23:46.624Z",
     "durationMs": 358398,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 380,
-    "cmsItemsBefore": 380,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 380,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-20T21:51:12.908Z",
-    "startedAt": "2026-03-20T21:51:12.908Z",
-    "finishedAt": "2026-03-20T21:57:16.579Z",
-    "durationMs": 363671,
     "status": "success",
     "error": null,
     "pageupJobsFound": 380,
