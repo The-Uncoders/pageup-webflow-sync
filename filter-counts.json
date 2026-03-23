@@ -1,8 +1,8 @@
 {
   "regions": {
+    "new zealand": 11,
     "australia": 216,
     "uk & europe": 21,
-    "new zealand": 10,
     "canada": 16,
     "south africa": 5,
     "asia": 58,
@@ -10,7 +10,8 @@
     "uae": 1
   },
   "cities": {
-    "queensland": 67,
+    "wellington": 1,
+    "queensland": 66,
     "south east": 2,
     "western australia": 21,
     "auckland": 3,
@@ -29,7 +30,7 @@
     "bangkok": 3,
     "virtual - canada": 2,
     "remote": 5,
-    "new south wales": 62,
+    "new south wales": 63,
     "kuala lumpur": 4,
     "phuket": 2,
     "virtual - usa": 2,
@@ -67,9 +68,9 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 266,
     "digital and technology": 25,
     "marketing and communication": 11,
-    "sales and customer service": 265,
     "finance": 19,
     "leadership": 27,
     "legal": 2,
@@ -83,6 +84,7 @@
     "procurement": 4
   },
   "cityToRegion": {
+    "wellington": "New Zealand",
     "queensland": "Australia",
     "south east": "UK & Europe",
     "western australia": "Australia",
@@ -140,6 +142,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "wellington": "Wellington",
     "queensland": "Queensland",
     "south east": "South East",
     "western australia": "Western Australia",
@@ -197,9 +200,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "marketing and communication": "Marketing and Communication",
-    "sales and customer service": "Sales and Customer Service",
     "finance": "Finance",
     "leadership": "Leadership",
     "legal": "Legal",

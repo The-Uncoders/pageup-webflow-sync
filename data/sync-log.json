@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-03-23T01:13:48.711Z",
+    "startedAt": "2026-03-23T01:13:48.711Z",
+    "finishedAt": "2026-03-23T01:19:41.793Z",
+    "durationMs": 353082,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 367,
+    "created": 1,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 366,
+    "createdJobs": [
+      {
+        "jobId": "530360",
+        "title": "Travel Expert - North City"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529290",
+        "title": "Group Travel Manager - FCM Meetings & Events - South Bank, QLD",
+        "changedFields": [
+          "location"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-22T23:48:21.165Z",
     "startedAt": "2026-03-22T23:48:21.165Z",
     "finishedAt": "2026-03-22T23:54:02.529Z",
@@ -2012,66 +2044,6 @@
     "deletedJobs": [
       {
         "jobId": "530171",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-20T05:11:37.331Z",
-    "startedAt": "2026-03-20T05:11:37.331Z",
-    "finishedAt": "2026-03-20T05:17:52.953Z",
-    "durationMs": 375622,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 389,
-    "cmsItemsBefore": 389,
-    "created": 3,
-    "updated": 2,
-    "deleted": 3,
-    "unchanged": 384,
-    "createdJobs": [
-      {
-        "jobId": "530178",
-        "title": "Sales Travel Consultant - Whitford City, WA"
-      },
-      {
-        "jobId": "530349",
-        "title": "Customer Sales Consultant - Global Touring"
-      },
-      {
-        "jobId": "530350",
-        "title": "After Care Sales Consultant - Global Touring"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530099",
-        "title": "Contract Manager Asia Pacific - South Bank, QLD",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "530143",
-        "title": "Contract Manager Asia Pacific - North Sydney, NSW",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "528739",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "526868",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530021",
         "title": "Unknown"
       }
     ],
