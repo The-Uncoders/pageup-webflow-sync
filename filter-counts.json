@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 217,
+    "australia": 218,
     "new zealand": 11,
     "uk & europe": 21,
     "canada": 16,
@@ -10,7 +10,7 @@
     "uae": 1
   },
   "cities": {
-    "new south wales": 66,
+    "new south wales": 67,
     "wellington": 1,
     "south east": 2,
     "queensland": 64,
@@ -68,7 +68,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 268,
+    "sales and customer service": 269,
     "marketing and communication": 11,
     "finance": 19,
     "leadership": 27,

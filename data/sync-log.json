@@ -1,5 +1,38 @@
 [
   {
+    "id": "2026-03-23T05:52:17.971Z",
+    "startedAt": "2026-03-23T05:52:17.971Z",
+    "finishedAt": "2026-03-23T05:58:11.357Z",
+    "durationMs": 353386,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 369,
+    "created": 2,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 368,
+    "createdJobs": [
+      {
+        "jobId": "530169",
+        "title": "Global Account Manager Events - North Sydney, NSW"
+      },
+      {
+        "jobId": "530258",
+        "title": "Account Manager (Group Travel) - North Sydney, NSW"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529699",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-23T04:03:10.718Z",
     "startedAt": "2026-03-23T04:03:10.718Z",
     "finishedAt": "2026-03-23T04:09:05.120Z",
@@ -2034,29 +2067,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-20T07:27:52.254Z",
-    "startedAt": "2026-03-20T07:27:52.254Z",
-    "finishedAt": "2026-03-20T07:34:08.282Z",
-    "durationMs": 376028,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 387,
-    "cmsItemsBefore": 388,
-    "created": 0,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 387,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530117",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
