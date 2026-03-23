@@ -1,19 +1,19 @@
 {
   "regions": {
-    "australia": 218,
+    "australia": 219,
     "new zealand": 11,
     "uk & europe": 21,
     "canada": 16,
     "south africa": 5,
-    "asia": 58,
+    "asia": 56,
     "usa": 40,
     "uae": 1
   },
   "cities": {
+    "queensland": 65,
     "new south wales": 67,
     "wellington": 1,
     "south east": 2,
-    "queensland": 64,
     "western australia": 21,
     "auckland": 3,
     "london": 10,
@@ -46,7 +46,7 @@
     "cape town": 2,
     "northern territory": 2,
     "paris": 1,
-    "hanoi": 4,
+    "hanoi": 2,
     "ho chi minh city": 2,
     "nationwide": 1,
     "bali": 6,
@@ -68,14 +68,14 @@
     "new jersey": 1
   },
   "categories": {
+    "digital and technology": 25,
     "sales and customer service": 269,
     "marketing and communication": 11,
     "finance": 19,
     "leadership": 27,
-    "digital and technology": 24,
     "legal": 2,
     "risk and compliance": 2,
-    "operations and logistics": 39,
+    "operations and logistics": 37,
     "administration": 2,
     "data and business intelligence": 4,
     "people and culture": 7,
@@ -84,10 +84,10 @@
     "procurement": 3
   },
   "cityToRegion": {
+    "queensland": "Australia",
     "new south wales": "Australia",
     "wellington": "New Zealand",
     "south east": "UK & Europe",
-    "queensland": "Australia",
     "western australia": "Australia",
     "auckland": "New Zealand",
     "london": "UK & Europe",
@@ -142,10 +142,10 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "queensland": "Queensland",
     "new south wales": "New South Wales",
     "wellington": "Wellington",
     "south east": "South East",
-    "queensland": "Queensland",
     "western australia": "Western Australia",
     "auckland": "Auckland",
     "london": "London",
@@ -200,11 +200,11 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "marketing and communication": "Marketing and Communication",
     "finance": "Finance",
     "leadership": "Leadership",
-    "digital and technology": "Digital and Technology",
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance",
     "operations and logistics": "Operations and Logistics",
