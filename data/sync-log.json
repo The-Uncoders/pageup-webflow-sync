@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-03-23T08:58:25.154Z",
+    "startedAt": "2026-03-23T08:58:25.155Z",
+    "finishedAt": "2026-03-23T09:04:17.235Z",
+    "durationMs": 352080,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 369,
+    "cmsItemsBefore": 369,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 369,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-23T07:59:52.605Z",
     "startedAt": "2026-03-23T07:59:52.605Z",
     "finishedAt": "2026-03-23T08:05:37.332Z",
@@ -2057,24 +2076,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-03-20T10:02:02.145Z",
-    "startedAt": "2026-03-20T10:02:02.145Z",
-    "finishedAt": "2026-03-20T10:08:02.463Z",
-    "durationMs": 360318,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 386,
-    "cmsItemsBefore": 386,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 386,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
