@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-23T21:01:18.228Z",
+    "startedAt": "2026-03-23T21:01:18.229Z",
+    "finishedAt": "2026-03-23T21:07:21.424Z",
+    "durationMs": 363195,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 367,
+    "cmsItemsBefore": 366,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 366,
+    "createdJobs": [
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-23T20:28:39.051Z",
     "startedAt": "2026-03-23T20:28:39.052Z",
     "finishedAt": "2026-03-23T20:34:25.194Z",
@@ -2134,25 +2158,6 @@
     "startedAt": "2026-03-20T20:54:48.506Z",
     "finishedAt": "2026-03-20T21:00:39.385Z",
     "durationMs": 350879,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 380,
-    "cmsItemsBefore": 380,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 380,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-20T20:21:00.978Z",
-    "startedAt": "2026-03-20T20:21:00.978Z",
-    "finishedAt": "2026-03-20T20:26:48.929Z",
-    "durationMs": 347951,
     "status": "success",
     "error": null,
     "pageupJobsFound": 380,
