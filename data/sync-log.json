@@ -1,5 +1,45 @@
 [
   {
+    "id": "2026-03-23T14:07:55.065Z",
+    "startedAt": "2026-03-23T14:07:55.065Z",
+    "finishedAt": "2026-03-23T14:13:57.980Z",
+    "durationMs": 362915,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 367,
+    "cmsItemsBefore": 364,
+    "created": 3,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 363,
+    "createdJobs": [
+      {
+        "jobId": "530105",
+        "title": "Global Pricing Specialist – FCM Meetings & Events"
+      },
+      {
+        "jobId": "530345",
+        "title": "Social Media and Content Specialist (Johannesburg, South Africa)"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530329",
+        "title": "Growth & Demand Generation (B2B) Manager",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-23T12:40:35.766Z",
     "startedAt": "2026-03-23T12:40:35.766Z",
     "finishedAt": "2026-03-23T12:46:22.334Z",
@@ -2114,37 +2154,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-20T14:36:44.233Z",
-    "startedAt": "2026-03-20T14:36:44.234Z",
-    "finishedAt": "2026-03-20T14:42:44.796Z",
-    "durationMs": 360562,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 382,
-    "cmsItemsBefore": 385,
-    "created": 0,
-    "updated": 0,
-    "deleted": 3,
-    "unchanged": 382,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529746",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529854",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530147",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
