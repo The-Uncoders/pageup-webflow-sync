@@ -1,5 +1,57 @@
 [
   {
+    "id": "2026-03-24T03:45:20.270Z",
+    "startedAt": "2026-03-24T03:45:20.270Z",
+    "finishedAt": "2026-03-24T03:51:12.659Z",
+    "durationMs": 352389,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 369,
+    "cmsItemsBefore": 368,
+    "created": 3,
+    "updated": 1,
+    "deleted": 2,
+    "unchanged": 365,
+    "createdJobs": [
+      {
+        "jobId": "530001",
+        "title": "Principal Product Owner- South Bank, QLD"
+      },
+      {
+        "jobId": "529483",
+        "title": "Service Product Lead (Workday) - South Bank, QLD"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529372",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "528383",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529999",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-23T23:54:16.295Z",
     "startedAt": "2026-03-23T23:54:16.296Z",
     "finishedAt": "2026-03-24T00:00:03.629Z",
@@ -2172,25 +2224,6 @@
     "startedAt": "2026-03-20T23:49:05.432Z",
     "finishedAt": "2026-03-20T23:54:56.606Z",
     "durationMs": 351174,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 380,
-    "cmsItemsBefore": 380,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 380,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-20T23:19:21.438Z",
-    "startedAt": "2026-03-20T23:19:21.438Z",
-    "finishedAt": "2026-03-20T23:24:57.944Z",
-    "durationMs": 336506,
     "status": "success",
     "error": null,
     "pageupJobsFound": 380,
