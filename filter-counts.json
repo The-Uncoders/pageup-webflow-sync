@@ -1,6 +1,6 @@
 {
   "regions": {
-    "south africa": 7,
+    "south africa": 8,
     "asia": 61,
     "australia": 221,
     "uk & europe": 20,
@@ -10,7 +10,7 @@
     "uae": 1
   },
   "cities": {
-    "johannesburg": 4,
+    "johannesburg": 5,
     "noida": 14,
     "bali": 8,
     "victoria": 25,
@@ -64,10 +64,10 @@
     "new jersey": 1
   },
   "categories": {
+    "finance": 22,
     "sales and customer service": 265,
     "digital and technology": 31,
     "operations and logistics": 38,
-    "finance": 21,
     "marketing and communication": 12,
     "commercial": 25,
     "leadership": 26,
@@ -188,10 +188,10 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "finance": "Finance",
     "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "operations and logistics": "Operations and Logistics",
-    "finance": "Finance",
     "marketing and communication": "Marketing and Communication",
     "commercial": "Commercial",
     "leadership": "Leadership",
