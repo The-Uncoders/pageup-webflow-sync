@@ -1,5 +1,66 @@
 [
   {
+    "id": "2026-03-24T05:19:19.989Z",
+    "startedAt": "2026-03-24T05:19:19.990Z",
+    "finishedAt": "2026-03-24T05:25:39.152Z",
+    "durationMs": 379162,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 368,
+    "created": 5,
+    "updated": 0,
+    "deleted": 5,
+    "unchanged": 363,
+    "createdJobs": [
+      {
+        "jobId": "528526",
+        "title": "Travel Consultant - FCM: NSW Government - North Sydney, NSW"
+      },
+      {
+        "jobId": "529050",
+        "title": "Sales Travel Consultant - Hobart, Tasmania"
+      },
+      {
+        "jobId": "529717",
+        "title": "Sales Travel Consultant - Centrepoint, TAS"
+      },
+      {
+        "jobId": "530361",
+        "title": "Sales Travel Consultant - Hawthorn, VIC"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529560",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529042",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529835",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529372",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529046",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-24T03:45:20.270Z",
     "startedAt": "2026-03-24T03:45:20.270Z",
     "finishedAt": "2026-03-24T03:51:12.659Z",
@@ -2218,24 +2279,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-03-20T23:49:05.432Z",
-    "startedAt": "2026-03-20T23:49:05.432Z",
-    "finishedAt": "2026-03-20T23:54:56.606Z",
-    "durationMs": 351174,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 380,
-    "cmsItemsBefore": 380,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 380,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
