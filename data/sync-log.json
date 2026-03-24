@@ -1,5 +1,46 @@
 [
   {
+    "id": "2026-03-24T06:36:42.267Z",
+    "startedAt": "2026-03-24T06:36:42.267Z",
+    "finishedAt": "2026-03-24T06:42:36.436Z",
+    "durationMs": 354169,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 367,
+    "created": 4,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 366,
+    "createdJobs": [
+      {
+        "jobId": "530337",
+        "title": "QA engineer"
+      },
+      {
+        "jobId": "530338",
+        "title": "Senior QA engineer"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      },
+      {
+        "jobId": "526810",
+        "title": "Senior Dot net Developer - Noida, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530094",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-24T05:19:19.989Z",
     "startedAt": "2026-03-24T05:19:19.990Z",
     "finishedAt": "2026-03-24T05:25:39.152Z",
@@ -2251,33 +2292,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-21T01:04:44.344Z",
-    "startedAt": "2026-03-21T01:04:44.344Z",
-    "finishedAt": "2026-03-21T01:10:34.758Z",
-    "durationMs": 350414,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 378,
-    "cmsItemsBefore": 380,
-    "created": 0,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 378,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529401",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529826",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
