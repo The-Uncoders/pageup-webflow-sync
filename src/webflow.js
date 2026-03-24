@@ -1,5 +1,8 @@
 const WEBFLOW_API = 'https://api.webflow.com/v2';
 const RATE_LIMIT_DELAY_MS = 1100; // Stay under 60 req/min
+const TRANSIENT_STATUS_CODES = new Set([502, 503, 504]);
+const MAX_RETRIES = 3;
+const RETRY_BASE_DELAY_MS = 5000; // 5s, 10s, 20s exponential backoff
 
 class WebflowClient {
   constructor(apiToken, siteId) {
@@ -8,7 +11,7 @@ class WebflowClient {
     this.lastRequestTime = 0;
   }
 
-  async request(method, path, body = null) {
+  async request(method, path, body = null, _retryCount = 0) {
     // Simple rate limiter
     const now = Date.now();
     const elapsed = now - this.lastRequestTime;
@@ -28,13 +31,33 @@ class WebflowClient {
     };
     if (body) options.body = JSON.stringify(body);
 
-    const res = await fetch(url, options);
+    let res;
+    try {
+      res = await fetch(url, options);
+    } catch (networkErr) {
+      // Network-level failure (DNS, connection reset, etc.)
+      if (_retryCount < MAX_RETRIES) {
+        const delay = RETRY_BASE_DELAY_MS * Math.pow(2, _retryCount);
+        console.warn(`[webflow] Network error: ${networkErr.message}. Retrying in ${delay / 1000}s (attempt ${_retryCount + 1}/${MAX_RETRIES})...`);
+        await sleep(delay);
+        return this.request(method, path, body, _retryCount + 1);
+      }
+      throw networkErr;
+    }
 
     if (res.status === 429) {
       const retryAfter = parseInt(res.headers.get('retry-after') || '5', 10);
       console.warn(`[webflow] Rate limited. Retrying in ${retryAfter}s...`);
       await sleep(retryAfter * 1000);
-      return this.request(method, path, body);
+      return this.request(method, path, body, 0);
+    }
+
+    // Retry on transient server errors (502, 503, 504)
+    if (TRANSIENT_STATUS_CODES.has(res.status) && _retryCount < MAX_RETRIES) {
+      const delay = RETRY_BASE_DELAY_MS * Math.pow(2, _retryCount);
+      console.warn(`[webflow] ${res.status} on ${method} ${path}. Retrying in ${delay / 1000}s (attempt ${_retryCount + 1}/${MAX_RETRIES})...`);
+      await sleep(delay);
+      return this.request(method, path, body, _retryCount + 1);
     }
 
     if (!res.ok) {
