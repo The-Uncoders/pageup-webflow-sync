@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-03-24T08:39:15.160Z",
+    "startedAt": "2026-03-24T08:39:15.160Z",
+    "finishedAt": "2026-03-24T08:45:33.732Z",
+    "durationMs": 378572,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 372,
+    "cmsItemsBefore": 369,
+    "created": 3,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 369,
+    "createdJobs": [
+      {
+        "jobId": "530323",
+        "title": "Accounts Payable Executive - Bali"
+      },
+      {
+        "jobId": "530324",
+        "title": "Accounts Payable Intern - Bali"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-24T07:47:08.001Z",
     "startedAt": "2026-03-24T07:47:08.001Z",
     "finishedAt": "2026-03-24T07:52:57.206Z",
@@ -2269,33 +2301,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-21T05:02:03.639Z",
-    "startedAt": "2026-03-21T05:02:03.639Z",
-    "finishedAt": "2026-03-21T05:08:04.777Z",
-    "durationMs": 361138,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 376,
-    "cmsItemsBefore": 378,
-    "created": 0,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 376,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529658",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530041",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
