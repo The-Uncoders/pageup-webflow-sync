@@ -1,6 +1,6 @@
 {
   "regions": {
-    "asia": 65,
+    "asia": 64,
     "australia": 217,
     "canada": 17,
     "south africa": 6,
@@ -16,7 +16,7 @@
     "tokyo": 16,
     "ontario": 10,
     "johannesburg": 4,
-    "noida": 14,
+    "noida": 13,
     "bali": 8,
     "victoria": 25,
     "tasmania": 4,
@@ -72,7 +72,7 @@
     "administration": 3,
     "commercial": 25,
     "sales and customer service": 259,
-    "digital and technology": 32,
+    "digital and technology": 31,
     "marketing and communication": 12,
     "leadership": 24,
     "data and business intelligence": 4,
