@@ -1,5 +1,76 @@
 [
   {
+    "id": "2026-03-25T05:20:10.565Z",
+    "startedAt": "2026-03-25T05:20:10.566Z",
+    "finishedAt": "2026-03-25T05:36:02.537Z",
+    "durationMs": 951971,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 376,
+    "cmsItemsBefore": 374,
+    "created": 4,
+    "updated": 3,
+    "deleted": 2,
+    "unchanged": 369,
+    "createdJobs": [
+      {
+        "jobId": "530358",
+        "title": "Sales Travel Consultant - Coomera, QLD"
+      },
+      {
+        "jobId": "530305",
+        "title": "Talent Acquisition Consultant (12‑month Fixed‑Term Contract) - London, UK"
+      },
+      {
+        "jobId": "529856",
+        "title": "HR Intern"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530323",
+        "title": "Accounts Payable Executive - Bali",
+        "changedFields": [
+          "location"
+        ]
+      },
+      {
+        "jobId": "530004",
+        "title": "Solutions Consultant - Asia Wide",
+        "changedFields": [
+          "name"
+        ]
+      },
+      {
+        "jobId": "529393",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530112",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529384",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-25T03:56:13.700Z",
     "startedAt": "2026-03-25T03:56:13.700Z",
     "finishedAt": "2026-03-25T04:11:09.644Z",
@@ -2534,25 +2605,6 @@
     "startedAt": "2026-03-21T16:17:21.890Z",
     "finishedAt": "2026-03-21T16:23:06.153Z",
     "durationMs": 344263,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 374,
-    "cmsItemsBefore": 374,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 374,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-21T15:45:45.523Z",
-    "startedAt": "2026-03-21T15:45:45.524Z",
-    "finishedAt": "2026-03-21T15:51:28.037Z",
-    "durationMs": 342513,
     "status": "success",
     "error": null,
     "pageupJobsFound": 374,

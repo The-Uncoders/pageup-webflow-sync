@@ -1,15 +1,16 @@
 {
   "regions": {
+    "australia": 218,
     "asia": 62,
     "canada": 17,
     "south africa": 8,
-    "australia": 219,
     "uk & europe": 20,
     "new zealand": 7,
     "usa": 40,
     "uae": 1
   },
   "cities": {
+    "queensland": 67,
     "tokyo": 15,
     "ontario": 10,
     "johannesburg": 5,
@@ -17,8 +18,7 @@
     "bali": 8,
     "victoria": 25,
     "tasmania": 4,
-    "new south wales": 66,
-    "queensland": 66,
+    "new south wales": 65,
     "london": 9,
     "wellington": 1,
     "south east": 2,
@@ -42,7 +42,7 @@
     "new york": 8,
     "bath": 2,
     "chennai": 2,
-    "australian capital territory": 15,
+    "australian capital territory": 14,
     "new zealand": 1,
     "cape town": 2,
     "northern territory": 2,
@@ -64,10 +64,10 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 261,
     "operations and logistics": 38,
     "digital and technology": 32,
     "finance": 22,
-    "sales and customer service": 262,
     "marketing and communication": 12,
     "commercial": 25,
     "leadership": 25,
@@ -80,6 +80,7 @@
     "procurement": 3
   },
   "cityToRegion": {
+    "queensland": "Australia",
     "tokyo": "Asia",
     "ontario": "Canada",
     "johannesburg": "South Africa",
@@ -88,7 +89,6 @@
     "victoria": "Australia",
     "tasmania": "Australia",
     "new south wales": "Australia",
-    "queensland": "Australia",
     "london": "UK & Europe",
     "wellington": "New Zealand",
     "south east": "UK & Europe",
@@ -134,6 +134,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "queensland": "Queensland",
     "tokyo": "Tokyo",
     "ontario": "Ontario",
     "johannesburg": "Johannesburg",
@@ -142,7 +143,6 @@
     "victoria": "Victoria",
     "tasmania": "Tasmania",
     "new south wales": "New South Wales",
-    "queensland": "Queensland",
     "london": "London",
     "wellington": "Wellington",
     "south east": "South East",
@@ -188,10 +188,10 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "operations and logistics": "Operations and Logistics",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
-    "sales and customer service": "Sales and Customer Service",
     "marketing and communication": "Marketing and Communication",
     "commercial": "Commercial",
     "leadership": "Leadership",
