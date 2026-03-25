@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-03-25T01:11:48.451Z",
+    "startedAt": "2026-03-25T01:11:48.451Z",
+    "finishedAt": "2026-03-25T01:17:42.623Z",
+    "durationMs": 354172,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 380,
+    "cmsItemsBefore": 376,
+    "created": 4,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 376,
+    "createdJobs": [
+      {
+        "jobId": "530378",
+        "title": "Touring Executive"
+      },
+      {
+        "jobId": "530305",
+        "title": "Talent Acquisition Consultant (12‑month Fixed‑Term Contract) - London, UK"
+      },
+      {
+        "jobId": "529856",
+        "title": "HR Intern"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-24T23:52:04.401Z",
     "startedAt": "2026-03-24T23:52:04.401Z",
     "finishedAt": "2026-03-24T23:57:56.143Z",
@@ -2491,25 +2527,6 @@
     "startedAt": "2026-03-21T15:16:39.475Z",
     "finishedAt": "2026-03-21T15:22:27.613Z",
     "durationMs": 348138,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 374,
-    "cmsItemsBefore": 374,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 374,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-21T14:50:11.465Z",
-    "startedAt": "2026-03-21T14:50:11.466Z",
-    "finishedAt": "2026-03-21T14:56:01.107Z",
-    "durationMs": 349641,
     "status": "success",
     "error": null,
     "pageupJobsFound": 374,

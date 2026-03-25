@@ -1,8 +1,8 @@
 {
   "regions": {
+    "asia": 62,
     "canada": 17,
     "south africa": 8,
-    "asia": 61,
     "australia": 221,
     "uk & europe": 20,
     "new zealand": 8,
@@ -10,6 +10,7 @@
     "uae": 1
   },
   "cities": {
+    "tokyo": 15,
     "ontario": 10,
     "johannesburg": 5,
     "noida": 14,
@@ -40,7 +41,6 @@
     "pennsylvania": 5,
     "new york": 8,
     "bath": 2,
-    "tokyo": 14,
     "chennai": 2,
     "australian capital territory": 15,
     "new zealand": 1,
@@ -64,10 +64,10 @@
     "new jersey": 1
   },
   "categories": {
+    "operations and logistics": 39,
     "digital and technology": 32,
     "finance": 22,
     "sales and customer service": 265,
-    "operations and logistics": 38,
     "marketing and communication": 12,
     "commercial": 25,
     "leadership": 26,
@@ -80,6 +80,7 @@
     "procurement": 3
   },
   "cityToRegion": {
+    "tokyo": "Asia",
     "ontario": "Canada",
     "johannesburg": "South Africa",
     "noida": "Asia",
@@ -110,7 +111,6 @@
     "pennsylvania": "USA",
     "new york": "USA",
     "bath": "UK & Europe",
-    "tokyo": "Asia",
     "chennai": "Asia",
     "australian capital territory": "Australia",
     "new zealand": "New Zealand",
@@ -134,6 +134,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "tokyo": "Tokyo",
     "ontario": "Ontario",
     "johannesburg": "Johannesburg",
     "noida": "Noida",
@@ -164,7 +165,6 @@
     "pennsylvania": "Pennsylvania",
     "new york": "New York",
     "bath": "Bath",
-    "tokyo": "Tokyo",
     "chennai": "Chennai",
     "australian capital territory": "Australian Capital Territory",
     "new zealand": "New Zealand",
@@ -188,10 +188,10 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "operations and logistics": "Operations and Logistics",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
     "sales and customer service": "Sales and Customer Service",
-    "operations and logistics": "Operations and Logistics",
     "marketing and communication": "Marketing and Communication",
     "commercial": "Commercial",
     "leadership": "Leadership",
