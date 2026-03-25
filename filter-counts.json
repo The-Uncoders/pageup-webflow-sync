@@ -3,7 +3,7 @@
     "asia": 65,
     "australia": 217,
     "canada": 17,
-    "south africa": 7,
+    "south africa": 6,
     "uk & europe": 20,
     "new zealand": 7,
     "usa": 40,
@@ -15,7 +15,7 @@
     "queensland": 67,
     "tokyo": 16,
     "ontario": 10,
-    "johannesburg": 5,
+    "johannesburg": 4,
     "noida": 14,
     "bali": 8,
     "victoria": 25,
@@ -75,10 +75,10 @@
     "digital and technology": 32,
     "marketing and communication": 12,
     "leadership": 24,
-    "legal": 2,
-    "risk and compliance": 2,
     "data and business intelligence": 4,
     "project and program management": 6,
+    "legal": 1,
+    "risk and compliance": 1,
     "procurement": 3
   },
   "cityToRegion": {
@@ -203,10 +203,10 @@
     "digital and technology": "Digital and Technology",
     "marketing and communication": "Marketing and Communication",
     "leadership": "Leadership",
-    "legal": "Legal",
-    "risk and compliance": "Risk and Compliance",
     "data and business intelligence": "Data and Business Intelligence",
     "project and program management": "Project and Program Management",
+    "legal": "Legal",
+    "risk and compliance": "Risk and Compliance",
     "procurement": "Procurement"
   }
 }
