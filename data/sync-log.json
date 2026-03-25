@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-03-25T19:39:24.794Z",
+    "startedAt": "2026-03-25T19:39:24.794Z",
+    "finishedAt": "2026-03-25T19:47:54.665Z",
+    "durationMs": 509871,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 375,
+    "cmsItemsBefore": 372,
+    "created": 3,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 372,
+    "createdJobs": [
+      {
+        "jobId": "530305",
+        "title": "Talent Acquisition Consultant (12‑month Fixed‑Term Contract) - London, UK"
+      },
+      {
+        "jobId": "529856",
+        "title": "HR Intern"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-25T18:42:14.967Z",
     "startedAt": "2026-03-25T18:42:14.967Z",
     "finishedAt": "2026-03-25T18:57:38.798Z",
@@ -2782,25 +2814,6 @@
     "startedAt": "2026-03-21T22:47:25.354Z",
     "finishedAt": "2026-03-21T22:53:00.649Z",
     "durationMs": 335295,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 374,
-    "cmsItemsBefore": 374,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 374,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-21T22:13:52.739Z",
-    "startedAt": "2026-03-21T22:13:52.739Z",
-    "finishedAt": "2026-03-21T22:19:57.112Z",
-    "durationMs": 364373,
     "status": "success",
     "error": null,
     "pageupJobsFound": 374,
