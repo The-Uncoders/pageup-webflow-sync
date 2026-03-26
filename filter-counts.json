@@ -1,8 +1,8 @@
 {
   "regions": {
+    "new zealand": 8,
     "asia": 70,
     "australia": 216,
-    "new zealand": 7,
     "canada": 14,
     "south africa": 6,
     "uk & europe": 20,
@@ -10,6 +10,7 @@
     "uae": 1
   },
   "cities": {
+    "new plymouth": 1,
     "gurgaon": 2,
     "mumbai": 6,
     "noida": 14,
@@ -65,10 +66,10 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 259,
     "digital and technology": 33,
     "marketing and communication": 12,
     "people and culture": 7,
-    "sales and customer service": 258,
     "finance": 26,
     "leadership": 25,
     "operations and logistics": 37,
@@ -81,6 +82,7 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "new plymouth": "New Zealand",
     "gurgaon": "Asia",
     "mumbai": "Asia",
     "noida": "Asia",
@@ -136,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new plymouth": "New Plymouth",
     "gurgaon": "Gurgaon",
     "mumbai": "Mumbai",
     "noida": "Noida",
@@ -191,10 +194,10 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "marketing and communication": "Marketing and Communication",
     "people and culture": "People and Culture",
-    "sales and customer service": "Sales and Customer Service",
     "finance": "Finance",
     "leadership": "Leadership",
     "operations and logistics": "Operations and Logistics",

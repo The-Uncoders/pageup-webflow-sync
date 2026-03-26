@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-26T21:24:14.961Z",
+    "startedAt": "2026-03-26T21:24:14.961Z",
+    "finishedAt": "2026-03-26T21:34:42.179Z",
+    "durationMs": 627218,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 375,
+    "cmsItemsBefore": 374,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 374,
+    "createdJobs": [
+      {
+        "jobId": "529969",
+        "title": "Travel Expert - New Plymouth"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-26T20:56:26.319Z",
     "startedAt": "2026-03-26T20:56:26.319Z",
     "finishedAt": "2026-03-26T21:06:25.459Z",
@@ -3009,25 +3033,6 @@
     "startedAt": "2026-03-22T16:52:19.375Z",
     "finishedAt": "2026-03-22T16:58:06.387Z",
     "durationMs": 347012,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 373,
-    "cmsItemsBefore": 373,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 373,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-22T16:18:13.623Z",
-    "startedAt": "2026-03-22T16:18:13.623Z",
-    "finishedAt": "2026-03-22T16:24:05.508Z",
-    "durationMs": 351885,
     "status": "success",
     "error": null,
     "pageupJobsFound": 373,
