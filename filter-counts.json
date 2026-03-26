@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 216,
+    "australia": 217,
     "asia": 67,
     "new zealand": 7,
     "canada": 17,
@@ -10,6 +10,7 @@
     "uae": 1
   },
   "cities": {
+    "new south wales": 65,
     "queensland": 66,
     "hanoi": 3,
     "ho chi minh city": 3,
@@ -24,7 +25,6 @@
     "bali": 8,
     "victoria": 25,
     "tasmania": 4,
-    "new south wales": 64,
     "london": 9,
     "wellington": 1,
     "south east": 2,
@@ -65,10 +65,10 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 258,
     "finance": 26,
     "leadership": 25,
     "operations and logistics": 40,
-    "sales and customer service": 257,
     "people and culture": 6,
     "administration": 3,
     "commercial": 25,
@@ -81,6 +81,7 @@
     "procurement": 3
   },
   "cityToRegion": {
+    "new south wales": "Australia",
     "queensland": "Australia",
     "hanoi": "Asia",
     "ho chi minh city": "Asia",
@@ -95,7 +96,6 @@
     "bali": "Asia",
     "victoria": "Australia",
     "tasmania": "Australia",
-    "new south wales": "Australia",
     "london": "UK & Europe",
     "wellington": "New Zealand",
     "south east": "UK & Europe",
@@ -136,6 +136,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new south wales": "New South Wales",
     "queensland": "Queensland",
     "hanoi": "Hanoi",
     "ho chi minh city": "Ho Chi Minh City",
@@ -150,7 +151,6 @@
     "bali": "Bali",
     "victoria": "Victoria",
     "tasmania": "Tasmania",
-    "new south wales": "New South Wales",
     "london": "London",
     "wellington": "Wellington",
     "south east": "South East",
@@ -191,10 +191,10 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "finance": "Finance",
     "leadership": "Leadership",
     "operations and logistics": "Operations and Logistics",
-    "sales and customer service": "Sales and Customer Service",
     "people and culture": "People and Culture",
     "administration": "Administration",
     "commercial": "Commercial",
