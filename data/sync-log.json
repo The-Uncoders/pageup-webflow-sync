@@ -1,5 +1,74 @@
 [
   {
+    "id": "2026-03-26T04:08:31.727Z",
+    "startedAt": "2026-03-26T04:08:31.727Z",
+    "finishedAt": "2026-03-26T04:16:44.729Z",
+    "durationMs": 493002,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 376,
+    "cmsItemsBefore": 372,
+    "created": 7,
+    "updated": 1,
+    "deleted": 3,
+    "unchanged": 368,
+    "createdJobs": [
+      {
+        "jobId": "530366",
+        "title": "Senior Executive - Credit Control"
+      },
+      {
+        "jobId": "530354",
+        "title": "Financial Analyst Japan (9 months)"
+      },
+      {
+        "jobId": "530384",
+        "title": "Reservation Team Leader - Hanoi, Vietnam"
+      },
+      {
+        "jobId": "530186",
+        "title": "Commercial Analyst- South Bank, QLD"
+      },
+      {
+        "jobId": "530210",
+        "title": "Commercial Manager- Product and Pricing- South Bank, QLD"
+      },
+      {
+        "jobId": "529856",
+        "title": "HR Intern"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530378",
+        "title": "Touring Executive - Tokyo, Japan",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "528864",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "530242",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529767",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-26T01:17:25.389Z",
     "startedAt": "2026-03-26T01:17:25.389Z",
     "finishedAt": "2026-03-26T01:29:43.948Z",
@@ -2891,25 +2960,6 @@
     "startedAt": "2026-03-22T07:54:02.572Z",
     "finishedAt": "2026-03-22T07:59:52.902Z",
     "durationMs": 350330,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 374,
-    "cmsItemsBefore": 374,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 374,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-22T07:11:55.455Z",
-    "startedAt": "2026-03-22T07:11:55.455Z",
-    "finishedAt": "2026-03-22T07:17:30.614Z",
-    "durationMs": 335159,
     "status": "success",
     "error": null,
     "pageupJobsFound": 374,
