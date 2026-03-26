@@ -1,18 +1,19 @@
 {
   "regions": {
+    "new zealand": 8,
     "asia": 64,
-    "australia": 217,
+    "australia": 216,
     "canada": 17,
     "south africa": 6,
     "uk & europe": 20,
-    "new zealand": 7,
     "usa": 40,
     "uae": 1
   },
   "cities": {
+    "auckland": 4,
     "siem reap": 1,
     "hong kong": 1,
-    "queensland": 67,
+    "queensland": 66,
     "tokyo": 16,
     "ontario": 10,
     "johannesburg": 4,
@@ -25,7 +26,6 @@
     "wellington": 1,
     "south east": 2,
     "western australia": 21,
-    "auckland": 3,
     "british columbia": 2,
     "barcelona": 3,
     "mumbai": 4,
@@ -66,12 +66,12 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 260,
     "people and culture": 6,
     "operations and logistics": 39,
-    "finance": 23,
+    "finance": 22,
     "administration": 3,
     "commercial": 25,
-    "sales and customer service": 259,
     "digital and technology": 31,
     "marketing and communication": 12,
     "leadership": 24,
@@ -82,6 +82,7 @@
     "procurement": 3
   },
   "cityToRegion": {
+    "auckland": "New Zealand",
     "siem reap": "Asia",
     "hong kong": "Asia",
     "queensland": "Australia",
@@ -97,7 +98,6 @@
     "wellington": "New Zealand",
     "south east": "UK & Europe",
     "western australia": "Australia",
-    "auckland": "New Zealand",
     "british columbia": "Canada",
     "barcelona": "UK & Europe",
     "mumbai": "Asia",
@@ -138,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "auckland": "Auckland",
     "siem reap": "Siem Reap",
     "hong kong": "Hong Kong",
     "queensland": "Queensland",
@@ -153,7 +154,6 @@
     "wellington": "Wellington",
     "south east": "South East",
     "western australia": "Western Australia",
-    "auckland": "Auckland",
     "british columbia": "British Columbia",
     "barcelona": "Barcelona",
     "mumbai": "Mumbai",
@@ -194,12 +194,12 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "people and culture": "People and Culture",
     "operations and logistics": "Operations and Logistics",
     "finance": "Finance",
     "administration": "Administration",
     "commercial": "Commercial",
-    "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "marketing and communication": "Marketing and Communication",
     "leadership": "Leadership",
