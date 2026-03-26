@@ -1,5 +1,32 @@
 [
   {
+    "id": "2026-03-26T11:41:43.503Z",
+    "startedAt": "2026-03-26T11:41:43.503Z",
+    "finishedAt": "2026-03-26T11:50:01.064Z",
+    "durationMs": 497561,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 375,
+    "cmsItemsBefore": 375,
+    "created": 0,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 374,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "530269",
+        "title": "RPA Business Analyst  - Noida, India",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-26T10:42:45.007Z",
     "startedAt": "2026-03-26T10:42:45.007Z",
     "finishedAt": "2026-03-26T10:54:04.454Z",
@@ -2995,24 +3022,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-03-22T10:51:11.183Z",
-    "startedAt": "2026-03-22T10:51:11.183Z",
-    "finishedAt": "2026-03-22T10:56:39.556Z",
-    "durationMs": 328373,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 374,
-    "cmsItemsBefore": 374,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 374,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
