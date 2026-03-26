@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 217,
+    "australia": 216,
     "asia": 67,
     "new zealand": 7,
     "canada": 17,
@@ -11,7 +11,7 @@
   },
   "cities": {
     "new south wales": 65,
-    "queensland": 66,
+    "queensland": 65,
     "hanoi": 3,
     "ho chi minh city": 3,
     "mumbai": 5,
@@ -73,7 +73,7 @@
     "administration": 3,
     "commercial": 25,
     "digital and technology": 31,
-    "marketing and communication": 12,
+    "marketing and communication": 11,
     "data and business intelligence": 4,
     "project and program management": 6,
     "legal": 1,
