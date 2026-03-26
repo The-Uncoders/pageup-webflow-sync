@@ -1,28 +1,28 @@
 {
   "regions": {
+    "canada": 15,
     "new zealand": 8,
     "asia": 70,
-    "australia": 216,
-    "canada": 14,
+    "australia": 215,
     "south africa": 6,
     "uk & europe": 20,
     "usa": 40,
     "uae": 1
   },
   "cities": {
+    "ontario": 10,
     "new plymouth": 1,
     "gurgaon": 2,
     "mumbai": 6,
     "noida": 14,
     "new south wales": 65,
-    "queensland": 65,
+    "queensland": 64,
     "hanoi": 3,
     "ho chi minh city": 3,
     "auckland": 4,
     "siem reap": 1,
     "hong kong": 1,
     "tokyo": 16,
-    "ontario": 9,
     "johannesburg": 4,
     "bali": 8,
     "victoria": 25,
@@ -66,9 +66,9 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 259,
+    "marketing and communication": 13,
+    "sales and customer service": 258,
     "digital and technology": 33,
-    "marketing and communication": 12,
     "people and culture": 7,
     "finance": 26,
     "leadership": 25,
@@ -82,6 +82,7 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "ontario": "Canada",
     "new plymouth": "New Zealand",
     "gurgaon": "Asia",
     "mumbai": "Asia",
@@ -94,7 +95,6 @@
     "siem reap": "Asia",
     "hong kong": "Asia",
     "tokyo": "Asia",
-    "ontario": "Canada",
     "johannesburg": "South Africa",
     "bali": "Asia",
     "victoria": "Australia",
@@ -138,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "ontario": "Ontario",
     "new plymouth": "New Plymouth",
     "gurgaon": "Gurgaon",
     "mumbai": "Mumbai",
@@ -150,7 +151,6 @@
     "siem reap": "Siem Reap",
     "hong kong": "Hong Kong",
     "tokyo": "Tokyo",
-    "ontario": "Ontario",
     "johannesburg": "Johannesburg",
     "bali": "Bali",
     "victoria": "Victoria",
@@ -194,9 +194,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "marketing and communication": "Marketing and Communication",
     "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
-    "marketing and communication": "Marketing and Communication",
     "people and culture": "People and Culture",
     "finance": "Finance",
     "leadership": "Leadership",

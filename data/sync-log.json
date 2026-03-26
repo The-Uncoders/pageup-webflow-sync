@@ -1,5 +1,34 @@
 [
   {
+    "id": "2026-03-26T22:17:45.917Z",
+    "startedAt": "2026-03-26T22:17:45.917Z",
+    "finishedAt": "2026-03-26T22:28:11.660Z",
+    "durationMs": 625743,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 375,
+    "cmsItemsBefore": 375,
+    "created": 1,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 374,
+    "createdJobs": [
+      {
+        "jobId": "530413",
+        "title": "Corporate Traveller - Social Media Content Creator (12 month Maternity Leave Coverage) - Toronto, Canada"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530177",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-26T21:51:28.371Z",
     "startedAt": "2026-03-26T21:51:28.371Z",
     "finishedAt": "2026-03-26T22:03:32.155Z",
@@ -3014,25 +3043,6 @@
     "startedAt": "2026-03-22T17:48:09.506Z",
     "finishedAt": "2026-03-22T17:53:46.646Z",
     "durationMs": 337140,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 373,
-    "cmsItemsBefore": 373,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 373,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-22T17:17:10.937Z",
-    "startedAt": "2026-03-22T17:17:10.937Z",
-    "finishedAt": "2026-03-22T17:23:01.171Z",
-    "durationMs": 350234,
     "status": "success",
     "error": null,
     "pageupJobsFound": 373,
