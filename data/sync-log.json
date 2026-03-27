@@ -1,5 +1,46 @@
 [
   {
+    "id": "2026-03-27T05:55:03.772Z",
+    "startedAt": "2026-03-27T05:55:03.772Z",
+    "finishedAt": "2026-03-27T06:03:43.455Z",
+    "durationMs": 519683,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 373,
+    "created": 1,
+    "updated": 0,
+    "deleted": 4,
+    "unchanged": 369,
+    "createdJobs": [
+      {
+        "jobId": "530396",
+        "title": "Travel Manager - Stage and Screen - North Sydney, NSW"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530202",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529866",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "530134",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529296",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-27T04:08:49.455Z",
     "startedAt": "2026-03-27T04:08:49.456Z",
     "finishedAt": "2026-03-27T04:21:38.996Z",
@@ -3081,24 +3122,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-03-22T20:15:24.645Z",
-    "startedAt": "2026-03-22T20:15:24.645Z",
-    "finishedAt": "2026-03-22T20:21:32.354Z",
-    "durationMs": 367709,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 373,
-    "cmsItemsBefore": 373,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 373,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]

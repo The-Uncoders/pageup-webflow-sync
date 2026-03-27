@@ -1,16 +1,16 @@
 {
   "regions": {
+    "australia": 211,
     "new zealand": 9,
     "canada": 15,
-    "asia": 70,
-    "australia": 213,
+    "asia": 69,
     "south africa": 6,
     "uk & europe": 19,
     "usa": 40,
     "uae": 1
   },
   "cities": {
-    "new south wales": 65,
+    "new south wales": 64,
     "ontario": 10,
     "new plymouth": 1,
     "gurgaon": 2,
@@ -38,8 +38,8 @@
     "invercargill": 1,
     "massachusetts": 4,
     "bangalore": 1,
-    "bangkok": 2,
-    "remote": 4,
+    "bangkok": 1,
+    "remote": 3,
     "kuala lumpur": 4,
     "phuket": 2,
     "virtual - usa": 2,
@@ -66,10 +66,10 @@
     "new jersey": 1
   },
   "categories": {
-    "operations and logistics": 38,
+    "sales and customer service": 253,
+    "operations and logistics": 37,
     "data and business intelligence": 5,
     "marketing and communication": 13,
-    "sales and customer service": 255,
     "digital and technology": 33,
     "people and culture": 7,
     "finance": 26,
@@ -82,7 +82,7 @@
     "procurement": 2
   },
   "cityToRegion": {
-    "new south wales": "New Zealand",
+    "new south wales": "Australia",
     "ontario": "Canada",
     "new plymouth": "New Zealand",
     "gurgaon": "Asia",
@@ -194,10 +194,10 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "operations and logistics": "Operations and Logistics",
     "data and business intelligence": "Data and Business Intelligence",
     "marketing and communication": "Marketing and Communication",
-    "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "people and culture": "People and Culture",
     "finance": "Finance",
