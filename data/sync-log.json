@@ -1,5 +1,33 @@
 [
   {
+    "id": "2026-03-27T14:04:14.775Z",
+    "startedAt": "2026-03-27T14:04:14.775Z",
+    "finishedAt": "2026-03-27T14:18:39.530Z",
+    "durationMs": 864755,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 372,
+    "cmsItemsBefore": 370,
+    "created": 2,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 370,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      },
+      {
+        "jobId": "529826",
+        "title": "Global DevOps Lead"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-27T12:39:22.009Z",
     "startedAt": "2026-03-27T12:39:22.010Z",
     "finishedAt": "2026-03-27T12:49:30.407Z",
@@ -3092,38 +3120,6 @@
         "title": "Unknown"
       }
     ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-23T01:13:48.711Z",
-    "startedAt": "2026-03-23T01:13:48.711Z",
-    "finishedAt": "2026-03-23T01:19:41.793Z",
-    "durationMs": 353082,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 367,
-    "created": 1,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "530360",
-        "title": "Travel Expert - North City"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529290",
-        "title": "Group Travel Manager - FCM Meetings & Events - South Bank, QLD",
-        "changedFields": [
-          "location"
-        ]
-      }
-    ],
-    "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
   }

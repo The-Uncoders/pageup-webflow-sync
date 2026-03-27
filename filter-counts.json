@@ -1,15 +1,16 @@
 {
   "regions": {
+    "uk & europe": 20,
     "canada": 14,
     "asia": 71,
     "australia": 210,
     "new zealand": 9,
     "south africa": 6,
-    "uk & europe": 19,
     "usa": 40,
     "uae": 1
   },
   "cities": {
+    "manchester": 2,
     "quebec": 1,
     "noida": 16,
     "new south wales": 64,
@@ -60,14 +61,13 @@
     "texas": 1,
     "colorado": 4,
     "dubai": 1,
-    "manchester": 1,
     "berlin": 2,
     "alberta": 1,
     "new jersey": 1
   },
   "categories": {
+    "digital and technology": 35,
     "sales and customer service": 252,
-    "digital and technology": 34,
     "operations and logistics": 37,
     "data and business intelligence": 5,
     "marketing and communication": 13,
@@ -82,6 +82,7 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "manchester": "UK & Europe",
     "quebec": "Canada",
     "noida": "Asia",
     "new south wales": "Australia",
@@ -132,12 +133,12 @@
     "texas": "USA",
     "colorado": "USA",
     "dubai": "UAE",
-    "manchester": "UK & Europe",
     "berlin": "UK & Europe",
     "alberta": "Canada",
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "manchester": "Manchester",
     "quebec": "Quebec",
     "noida": "Noida",
     "new south wales": "New South Wales",
@@ -188,14 +189,13 @@
     "texas": "Texas",
     "colorado": "Colorado",
     "dubai": "Dubai",
-    "manchester": "Manchester",
     "berlin": "Berlin",
     "alberta": "Alberta",
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
-    "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
+    "sales and customer service": "Sales and Customer Service",
     "operations and logistics": "Operations and Logistics",
     "data and business intelligence": "Data and Business Intelligence",
     "marketing and communication": "Marketing and Communication",
