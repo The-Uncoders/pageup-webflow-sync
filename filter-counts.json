@@ -1,7 +1,7 @@
 {
   "regions": {
+    "new zealand": 9,
     "canada": 15,
-    "new zealand": 8,
     "asia": 70,
     "australia": 213,
     "south africa": 6,
@@ -10,12 +10,12 @@
     "uae": 1
   },
   "cities": {
+    "new south wales": 65,
     "ontario": 10,
     "new plymouth": 1,
     "gurgaon": 2,
     "mumbai": 6,
     "noida": 14,
-    "new south wales": 64,
     "queensland": 64,
     "hanoi": 3,
     "ho chi minh city": 3,
@@ -66,28 +66,28 @@
     "new jersey": 1
   },
   "categories": {
+    "operations and logistics": 38,
+    "data and business intelligence": 5,
     "marketing and communication": 13,
     "sales and customer service": 255,
     "digital and technology": 33,
     "people and culture": 7,
     "finance": 26,
     "leadership": 25,
-    "operations and logistics": 37,
     "administration": 3,
     "commercial": 25,
-    "data and business intelligence": 4,
     "project and program management": 6,
     "legal": 1,
     "risk and compliance": 1,
     "procurement": 2
   },
   "cityToRegion": {
+    "new south wales": "New Zealand",
     "ontario": "Canada",
     "new plymouth": "New Zealand",
     "gurgaon": "Asia",
     "mumbai": "Asia",
     "noida": "Asia",
-    "new south wales": "Australia",
     "queensland": "Australia",
     "hanoi": "Asia",
     "ho chi minh city": "Asia",
@@ -138,12 +138,12 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new south wales": "New South Wales",
     "ontario": "Ontario",
     "new plymouth": "New Plymouth",
     "gurgaon": "Gurgaon",
     "mumbai": "Mumbai",
     "noida": "Noida",
-    "new south wales": "New South Wales",
     "queensland": "Queensland",
     "hanoi": "Hanoi",
     "ho chi minh city": "Ho Chi Minh City",
@@ -194,16 +194,16 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "operations and logistics": "Operations and Logistics",
+    "data and business intelligence": "Data and Business Intelligence",
     "marketing and communication": "Marketing and Communication",
     "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "people and culture": "People and Culture",
     "finance": "Finance",
     "leadership": "Leadership",
-    "operations and logistics": "Operations and Logistics",
     "administration": "Administration",
     "commercial": "Commercial",
-    "data and business intelligence": "Data and Business Intelligence",
     "project and program management": "Project and Program Management",
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance",
