@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 211,
+    "australia": 210,
     "new zealand": 9,
     "canada": 15,
     "asia": 69,
@@ -16,7 +16,7 @@
     "gurgaon": 2,
     "mumbai": 6,
     "noida": 14,
-    "queensland": 64,
+    "queensland": 63,
     "hanoi": 3,
     "ho chi minh city": 3,
     "auckland": 4,
@@ -70,7 +70,7 @@
     "operations and logistics": 37,
     "data and business intelligence": 5,
     "marketing and communication": 13,
-    "digital and technology": 33,
+    "digital and technology": 32,
     "people and culture": 7,
     "finance": 26,
     "leadership": 25,
