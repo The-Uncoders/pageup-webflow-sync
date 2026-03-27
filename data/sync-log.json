@@ -1,5 +1,62 @@
 [
   {
+    "id": "2026-03-27T15:13:48.542Z",
+    "startedAt": "2026-03-27T15:13:48.543Z",
+    "finishedAt": "2026-03-27T15:22:37.402Z",
+    "durationMs": 528859,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 373,
+    "cmsItemsBefore": 371,
+    "created": 2,
+    "updated": 4,
+    "deleted": 0,
+    "unchanged": 367,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      },
+      {
+        "jobId": "529658",
+        "title": "Flight Centre - Director of Growth & Demand - Philadelphia, USA"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530253",
+        "title": "Flight Centre - Growth & Demand Manager (6 Month Contract) - Philadelphia, USA",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "530152",
+        "title": "Corporate Traveler - Director of Partnership Marketing - New York, USA",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "530189",
+        "title": "Flight Centre - Office Manager & Event Coordinator - New York, USA",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "530153",
+        "title": "Flight Centre - Credit & Collections Associate - Toronto, Canada",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-27T14:04:14.775Z",
     "startedAt": "2026-03-27T14:04:14.775Z",
     "finishedAt": "2026-03-27T14:18:39.530Z",
@@ -3076,47 +3133,6 @@
     "deletedJobs": [
       {
         "jobId": "529699",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-23T04:03:10.718Z",
-    "startedAt": "2026-03-23T04:03:10.718Z",
-    "finishedAt": "2026-03-23T04:09:05.120Z",
-    "durationMs": 354402,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 368,
-    "created": 3,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "529516",
-        "title": "Customer Solutions Manager (Group Travel) - North Sydney, NSW"
-      },
-      {
-        "jobId": "529752",
-        "title": "Foreign Currency Sales Consultant (Part Time) – Travel Money Oz – Rouse Hill, NSW"
-      },
-      {
-        "jobId": "530170",
-        "title": "Customer Solutions Manager (Events) - North Sydney, NSW"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529483",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529793",
         "title": "Unknown"
       }
     ],

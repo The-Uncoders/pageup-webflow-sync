@@ -1,15 +1,16 @@
 {
   "regions": {
+    "usa": 41,
     "uk & europe": 20,
     "canada": 14,
     "asia": 71,
     "australia": 210,
     "new zealand": 9,
     "south africa": 6,
-    "usa": 40,
     "uae": 1
   },
   "cities": {
+    "pennsylvania": 6,
     "manchester": 2,
     "quebec": 1,
     "noida": 16,
@@ -45,7 +46,6 @@
     "kuala lumpur": 4,
     "phuket": 2,
     "virtual - usa": 2,
-    "pennsylvania": 5,
     "new york": 8,
     "chennai": 2,
     "australian capital territory": 14,
@@ -66,11 +66,11 @@
     "new jersey": 1
   },
   "categories": {
+    "marketing and communication": 14,
     "digital and technology": 35,
     "sales and customer service": 252,
     "operations and logistics": 37,
     "data and business intelligence": 5,
-    "marketing and communication": 13,
     "people and culture": 7,
     "finance": 26,
     "leadership": 25,
@@ -82,6 +82,7 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "pennsylvania": "USA",
     "manchester": "UK & Europe",
     "quebec": "Canada",
     "noida": "Asia",
@@ -117,7 +118,6 @@
     "kuala lumpur": "Asia",
     "phuket": "Asia",
     "virtual - usa": "USA",
-    "pennsylvania": "USA",
     "new york": "USA",
     "chennai": "Asia",
     "australian capital territory": "Australia",
@@ -138,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "pennsylvania": "Pennsylvania",
     "manchester": "Manchester",
     "quebec": "Quebec",
     "noida": "Noida",
@@ -173,7 +174,6 @@
     "kuala lumpur": "Kuala Lumpur",
     "phuket": "Phuket",
     "virtual - usa": "Virtual - USA",
-    "pennsylvania": "Pennsylvania",
     "new york": "New York",
     "chennai": "Chennai",
     "australian capital territory": "Australian Capital Territory",
@@ -194,11 +194,11 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "marketing and communication": "Marketing and Communication",
     "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "operations and logistics": "Operations and Logistics",
     "data and business intelligence": "Data and Business Intelligence",
-    "marketing and communication": "Marketing and Communication",
     "people and culture": "People and Culture",
     "finance": "Finance",
     "leadership": "Leadership",
