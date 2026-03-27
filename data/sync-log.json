@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-03-27T16:10:59.910Z",
+    "startedAt": "2026-03-27T16:10:59.911Z",
+    "finishedAt": "2026-03-27T16:19:44.498Z",
+    "durationMs": 524587,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 373,
+    "cmsItemsBefore": 372,
+    "created": 1,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 371,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528463",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-27T15:13:48.542Z",
     "startedAt": "2026-03-27T15:13:48.543Z",
     "finishedAt": "2026-03-27T15:22:37.402Z",
@@ -3100,39 +3136,6 @@
       },
       {
         "jobId": "528347",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-23T05:52:17.971Z",
-    "startedAt": "2026-03-23T05:52:17.971Z",
-    "finishedAt": "2026-03-23T05:58:11.357Z",
-    "durationMs": 353386,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 370,
-    "cmsItemsBefore": 369,
-    "created": 2,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 368,
-    "createdJobs": [
-      {
-        "jobId": "530169",
-        "title": "Global Account Manager Events - North Sydney, NSW"
-      },
-      {
-        "jobId": "530258",
-        "title": "Account Manager (Group Travel) - North Sydney, NSW"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529699",
         "title": "Unknown"
       }
     ],
