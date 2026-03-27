@@ -1,7 +1,7 @@
 {
   "regions": {
     "usa": 41,
-    "uk & europe": 20,
+    "uk & europe": 19,
     "canada": 14,
     "asia": 71,
     "australia": 210,
@@ -30,7 +30,7 @@
     "bali": 8,
     "victoria": 25,
     "tasmania": 4,
-    "london": 9,
+    "london": 8,
     "wellington": 1,
     "south east": 2,
     "western australia": 20,
@@ -67,7 +67,7 @@
   },
   "categories": {
     "marketing and communication": 14,
-    "digital and technology": 35,
+    "digital and technology": 34,
     "sales and customer service": 252,
     "operations and logistics": 37,
     "data and business intelligence": 5,
@@ -76,7 +76,7 @@
     "leadership": 25,
     "administration": 3,
     "commercial": 25,
-    "project and program management": 6,
+    "project and program management": 5,
     "legal": 1,
     "risk and compliance": 1,
     "procurement": 2
