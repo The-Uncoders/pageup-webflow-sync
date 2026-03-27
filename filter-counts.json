@@ -1,6 +1,6 @@
 {
   "regions": {
-    "asia": 70,
+    "asia": 71,
     "australia": 210,
     "new zealand": 9,
     "canada": 15,
@@ -10,7 +10,7 @@
     "uae": 1
   },
   "cities": {
-    "noida": 15,
+    "noida": 16,
     "new south wales": 64,
     "ontario": 10,
     "new plymouth": 1,
@@ -66,7 +66,7 @@
     "new jersey": 1
   },
   "categories": {
-    "digital and technology": 33,
+    "digital and technology": 34,
     "sales and customer service": 253,
     "operations and logistics": 37,
     "data and business intelligence": 5,

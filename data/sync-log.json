@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-03-27T10:37:46.041Z",
+    "startedAt": "2026-03-27T10:37:46.041Z",
+    "finishedAt": "2026-03-27T10:46:14.839Z",
+    "durationMs": 508798,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 371,
+    "cmsItemsBefore": 370,
+    "created": 1,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 369,
+    "createdJobs": [
+      {
+        "jobId": "530330",
+        "title": "Senior Cloud Operation Engineer"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530034",
+        "title": "Senior UiPath Developer",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-27T09:43:38.038Z",
     "startedAt": "2026-03-27T09:43:38.038Z",
     "finishedAt": "2026-03-27T09:57:38.887Z",
@@ -3089,34 +3121,6 @@
     "deletedJobs": [
       {
         "jobId": "530341",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-22T22:48:58.604Z",
-    "startedAt": "2026-03-22T22:48:58.604Z",
-    "finishedAt": "2026-03-22T22:54:55.579Z",
-    "durationMs": 356975,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 371,
-    "created": 0,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 369,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530223",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529070",
         "title": "Unknown"
       }
     ],
