@@ -1,21 +1,21 @@
 {
   "regions": {
+    "asia": 70,
     "australia": 210,
     "new zealand": 9,
     "canada": 15,
-    "asia": 69,
     "south africa": 6,
     "uk & europe": 19,
     "usa": 40,
     "uae": 1
   },
   "cities": {
+    "noida": 15,
     "new south wales": 64,
     "ontario": 10,
     "new plymouth": 1,
     "gurgaon": 2,
     "mumbai": 6,
-    "noida": 14,
     "queensland": 63,
     "hanoi": 3,
     "ho chi minh city": 3,
@@ -66,11 +66,11 @@
     "new jersey": 1
   },
   "categories": {
+    "digital and technology": 33,
     "sales and customer service": 253,
     "operations and logistics": 37,
     "data and business intelligence": 5,
     "marketing and communication": 13,
-    "digital and technology": 32,
     "people and culture": 7,
     "finance": 26,
     "leadership": 25,
@@ -82,12 +82,12 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "noida": "Asia",
     "new south wales": "Australia",
     "ontario": "Canada",
     "new plymouth": "New Zealand",
     "gurgaon": "Asia",
     "mumbai": "Asia",
-    "noida": "Asia",
     "queensland": "Australia",
     "hanoi": "Asia",
     "ho chi minh city": "Asia",
@@ -138,12 +138,12 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "noida": "Noida",
     "new south wales": "New South Wales",
     "ontario": "Ontario",
     "new plymouth": "New Plymouth",
     "gurgaon": "Gurgaon",
     "mumbai": "Mumbai",
-    "noida": "Noida",
     "queensland": "Queensland",
     "hanoi": "Hanoi",
     "ho chi minh city": "Ho Chi Minh City",
@@ -194,11 +194,11 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "operations and logistics": "Operations and Logistics",
     "data and business intelligence": "Data and Business Intelligence",
     "marketing and communication": "Marketing and Communication",
-    "digital and technology": "Digital and Technology",
     "people and culture": "People and Culture",
     "finance": "Finance",
     "leadership": "Leadership",

@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-27T09:43:38.038Z",
+    "startedAt": "2026-03-27T09:43:38.038Z",
+    "finishedAt": "2026-03-27T09:57:38.887Z",
+    "durationMs": 840849,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 369,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 369,
+    "createdJobs": [
+      {
+        "jobId": "528626",
+        "title": "Senior UiPath Developer - Noida, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-27T08:39:15.066Z",
     "startedAt": "2026-03-27T08:39:15.067Z",
     "finishedAt": "2026-03-27T08:51:18.333Z",
@@ -3093,30 +3117,6 @@
       },
       {
         "jobId": "529070",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-22T22:15:10.550Z",
-    "startedAt": "2026-03-22T22:15:10.551Z",
-    "finishedAt": "2026-03-22T22:21:00.945Z",
-    "durationMs": 350394,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 371,
-    "cmsItemsBefore": 372,
-    "created": 0,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 371,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529860",
         "title": "Unknown"
       }
     ],
