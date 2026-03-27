@@ -1,5 +1,38 @@
 [
   {
+    "id": "2026-03-27T11:35:07.956Z",
+    "startedAt": "2026-03-27T11:35:07.956Z",
+    "finishedAt": "2026-03-27T11:45:24.264Z",
+    "durationMs": 616308,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 371,
+    "created": 1,
+    "updated": 0,
+    "deleted": 2,
+    "unchanged": 369,
+    "createdJobs": [
+      {
+        "jobId": "530421",
+        "title": "Corporate Traveller - Conseiller ou conseillère en voyages d’affaires – Montréal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529566",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529565",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-27T10:37:46.041Z",
     "startedAt": "2026-03-27T10:37:46.041Z",
     "finishedAt": "2026-03-27T10:46:14.839Z",
@@ -3092,35 +3125,6 @@
       },
       {
         "jobId": "528961",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-22T23:17:42.767Z",
-    "startedAt": "2026-03-22T23:17:42.767Z",
-    "finishedAt": "2026-03-22T23:23:39.806Z",
-    "durationMs": 357039,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
-    "created": 1,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 368,
-    "createdJobs": [
-      {
-        "jobId": "529483",
-        "title": "Service Product Lead (Workday) - South Bank, QLD"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530341",
         "title": "Unknown"
       }
     ],
