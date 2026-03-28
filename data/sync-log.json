@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-28T13:43:08.603Z",
+    "startedAt": "2026-03-28T13:43:08.603Z",
+    "finishedAt": "2026-03-28T13:50:50.764Z",
+    "durationMs": 462161,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 365,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 365,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-28T12:31:10.707Z",
     "startedAt": "2026-03-28T12:31:10.707Z",
     "finishedAt": "2026-03-28T12:38:38.938Z",
@@ -2963,38 +2987,6 @@
       {
         "jobId": "529860",
         "title": "Portuguese‑Speaking Corporate Travel Consultant – Edenvale, Johannesburg"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-24T08:39:15.160Z",
-    "startedAt": "2026-03-24T08:39:15.160Z",
-    "finishedAt": "2026-03-24T08:45:33.732Z",
-    "durationMs": 378572,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 372,
-    "cmsItemsBefore": 369,
-    "created": 3,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 369,
-    "createdJobs": [
-      {
-        "jobId": "530323",
-        "title": "Accounts Payable Executive - Bali"
-      },
-      {
-        "jobId": "530324",
-        "title": "Accounts Payable Intern - Bali"
       },
       {
         "jobId": "529160",
