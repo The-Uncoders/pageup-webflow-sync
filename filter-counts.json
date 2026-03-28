@@ -1,7 +1,7 @@
 {
   "regions": {
     "usa": 41,
-    "uk & europe": 19,
+    "uk & europe": 16,
     "canada": 14,
     "asia": 69,
     "australia": 210,
@@ -11,7 +11,7 @@
   },
   "cities": {
     "pennsylvania": 6,
-    "manchester": 2,
+    "manchester": 1,
     "quebec": 1,
     "noida": 15,
     "new south wales": 64,
@@ -30,7 +30,7 @@
     "bali": 8,
     "victoria": 25,
     "tasmania": 4,
-    "london": 8,
+    "london": 6,
     "wellington": 1,
     "south east": 2,
     "western australia": 20,
@@ -68,11 +68,11 @@
   "categories": {
     "marketing and communication": 12,
     "digital and technology": 34,
-    "sales and customer service": 251,
+    "sales and customer service": 250,
     "operations and logistics": 37,
     "data and business intelligence": 5,
     "people and culture": 7,
-    "finance": 26,
+    "finance": 23,
     "leadership": 25,
     "administration": 3,
     "commercial": 25,

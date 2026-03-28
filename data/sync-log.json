@@ -1,5 +1,42 @@
 [
   {
+    "id": "2026-03-28T01:10:42.695Z",
+    "startedAt": "2026-03-28T01:10:42.695Z",
+    "finishedAt": "2026-03-28T01:22:35.748Z",
+    "durationMs": 713053,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 368,
+    "created": 1,
+    "updated": 0,
+    "deleted": 3,
+    "unchanged": 365,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529827",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529877",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529952",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-27T23:51:54.184Z",
     "startedAt": "2026-03-27T23:51:54.184Z",
     "finishedAt": "2026-03-27T23:59:35.033Z",
@@ -3040,30 +3077,6 @@
     "startedAt": "2026-03-23T19:40:42.115Z",
     "finishedAt": "2026-03-23T19:46:25.058Z",
     "durationMs": 342943,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 366,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-23T18:38:55.920Z",
-    "startedAt": "2026-03-23T18:38:55.920Z",
-    "finishedAt": "2026-03-23T18:44:47.765Z",
-    "durationMs": 351845,
     "status": "success",
     "error": null,
     "pageupJobsFound": 367,
