@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-28T06:14:46.429Z",
+    "startedAt": "2026-03-28T06:14:46.429Z",
+    "finishedAt": "2026-03-28T06:25:22.445Z",
+    "durationMs": 636016,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 365,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 365,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-28T05:17:39.008Z",
     "startedAt": "2026-03-28T05:17:39.008Z",
     "finishedAt": "2026-03-28T05:25:08.782Z",
@@ -3053,30 +3077,6 @@
     "startedAt": "2026-03-23T21:53:46.825Z",
     "finishedAt": "2026-03-23T21:59:41.115Z",
     "durationMs": 354290,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 366,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-23T21:01:18.228Z",
-    "startedAt": "2026-03-23T21:01:18.229Z",
-    "finishedAt": "2026-03-23T21:07:21.424Z",
-    "durationMs": 363195,
     "status": "success",
     "error": null,
     "pageupJobsFound": 367,
