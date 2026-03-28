@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-28T11:48:45.346Z",
+    "startedAt": "2026-03-28T11:48:45.346Z",
+    "finishedAt": "2026-03-28T11:56:15.769Z",
+    "durationMs": 450423,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 365,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 365,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-28T11:19:07.962Z",
     "startedAt": "2026-03-28T11:19:07.962Z",
     "finishedAt": "2026-03-28T11:26:34.905Z",
@@ -2981,46 +3005,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-24T06:36:42.267Z",
-    "startedAt": "2026-03-24T06:36:42.267Z",
-    "finishedAt": "2026-03-24T06:42:36.436Z",
-    "durationMs": 354169,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 370,
-    "cmsItemsBefore": 367,
-    "created": 4,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "530337",
-        "title": "QA engineer"
-      },
-      {
-        "jobId": "530338",
-        "title": "Senior QA engineer"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      },
-      {
-        "jobId": "526810",
-        "title": "Senior Dot net Developer - Noida, India"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530094",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
