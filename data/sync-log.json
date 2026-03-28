@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-28T10:31:17.551Z",
+    "startedAt": "2026-03-28T10:31:17.552Z",
+    "finishedAt": "2026-03-28T10:39:29.935Z",
+    "durationMs": 492383,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 365,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 365,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-28T09:59:11.401Z",
     "startedAt": "2026-03-28T09:59:11.402Z",
     "finishedAt": "2026-03-28T10:06:43.881Z",
@@ -3030,58 +3054,6 @@
       },
       {
         "jobId": "529046",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-24T03:45:20.270Z",
-    "startedAt": "2026-03-24T03:45:20.270Z",
-    "finishedAt": "2026-03-24T03:51:12.659Z",
-    "durationMs": 352389,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 368,
-    "created": 3,
-    "updated": 1,
-    "deleted": 2,
-    "unchanged": 365,
-    "createdJobs": [
-      {
-        "jobId": "530001",
-        "title": "Principal Product Owner- South Bank, QLD"
-      },
-      {
-        "jobId": "529483",
-        "title": "Service Product Lead (Workday) - South Bank, QLD"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529372",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "528383",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529999",
         "title": "Unknown"
       }
     ],
