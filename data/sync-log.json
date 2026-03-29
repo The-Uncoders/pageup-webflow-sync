@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-29T21:52:21.042Z",
+    "startedAt": "2026-03-29T21:52:21.042Z",
+    "finishedAt": "2026-03-29T21:59:45.332Z",
+    "durationMs": 444290,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 365,
+    "cmsItemsBefore": 364,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 364,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-29T21:22:29.357Z",
     "startedAt": "2026-03-29T21:22:29.357Z",
     "finishedAt": "2026-03-29T21:30:50.301Z",
@@ -2485,24 +2509,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-03-26T10:42:45.007Z",
-    "startedAt": "2026-03-26T10:42:45.007Z",
-    "finishedAt": "2026-03-26T10:54:04.454Z",
-    "durationMs": 679447,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 375,
-    "cmsItemsBefore": 375,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 375,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
