@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-29T22:19:45.931Z",
+    "startedAt": "2026-03-29T22:19:45.931Z",
+    "finishedAt": "2026-03-29T22:27:22.612Z",
+    "durationMs": 456681,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 365,
+    "cmsItemsBefore": 364,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 364,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-29T21:52:21.042Z",
     "startedAt": "2026-03-29T21:52:21.042Z",
     "finishedAt": "2026-03-29T21:59:45.332Z",
@@ -2482,32 +2506,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-26T11:41:43.503Z",
-    "startedAt": "2026-03-26T11:41:43.503Z",
-    "finishedAt": "2026-03-26T11:50:01.064Z",
-    "durationMs": 497561,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 375,
-    "cmsItemsBefore": 375,
-    "created": 0,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 374,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "530269",
-        "title": "RPA Business Analyst  - Noida, India",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
