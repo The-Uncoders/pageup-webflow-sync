@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-28T23:52:37.928Z",
+    "startedAt": "2026-03-28T23:52:37.928Z",
+    "finishedAt": "2026-03-29T00:00:16.579Z",
+    "durationMs": 458651,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 365,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 365,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-28T23:21:11.475Z",
     "startedAt": "2026-03-28T23:21:11.475Z",
     "finishedAt": "2026-03-28T23:30:31.698Z",
@@ -2783,51 +2807,6 @@
       },
       {
         "jobId": "529384",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-25T03:56:13.700Z",
-    "startedAt": "2026-03-25T03:56:13.700Z",
-    "finishedAt": "2026-03-25T04:11:09.644Z",
-    "durationMs": 895944,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 377,
-    "cmsItemsBefore": 377,
-    "created": 3,
-    "updated": 0,
-    "deleted": 3,
-    "unchanged": 374,
-    "createdJobs": [
-      {
-        "jobId": "530305",
-        "title": "Talent Acquisition Consultant (12‑month Fixed‑Term Contract) - London, UK"
-      },
-      {
-        "jobId": "529856",
-        "title": "HR Intern"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529605",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529575",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529598",
         "title": "Unknown"
       }
     ],
