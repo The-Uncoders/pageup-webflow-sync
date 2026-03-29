@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-03-29T18:36:48.172Z",
+    "startedAt": "2026-03-29T18:36:48.172Z",
+    "finishedAt": "2026-03-29T18:44:17.747Z",
+    "durationMs": 449575,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 365,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 365,
+    "createdJobs": [
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-29T17:57:49.954Z",
     "startedAt": "2026-03-29T17:57:49.954Z",
     "finishedAt": "2026-03-29T18:05:09.193Z",
@@ -2489,75 +2513,6 @@
     ],
     "updatedJobs": [],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-26T04:08:31.727Z",
-    "startedAt": "2026-03-26T04:08:31.727Z",
-    "finishedAt": "2026-03-26T04:16:44.729Z",
-    "durationMs": 493002,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 376,
-    "cmsItemsBefore": 372,
-    "created": 7,
-    "updated": 1,
-    "deleted": 3,
-    "unchanged": 368,
-    "createdJobs": [
-      {
-        "jobId": "530366",
-        "title": "Senior Executive - Credit Control"
-      },
-      {
-        "jobId": "530354",
-        "title": "Financial Analyst Japan (9 months)"
-      },
-      {
-        "jobId": "530384",
-        "title": "Reservation Team Leader - Hanoi, Vietnam"
-      },
-      {
-        "jobId": "530186",
-        "title": "Commercial Analyst- South Bank, QLD"
-      },
-      {
-        "jobId": "530210",
-        "title": "Commercial Manager- Product and Pricing- South Bank, QLD"
-      },
-      {
-        "jobId": "529856",
-        "title": "HR Intern"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530378",
-        "title": "Touring Executive - Tokyo, Japan",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "528864",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530242",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529767",
-        "title": "Unknown"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }
