@@ -1,5 +1,78 @@
 [
   {
+    "id": "2026-03-29T23:23:12.218Z",
+    "startedAt": "2026-03-29T23:23:12.218Z",
+    "finishedAt": "2026-03-29T23:32:31.965Z",
+    "durationMs": 559747,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 352,
+    "cmsItemsBefore": 359,
+    "created": 3,
+    "updated": 0,
+    "deleted": 10,
+    "unchanged": 349,
+    "createdJobs": [
+      {
+        "jobId": "530405",
+        "title": "Foreign Currency Sales Consultant (Part Time) – Travel Money Oz – Indooroopilly, QLD"
+      },
+      {
+        "jobId": "530374",
+        "title": "Travel Manager - Corporate Traveller - North Sydney, NSW"
+      },
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529968",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "530321",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "530303",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529755",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529557",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529069",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529024",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529007",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "528123",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "519739",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-29T22:55:46.092Z",
     "startedAt": "2026-03-29T22:55:46.092Z",
     "finishedAt": "2026-03-29T23:03:18.048Z",
@@ -2502,34 +2575,6 @@
     ],
     "updatedJobs": [],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-26T14:19:46.888Z",
-    "startedAt": "2026-03-26T14:19:46.888Z",
-    "finishedAt": "2026-03-26T14:29:11.319Z",
-    "durationMs": 564431,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 373,
-    "cmsItemsBefore": 375,
-    "created": 0,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 373,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530315",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529140",
-        "title": "Unknown"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }
