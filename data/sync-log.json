@@ -1,5 +1,93 @@
 [
   {
+    "id": "2026-03-30T01:21:06.055Z",
+    "startedAt": "2026-03-30T01:21:06.055Z",
+    "finishedAt": "2026-03-30T01:29:54.440Z",
+    "durationMs": 528385,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 351,
+    "created": 17,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 351,
+    "createdJobs": [
+      {
+        "jobId": "519735",
+        "title": "Sales Travel Consultant - WA North/Northern Territory"
+      },
+      {
+        "jobId": "519739",
+        "title": "Sales Travel Consultant - WA South"
+      },
+      {
+        "jobId": "528123",
+        "title": "Sales Travel Consultant - Booragoon, WA"
+      },
+      {
+        "jobId": "529007",
+        "title": "Sales Travel Consultant - South-East Perth"
+      },
+      {
+        "jobId": "529024",
+        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
+      },
+      {
+        "jobId": "529047",
+        "title": "Sales Travel Consultant - Claremont & Surrounding Suburbs"
+      },
+      {
+        "jobId": "529069",
+        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
+      },
+      {
+        "jobId": "529251",
+        "title": "Sales Travel Consultant - Midland, WA"
+      },
+      {
+        "jobId": "529557",
+        "title": "Sales Travel Consultant - Kalamunda, WA"
+      },
+      {
+        "jobId": "529755",
+        "title": "Sales Travel Consultant - Willeton, WA"
+      },
+      {
+        "jobId": "529968",
+        "title": "Retail Sales Travel Consultant - Esperance, WA"
+      },
+      {
+        "jobId": "530178",
+        "title": "Sales Travel Consultant - Whitford City, WA"
+      },
+      {
+        "jobId": "530303",
+        "title": "Retail Sales Travel Consultant - Eaton, WA"
+      },
+      {
+        "jobId": "530321",
+        "title": "Sales Travel Consultant - South-West Suburbs"
+      },
+      {
+        "jobId": "528829",
+        "title": "Service Product Lead (Unified Communications) - South Bank, QLD"
+      },
+      {
+        "jobId": "530380",
+        "title": "Travel Manager - FCBT - Sydney, NSW"
+      },
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-29T23:54:19.922Z",
     "startedAt": "2026-03-29T23:54:19.922Z",
     "finishedAt": "2026-03-30T00:01:33.620Z",
@@ -2551,30 +2639,6 @@
         "title": "Unknown"
       }
     ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-03-26T16:52:24.860Z",
-    "startedAt": "2026-03-26T16:52:24.861Z",
-    "finishedAt": "2026-03-26T17:02:24.904Z",
-    "durationMs": 600043,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 375,
-    "cmsItemsBefore": 374,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 374,
-    "createdJobs": [
-      {
-        "jobId": "530199",
-        "title": "DGM - Product Management"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
   }

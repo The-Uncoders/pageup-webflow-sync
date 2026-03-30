@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 197,
+    "australia": 199,
     "usa": 41,
     "uk & europe": 16,
     "canada": 14,
@@ -10,8 +10,8 @@
     "uae": 1
   },
   "cities": {
-    "new south wales": 65,
-    "queensland": 64,
+    "new south wales": 66,
+    "queensland": 65,
     "pennsylvania": 6,
     "manchester": 1,
     "quebec": 1,
@@ -66,9 +66,9 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 236,
+    "sales and customer service": 237,
+    "digital and technology": 35,
     "marketing and communication": 12,
-    "digital and technology": 34,
     "operations and logistics": 37,
     "data and business intelligence": 5,
     "people and culture": 7,
@@ -195,8 +195,8 @@
   },
   "categoryDisplay": {
     "sales and customer service": "Sales and Customer Service",
-    "marketing and communication": "Marketing and Communication",
     "digital and technology": "Digital and Technology",
+    "marketing and communication": "Marketing and Communication",
     "operations and logistics": "Operations and Logistics",
     "data and business intelligence": "Data and Business Intelligence",
     "people and culture": "People and Culture",
