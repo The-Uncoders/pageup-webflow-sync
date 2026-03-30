@@ -1,5 +1,102 @@
 [
   {
+    "id": "2026-03-30T04:21:45.797Z",
+    "startedAt": "2026-03-30T04:21:45.797Z",
+    "finishedAt": "2026-03-30T04:29:52.255Z",
+    "durationMs": 486458,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 353,
+    "created": 18,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 352,
+    "createdJobs": [
+      {
+        "jobId": "519735",
+        "title": "Sales Travel Consultant - WA North/Northern Territory"
+      },
+      {
+        "jobId": "519739",
+        "title": "Sales Travel Consultant - WA South"
+      },
+      {
+        "jobId": "528123",
+        "title": "Sales Travel Consultant - Booragoon, WA"
+      },
+      {
+        "jobId": "529007",
+        "title": "Sales Travel Consultant - South-East Perth"
+      },
+      {
+        "jobId": "529024",
+        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
+      },
+      {
+        "jobId": "529047",
+        "title": "Sales Travel Consultant - Claremont & Surrounding Suburbs"
+      },
+      {
+        "jobId": "529069",
+        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
+      },
+      {
+        "jobId": "529251",
+        "title": "Sales Travel Consultant - Midland, WA"
+      },
+      {
+        "jobId": "529557",
+        "title": "Sales Travel Consultant - Kalamunda, WA"
+      },
+      {
+        "jobId": "529755",
+        "title": "Sales Travel Consultant - Willeton, WA"
+      },
+      {
+        "jobId": "529968",
+        "title": "Retail Sales Travel Consultant - Esperance, WA"
+      },
+      {
+        "jobId": "530178",
+        "title": "Sales Travel Consultant - Whitford City, WA"
+      },
+      {
+        "jobId": "530303",
+        "title": "Retail Sales Travel Consultant - Eaton, WA"
+      },
+      {
+        "jobId": "530321",
+        "title": "Sales Travel Consultant - South-West Suburbs"
+      },
+      {
+        "jobId": "530431",
+        "title": "Career Information Evening with FCTG Corporate - Perth, WA"
+      },
+      {
+        "jobId": "530428",
+        "title": "Round the World Travel Consultant - Flight Centre - Australia Wide"
+      },
+      {
+        "jobId": "530429",
+        "title": "Team Leader - Flight Centre Corporate Benefits - Hybrid or Remote, AUS Wide"
+      },
+      {
+        "jobId": "530423",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530225",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-30T01:21:06.055Z",
     "startedAt": "2026-03-30T01:21:06.055Z",
     "finishedAt": "2026-03-30T01:29:54.440Z",
@@ -2617,29 +2714,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-26T17:52:22.501Z",
-    "startedAt": "2026-03-26T17:52:22.501Z",
-    "finishedAt": "2026-03-26T18:00:14.907Z",
-    "durationMs": 472406,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 374,
-    "cmsItemsBefore": 375,
-    "created": 0,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 374,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530314",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
