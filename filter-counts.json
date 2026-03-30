@@ -1,15 +1,16 @@
 {
   "regions": {
-    "uk & europe": 17,
+    "uk & europe": 18,
     "asia": 69,
     "australia": 202,
     "usa": 41,
-    "canada": 14,
+    "canada": 13,
     "new zealand": 9,
     "south africa": 4,
     "uae": 1
   },
   "cities": {
+    "london": 7,
     "bath": 2,
     "noida": 16,
     "queensland": 67,
@@ -19,7 +20,7 @@
     "pennsylvania": 6,
     "manchester": 1,
     "quebec": 1,
-    "ontario": 10,
+    "ontario": 9,
     "new plymouth": 1,
     "gurgaon": 2,
     "hanoi": 3,
@@ -33,7 +34,6 @@
     "bali": 7,
     "victoria": 25,
     "tasmania": 4,
-    "london": 6,
     "wellington": 1,
     "south east": 2,
     "british columbia": 2,
@@ -66,15 +66,15 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 240,
-    "digital and technology": 36,
+    "sales and customer service": 241,
+    "administration": 4,
+    "digital and technology": 35,
     "finance": 24,
     "leadership": 27,
     "marketing and communication": 12,
     "operations and logistics": 37,
     "data and business intelligence": 5,
     "people and culture": 7,
-    "administration": 3,
     "commercial": 24,
     "project and program management": 5,
     "legal": 1,
@@ -82,6 +82,7 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "london": "UK & Europe",
     "bath": "UK & Europe",
     "noida": "Asia",
     "queensland": "Australia",
@@ -105,7 +106,6 @@
     "bali": "Asia",
     "victoria": "Australia",
     "tasmania": "Australia",
-    "london": "UK & Europe",
     "wellington": "New Zealand",
     "south east": "UK & Europe",
     "british columbia": "Canada",
@@ -138,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "london": "London",
     "bath": "Bath",
     "noida": "Noida",
     "queensland": "Queensland",
@@ -161,7 +162,6 @@
     "bali": "Bali",
     "victoria": "Victoria",
     "tasmania": "Tasmania",
-    "london": "London",
     "wellington": "Wellington",
     "south east": "South East",
     "british columbia": "British Columbia",
@@ -195,6 +195,7 @@
   },
   "categoryDisplay": {
     "sales and customer service": "Sales and Customer Service",
+    "administration": "Administration",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
     "leadership": "Leadership",
@@ -202,7 +203,6 @@
     "operations and logistics": "Operations and Logistics",
     "data and business intelligence": "Data and Business Intelligence",
     "people and culture": "People and Culture",
-    "administration": "Administration",
     "commercial": "Commercial",
     "project and program management": "Project and Program Management",
     "legal": "Legal",
