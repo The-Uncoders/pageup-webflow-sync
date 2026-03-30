@@ -1,5 +1,89 @@
 [
   {
+    "id": "2026-03-30T23:01:47.337Z",
+    "startedAt": "2026-03-30T23:01:47.338Z",
+    "finishedAt": "2026-03-30T23:11:37.732Z",
+    "durationMs": 590394,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 374,
+    "cmsItemsBefore": 358,
+    "created": 16,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 358,
+    "createdJobs": [
+      {
+        "jobId": "530449",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      },
+      {
+        "jobId": "519735",
+        "title": "Sales Travel Consultant - WA North/Northern Territory"
+      },
+      {
+        "jobId": "519739",
+        "title": "Sales Travel Consultant - WA South"
+      },
+      {
+        "jobId": "528123",
+        "title": "Sales Travel Consultant - Booragoon, WA"
+      },
+      {
+        "jobId": "529007",
+        "title": "Sales Travel Consultant - South-East Perth"
+      },
+      {
+        "jobId": "529024",
+        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
+      },
+      {
+        "jobId": "529047",
+        "title": "Sales Travel Consultant - Claremont & Surrounding Suburbs"
+      },
+      {
+        "jobId": "529069",
+        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
+      },
+      {
+        "jobId": "529251",
+        "title": "Sales Travel Consultant - Midland, WA"
+      },
+      {
+        "jobId": "529557",
+        "title": "Sales Travel Consultant - Kalamunda, WA"
+      },
+      {
+        "jobId": "529755",
+        "title": "Sales Travel Consultant - Willeton, WA"
+      },
+      {
+        "jobId": "529968",
+        "title": "Retail Sales Travel Consultant - Esperance, WA"
+      },
+      {
+        "jobId": "530178",
+        "title": "Sales Travel Consultant - Whitford City, WA"
+      },
+      {
+        "jobId": "530303",
+        "title": "Retail Sales Travel Consultant - Eaton, WA"
+      },
+      {
+        "jobId": "530321",
+        "title": "Sales Travel Consultant - South-West Suburbs"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-03-30T22:24:35.671Z",
     "startedAt": "2026-03-30T22:24:35.671Z",
     "finishedAt": "2026-03-30T22:33:42.081Z",
@@ -3614,24 +3698,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-03-27T08:39:15.066Z",
-    "startedAt": "2026-03-27T08:39:15.067Z",
-    "finishedAt": "2026-03-27T08:51:18.333Z",
-    "durationMs": 723266,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 369,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
