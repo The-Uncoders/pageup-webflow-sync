@@ -1,15 +1,16 @@
 {
   "regions": {
+    "uk & europe": 17,
     "asia": 69,
     "australia": 202,
     "usa": 41,
-    "uk & europe": 16,
     "canada": 14,
     "new zealand": 9,
     "south africa": 4,
     "uae": 1
   },
   "cities": {
+    "bath": 2,
     "noida": 16,
     "queensland": 67,
     "australian capital territory": 15,
@@ -53,7 +54,6 @@
     "northern territory": 1,
     "paris": 1,
     "nationwide": 1,
-    "bath": 1,
     "shanghai": 2,
     "kerikeri": 1,
     "singapore": 3,
@@ -66,10 +66,10 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 240,
     "digital and technology": 36,
     "finance": 24,
     "leadership": 27,
-    "sales and customer service": 239,
     "marketing and communication": 12,
     "operations and logistics": 37,
     "data and business intelligence": 5,
@@ -82,6 +82,7 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "bath": "UK & Europe",
     "noida": "Asia",
     "queensland": "Australia",
     "australian capital territory": "Australia",
@@ -125,7 +126,6 @@
     "northern territory": "Australia",
     "paris": "UK & Europe",
     "nationwide": "South Africa",
-    "bath": "UK & Europe",
     "shanghai": "Asia",
     "kerikeri": "New Zealand",
     "singapore": "Asia",
@@ -138,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "bath": "Bath",
     "noida": "Noida",
     "queensland": "Queensland",
     "australian capital territory": "Australian Capital Territory",
@@ -181,7 +182,6 @@
     "northern territory": "Northern Territory",
     "paris": "Paris",
     "nationwide": "Nationwide",
-    "bath": "Bath",
     "shanghai": "Shanghai",
     "kerikeri": "Kerikeri",
     "singapore": "Singapore",
@@ -194,10 +194,10 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
     "leadership": "Leadership",
-    "sales and customer service": "Sales and Customer Service",
     "marketing and communication": "Marketing and Communication",
     "operations and logistics": "Operations and Logistics",
     "data and business intelligence": "Data and Business Intelligence",
