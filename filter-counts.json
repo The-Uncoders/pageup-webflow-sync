@@ -1,8 +1,8 @@
 {
   "regions": {
+    "australia": 203,
     "uk & europe": 18,
     "asia": 69,
-    "australia": 202,
     "usa": 41,
     "canada": 13,
     "new zealand": 9,
@@ -10,13 +10,13 @@
     "uae": 1
   },
   "cities": {
+    "new south wales": 67,
     "london": 7,
     "bath": 2,
     "noida": 16,
     "queensland": 67,
     "australian capital territory": 15,
     "western australia": 7,
-    "new south wales": 66,
     "pennsylvania": 6,
     "manchester": 1,
     "quebec": 1,
@@ -66,7 +66,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 241,
+    "sales and customer service": 242,
     "administration": 4,
     "digital and technology": 35,
     "finance": 24,
@@ -82,13 +82,13 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "new south wales": "Australia",
     "london": "UK & Europe",
     "bath": "UK & Europe",
     "noida": "Asia",
     "queensland": "Australia",
     "australian capital territory": "Australia",
     "western australia": "Australia",
-    "new south wales": "Australia",
     "pennsylvania": "USA",
     "manchester": "UK & Europe",
     "quebec": "Canada",
@@ -138,13 +138,13 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new south wales": "New South Wales",
     "london": "London",
     "bath": "Bath",
     "noida": "Noida",
     "queensland": "Queensland",
     "australian capital territory": "Australian Capital Territory",
     "western australia": "Western Australia",
-    "new south wales": "New South Wales",
     "pennsylvania": "Pennsylvania",
     "manchester": "Manchester",
     "quebec": "Quebec",
