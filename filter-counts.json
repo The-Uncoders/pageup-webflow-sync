@@ -1,6 +1,6 @@
 {
   "regions": {
-    "asia": 70,
+    "asia": 69,
     "australia": 202,
     "usa": 41,
     "uk & europe": 16,
@@ -29,7 +29,7 @@
     "hong kong": 1,
     "tokyo": 16,
     "johannesburg": 2,
-    "bali": 8,
+    "bali": 7,
     "victoria": 25,
     "tasmania": 4,
     "london": 6,
@@ -75,7 +75,7 @@
     "data and business intelligence": 5,
     "people and culture": 7,
     "administration": 3,
-    "commercial": 25,
+    "commercial": 24,
     "project and program management": 5,
     "legal": 1,
     "risk and compliance": 1,
