@@ -1,15 +1,17 @@
 {
   "regions": {
-    "asia": 72,
+    "asia": 73,
+    "uk & europe": 19,
     "south africa": 5,
     "australia": 210,
-    "uk & europe": 18,
     "usa": 41,
     "canada": 13,
     "new zealand": 9,
     "uae": 1
   },
   "cities": {
+    "bangalore": 2,
+    "london": 8,
     "bangkok": 2,
     "cape town": 2,
     "pune": 1,
@@ -18,7 +20,6 @@
     "victoria": 29,
     "new south wales": 65,
     "queensland": 73,
-    "london": 7,
     "bath": 2,
     "noida": 16,
     "australian capital territory": 15,
@@ -46,7 +47,6 @@
     "south australia": 15,
     "invercargill": 1,
     "massachusetts": 4,
-    "bangalore": 1,
     "kuala lumpur": 4,
     "phuket": 2,
     "virtual - usa": 2,
@@ -67,11 +67,11 @@
     "new jersey": 1
   },
   "categories": {
+    "digital and technology": 36,
+    "finance": 25,
     "operations and logistics": 40,
     "sales and customer service": 250,
     "administration": 4,
-    "digital and technology": 35,
-    "finance": 24,
     "leadership": 27,
     "marketing and communication": 12,
     "data and business intelligence": 5,
@@ -83,6 +83,8 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "bangalore": "Asia",
+    "london": "UK & Europe",
     "bangkok": "Asia",
     "cape town": "South Africa",
     "pune": "Asia",
@@ -91,7 +93,6 @@
     "victoria": "Australia",
     "new south wales": "Australia",
     "queensland": "Australia",
-    "london": "UK & Europe",
     "bath": "UK & Europe",
     "noida": "Asia",
     "australian capital territory": "Australia",
@@ -119,7 +120,6 @@
     "south australia": "Australia",
     "invercargill": "New Zealand",
     "massachusetts": "USA",
-    "bangalore": "Asia",
     "kuala lumpur": "Asia",
     "phuket": "Asia",
     "virtual - usa": "USA",
@@ -140,6 +140,8 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "bangalore": "Bangalore",
+    "london": "London",
     "bangkok": "Bangkok",
     "cape town": "Cape Town",
     "pune": "Pune",
@@ -148,7 +150,6 @@
     "victoria": "Victoria",
     "new south wales": "New South Wales",
     "queensland": "Queensland",
-    "london": "London",
     "bath": "Bath",
     "noida": "Noida",
     "australian capital territory": "Australian Capital Territory",
@@ -176,7 +177,6 @@
     "south australia": "South Australia",
     "invercargill": "Invercargill",
     "massachusetts": "Massachusetts",
-    "bangalore": "Bangalore",
     "kuala lumpur": "Kuala Lumpur",
     "phuket": "Phuket",
     "virtual - usa": "Virtual - USA",
@@ -197,11 +197,11 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "digital and technology": "Digital and Technology",
+    "finance": "Finance",
     "operations and logistics": "Operations and Logistics",
     "sales and customer service": "Sales and Customer Service",
     "administration": "Administration",
-    "digital and technology": "Digital and Technology",
-    "finance": "Finance",
     "leadership": "Leadership",
     "marketing and communication": "Marketing and Communication",
     "data and business intelligence": "Data and Business Intelligence",
