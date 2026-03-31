@@ -1,9 +1,9 @@
 {
   "regions": {
-    "uk & europe": 20,
+    "uk & europe": 19,
     "asia": 75,
     "south africa": 5,
-    "australia": 210,
+    "australia": 207,
     "usa": 41,
     "canada": 13,
     "new zealand": 9,
@@ -12,15 +12,15 @@
   "cities": {
     "can be based in any global head office": 1,
     "bangalore": 4,
-    "london": 8,
+    "london": 7,
     "bangkok": 2,
     "cape town": 2,
     "pune": 1,
     "mumbai": 6,
     "remote": 3,
     "victoria": 29,
-    "new south wales": 65,
-    "queensland": 73,
+    "new south wales": 63,
+    "queensland": 72,
     "bath": 2,
     "noida": 16,
     "australian capital territory": 15,
@@ -69,19 +69,18 @@
   },
   "categories": {
     "digital and technology": 39,
-    "finance": 25,
+    "finance": 24,
     "operations and logistics": 40,
     "sales and customer service": 250,
     "administration": 4,
     "leadership": 27,
     "marketing and communication": 12,
     "data and business intelligence": 5,
-    "people and culture": 7,
-    "commercial": 24,
+    "people and culture": 6,
+    "commercial": 22,
     "project and program management": 5,
     "legal": 1,
-    "risk and compliance": 1,
-    "procurement": 2
+    "risk and compliance": 1
   },
   "cityToRegion": {
     "can be based in any global head office": "UK & Europe",
@@ -212,7 +211,6 @@
     "commercial": "Commercial",
     "project and program management": "Project and Program Management",
     "legal": "Legal",
-    "risk and compliance": "Risk and Compliance",
-    "procurement": "Procurement"
+    "risk and compliance": "Risk and Compliance"
   }
 }
