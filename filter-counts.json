@@ -1,8 +1,8 @@
 {
   "regions": {
+    "asia": 71,
     "australia": 210,
     "uk & europe": 18,
-    "asia": 69,
     "usa": 41,
     "canada": 13,
     "new zealand": 9,
@@ -10,6 +10,8 @@
     "uae": 1
   },
   "cities": {
+    "pune": 1,
+    "mumbai": 6,
     "remote": 3,
     "victoria": 29,
     "new south wales": 65,
@@ -27,7 +29,6 @@
     "gurgaon": 2,
     "hanoi": 3,
     "ho chi minh city": 3,
-    "mumbai": 5,
     "auckland": 4,
     "siem reap": 1,
     "hong kong": 1,
@@ -66,13 +67,13 @@
     "new jersey": 1
   },
   "categories": {
+    "operations and logistics": 39,
     "sales and customer service": 249,
     "administration": 4,
     "digital and technology": 35,
     "finance": 24,
     "leadership": 27,
     "marketing and communication": 12,
-    "operations and logistics": 37,
     "data and business intelligence": 5,
     "people and culture": 7,
     "commercial": 24,
@@ -82,6 +83,8 @@
     "procurement": 2
   },
   "cityToRegion": {
+    "pune": "Asia",
+    "mumbai": "Asia",
     "remote": "Australia",
     "victoria": "Australia",
     "new south wales": "Australia",
@@ -99,7 +102,6 @@
     "gurgaon": "Asia",
     "hanoi": "Asia",
     "ho chi minh city": "Asia",
-    "mumbai": "Asia",
     "auckland": "New Zealand",
     "siem reap": "Asia",
     "hong kong": "Asia",
@@ -138,6 +140,8 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "pune": "Pune",
+    "mumbai": "Mumbai",
     "remote": "Remote",
     "victoria": "Victoria",
     "new south wales": "New South Wales",
@@ -155,7 +159,6 @@
     "gurgaon": "Gurgaon",
     "hanoi": "Hanoi",
     "ho chi minh city": "Ho Chi Minh City",
-    "mumbai": "Mumbai",
     "auckland": "Auckland",
     "siem reap": "Siem Reap",
     "hong kong": "Hong Kong",
@@ -194,13 +197,13 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "operations and logistics": "Operations and Logistics",
     "sales and customer service": "Sales and Customer Service",
     "administration": "Administration",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
     "leadership": "Leadership",
     "marketing and communication": "Marketing and Communication",
-    "operations and logistics": "Operations and Logistics",
     "data and business intelligence": "Data and Business Intelligence",
     "people and culture": "People and Culture",
     "commercial": "Commercial",
