@@ -1,5 +1,98 @@
 [
   {
+    "id": "2026-03-31T22:02:43.727Z",
+    "startedAt": "2026-03-31T22:02:43.727Z",
+    "finishedAt": "2026-03-31T22:10:54.699Z",
+    "durationMs": 490972,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 373,
+    "cmsItemsBefore": 357,
+    "created": 17,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 356,
+    "createdJobs": [
+      {
+        "jobId": "530449",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      },
+      {
+        "jobId": "519735",
+        "title": "Sales Travel Consultant - WA North/Northern Territory"
+      },
+      {
+        "jobId": "519739",
+        "title": "Sales Travel Consultant - WA South"
+      },
+      {
+        "jobId": "528123",
+        "title": "Sales Travel Consultant - Booragoon, WA"
+      },
+      {
+        "jobId": "529007",
+        "title": "Sales Travel Consultant - South-East Perth"
+      },
+      {
+        "jobId": "529024",
+        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
+      },
+      {
+        "jobId": "529069",
+        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
+      },
+      {
+        "jobId": "529251",
+        "title": "Sales Travel Consultant - Midland, WA"
+      },
+      {
+        "jobId": "529557",
+        "title": "Sales Travel Consultant - Kalamunda, WA"
+      },
+      {
+        "jobId": "529755",
+        "title": "Sales Travel Consultant - Willeton, WA"
+      },
+      {
+        "jobId": "529968",
+        "title": "Retail Sales Travel Consultant - Esperance, WA"
+      },
+      {
+        "jobId": "530178",
+        "title": "Sales Travel Consultant - Whitford City, WA"
+      },
+      {
+        "jobId": "530303",
+        "title": "Retail Sales Travel Consultant - Eaton, WA"
+      },
+      {
+        "jobId": "530321",
+        "title": "Sales Travel Consultant - South-West Suburbs"
+      },
+      {
+        "jobId": "529827",
+        "title": "Credit Controller"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "528732",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-03-31T21:29:17.789Z",
     "startedAt": "2026-03-31T21:29:17.789Z",
     "finishedAt": "2026-03-31T21:37:17.956Z",
@@ -4950,42 +5043,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-28T01:10:42.695Z",
-    "startedAt": "2026-03-28T01:10:42.695Z",
-    "finishedAt": "2026-03-28T01:22:35.748Z",
-    "durationMs": 713053,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 366,
-    "cmsItemsBefore": 368,
-    "created": 1,
-    "updated": 0,
-    "deleted": 3,
-    "unchanged": 365,
-    "createdJobs": [
-      {
-        "jobId": "530423",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529827",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529877",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529952",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
