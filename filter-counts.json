@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 213,
+    "australia": 212,
     "uk & europe": 18,
     "asia": 69,
     "usa": 41,
@@ -11,7 +11,7 @@
   },
   "cities": {
     "victoria": 29,
-    "new south wales": 68,
+    "new south wales": 67,
     "queensland": 73,
     "london": 7,
     "bath": 2,
@@ -66,7 +66,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 252,
+    "sales and customer service": 251,
     "administration": 4,
     "digital and technology": 35,
     "finance": 24,
