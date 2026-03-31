@@ -1,7 +1,7 @@
 {
   "regions": {
     "uk & europe": 19,
-    "asia": 75,
+    "asia": 74,
     "south africa": 4,
     "australia": 207,
     "usa": 41,
@@ -56,7 +56,7 @@
     "northern territory": 1,
     "paris": 1,
     "nationwide": 1,
-    "shanghai": 2,
+    "shanghai": 1,
     "kerikeri": 1,
     "singapore": 3,
     "illinois": 3,
@@ -74,10 +74,10 @@
     "sales and customer service": 250,
     "administration": 4,
     "leadership": 27,
-    "marketing and communication": 12,
+    "marketing and communication": 11,
     "data and business intelligence": 5,
     "people and culture": 6,
-    "commercial": 22,
+    "commercial": 21,
     "project and program management": 5,
     "legal": 1,
     "risk and compliance": 1
