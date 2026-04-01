@@ -1,5 +1,97 @@
 [
   {
+    "id": "2026-04-01T16:43:34.051Z",
+    "startedAt": "2026-04-01T16:43:34.051Z",
+    "finishedAt": "2026-04-01T16:51:42.197Z",
+    "durationMs": 488146,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 369,
+    "cmsItemsBefore": 351,
+    "created": 18,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 351,
+    "createdJobs": [
+      {
+        "jobId": "530449",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      },
+      {
+        "jobId": "519735",
+        "title": "Sales Travel Consultant - WA North/Northern Territory"
+      },
+      {
+        "jobId": "519739",
+        "title": "Sales Travel Consultant - WA South"
+      },
+      {
+        "jobId": "528123",
+        "title": "Sales Travel Consultant - Booragoon, WA"
+      },
+      {
+        "jobId": "529007",
+        "title": "Sales Travel Consultant - South-East Perth"
+      },
+      {
+        "jobId": "529024",
+        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
+      },
+      {
+        "jobId": "529069",
+        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
+      },
+      {
+        "jobId": "529251",
+        "title": "Sales Travel Consultant - Midland, WA"
+      },
+      {
+        "jobId": "529557",
+        "title": "Sales Travel Consultant - Kalamunda, WA"
+      },
+      {
+        "jobId": "529755",
+        "title": "Sales Travel Consultant - Willeton, WA"
+      },
+      {
+        "jobId": "529968",
+        "title": "Retail Sales Travel Consultant - Esperance, WA"
+      },
+      {
+        "jobId": "530178",
+        "title": "Sales Travel Consultant - Whitford City, WA"
+      },
+      {
+        "jobId": "530303",
+        "title": "Retail Sales Travel Consultant - Eaton, WA"
+      },
+      {
+        "jobId": "530321",
+        "title": "Sales Travel Consultant - South-West Suburbs"
+      },
+      {
+        "jobId": "528732",
+        "title": "Travel Consultant South Africa (Worcester, Cape Town based)"
+      },
+      {
+        "jobId": "529827",
+        "title": "Credit Controller"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-01T15:49:49.080Z",
     "startedAt": "2026-04-01T15:49:49.080Z",
     "finishedAt": "2026-04-01T16:00:25.104Z",
@@ -5990,30 +6082,6 @@
     "startedAt": "2026-03-28T15:21:31.318Z",
     "finishedAt": "2026-03-28T15:33:56.203Z",
     "durationMs": 744885,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 366,
-    "cmsItemsBefore": 365,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 365,
-    "createdJobs": [
-      {
-        "jobId": "530423",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-28T14:23:15.804Z",
-    "startedAt": "2026-03-28T14:23:15.804Z",
-    "finishedAt": "2026-03-28T14:30:42.502Z",
-    "durationMs": 446698,
     "status": "success",
     "error": null,
     "pageupJobsFound": 366,
