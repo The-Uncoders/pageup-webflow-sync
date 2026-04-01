@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 208,
+    "australia": 205,
     "uk & europe": 15,
     "asia": 64,
     "south africa": 3,
@@ -12,7 +12,7 @@
   "cities": {
     "western australia": 7,
     "south australia": 16,
-    "new south wales": 62,
+    "new south wales": 59,
     "can be based in any global head office": 1,
     "bangalore": 3,
     "london": 6,
@@ -65,12 +65,12 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 244,
+    "sales and customer service": 241,
     "digital and technology": 35,
     "finance": 22,
     "operations and logistics": 37,
     "administration": 4,
-    "leadership": 27,
+    "leadership": 26,
     "marketing and communication": 8,
     "data and business intelligence": 5,
     "people and culture": 6,
