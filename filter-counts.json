@@ -4,7 +4,7 @@
     "asia": 68,
     "uk & europe": 14,
     "south africa": 6,
-    "australia": 218,
+    "australia": 216,
     "canada": 14,
     "usa": 37,
     "new zealand": 9,
@@ -21,7 +21,7 @@
     "quebec": 2,
     "johannesburg": 3,
     "hanoi": 4,
-    "south australia": 16,
+    "south australia": 14,
     "new south wales": 59,
     "can be based in any global head office": 1,
     "bangalore": 3,
@@ -67,7 +67,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 260,
+    "sales and customer service": 258,
     "marketing and communication": 9,
     "finance": 23,
     "operations and logistics": 37,
