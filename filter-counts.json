@@ -4,7 +4,7 @@
     "south africa": 5,
     "australia": 205,
     "uk & europe": 13,
-    "usa": 38,
+    "usa": 37,
     "canada": 13,
     "new zealand": 9,
     "uae": 1
@@ -42,7 +42,7 @@
     "wellington": 1,
     "british columbia": 2,
     "barcelona": 3,
-    "california": 12,
+    "california": 11,
     "invercargill": 1,
     "massachusetts": 3,
     "kuala lumpur": 4,
@@ -66,7 +66,7 @@
   },
   "categories": {
     "operations and logistics": 37,
-    "sales and customer service": 243,
+    "sales and customer service": 242,
     "commercial": 22,
     "digital and technology": 34,
     "finance": 22,
