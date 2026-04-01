@@ -10,9 +10,9 @@
     "uae": 1
   },
   "cities": {
+    "western australia": 7,
     "south australia": 16,
-    "western australia": 6,
-    "new south wales": 63,
+    "new south wales": 62,
     "can be based in any global head office": 1,
     "bangalore": 3,
     "london": 6,
@@ -80,8 +80,8 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
-    "south australia": "Australia",
     "western australia": "Australia",
+    "south australia": "Australia",
     "new south wales": "Australia",
     "can be based in any global head office": "UK & Europe",
     "bangalore": "Asia",
@@ -135,8 +135,8 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
-    "south australia": "South Australia",
     "western australia": "Western Australia",
+    "south australia": "South Australia",
     "new south wales": "New South Wales",
     "can be based in any global head office": "Can be based in any global head office",
     "bangalore": "Bangalore",
