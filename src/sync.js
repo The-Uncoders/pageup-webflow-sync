@@ -158,8 +158,11 @@ function cleanDescription(html) {
   // Collapse multiple consecutive <br> tags into one
   clean = clean.replace(/(<br\s*\/?\s*>\s*){2,}/gi, '<br>');
 
-  // Clean up empty <div></div> wrappers
-  clean = clean.replace(/<div>\s*<\/div>/gi, '');
+  // Strip ALL remaining <div> tags (opening and closing).
+  // Webflow rich text only supports p, ul, ol, h1-h6, blockquote, figure.
+  // Leftover <div> elements break Webflow's CMS template DOM structure,
+  // causing the brand sidebar to get swallowed into the content column.
+  clean = clean.replace(/<\/?div[^>]*>/gi, '');
 
   return clean.trim();
 }
