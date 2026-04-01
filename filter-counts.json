@@ -1,8 +1,8 @@
 {
   "regions": {
+    "asia": 65,
     "australia": 205,
-    "uk & europe": 15,
-    "asia": 64,
+    "uk & europe": 13,
     "south africa": 3,
     "usa": 38,
     "canada": 13,
@@ -10,12 +10,13 @@
     "uae": 1
   },
   "cities": {
+    "hanoi": 4,
     "western australia": 7,
     "south australia": 16,
     "new south wales": 59,
     "can be based in any global head office": 1,
     "bangalore": 3,
-    "london": 6,
+    "london": 4,
     "bangkok": 2,
     "cape town": 1,
     "pune": 1,
@@ -30,7 +31,6 @@
     "quebec": 1,
     "ontario": 9,
     "new plymouth": 1,
-    "hanoi": 3,
     "ho chi minh city": 3,
     "auckland": 4,
     "siem reap": 1,
@@ -65,21 +65,22 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 241,
-    "digital and technology": 35,
+    "commercial": 22,
+    "sales and customer service": 240,
+    "digital and technology": 34,
     "finance": 22,
-    "operations and logistics": 37,
+    "operations and logistics": 36,
     "administration": 4,
     "leadership": 26,
     "marketing and communication": 8,
     "data and business intelligence": 5,
     "people and culture": 6,
-    "commercial": 21,
     "project and program management": 5,
     "legal": 1,
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "hanoi": "Asia",
     "western australia": "Australia",
     "south australia": "Australia",
     "new south wales": "Australia",
@@ -100,7 +101,6 @@
     "quebec": "Canada",
     "ontario": "Canada",
     "new plymouth": "New Zealand",
-    "hanoi": "Asia",
     "ho chi minh city": "Asia",
     "auckland": "New Zealand",
     "siem reap": "Asia",
@@ -135,6 +135,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "hanoi": "Hanoi",
     "western australia": "Western Australia",
     "south australia": "South Australia",
     "new south wales": "New South Wales",
@@ -155,7 +156,6 @@
     "quebec": "Quebec",
     "ontario": "Ontario",
     "new plymouth": "New Plymouth",
-    "hanoi": "Hanoi",
     "ho chi minh city": "Ho Chi Minh City",
     "auckland": "Auckland",
     "siem reap": "Siem Reap",
@@ -190,6 +190,7 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "commercial": "Commercial",
     "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
@@ -199,7 +200,6 @@
     "marketing and communication": "Marketing and Communication",
     "data and business intelligence": "Data and Business Intelligence",
     "people and culture": "People and Culture",
-    "commercial": "Commercial",
     "project and program management": "Project and Program Management",
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance"
