@@ -232,8 +232,7 @@ function buildCmsFieldData(jobDetail, brandMap, countryMap, hashtagToBrand) {
 
 function hasChanged(existing, newData) {
   // Compare key fields to detect real content changes
-  // Exclude 'summary' and 'description' since they may differ between imports
-  const fieldsToCompare = ['name', 'location', 'work-type', 'category', 'brand-name', 'closing-date'];
+  const fieldsToCompare = ['name', 'location', 'work-type', 'category', 'brand-name', 'closing-date', 'description'];
   const existingFields = existing.fieldData || {};
 
   const changed = [];
