@@ -104,6 +104,66 @@ function resolveBrand(jobDetail, brandMap, hashtagToBrand) {
   return { id: fctgRef, name: FCTG_DEFAULT_BRAND };
 }
 
+/**
+ * Clean up PageUp description HTML for consistent display in Webflow.
+ * PageUp descriptions come with inconsistent formatting across regions:
+ *   - Empty <p>&nbsp;</p> paragraphs creating double/triple spacing
+ *   - Whitespace-only spans and paragraphs
+ *   - Each bullet in its own <div><ul><li> wrapper (causes extra gaps)
+ *   - White-text hashtag lines (#LI-xxx, brand tags) meant to be hidden
+ *   - Inline font-size/font-family styles overriding site typography
+ *   - PageUp-sourced images that Webflow can't import
+ */
+function cleanDescription(html) {
+  let clean = html;
+
+  // Strip PageUp-sourced images (serve image/x-png which Webflow rejects)
+  clean = clean.replace(/<img[^>]*src="[^"]*pageuppeople\.com[^"]*"[^>]*\/?>/gi, '');
+  clean = clean.replace(/<img[^>]*src="[^"]*publicstorage[^"]*"[^>]*\/?>/gi, '');
+
+  // Remove white-text hashtag lines (LinkedIn tracking tags like #LI-ME1#MTEV#LI-Onsite)
+  clean = clean.replace(/<span[^>]*color:\s*#(?:FFF(?:FFF)?|fff(?:fff)?|FFFFFF|ffffff)\b[^>]*>[^<]*<\/span>/gi, '');
+
+  // Strip inline font-size and font-family from style attributes so Webflow's typography applies.
+  // Do this BEFORE empty-element removal so stripped spans get cleaned up properly.
+  clean = clean.replace(/\s*style="([^"]*)"/gi, (match, styleContent) => {
+    let cleaned = styleContent
+      .replace(/\s*font-size:\s*[^;]+;?/gi, '')
+      .replace(/\s*font-family:\s*[^;"]+;?/gi, '')
+      .replace(/^\s*;\s*/, '')
+      .replace(/;\s*$/, '')
+      .replace(/;\s*;/g, ';')
+      .trim();
+    return cleaned ? ` style="${cleaned}"` : '';
+  });
+
+  // Remove empty <span> wrappers (no attributes left after style stripping)
+  clean = clean.replace(/<span>([^<]*)<\/span>/gi, '$1');
+
+  // Remove empty paragraphs: <p>&nbsp;</p>, <p> </p>, <p></p>
+  clean = clean.replace(/<p>\s*(?:&nbsp;|\u00A0)?\s*<\/p>/gi, '');
+
+  // Remove paragraphs that only contain a whitespace-only span
+  clean = clean.replace(/<p>\s*<span[^>]*>\s*(?:&nbsp;|\u00A0)?\s*<\/span>\s*<\/p>/gi, '');
+
+  // Consolidate fragmented lists: merge adjacent <div><ul>...</ul></div> blocks
+  clean = clean.replace(/<div>\s*<ul>/gi, '<ul>');
+  clean = clean.replace(/<\/ul>\s*<\/div>/gi, '</ul>');
+  clean = clean.replace(/<\/ul>\s*<ul>/gi, '');
+
+  // Unwrap unnecessary nested <div> wrappers around paragraphs
+  clean = clean.replace(/<div>\s*(<p[^>]*>)/gi, '$1');
+  clean = clean.replace(/(<\/p>)\s*<\/div>/gi, '$1');
+
+  // Collapse multiple consecutive <br> tags into one
+  clean = clean.replace(/(<br\s*\/?\s*>\s*){2,}/gi, '<br>');
+
+  // Clean up empty <div></div> wrappers
+  clean = clean.replace(/<div>\s*<\/div>/gi, '');
+
+  return clean.trim();
+}
+
 function buildCmsFieldData(jobDetail, brandMap, countryMap, hashtagToBrand) {
   // Resolve brand using 3-tier logic
   const resolvedBrand = resolveBrand(jobDetail, brandMap, hashtagToBrand);
@@ -137,12 +197,9 @@ function buildCmsFieldData(jobDetail, brandMap, countryMap, hashtagToBrand) {
     fieldData['refer-url'] = jobDetail.referUrl;
   }
 
-  // Description (RichText) - strip images that Webflow can't import (pageuppeople.com serves image/x-png)
+  // Description (RichText) - clean up PageUp HTML for uniform display
   if (jobDetail.descriptionHtml) {
-    let cleanHtml = jobDetail.descriptionHtml
-      .replace(/<img[^>]*src="[^"]*pageuppeople\.com[^"]*"[^>]*\/?>/gi, '')
-      .replace(/<img[^>]*src="[^"]*publicstorage[^"]*"[^>]*\/?>/gi, '');
-    fieldData['description'] = cleanHtml;
+    fieldData['description'] = cleanDescription(jobDetail.descriptionHtml);
   }
 
   // Hero image - skip ALL PageUp-sourced images as they serve image/x-png which Webflow rejects
