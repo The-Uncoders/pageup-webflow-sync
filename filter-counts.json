@@ -1,5 +1,6 @@
 {
   "regions": {
+    "multiple locations": 1,
     "asia": 68,
     "uk & europe": 14,
     "south africa": 6,
@@ -10,6 +11,7 @@
     "uae": 1
   },
   "cities": {
+    "new zealand": 1,
     "mumbai": 3,
     "noida": 16,
     "london": 5,
@@ -65,8 +67,8 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 260,
     "marketing and communication": 9,
-    "sales and customer service": 259,
     "finance": 23,
     "operations and logistics": 37,
     "commercial": 22,
@@ -80,6 +82,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "new zealand": "Multiple Locations",
     "mumbai": "Asia",
     "noida": "Asia",
     "london": "UK & Europe",
@@ -135,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new zealand": "New Zealand",
     "mumbai": "Mumbai",
     "noida": "Noida",
     "london": "London",
@@ -190,8 +194,8 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
-    "marketing and communication": "Marketing and Communication",
     "sales and customer service": "Sales and Customer Service",
+    "marketing and communication": "Marketing and Communication",
     "finance": "Finance",
     "operations and logistics": "Operations and Logistics",
     "commercial": "Commercial",
