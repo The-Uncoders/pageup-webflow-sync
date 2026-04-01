@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 207,
+    "australia": 208,
     "uk & europe": 15,
     "asia": 64,
     "south africa": 3,
@@ -10,6 +10,7 @@
     "uae": 1
   },
   "cities": {
+    "western australia": 6,
     "new south wales": 64,
     "can be based in any global head office": 1,
     "bangalore": 3,
@@ -24,7 +25,6 @@
     "bath": 2,
     "noida": 14,
     "australian capital territory": 15,
-    "western australia": 5,
     "pennsylvania": 6,
     "quebec": 1,
     "ontario": 9,
@@ -65,7 +65,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 243,
+    "sales and customer service": 244,
     "digital and technology": 35,
     "finance": 22,
     "operations and logistics": 37,
@@ -80,6 +80,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "western australia": "Australia",
     "new south wales": "Australia",
     "can be based in any global head office": "UK & Europe",
     "bangalore": "Asia",
@@ -94,7 +95,6 @@
     "bath": "UK & Europe",
     "noida": "Asia",
     "australian capital territory": "Australia",
-    "western australia": "Australia",
     "pennsylvania": "USA",
     "quebec": "Canada",
     "ontario": "Canada",
@@ -135,6 +135,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "western australia": "Western Australia",
     "new south wales": "New South Wales",
     "can be based in any global head office": "Can be based in any global head office",
     "bangalore": "Bangalore",
@@ -149,7 +150,6 @@
     "bath": "Bath",
     "noida": "Noida",
     "australian capital territory": "Australian Capital Territory",
-    "western australia": "Western Australia",
     "pennsylvania": "Pennsylvania",
     "quebec": "Quebec",
     "ontario": "Ontario",
