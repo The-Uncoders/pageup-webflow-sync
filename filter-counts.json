@@ -1,15 +1,16 @@
 {
   "regions": {
+    "south africa": 5,
     "asia": 65,
     "australia": 205,
     "uk & europe": 13,
-    "south africa": 3,
     "usa": 38,
     "canada": 13,
     "new zealand": 9,
     "uae": 1
   },
   "cities": {
+    "johannesburg": 3,
     "hanoi": 4,
     "western australia": 7,
     "south australia": 16,
@@ -44,7 +45,6 @@
     "california": 12,
     "invercargill": 1,
     "massachusetts": 3,
-    "johannesburg": 1,
     "kuala lumpur": 4,
     "phuket": 2,
     "new york": 7,
@@ -65,8 +65,8 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 242,
     "commercial": 22,
-    "sales and customer service": 240,
     "digital and technology": 34,
     "finance": 22,
     "operations and logistics": 36,
@@ -80,6 +80,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "johannesburg": "South Africa",
     "hanoi": "Asia",
     "western australia": "Australia",
     "south australia": "Australia",
@@ -114,7 +115,6 @@
     "california": "USA",
     "invercargill": "New Zealand",
     "massachusetts": "USA",
-    "johannesburg": "South Africa",
     "kuala lumpur": "Asia",
     "phuket": "Asia",
     "new york": "USA",
@@ -135,6 +135,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "johannesburg": "Johannesburg",
     "hanoi": "Hanoi",
     "western australia": "Western Australia",
     "south australia": "South Australia",
@@ -169,7 +170,6 @@
     "california": "California",
     "invercargill": "Invercargill",
     "massachusetts": "Massachusetts",
-    "johannesburg": "Johannesburg",
     "kuala lumpur": "Kuala Lumpur",
     "phuket": "Phuket",
     "new york": "New York",
@@ -190,8 +190,8 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
-    "commercial": "Commercial",
     "sales and customer service": "Sales and Customer Service",
+    "commercial": "Commercial",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
     "operations and logistics": "Operations and Logistics",
