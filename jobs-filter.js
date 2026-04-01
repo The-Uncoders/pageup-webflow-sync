@@ -495,9 +495,12 @@
     if (tag) tag.textContent = job.ca;
 
     // Brand logo image
+    // Clear srcset to prevent Webflow's responsive image from overriding our src
     var logoImg = card.querySelector('.career_item-header_image');
     if (logoImg && job.l) {
       logoImg.src = job.l;
+      logoImg.srcset = '';
+      logoImg.sizes = '';
       logoImg.alt = job.b || '';
       logoImg.loading = 'lazy';
     } else if (logoImg && !job.l) {
