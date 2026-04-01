@@ -338,6 +338,18 @@ function extractJobDetails(html, jobId) {
     }
   }
 
+  // Extract hashtags from the job post (typically white text at the bottom of the description)
+  // These are LinkedIn tracking tags used to identify brands, e.g. #FCM, #CTAU, #DSVA
+  const hashtags = [];
+  const fullText = fcJobs.textContent || '';
+  const hashtagMatches = fullText.match(/#[A-Za-z0-9]+/g);
+  if (hashtagMatches) {
+    for (const tag of hashtagMatches) {
+      const upper = tag.toUpperCase();
+      if (!hashtags.includes(upper)) hashtags.push(upper);
+    }
+  }
+
   return {
     jobId,
     title,
@@ -354,6 +366,7 @@ function extractJobDetails(html, jobId) {
     descriptionHtml,
     heroImage,
     videoUrl,
+    hashtags,
   };
 }
 

@@ -18,10 +18,20 @@ async function buildReferenceMaps(client) {
   console.log('[sync] Building brand and country reference maps...');
 
   const brandItems = await client.getAllCollectionItems(BRAND_COLLECTION_ID);
-  const brandMap = {};
+  const brandMap = {};       // brand name (lowercase) → Webflow item ID
+  const hashtagToBrand = {}; // hashtag (uppercase, e.g. "#FCM") → { id, name }
   for (const item of brandItems) {
-    const name = item.fieldData?.name?.toLowerCase()?.trim();
-    if (name) brandMap[name] = item.id;
+    const name = item.fieldData?.name?.trim();
+    if (name) brandMap[name.toLowerCase()] = item.id;
+
+    // Build hashtag → brand mapping from the brand-tag field
+    const brandTag = item.fieldData?.['brand-tag']?.trim();
+    if (brandTag && name) {
+      const tags = brandTag.split(',').map(t => t.trim().toUpperCase());
+      for (const tag of tags) {
+        if (tag) hashtagToBrand[tag] = { id: item.id, name };
+      }
+    }
   }
 
   const countryItems = await client.getAllCollectionItems(COUNTRY_COLLECTION_ID);
@@ -31,8 +41,8 @@ async function buildReferenceMaps(client) {
     if (name) countryMap[name] = item.id;
   }
 
-  console.log(`[sync] Loaded ${Object.keys(brandMap).length} brands, ${Object.keys(countryMap).length} countries.`);
-  return { brandMap, countryMap };
+  console.log(`[sync] Loaded ${Object.keys(brandMap).length} brands, ${Object.keys(countryMap).length} countries, ${Object.keys(hashtagToBrand).length} brand hashtags.`);
+  return { brandMap, countryMap, hashtagToBrand };
 }
 
 function resolveReference(name, map) {
@@ -57,13 +67,53 @@ function slugify(text) {
     .substring(0, 256);
 }
 
-function buildCmsFieldData(jobDetail, brandMap, countryMap) {
+// Default brand name used when no recognized brand or hashtag is found
+const FCTG_DEFAULT_BRAND = 'Flight Centre Travel Group';
+
+/**
+ * Resolve brand using 3-tier logic:
+ *   1. PageUp brand field → match against Webflow Brands CMS by name
+ *   2. Hashtags in job post → match against Webflow Brands CMS brand-tag field
+ *   3. Default to Flight Centre Travel Group
+ *
+ * Returns { id: Webflow item ID, name: brand display name }
+ */
+function resolveBrand(jobDetail, brandMap, hashtagToBrand) {
+  // Tier 1: Try the PageUp brand field (exact/partial name match)
+  if (jobDetail.brandName) {
+    const brandRef = resolveReference(jobDetail.brandName, brandMap);
+    if (brandRef) {
+      return { id: brandRef, name: jobDetail.brandName };
+    }
+  }
+
+  // Tier 2: Try hashtags from the job post against brand-tag mappings
+  const hashtags = jobDetail.hashtags || [];
+  if (hashtags.length > 0) {
+    for (const tag of hashtags) {
+      const match = hashtagToBrand[tag];
+      if (match) {
+        console.log(`[sync] Brand resolved via hashtag ${tag} → "${match.name}" for job ${jobDetail.jobId}`);
+        return { id: match.id, name: match.name };
+      }
+    }
+  }
+
+  // Tier 3: Default to Flight Centre Travel Group
+  const fctgRef = resolveReference(FCTG_DEFAULT_BRAND, brandMap);
+  return { id: fctgRef, name: FCTG_DEFAULT_BRAND };
+}
+
+function buildCmsFieldData(jobDetail, brandMap, countryMap, hashtagToBrand) {
+  // Resolve brand using 3-tier logic
+  const resolvedBrand = resolveBrand(jobDetail, brandMap, hashtagToBrand);
+
   const fieldData = {
     name: jobDetail.title.substring(0, 256),
     slug: slugify(jobDetail.title),
     'job-id': jobDetail.jobId,
     'location': jobDetail.location || '',
-    'brand-name': jobDetail.brandName || '',
+    'brand-name': resolvedBrand.name,
     'summary': jobDetail.summary || '',
     'work-type': jobDetail.workType || '',
     'city': jobDetail.city || '',
@@ -109,10 +159,9 @@ function buildCmsFieldData(jobDetail, brandMap, countryMap) {
     fieldData['video'] = jobDetail.videoUrl;
   }
 
-  // Brand reference
-  const brandRef = resolveReference(jobDetail.brandName, brandMap);
-  if (brandRef) {
-    fieldData['brand'] = brandRef;
+  // Brand reference (already resolved)
+  if (resolvedBrand.id) {
+    fieldData['brand'] = resolvedBrand.id;
   }
 
   // Country reference
@@ -171,8 +220,8 @@ async function runSync() {
   const cmsItems = await client.getAllCollectionItems(COLLECTION_ID);
   logger.recordCmsState(cmsItems.length);
 
-  // Step 4: Build reference maps
-  const { brandMap, countryMap } = await buildReferenceMaps(client);
+  // Step 4: Build reference maps (includes hashtag → brand mapping)
+  const { brandMap, countryMap, hashtagToBrand } = await buildReferenceMaps(client);
 
   // Step 5: Build maps for diffing
   const cmsJobMap = new Map(); // jobId → CMS item
@@ -221,7 +270,7 @@ async function runSync() {
     const { results: newDetails } = await scrapeAllJobs(newJobs);
 
     const itemsToCreate = newDetails.map(detail => ({
-      fieldData: buildCmsFieldData(detail, brandMap, countryMap),
+      fieldData: buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand),
       isArchived: false,
       isDraft: false,
     }));
@@ -244,7 +293,7 @@ async function runSync() {
       const cmsItem = cmsJobMap.get(detail.jobId);
       if (!cmsItem) continue;
 
-      const newFieldData = buildCmsFieldData(detail, brandMap, countryMap);
+      const newFieldData = buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand);
 
       const changedFields = hasChanged(cmsItem, newFieldData);
       if (changedFields) {
