@@ -1,5 +1,553 @@
 [
   {
+    "id": "2026-04-01T19:20:52.066Z",
+    "startedAt": "2026-04-01T19:20:52.066Z",
+    "finishedAt": "2026-04-01T19:38:30.612Z",
+    "durationMs": 1058546,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 367,
+    "cmsItemsBefore": 349,
+    "created": 18,
+    "updated": 65,
+    "deleted": 0,
+    "unchanged": 284,
+    "createdJobs": [
+      {
+        "jobId": "530449",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
+      },
+      {
+        "jobId": "519735",
+        "title": "Sales Travel Consultant - WA North/Northern Territory"
+      },
+      {
+        "jobId": "519739",
+        "title": "Sales Travel Consultant - WA South"
+      },
+      {
+        "jobId": "528123",
+        "title": "Sales Travel Consultant - Booragoon, WA"
+      },
+      {
+        "jobId": "529007",
+        "title": "Sales Travel Consultant - South-East Perth"
+      },
+      {
+        "jobId": "529024",
+        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
+      },
+      {
+        "jobId": "529069",
+        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
+      },
+      {
+        "jobId": "529251",
+        "title": "Sales Travel Consultant - Midland, WA"
+      },
+      {
+        "jobId": "529557",
+        "title": "Sales Travel Consultant - Kalamunda, WA"
+      },
+      {
+        "jobId": "529755",
+        "title": "Sales Travel Consultant - Willeton, WA"
+      },
+      {
+        "jobId": "529968",
+        "title": "Retail Sales Travel Consultant - Esperance, WA"
+      },
+      {
+        "jobId": "530178",
+        "title": "Sales Travel Consultant - Whitford City, WA"
+      },
+      {
+        "jobId": "530303",
+        "title": "Retail Sales Travel Consultant - Eaton, WA"
+      },
+      {
+        "jobId": "530321",
+        "title": "Sales Travel Consultant - South-West Suburbs"
+      },
+      {
+        "jobId": "528732",
+        "title": "Travel Consultant South Africa (Worcester, Cape Town based)"
+      },
+      {
+        "jobId": "529827",
+        "title": "Credit Controller"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      },
+      {
+        "jobId": "529160",
+        "title": "Graphic Digital Designer - Mumbai, India"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529462",
+        "title": "Senior Machine Learning Engineer - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529754",
+        "title": "Senior Machine Learning Engineer (Team Lead) - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530367",
+        "title": "Transactional Finance Team Leader, AR - London, United Kingdom",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529853",
+        "title": "QA Automation Engineer",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529916",
+        "title": "Technical Lead - Java Backend",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530422",
+        "title": "Front End Developer (React JS) - Bangalore",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529483",
+        "title": "Service Product Lead (Workday) - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530431",
+        "title": "Career Information Evening with FCTG Corporate - Perth, WA",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528829",
+        "title": "Service Product Lead (Unified Communications) - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530147",
+        "title": "Finance Business Partner - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530428",
+        "title": "Round the World Travel Consultant - Flight Centre - Australia Wide",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530429",
+        "title": "Team Leader - Flight Centre Corporate Benefits - Hybrid or Remote, AUS Wide",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "526707",
+        "title": "Luxury Travel Consultant – Flight Centre – Australia Wide",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "527859",
+        "title": "Future Team Leader - Flight Centre Corporate Benefits - Hybrid or Remote, AUS Wide",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529359",
+        "title": "Senior Insights Analyst - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529501",
+        "title": "Business Improvement Manager (Travel Product) - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530029",
+        "title": "Future Team Leader - Flight Centre Luxury - Brisbane, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "525484",
+        "title": "Groups Travel Consultant",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530366",
+        "title": "Senior Executive - Credit Control",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530186",
+        "title": "Commercial Analyst- South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530210",
+        "title": "Commercial Manager- Product and Pricing- South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530330",
+        "title": "Senior Cloud Operation Engineer",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530362",
+        "title": "Tax Administrator - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530336",
+        "title": "QA Lead",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530337",
+        "title": "QA engineer",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530338",
+        "title": "Senior QA engineer",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529620",
+        "title": "Flight Centre - Head of Global CRM Technology - Toronto, Canada",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530105",
+        "title": "Global Pricing Specialist – FCM Meetings & Events",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529440",
+        "title": "Manager - Credit Control",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530181",
+        "title": "Organisational Change Manager - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530329",
+        "title": "DIGITAL MARKETING MANAGER (B2B Marketing)",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530266",
+        "title": "Senior Payroll Consultant - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528070",
+        "title": "Wholesale Cruise Advisor - Sydney, NSW",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528169",
+        "title": "Wholesale Cruise Advisor - Melbourne, VIC",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530269",
+        "title": "RPA Business Analyst  - Noida, India",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529416",
+        "title": "Product Manager (Air Fulfilment) - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529688",
+        "title": "D365 Finance Functional Consultant- South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530194",
+        "title": "Finance Business Analyst - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528418",
+        "title": "Senior Salesforce Developer - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530253",
+        "title": "Flight Centre - Growth & Demand Manager (6 Month Contract) - Philadelphia, USA",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528497",
+        "title": "Mortgage Broker - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530130",
+        "title": "Leisure Travel Consultant - Flight Centre Corporate Benefits - Remote, Australia",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529255",
+        "title": "Service Product Lead (Monitoring & Observability) - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530189",
+        "title": "Flight Centre - Office Manager & Event Coordinator - New York, USA",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529856",
+        "title": "HR Intern",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530153",
+        "title": "Flight Centre - Credit & Collections Associate - Toronto, Canada",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530034",
+        "title": "Senior UiPath Developer",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529658",
+        "title": "Flight Centre - Director of Growth & Demand - Philadelphia, USA",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "530004",
+        "title": "Solutions Consultant - Asia Wide",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529269",
+        "title": "Enterprise Architecture Practice Manager - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529746",
+        "title": "Global Finance Systems Product Lead (Corporate)",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529809",
+        "title": "Employee Travel Advisor - South Bank, QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529858",
+        "title": "HR Executive, Japan",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529572",
+        "title": "Software Engineer",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529399",
+        "title": "Azure data Engineer - Noida, India",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "529533",
+        "title": "Team Leader - Japan Operations - Noida, India",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528551",
+        "title": "QA Manager - Noida, India",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528135",
+        "title": "Junior Accountant, South Brisbane - QLD",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528992",
+        "title": "Finance Manager, Japan",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528786",
+        "title": "EMEA Legal Counsel",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "528626",
+        "title": "Senior UiPath Developer - Noida, India",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "526810",
+        "title": "Senior Dot net Developer - Noida, India",
+        "changedFields": [
+          "brand-name"
+        ]
+      },
+      {
+        "jobId": "527858",
+        "title": "Financial Accountant - Bangkok, Thailand",
+        "changedFields": [
+          "brand-name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-01T18:44:59.779Z",
     "startedAt": "2026-04-01T18:44:59.779Z",
     "finishedAt": "2026-04-01T18:55:31.279Z",
@@ -6204,30 +6752,6 @@
     "startedAt": "2026-03-28T16:56:51.152Z",
     "finishedAt": "2026-03-28T17:05:07.044Z",
     "durationMs": 495892,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 366,
-    "cmsItemsBefore": 365,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 365,
-    "createdJobs": [
-      {
-        "jobId": "530423",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-28T16:21:34.475Z",
-    "startedAt": "2026-03-28T16:21:34.475Z",
-    "finishedAt": "2026-03-28T16:29:09.561Z",
-    "durationMs": 455086,
     "status": "success",
     "error": null,
     "pageupJobsFound": 366,
