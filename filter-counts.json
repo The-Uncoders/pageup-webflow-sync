@@ -1,7 +1,7 @@
 {
   "regions": {
+    "asia": 67,
     "south africa": 5,
-    "asia": 65,
     "australia": 205,
     "uk & europe": 13,
     "usa": 38,
@@ -10,6 +10,7 @@
     "uae": 1
   },
   "cities": {
+    "noida": 16,
     "johannesburg": 3,
     "hanoi": 4,
     "western australia": 7,
@@ -26,7 +27,6 @@
     "victoria": 29,
     "queensland": 72,
     "bath": 2,
-    "noida": 14,
     "australian capital territory": 15,
     "pennsylvania": 6,
     "quebec": 1,
@@ -65,11 +65,11 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 242,
+    "operations and logistics": 37,
+    "sales and customer service": 243,
     "commercial": 22,
     "digital and technology": 34,
     "finance": 22,
-    "operations and logistics": 36,
     "administration": 4,
     "leadership": 26,
     "marketing and communication": 8,
@@ -80,6 +80,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "noida": "Asia",
     "johannesburg": "South Africa",
     "hanoi": "Asia",
     "western australia": "Australia",
@@ -96,7 +97,6 @@
     "victoria": "Australia",
     "queensland": "Australia",
     "bath": "UK & Europe",
-    "noida": "Asia",
     "australian capital territory": "Australia",
     "pennsylvania": "USA",
     "quebec": "Canada",
@@ -135,6 +135,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "noida": "Noida",
     "johannesburg": "Johannesburg",
     "hanoi": "Hanoi",
     "western australia": "Western Australia",
@@ -151,7 +152,6 @@
     "victoria": "Victoria",
     "queensland": "Queensland",
     "bath": "Bath",
-    "noida": "Noida",
     "australian capital territory": "Australian Capital Territory",
     "pennsylvania": "Pennsylvania",
     "quebec": "Quebec",
@@ -190,11 +190,11 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "operations and logistics": "Operations and Logistics",
     "sales and customer service": "Sales and Customer Service",
     "commercial": "Commercial",
     "digital and technology": "Digital and Technology",
     "finance": "Finance",
-    "operations and logistics": "Operations and Logistics",
     "administration": "Administration",
     "leadership": "Leadership",
     "marketing and communication": "Marketing and Communication",
