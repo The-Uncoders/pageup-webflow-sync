@@ -1,16 +1,18 @@
 {
   "regions": {
+    "canada": 15,
     "uk & europe": 14,
     "asia": 70,
     "australia": 213,
     "multiple locations": 1,
     "south africa": 6,
-    "canada": 13,
     "usa": 37,
     "new zealand": 8,
     "uae": 1
   },
   "cities": {
+    "ontario": 9,
+    "british columbia": 3,
     "bristol": 1,
     "noida": 17,
     "new south wales": 58,
@@ -35,7 +37,6 @@
     "bath": 2,
     "australian capital territory": 15,
     "pennsylvania": 6,
-    "ontario": 8,
     "new plymouth": 1,
     "ho chi minh city": 3,
     "auckland": 3,
@@ -45,7 +46,6 @@
     "bali": 7,
     "tasmania": 4,
     "wellington": 1,
-    "british columbia": 2,
     "barcelona": 3,
     "california": 11,
     "invercargill": 1,
@@ -68,7 +68,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 256,
+    "sales and customer service": 258,
     "digital and technology": 32,
     "operations and logistics": 37,
     "commercial": 22,
@@ -83,6 +83,8 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "ontario": "Canada",
+    "british columbia": "Canada",
     "bristol": "UK & Europe",
     "noida": "Asia",
     "new south wales": "Australia",
@@ -107,7 +109,6 @@
     "bath": "UK & Europe",
     "australian capital territory": "Australia",
     "pennsylvania": "USA",
-    "ontario": "Canada",
     "new plymouth": "New Zealand",
     "ho chi minh city": "Asia",
     "auckland": "New Zealand",
@@ -117,7 +118,6 @@
     "bali": "Asia",
     "tasmania": "Australia",
     "wellington": "New Zealand",
-    "british columbia": "Canada",
     "barcelona": "UK & Europe",
     "california": "USA",
     "invercargill": "New Zealand",
@@ -140,6 +140,8 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "ontario": "Ontario",
+    "british columbia": "British Columbia",
     "bristol": "Bristol",
     "noida": "Noida",
     "new south wales": "New South Wales",
@@ -164,7 +166,6 @@
     "bath": "Bath",
     "australian capital territory": "Australian Capital Territory",
     "pennsylvania": "Pennsylvania",
-    "ontario": "Ontario",
     "new plymouth": "New Plymouth",
     "ho chi minh city": "Ho Chi Minh City",
     "auckland": "Auckland",
@@ -174,7 +175,6 @@
     "bali": "Bali",
     "tasmania": "Tasmania",
     "wellington": "Wellington",
-    "british columbia": "British Columbia",
     "barcelona": "Barcelona",
     "california": "California",
     "invercargill": "Invercargill",
