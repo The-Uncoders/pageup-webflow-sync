@@ -205,9 +205,11 @@ function buildCmsFieldData(jobDetail, brandMap, countryMap, hashtagToBrand) {
     fieldData['description'] = cleanDescription(jobDetail.descriptionHtml);
   }
 
-  // Hero image (banner from PageUp job posts)
+  // Banner image link — store the PageUp banner URL in a Link field
+  // (Webflow's Image field rejects PageUp's image/x-png MIME type,
+  // so we store the URL and render it via a code embed on the template)
   if (jobDetail.heroImage) {
-    fieldData['hero-image'] = { url: jobDetail.heroImage };
+    fieldData['banner-image-link'] = jobDetail.heroImage;
   }
 
   // Video
@@ -241,9 +243,9 @@ function hasChanged(existing, newData) {
     if (existingVal !== newVal) changed.push(field);
   }
 
-  // Also flag as changed if a hero image is now available but wasn't stored before
-  if (newData['hero-image'] && !existingFields['hero-image']) {
-    changed.push('hero-image');
+  // Also flag as changed if a banner image link is now available but wasn't stored before
+  if (newData['banner-image-link'] && !existingFields['banner-image-link']) {
+    changed.push('banner-image-link');
   }
 
   return changed.length > 0 ? changed : false;
