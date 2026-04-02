@@ -1,8 +1,8 @@
 {
   "regions": {
-    "australia": 214,
+    "asia": 69,
+    "australia": 213,
     "multiple locations": 1,
-    "asia": 68,
     "uk & europe": 14,
     "south africa": 6,
     "canada": 14,
@@ -11,6 +11,7 @@
     "uae": 1
   },
   "cities": {
+    "shanghai": 2,
     "new south wales": 57,
     "new zealand": 1,
     "mumbai": 3,
@@ -28,7 +29,7 @@
     "bangkok": 2,
     "pune": 1,
     "remote": 3,
-    "victoria": 29,
+    "victoria": 28,
     "queensland": 72,
     "bath": 2,
     "australian capital territory": 15,
@@ -54,7 +55,6 @@
     "virtual - usa": 1,
     "paris": 1,
     "nationwide": 1,
-    "shanghai": 1,
     "kerikeri": 1,
     "singapore": 3,
     "illinois": 3,
@@ -67,11 +67,11 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 256,
-    "marketing and communication": 9,
+    "marketing and communication": 10,
+    "commercial": 22,
+    "sales and customer service": 255,
     "finance": 23,
     "operations and logistics": 36,
-    "commercial": 21,
     "digital and technology": 33,
     "administration": 4,
     "leadership": 26,
@@ -82,6 +82,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "shanghai": "Asia",
     "new south wales": "Australia",
     "new zealand": "Multiple Locations",
     "mumbai": "Asia",
@@ -125,7 +126,6 @@
     "virtual - usa": "USA",
     "paris": "UK & Europe",
     "nationwide": "South Africa",
-    "shanghai": "Asia",
     "kerikeri": "New Zealand",
     "singapore": "Asia",
     "illinois": "USA",
@@ -138,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "shanghai": "Shanghai",
     "new south wales": "New South Wales",
     "new zealand": "New Zealand",
     "mumbai": "Mumbai",
@@ -181,7 +182,6 @@
     "virtual - usa": "Virtual - USA",
     "paris": "Paris",
     "nationwide": "Nationwide",
-    "shanghai": "Shanghai",
     "kerikeri": "Kerikeri",
     "singapore": "Singapore",
     "illinois": "Illinois",
@@ -194,11 +194,11 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
-    "sales and customer service": "Sales and Customer Service",
     "marketing and communication": "Marketing and Communication",
+    "commercial": "Commercial",
+    "sales and customer service": "Sales and Customer Service",
     "finance": "Finance",
     "operations and logistics": "Operations and Logistics",
-    "commercial": "Commercial",
     "digital and technology": "Digital and Technology",
     "administration": "Administration",
     "leadership": "Leadership",
