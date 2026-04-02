@@ -1,16 +1,17 @@
 {
   "regions": {
+    "usa": 38,
     "canada": 15,
     "uk & europe": 14,
     "asia": 70,
     "australia": 213,
     "multiple locations": 1,
     "south africa": 6,
-    "usa": 37,
     "new zealand": 8,
     "uae": 1
   },
   "cities": {
+    "new york": 8,
     "ontario": 9,
     "british columbia": 3,
     "bristol": 1,
@@ -52,7 +53,6 @@
     "massachusetts": 3,
     "kuala lumpur": 4,
     "phuket": 2,
-    "new york": 7,
     "virtual - usa": 1,
     "paris": 1,
     "nationwide": 1,
@@ -68,9 +68,9 @@
     "new jersey": 1
   },
   "categories": {
+    "operations and logistics": 38,
     "sales and customer service": 258,
     "digital and technology": 32,
-    "operations and logistics": 37,
     "commercial": 22,
     "data and business intelligence": 6,
     "marketing and communication": 10,
@@ -83,6 +83,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "new york": "USA",
     "ontario": "Canada",
     "british columbia": "Canada",
     "bristol": "UK & Europe",
@@ -124,7 +125,6 @@
     "massachusetts": "USA",
     "kuala lumpur": "Asia",
     "phuket": "Asia",
-    "new york": "USA",
     "virtual - usa": "USA",
     "paris": "UK & Europe",
     "nationwide": "South Africa",
@@ -140,6 +140,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new york": "New York",
     "ontario": "Ontario",
     "british columbia": "British Columbia",
     "bristol": "Bristol",
@@ -181,7 +182,6 @@
     "massachusetts": "Massachusetts",
     "kuala lumpur": "Kuala Lumpur",
     "phuket": "Phuket",
-    "new york": "New York",
     "virtual - usa": "Virtual - USA",
     "paris": "Paris",
     "nationwide": "Nationwide",
@@ -197,9 +197,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "operations and logistics": "Operations and Logistics",
     "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
-    "operations and logistics": "Operations and Logistics",
     "commercial": "Commercial",
     "data and business intelligence": "Data and Business Intelligence",
     "marketing and communication": "Marketing and Communication",
