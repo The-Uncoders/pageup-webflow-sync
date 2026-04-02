@@ -1,16 +1,17 @@
 {
   "regions": {
+    "australia": 215,
     "multiple locations": 1,
     "asia": 68,
     "uk & europe": 14,
     "south africa": 6,
-    "australia": 216,
     "canada": 14,
     "usa": 37,
     "new zealand": 9,
     "uae": 1
   },
   "cities": {
+    "new south wales": 58,
     "new zealand": 1,
     "mumbai": 3,
     "noida": 16,
@@ -22,7 +23,6 @@
     "johannesburg": 3,
     "hanoi": 4,
     "south australia": 14,
-    "new south wales": 59,
     "can be based in any global head office": 1,
     "bangalore": 3,
     "bangkok": 2,
@@ -67,7 +67,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 258,
+    "sales and customer service": 257,
     "marketing and communication": 9,
     "finance": 23,
     "operations and logistics": 37,
@@ -82,6 +82,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "new south wales": "Australia",
     "new zealand": "Multiple Locations",
     "mumbai": "Asia",
     "noida": "Asia",
@@ -93,7 +94,6 @@
     "johannesburg": "South Africa",
     "hanoi": "Asia",
     "south australia": "Australia",
-    "new south wales": "Australia",
     "can be based in any global head office": "UK & Europe",
     "bangalore": "Asia",
     "bangkok": "Asia",
@@ -138,6 +138,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new south wales": "New South Wales",
     "new zealand": "New Zealand",
     "mumbai": "Mumbai",
     "noida": "Noida",
@@ -149,7 +150,6 @@
     "johannesburg": "Johannesburg",
     "hanoi": "Hanoi",
     "south australia": "South Australia",
-    "new south wales": "New South Wales",
     "can be based in any global head office": "Can be based in any global head office",
     "bangalore": "Bangalore",
     "bangkok": "Bangkok",
