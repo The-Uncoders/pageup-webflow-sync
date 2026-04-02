@@ -1,6 +1,6 @@
 {
   "regions": {
-    "usa": 38,
+    "usa": 39,
     "canada": 15,
     "uk & europe": 14,
     "asia": 70,
@@ -11,6 +11,7 @@
     "uae": 1
   },
   "cities": {
+    "pennsylvania": 7,
     "new york": 8,
     "ontario": 9,
     "british columbia": 3,
@@ -37,7 +38,6 @@
     "victoria": 28,
     "bath": 2,
     "australian capital territory": 15,
-    "pennsylvania": 6,
     "new plymouth": 1,
     "ho chi minh city": 3,
     "auckland": 3,
@@ -68,7 +68,7 @@
     "new jersey": 1
   },
   "categories": {
-    "operations and logistics": 38,
+    "operations and logistics": 39,
     "sales and customer service": 258,
     "digital and technology": 32,
     "commercial": 22,
@@ -83,6 +83,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "pennsylvania": "USA",
     "new york": "USA",
     "ontario": "Canada",
     "british columbia": "Canada",
@@ -109,7 +110,6 @@
     "victoria": "Australia",
     "bath": "UK & Europe",
     "australian capital territory": "Australia",
-    "pennsylvania": "USA",
     "new plymouth": "New Zealand",
     "ho chi minh city": "Asia",
     "auckland": "New Zealand",
@@ -140,6 +140,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "pennsylvania": "Pennsylvania",
     "new york": "New York",
     "ontario": "Ontario",
     "british columbia": "British Columbia",
@@ -166,7 +167,6 @@
     "victoria": "Victoria",
     "bath": "Bath",
     "australian capital territory": "Australian Capital Territory",
-    "pennsylvania": "Pennsylvania",
     "new plymouth": "New Plymouth",
     "ho chi minh city": "Ho Chi Minh City",
     "auckland": "Auckland",
