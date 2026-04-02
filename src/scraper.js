@@ -269,12 +269,14 @@ function extractJobDetails(html, jobId) {
     }
   }
 
-  // Hero image
+  // Hero image (banner) — find the first PageUp-hosted image that looks like a banner
+  // These are hosted on publicstorage.dc2.pageuppeople.com and typically 940px wide.
+  // We take the first one found, as it's positioned at the top of the job post as the banner.
   let heroImage = '';
   const images = fcJobs.querySelectorAll('img');
   for (const img of images) {
     const src = img.getAttribute('src') || '';
-    if (src.includes('pageuppeople.com') || src.includes('publicstorage')) {
+    if (src.includes('publicstorage') && src.match(/\.(png|jpg|jpeg|gif|webp)/i)) {
       heroImage = src;
       break;
     }

@@ -205,12 +205,8 @@ function buildCmsFieldData(jobDetail, brandMap, countryMap, hashtagToBrand) {
     fieldData['description'] = cleanDescription(jobDetail.descriptionHtml);
   }
 
-  // Hero image - skip ALL PageUp-sourced images as they serve image/x-png which Webflow rejects
-  // Only include images from standard web hosts (not pageuppeople.com or publicstorage)
-  if (jobDetail.heroImage &&
-      !jobDetail.heroImage.includes('pageuppeople.com') &&
-      !jobDetail.heroImage.includes('publicstorage') &&
-      !jobDetail.heroImage.includes('pageup')) {
+  // Hero image (banner from PageUp job posts)
+  if (jobDetail.heroImage) {
     fieldData['hero-image'] = { url: jobDetail.heroImage };
   }
 
