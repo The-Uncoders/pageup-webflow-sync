@@ -2,7 +2,7 @@
   "regions": {
     "uk & europe": 14,
     "asia": 70,
-    "australia": 215,
+    "australia": 213,
     "multiple locations": 1,
     "south africa": 6,
     "canada": 14,
@@ -14,7 +14,7 @@
     "bristol": 1,
     "noida": 17,
     "new south wales": 58,
-    "queensland": 73,
+    "queensland": 71,
     "shanghai": 2,
     "new zealand": 1,
     "mumbai": 3,
@@ -69,7 +69,7 @@
   },
   "categories": {
     "sales and customer service": 256,
-    "digital and technology": 35,
+    "digital and technology": 33,
     "operations and logistics": 37,
     "commercial": 22,
     "data and business intelligence": 6,
