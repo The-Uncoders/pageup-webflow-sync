@@ -5,7 +5,7 @@
     "australia": 213,
     "multiple locations": 1,
     "south africa": 6,
-    "canada": 14,
+    "canada": 13,
     "usa": 37,
     "new zealand": 8,
     "uae": 1
@@ -35,7 +35,7 @@
     "bath": 2,
     "australian capital territory": 15,
     "pennsylvania": 6,
-    "ontario": 9,
+    "ontario": 8,
     "new plymouth": 1,
     "ho chi minh city": 3,
     "auckland": 3,
@@ -69,7 +69,7 @@
   },
   "categories": {
     "sales and customer service": 256,
-    "digital and technology": 33,
+    "digital and technology": 32,
     "operations and logistics": 37,
     "commercial": 22,
     "data and business intelligence": 6,
