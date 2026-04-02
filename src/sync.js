@@ -240,6 +240,12 @@ function hasChanged(existing, newData) {
     const newVal = (newData[field] || '').toString().trim();
     if (existingVal !== newVal) changed.push(field);
   }
+
+  // Also flag as changed if a hero image is now available but wasn't stored before
+  if (newData['hero-image'] && !existingFields['hero-image']) {
+    changed.push('hero-image');
+  }
+
   return changed.length > 0 ? changed : false;
 }
 
