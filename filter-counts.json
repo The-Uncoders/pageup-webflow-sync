@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 215,
+    "australia": 214,
     "multiple locations": 1,
     "asia": 68,
     "uk & europe": 14,
@@ -11,7 +11,7 @@
     "uae": 1
   },
   "cities": {
-    "new south wales": 58,
+    "new south wales": 57,
     "new zealand": 1,
     "mumbai": 3,
     "noida": 16,
@@ -67,11 +67,11 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 257,
+    "sales and customer service": 256,
     "marketing and communication": 9,
     "finance": 23,
-    "operations and logistics": 37,
-    "commercial": 22,
+    "operations and logistics": 36,
+    "commercial": 21,
     "digital and technology": 33,
     "administration": 4,
     "leadership": 26,
