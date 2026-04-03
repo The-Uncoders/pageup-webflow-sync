@@ -1,5 +1,73 @@
 [
   {
+    "id": "2026-04-03T09:43:22.750Z",
+    "startedAt": "2026-04-03T09:43:22.751Z",
+    "finishedAt": "2026-04-03T09:51:12.514Z",
+    "durationMs": 469763,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 367,
+    "cmsItemsBefore": 367,
+    "created": 0,
+    "updated": 6,
+    "deleted": 0,
+    "unchanged": 361,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "529701",
+        "title": "Product Coordinator Touring - Broadbeach, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "527864",
+        "title": "Sales Travel Consultant - Toowoomba, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "528737",
+        "title": "Sales Travel Consultant - Toowoomba, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "529105",
+        "title": "Sales Travel Consultant - Sydney CBD, NSW",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "529178",
+        "title": "Business Development Manager, SEA",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "519924",
+        "title": "Sales Travel Consultant - Northern Beaches, NSW",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-03T08:48:07.912Z",
     "startedAt": "2026-04-03T08:48:07.912Z",
     "finishedAt": "2026-04-03T08:55:46.136Z",
@@ -19250,30 +19318,6 @@
     "startedAt": "2026-03-29T19:51:47.884Z",
     "finishedAt": "2026-03-29T19:59:13.720Z",
     "durationMs": 445836,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 366,
-    "cmsItemsBefore": 365,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 365,
-    "createdJobs": [
-      {
-        "jobId": "530423",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-03-29T19:25:03.115Z",
-    "startedAt": "2026-03-29T19:25:03.115Z",
-    "finishedAt": "2026-03-29T19:35:10.073Z",
-    "durationMs": 606958,
     "status": "success",
     "error": null,
     "pageupJobsFound": 366,
