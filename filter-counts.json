@@ -1,6 +1,6 @@
 {
   "regions": {
-    "usa": 39,
+    "usa": 40,
     "canada": 15,
     "uk & europe": 14,
     "asia": 70,
@@ -11,6 +11,7 @@
     "uae": 1
   },
   "cities": {
+    "virtual - usa": 2,
     "pennsylvania": 7,
     "new york": 8,
     "ontario": 9,
@@ -53,7 +54,6 @@
     "massachusetts": 3,
     "kuala lumpur": 4,
     "phuket": 2,
-    "virtual - usa": 1,
     "paris": 1,
     "nationwide": 1,
     "kerikeri": 1,
@@ -68,8 +68,8 @@
     "new jersey": 1
   },
   "categories": {
-    "operations and logistics": 39,
-    "sales and customer service": 258,
+    "operations and logistics": 43,
+    "sales and customer service": 255,
     "digital and technology": 32,
     "commercial": 22,
     "data and business intelligence": 6,
@@ -83,6 +83,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "virtual - usa": "USA",
     "pennsylvania": "USA",
     "new york": "USA",
     "ontario": "Canada",
@@ -125,7 +126,6 @@
     "massachusetts": "USA",
     "kuala lumpur": "Asia",
     "phuket": "Asia",
-    "virtual - usa": "USA",
     "paris": "UK & Europe",
     "nationwide": "South Africa",
     "kerikeri": "New Zealand",
@@ -140,6 +140,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "virtual - usa": "Virtual - USA",
     "pennsylvania": "Pennsylvania",
     "new york": "New York",
     "ontario": "Ontario",
@@ -182,7 +183,6 @@
     "massachusetts": "Massachusetts",
     "kuala lumpur": "Kuala Lumpur",
     "phuket": "Phuket",
-    "virtual - usa": "Virtual - USA",
     "paris": "Paris",
     "nationwide": "Nationwide",
     "kerikeri": "Kerikeri",

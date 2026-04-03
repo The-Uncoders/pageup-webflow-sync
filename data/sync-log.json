@@ -1,5 +1,99 @@
 [
   {
+    "id": "2026-04-03T17:03:19.692Z",
+    "startedAt": "2026-04-03T17:03:19.692Z",
+    "finishedAt": "2026-04-03T17:11:51.925Z",
+    "durationMs": 512233,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 367,
+    "created": 1,
+    "updated": 9,
+    "deleted": 0,
+    "unchanged": 358,
+    "createdJobs": [
+      {
+        "jobId": "530612",
+        "title": "FCM - VIP Corporate Travel Consultant - Remote, USA"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529701",
+        "title": "Product Coordinator Touring - Broadbeach, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "528887",
+        "title": "FCM - Dedicated Corporate Travel Consultant - Irvine, CA",
+        "changedFields": [
+          "category"
+        ]
+      },
+      {
+        "jobId": "527864",
+        "title": "Sales Travel Consultant - Toowoomba, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "528737",
+        "title": "Sales Travel Consultant - Toowoomba, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "529105",
+        "title": "Sales Travel Consultant - Sydney CBD, NSW",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "528888",
+        "title": "FCM - Dedicated Corporate Travel Consultant - Denver, CO",
+        "changedFields": [
+          "category"
+        ]
+      },
+      {
+        "jobId": "528890",
+        "title": "FCM - Dedicated Corporate Travel Consultant - Houston, TX",
+        "changedFields": [
+          "category"
+        ]
+      },
+      {
+        "jobId": "529178",
+        "title": "Business Development Manager, SEA",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "519924",
+        "title": "Sales Travel Consultant - Northern Beaches, NSW",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-03T16:28:53.203Z",
     "startedAt": "2026-04-03T16:28:53.203Z",
     "finishedAt": "2026-04-03T16:36:26.595Z",
@@ -19545,78 +19639,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-29T23:23:12.218Z",
-    "startedAt": "2026-03-29T23:23:12.218Z",
-    "finishedAt": "2026-03-29T23:32:31.965Z",
-    "durationMs": 559747,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 359,
-    "created": 3,
-    "updated": 0,
-    "deleted": 10,
-    "unchanged": 349,
-    "createdJobs": [
-      {
-        "jobId": "530405",
-        "title": "Foreign Currency Sales Consultant (Part Time) – Travel Money Oz – Indooroopilly, QLD"
-      },
-      {
-        "jobId": "530374",
-        "title": "Travel Manager - Corporate Traveller - North Sydney, NSW"
-      },
-      {
-        "jobId": "530423",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529968",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530321",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530303",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529755",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529557",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529069",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529024",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529007",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "528123",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "519739",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
