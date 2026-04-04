@@ -232,8 +232,11 @@ function buildCmsFieldData(jobDetail, brandMap, countryMap, hashtagToBrand) {
 }
 
 function hasChanged(existing, newData) {
-  // Compare key fields to detect real content changes
-  const fieldsToCompare = ['name', 'location', 'work-type', 'category', 'brand-name', 'closing-date', 'description'];
+  // Compare key fields to detect real content changes.
+  // Note: description and banner-image-link are intentionally excluded — Webflow
+  // normalizes HTML and link values on storage, causing false diffs every sync.
+  // These fields are still written correctly for new jobs and on every update.
+  const fieldsToCompare = ['name', 'location', 'work-type', 'category', 'brand-name', 'closing-date'];
   const existingFields = existing.fieldData || {};
 
   const changed = [];
@@ -241,11 +244,6 @@ function hasChanged(existing, newData) {
     const existingVal = (existingFields[field] || '').toString().trim();
     const newVal = (newData[field] || '').toString().trim();
     if (existingVal !== newVal) changed.push(field);
-  }
-
-  // Also flag as changed if a banner image link is now available but wasn't stored before
-  if (newData['banner-image-link'] && !existingFields['banner-image-link']) {
-    changed.push('banner-image-link');
   }
 
   return changed.length > 0 ? changed : false;
