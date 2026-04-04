@@ -392,18 +392,24 @@ async function runSync() {
     console.log(`[sync] Deleted ${deleted.length} items.`);
   }
 
-  // Step 10: Regenerate all-jobs.json + filter-counts.json
-  console.log(`\n[sync] Regenerating all-jobs.json and filter-counts.json...`);
-  await generateAllJobsJson(client, countryMap);
-  await generateFilterCounts(client, countryMap);
-
-  // Step 11: Publish site if any changes were made
+  // Step 10: Publish site if any changes were made
   const hasChanges = changedIds.length > 0 || removedJobIds.length > 0;
   if (hasChanges) {
     console.log(`\n[sync] Publishing site...`);
     await client.publishSite();
     logger.recordPublished(true);
+
+    // Wait for CMS changes to propagate in the Webflow API before regenerating JSON.
+    // Without this delay, getAllCollectionItems may return stale data that excludes
+    // newly created items, causing them to be missing from all-jobs.json.
+    console.log('[sync] Waiting 10s for CMS changes to propagate...');
+    await new Promise(resolve => setTimeout(resolve, 10000));
   }
+
+  // Step 11: Regenerate all-jobs.json + filter-counts.json
+  console.log(`\n[sync] Regenerating all-jobs.json and filter-counts.json...`);
+  await generateAllJobsJson(client, countryMap);
+  await generateFilterCounts(client, countryMap);
 
   // Cleanup browser
   await closeBrowser();
