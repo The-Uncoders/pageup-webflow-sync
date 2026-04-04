@@ -1,5 +1,73 @@
 [
   {
+    "id": "2026-04-04T09:59:48.104Z",
+    "startedAt": "2026-04-04T09:59:48.105Z",
+    "finishedAt": "2026-04-04T10:07:38.025Z",
+    "durationMs": 469920,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 368,
+    "created": 0,
+    "updated": 6,
+    "deleted": 0,
+    "unchanged": 362,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "529701",
+        "title": "Product Coordinator Touring - Broadbeach, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "527864",
+        "title": "Sales Travel Consultant - Toowoomba, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "528737",
+        "title": "Sales Travel Consultant - Toowoomba, QLD",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "529105",
+        "title": "Sales Travel Consultant - Sydney CBD, NSW",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "529178",
+        "title": "Business Development Manager, SEA",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      },
+      {
+        "jobId": "519924",
+        "title": "Sales Travel Consultant - Northern Beaches, NSW",
+        "changedFields": [
+          "description",
+          "banner-image-link"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-04T09:06:26.667Z",
     "startedAt": "2026-04-04T09:06:26.667Z",
     "finishedAt": "2026-04-04T09:15:04.681Z",
@@ -19316,89 +19384,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-03-30T21:33:17.565Z",
-    "startedAt": "2026-03-30T21:33:17.565Z",
-    "finishedAt": "2026-03-30T21:41:16.059Z",
-    "durationMs": 478494,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 373,
-    "cmsItemsBefore": 357,
-    "created": 16,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 357,
-    "createdJobs": [
-      {
-        "jobId": "530449",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      },
-      {
-        "jobId": "519735",
-        "title": "Sales Travel Consultant - WA North/Northern Territory"
-      },
-      {
-        "jobId": "519739",
-        "title": "Sales Travel Consultant - WA South"
-      },
-      {
-        "jobId": "528123",
-        "title": "Sales Travel Consultant - Booragoon, WA"
-      },
-      {
-        "jobId": "529007",
-        "title": "Sales Travel Consultant - South-East Perth"
-      },
-      {
-        "jobId": "529024",
-        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
-      },
-      {
-        "jobId": "529047",
-        "title": "Sales Travel Consultant - Claremont & Surrounding Suburbs"
-      },
-      {
-        "jobId": "529069",
-        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
-      },
-      {
-        "jobId": "529251",
-        "title": "Sales Travel Consultant - Midland, WA"
-      },
-      {
-        "jobId": "529557",
-        "title": "Sales Travel Consultant - Kalamunda, WA"
-      },
-      {
-        "jobId": "529755",
-        "title": "Sales Travel Consultant - Willeton, WA"
-      },
-      {
-        "jobId": "529968",
-        "title": "Retail Sales Travel Consultant - Esperance, WA"
-      },
-      {
-        "jobId": "530178",
-        "title": "Sales Travel Consultant - Whitford City, WA"
-      },
-      {
-        "jobId": "530303",
-        "title": "Retail Sales Travel Consultant - Eaton, WA"
-      },
-      {
-        "jobId": "530321",
-        "title": "Sales Travel Consultant - South-West Suburbs"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
