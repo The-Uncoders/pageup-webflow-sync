@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-04T16:59:37.722Z",
+    "startedAt": "2026-04-04T16:59:37.722Z",
+    "finishedAt": "2026-04-04T17:06:58.687Z",
+    "durationMs": 440965,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 368,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 368,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-04T16:40:59.626Z",
     "startedAt": "2026-04-04T16:40:59.626Z",
     "finishedAt": "2026-04-04T16:48:29.507Z",
@@ -18827,127 +18846,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-03-31T11:40:52.854Z",
-    "startedAt": "2026-03-31T11:40:52.854Z",
-    "finishedAt": "2026-03-31T11:49:29.307Z",
-    "durationMs": 516453,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 391,
-    "cmsItemsBefore": 371,
-    "created": 20,
-    "updated": 3,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [
-      {
-        "jobId": "529916",
-        "title": "Technical Architect - Java Backend"
-      },
-      {
-        "jobId": "530422",
-        "title": "Front End Developer (React JS) - Bangalore"
-      },
-      {
-        "jobId": "530449",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      },
-      {
-        "jobId": "519735",
-        "title": "Sales Travel Consultant - WA North/Northern Territory"
-      },
-      {
-        "jobId": "519739",
-        "title": "Sales Travel Consultant - WA South"
-      },
-      {
-        "jobId": "528123",
-        "title": "Sales Travel Consultant - Booragoon, WA"
-      },
-      {
-        "jobId": "529007",
-        "title": "Sales Travel Consultant - South-East Perth"
-      },
-      {
-        "jobId": "529024",
-        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
-      },
-      {
-        "jobId": "529069",
-        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
-      },
-      {
-        "jobId": "529251",
-        "title": "Sales Travel Consultant - Midland, WA"
-      },
-      {
-        "jobId": "529557",
-        "title": "Sales Travel Consultant - Kalamunda, WA"
-      },
-      {
-        "jobId": "529755",
-        "title": "Sales Travel Consultant - Willeton, WA"
-      },
-      {
-        "jobId": "529968",
-        "title": "Retail Sales Travel Consultant - Esperance, WA"
-      },
-      {
-        "jobId": "530178",
-        "title": "Sales Travel Consultant - Whitford City, WA"
-      },
-      {
-        "jobId": "530303",
-        "title": "Retail Sales Travel Consultant - Eaton, WA"
-      },
-      {
-        "jobId": "530321",
-        "title": "Sales Travel Consultant - South-West Suburbs"
-      },
-      {
-        "jobId": "529746",
-        "title": "Global Finance Systems Product Lead (Corporate)"
-      },
-      {
-        "jobId": "529827",
-        "title": "Credit Controller"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530199",
-        "title": "Senior Product Manager - Corporate Technology - Gurugram",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "529830",
-        "title": "Backend Engineer",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
