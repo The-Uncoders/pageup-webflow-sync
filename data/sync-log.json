@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-05T05:57:43.204Z",
+    "startedAt": "2026-04-05T05:57:43.204Z",
+    "finishedAt": "2026-04-05T06:05:54.747Z",
+    "durationMs": 491543,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 368,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 368,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-05T04:13:34.863Z",
     "startedAt": "2026-04-05T04:13:34.864Z",
     "finishedAt": "2026-04-05T04:21:52.914Z",
@@ -17616,126 +17635,6 @@
     "deletedJobs": [
       {
         "jobId": "530396",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-01T04:25:35.539Z",
-    "startedAt": "2026-04-01T04:25:35.539Z",
-    "finishedAt": "2026-04-01T04:35:53.752Z",
-    "durationMs": 618213,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 353,
-    "created": 18,
-    "updated": 2,
-    "deleted": 3,
-    "unchanged": 348,
-    "createdJobs": [
-      {
-        "jobId": "530107",
-        "title": "Travel Consultant - FCM - Adelaide, SA"
-      },
-      {
-        "jobId": "530449",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      },
-      {
-        "jobId": "519735",
-        "title": "Sales Travel Consultant - WA North/Northern Territory"
-      },
-      {
-        "jobId": "519739",
-        "title": "Sales Travel Consultant - WA South"
-      },
-      {
-        "jobId": "528123",
-        "title": "Sales Travel Consultant - Booragoon, WA"
-      },
-      {
-        "jobId": "529007",
-        "title": "Sales Travel Consultant - South-East Perth"
-      },
-      {
-        "jobId": "529024",
-        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
-      },
-      {
-        "jobId": "529069",
-        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
-      },
-      {
-        "jobId": "529251",
-        "title": "Sales Travel Consultant - Midland, WA"
-      },
-      {
-        "jobId": "529557",
-        "title": "Sales Travel Consultant - Kalamunda, WA"
-      },
-      {
-        "jobId": "529755",
-        "title": "Sales Travel Consultant - Willeton, WA"
-      },
-      {
-        "jobId": "529968",
-        "title": "Retail Sales Travel Consultant - Esperance, WA"
-      },
-      {
-        "jobId": "530178",
-        "title": "Sales Travel Consultant - Whitford City, WA"
-      },
-      {
-        "jobId": "530303",
-        "title": "Retail Sales Travel Consultant - Eaton, WA"
-      },
-      {
-        "jobId": "530321",
-        "title": "Sales Travel Consultant - South-West Suburbs"
-      },
-      {
-        "jobId": "529827",
-        "title": "Credit Controller"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528829",
-        "title": "Service Product Lead (Unified Communications) - South Bank, QLD",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "530181",
-        "title": "Organisational Change Manager - South Bank, QLD",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "530404",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530252",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530251",
         "title": "Unknown"
       }
     ],
