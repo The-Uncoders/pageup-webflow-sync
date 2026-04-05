@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-05T21:22:52.761Z",
+    "startedAt": "2026-04-05T21:22:52.761Z",
+    "finishedAt": "2026-04-05T21:31:00.984Z",
+    "durationMs": 488223,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 368,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 368,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-05T20:55:44.742Z",
     "startedAt": "2026-04-05T20:55:44.742Z",
     "finishedAt": "2026-04-05T21:03:19.293Z",
@@ -11670,78 +11689,6 @@
       }
     ],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-02T04:03:49.011Z",
-    "startedAt": "2026-04-02T04:03:49.012Z",
-    "finishedAt": "2026-04-02T04:12:22.837Z",
-    "durationMs": 513825,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 364,
-    "cmsItemsBefore": 364,
-    "created": 1,
-    "updated": 6,
-    "deleted": 1,
-    "unchanged": 357,
-    "createdJobs": [
-      {
-        "jobId": "530057",
-        "title": "Marketing Manager, Greater China"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529701",
-        "title": "Product Coordinator Touring - Broadbeach, QLD",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "527864",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "528737",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "529105",
-        "title": "Sales Travel Consultant - Sydney CBD, NSW",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW",
-        "changedFields": [
-          "description"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "528928",
-        "title": "Unknown"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }
