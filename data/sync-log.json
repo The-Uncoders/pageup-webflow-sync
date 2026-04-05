@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-05T14:59:48.312Z",
+    "startedAt": "2026-04-05T14:59:48.312Z",
+    "finishedAt": "2026-04-05T15:08:06.468Z",
+    "durationMs": 498156,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 368,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 368,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-05T14:26:41.755Z",
     "startedAt": "2026-04-05T14:26:41.755Z",
     "finishedAt": "2026-04-05T14:35:46.807Z",
@@ -16751,103 +16770,6 @@
       }
     ],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-01T18:44:59.779Z",
-    "startedAt": "2026-04-01T18:44:59.779Z",
-    "finishedAt": "2026-04-01T18:55:31.279Z",
-    "durationMs": 631500,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 350,
-    "created": 18,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 349,
-    "createdJobs": [
-      {
-        "jobId": "530449",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Montreal, QC"
-      },
-      {
-        "jobId": "519735",
-        "title": "Sales Travel Consultant - WA North/Northern Territory"
-      },
-      {
-        "jobId": "519739",
-        "title": "Sales Travel Consultant - WA South"
-      },
-      {
-        "jobId": "528123",
-        "title": "Sales Travel Consultant - Booragoon, WA"
-      },
-      {
-        "jobId": "529007",
-        "title": "Sales Travel Consultant - South-East Perth"
-      },
-      {
-        "jobId": "529024",
-        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
-      },
-      {
-        "jobId": "529069",
-        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
-      },
-      {
-        "jobId": "529251",
-        "title": "Sales Travel Consultant - Midland, WA"
-      },
-      {
-        "jobId": "529557",
-        "title": "Sales Travel Consultant - Kalamunda, WA"
-      },
-      {
-        "jobId": "529755",
-        "title": "Sales Travel Consultant - Willeton, WA"
-      },
-      {
-        "jobId": "529968",
-        "title": "Retail Sales Travel Consultant - Esperance, WA"
-      },
-      {
-        "jobId": "530178",
-        "title": "Sales Travel Consultant - Whitford City, WA"
-      },
-      {
-        "jobId": "530303",
-        "title": "Retail Sales Travel Consultant - Eaton, WA"
-      },
-      {
-        "jobId": "530321",
-        "title": "Sales Travel Consultant - South-West Suburbs"
-      },
-      {
-        "jobId": "528732",
-        "title": "Travel Consultant South Africa (Worcester, Cape Town based)"
-      },
-      {
-        "jobId": "529827",
-        "title": "Credit Controller"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      },
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "528978",
-        "title": "Unknown"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }
