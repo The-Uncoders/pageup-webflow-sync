@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-05T20:20:31.272Z",
+    "startedAt": "2026-04-05T20:20:31.272Z",
+    "finishedAt": "2026-04-05T20:30:17.880Z",
+    "durationMs": 586608,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 368,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 368,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-05T19:53:19.357Z",
     "startedAt": "2026-04-05T19:53:19.358Z",
     "finishedAt": "2026-04-05T20:01:49.970Z",
@@ -11784,101 +11803,6 @@
       },
       {
         "jobId": "530165",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-01T23:54:37.726Z",
-    "startedAt": "2026-04-01T23:54:37.726Z",
-    "finishedAt": "2026-04-02T00:02:43.879Z",
-    "durationMs": 486153,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 365,
-    "cmsItemsBefore": 366,
-    "created": 1,
-    "updated": 8,
-    "deleted": 2,
-    "unchanged": 356,
-    "createdJobs": [
-      {
-        "jobId": "530572",
-        "title": "Sales Travel Consultant - Hornsby, NSW"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529065",
-        "title": "Sales Travel Consultant - Northwestern Sydney, NSW",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "529701",
-        "title": "Product Coordinator Touring - Broadbeach, QLD",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "527864",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "528737",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "529105",
-        "title": "Sales Travel Consultant - Sydney CBD, NSW",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "530200",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category",
-          "brand-name",
-          "description"
-        ]
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA",
-        "changedFields": [
-          "description"
-        ]
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW",
-        "changedFields": [
-          "description"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "529063",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529062",
         "title": "Unknown"
       }
     ],
