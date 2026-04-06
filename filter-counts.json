@@ -2,7 +2,7 @@
   "regions": {
     "asia": 66,
     "usa": 38,
-    "canada": 15,
+    "canada": 14,
     "uk & europe": 14,
     "australia": 211,
     "multiple locations": 1,
@@ -15,7 +15,7 @@
     "virtual - usa": 2,
     "pennsylvania": 7,
     "new york": 8,
-    "ontario": 9,
+    "ontario": 8,
     "british columbia": 3,
     "bristol": 1,
     "noida": 16,
@@ -70,7 +70,7 @@
   "categories": {
     "people and culture": 5,
     "operations and logistics": 41,
-    "sales and customer service": 251,
+    "sales and customer service": 250,
     "digital and technology": 30,
     "commercial": 22,
     "data and business intelligence": 6,
