@@ -1,5 +1,38 @@
 [
   {
+    "id": "2026-04-06T10:46:46.851Z",
+    "startedAt": "2026-04-06T10:46:46.852Z",
+    "finishedAt": "2026-04-06T10:56:22.982Z",
+    "durationMs": 576130,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 364,
+    "cmsItemsBefore": 365,
+    "created": 1,
+    "updated": 0,
+    "deleted": 2,
+    "unchanged": 363,
+    "createdJobs": [
+      {
+        "jobId": "530614",
+        "title": "HR Admin Intern - Hanoi, Vietnam."
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "528702",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529203",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-06T09:45:48.254Z",
     "startedAt": "2026-04-06T09:45:48.254Z",
     "finishedAt": "2026-04-06T09:56:40.499Z",
@@ -4386,78 +4419,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-02T16:44:27.183Z",
-    "startedAt": "2026-04-02T16:44:27.183Z",
-    "finishedAt": "2026-04-02T16:53:12.248Z",
-    "durationMs": 525065,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 363,
-    "cmsItemsBefore": 364,
-    "created": 0,
-    "updated": 6,
-    "deleted": 1,
-    "unchanged": 357,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "529701",
-        "title": "Product Coordinator Touring - Broadbeach, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "527864",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "528737",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529105",
-        "title": "Sales Travel Consultant - Sydney CBD, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "529620",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
