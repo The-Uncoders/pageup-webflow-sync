@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-06T12:45:07.852Z",
+    "startedAt": "2026-04-06T12:45:07.852Z",
+    "finishedAt": "2026-04-06T12:53:22.082Z",
+    "durationMs": 494230,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 364,
+    "cmsItemsBefore": 364,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 364,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-06T11:40:48.894Z",
     "startedAt": "2026-04-06T11:40:48.894Z",
     "finishedAt": "2026-04-06T11:48:42.587Z",
@@ -4293,82 +4312,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-02T18:41:36.238Z",
-    "startedAt": "2026-04-02T18:41:36.238Z",
-    "finishedAt": "2026-04-02T19:02:18.770Z",
-    "durationMs": 1242532,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 365,
-    "cmsItemsBefore": 363,
-    "created": 2,
-    "updated": 6,
-    "deleted": 0,
-    "unchanged": 357,
-    "createdJobs": [
-      {
-        "jobId": "530607",
-        "title": "Flight Centre - Travel Consultant - Kelowna, BC"
-      },
-      {
-        "jobId": "530608",
-        "title": "Corporate Traveller - Customer Success Manager - Toronto, Canada"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529701",
-        "title": "Product Coordinator Touring - Broadbeach, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "527864",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "528737",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529105",
-        "title": "Sales Travel Consultant - Sydney CBD, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
