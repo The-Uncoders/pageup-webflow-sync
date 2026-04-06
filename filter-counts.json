@@ -3,7 +3,7 @@
     "usa": 40,
     "canada": 15,
     "uk & europe": 14,
-    "asia": 69,
+    "asia": 68,
     "australia": 213,
     "multiple locations": 1,
     "south africa": 6,
@@ -52,7 +52,7 @@
     "california": 11,
     "invercargill": 1,
     "massachusetts": 3,
-    "kuala lumpur": 4,
+    "kuala lumpur": 3,
     "phuket": 2,
     "paris": 1,
     "nationwide": 1,
@@ -68,8 +68,8 @@
     "new jersey": 1
   },
   "categories": {
-    "operations and logistics": 43,
-    "sales and customer service": 255,
+    "operations and logistics": 42,
+    "sales and customer service": 254,
     "digital and technology": 32,
     "commercial": 22,
     "data and business intelligence": 6,
