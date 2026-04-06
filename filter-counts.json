@@ -1,7 +1,7 @@
 {
   "regions": {
     "asia": 66,
-    "usa": 39,
+    "usa": 38,
     "canada": 15,
     "uk & europe": 14,
     "australia": 211,
@@ -49,7 +49,7 @@
     "tasmania": 4,
     "wellington": 1,
     "barcelona": 3,
-    "california": 10,
+    "california": 9,
     "invercargill": 1,
     "massachusetts": 3,
     "phuket": 2,
@@ -70,7 +70,7 @@
   "categories": {
     "people and culture": 5,
     "operations and logistics": 41,
-    "sales and customer service": 252,
+    "sales and customer service": 251,
     "digital and technology": 30,
     "commercial": 22,
     "data and business intelligence": 6,
