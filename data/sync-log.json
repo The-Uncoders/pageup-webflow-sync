@@ -1,5 +1,42 @@
 [
   {
+    "id": "2026-04-07T14:26:33.517Z",
+    "startedAt": "2026-04-07T14:26:33.518Z",
+    "finishedAt": "2026-04-07T14:35:10.060Z",
+    "durationMs": 516542,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 358,
+    "cmsItemsBefore": 358,
+    "created": 2,
+    "updated": 0,
+    "deleted": 2,
+    "unchanged": 356,
+    "createdJobs": [
+      {
+        "jobId": "530633",
+        "title": "Corporate Traveler - Director of Sales - New York, NY"
+      },
+      {
+        "jobId": "529474",
+        "title": "Travel Consultant After Hours - Mumbai"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530001",
+        "title": "Principal Product Owner- South Bank, QLD"
+      },
+      {
+        "jobId": "529540",
+        "title": "Corporate Traveler - Director of Sales - New York, NY"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-07T12:55:25.791Z",
     "startedAt": "2026-04-07T12:55:25.791Z",
     "finishedAt": "2026-04-07T13:02:44.188Z",
@@ -3361,99 +3398,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-03T17:03:19.692Z",
-    "startedAt": "2026-04-03T17:03:19.692Z",
-    "finishedAt": "2026-04-03T17:11:51.925Z",
-    "durationMs": 512233,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 367,
-    "created": 1,
-    "updated": 9,
-    "deleted": 0,
-    "unchanged": 358,
-    "createdJobs": [
-      {
-        "jobId": "530612",
-        "title": "FCM - VIP Corporate Travel Consultant - Remote, USA"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529701",
-        "title": "Product Coordinator Touring - Broadbeach, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "528887",
-        "title": "FCM - Dedicated Corporate Travel Consultant - Irvine, CA",
-        "changedFields": [
-          "category"
-        ]
-      },
-      {
-        "jobId": "527864",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "528737",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529105",
-        "title": "Sales Travel Consultant - Sydney CBD, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "528888",
-        "title": "FCM - Dedicated Corporate Travel Consultant - Denver, CO",
-        "changedFields": [
-          "category"
-        ]
-      },
-      {
-        "jobId": "528890",
-        "title": "FCM - Dedicated Corporate Travel Consultant - Houston, TX",
-        "changedFields": [
-          "category"
-        ]
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
