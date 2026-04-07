@@ -1,16 +1,17 @@
 {
   "regions": {
+    "australia": 208,
     "asia": 65,
     "usa": 38,
     "canada": 14,
     "uk & europe": 14,
-    "australia": 207,
     "multiple locations": 1,
     "south africa": 6,
     "new zealand": 8,
     "uae": 1
   },
   "cities": {
+    "queensland": 68,
     "hanoi": 4,
     "virtual - usa": 2,
     "pennsylvania": 7,
@@ -20,7 +21,6 @@
     "bristol": 1,
     "noida": 16,
     "new south wales": 57,
-    "queensland": 67,
     "shanghai": 2,
     "new zealand": 1,
     "mumbai": 3,
@@ -68,14 +68,14 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 249,
     "people and culture": 5,
     "operations and logistics": 40,
-    "sales and customer service": 247,
     "digital and technology": 29,
     "commercial": 22,
     "data and business intelligence": 6,
     "marketing and communication": 10,
-    "finance": 22,
+    "finance": 21,
     "administration": 4,
     "leadership": 26,
     "project and program management": 5,
@@ -83,6 +83,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "queensland": "Australia",
     "hanoi": "Asia",
     "virtual - usa": "USA",
     "pennsylvania": "USA",
@@ -92,7 +93,6 @@
     "bristol": "UK & Europe",
     "noida": "Asia",
     "new south wales": "Australia",
-    "queensland": "Australia",
     "shanghai": "Asia",
     "new zealand": "Multiple Locations",
     "mumbai": "Asia",
@@ -140,6 +140,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "queensland": "Queensland",
     "hanoi": "Hanoi",
     "virtual - usa": "Virtual - USA",
     "pennsylvania": "Pennsylvania",
@@ -149,7 +150,6 @@
     "bristol": "Bristol",
     "noida": "Noida",
     "new south wales": "New South Wales",
-    "queensland": "Queensland",
     "shanghai": "Shanghai",
     "new zealand": "New Zealand",
     "mumbai": "Mumbai",
@@ -197,9 +197,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "people and culture": "People and Culture",
     "operations and logistics": "Operations and Logistics",
-    "sales and customer service": "Sales and Customer Service",
     "digital and technology": "Digital and Technology",
     "commercial": "Commercial",
     "data and business intelligence": "Data and Business Intelligence",
