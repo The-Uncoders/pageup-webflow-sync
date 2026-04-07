@@ -1,16 +1,17 @@
 {
   "regions": {
+    "usa": 40,
     "uk & europe": 15,
     "asia": 66,
-    "usa": 39,
     "australia": 208,
-    "canada": 14,
+    "canada": 13,
     "multiple locations": 1,
     "south africa": 6,
     "new zealand": 8,
     "uae": 1
   },
   "cities": {
+    "illinois": 4,
     "london": 5,
     "mumbai": 4,
     "new york": 8,
@@ -57,14 +58,12 @@
     "kerikeri": 1,
     "singapore": 2,
     "massachusetts": 2,
-    "illinois": 3,
     "texas": 1,
     "colorado": 4,
     "kuala lumpur": 2,
     "chennai": 1,
     "dubai": 1,
     "berlin": 2,
-    "alberta": 1,
     "new jersey": 1
   },
   "categories": {
@@ -83,6 +82,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "illinois": "USA",
     "london": "UK & Europe",
     "mumbai": "Asia",
     "new york": "USA",
@@ -129,17 +129,16 @@
     "kerikeri": "New Zealand",
     "singapore": "Asia",
     "massachusetts": "USA",
-    "illinois": "USA",
     "texas": "USA",
     "colorado": "USA",
     "kuala lumpur": "Asia",
     "chennai": "Asia",
     "dubai": "UAE",
     "berlin": "UK & Europe",
-    "alberta": "Canada",
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "illinois": "Illinois",
     "london": "London",
     "mumbai": "Mumbai",
     "new york": "New York",
@@ -186,14 +185,12 @@
     "kerikeri": "Kerikeri",
     "singapore": "Singapore",
     "massachusetts": "Massachusetts",
-    "illinois": "Illinois",
     "texas": "Texas",
     "colorado": "Colorado",
     "kuala lumpur": "Kuala Lumpur",
     "chennai": "Chennai",
     "dubai": "Dubai",
     "berlin": "Berlin",
-    "alberta": "Alberta",
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
