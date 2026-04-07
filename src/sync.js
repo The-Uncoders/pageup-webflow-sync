@@ -300,7 +300,7 @@ async function runSync() {
   const newJobs = pageupJobs.filter(j => !cmsJobMap.has(j.jobId));
   const removedJobIds = [];
   for (const [jobId, item] of cmsJobMap) {
-    if (!pageupJobMap.has(jobId)) removedJobIds.push({ jobId, cmsId: item.id });
+    if (!pageupJobMap.has(jobId)) removedJobIds.push({ jobId, cmsId: item.id, title: item.fieldData?.name || jobId });
   }
   const existingJobs = pageupJobs.filter(j => cmsJobMap.has(j.jobId));
 
@@ -384,7 +384,7 @@ async function runSync() {
   // Step 9: Remove deleted jobs
   if (removedJobIds.length > 0) {
     console.log(`\n[sync] Removing ${removedJobIds.length} deleted jobs from CMS...`);
-    logger.recordDeleted(removedJobIds.map(r => ({ jobId: r.jobId })));
+    logger.recordDeleted(removedJobIds.map(r => ({ jobId: r.jobId, title: r.title })));
     const cmsIdsToDelete = removedJobIds.map(r => r.cmsId);
     const deleted = await client.deleteItems(COLLECTION_ID, cmsIdsToDelete);
     console.log(`[sync] Deleted ${deleted.length} items.`);

@@ -417,14 +417,14 @@
 
   // ── Hide location sub-headings that have no visible cities ──
   function updateLocationSubheadings(cityCounts) {
-    var subheadings = document.querySelectorAll('.filters1_region-subheading');
+    var subheadings = document.querySelectorAll('.filters1_filter-group-subheading');
     for (var i = 0; i < subheadings.length; i++) {
       var sh = subheadings[i];
       var regionName = sh.textContent.trim();
       // Check if any city in this region has count > 0
       var hasVisibleCities = false;
       var next = sh.nextElementSibling;
-      while (next && !next.classList.contains('filters1_region-subheading')) {
+      while (next && !next.classList.contains('filters1_filter-group-subheading')) {
         if (next.style.display !== 'none') {
           hasVisibleCities = true;
           break;
@@ -899,14 +899,28 @@
     var groupedContainer = document.createElement('div');
     groupedContainer.className = 'filters1_grouped-locations';
 
+    // Render "Multiple Locations" as a standalone checkbox at the top (not inside a region group)
+    var multiLocKey = 'Multiple Locations';
+    if (regionGroups[multiLocKey]) {
+      var mlCities = regionGroups[multiLocKey];
+      for (var ml = 0; ml < mlCities.length; ml++) {
+        groupedContainer.appendChild(
+          createCheckbox('city', mlCities[ml].label, mlCities[ml].count)
+        );
+      }
+    }
+
     for (var ri = 0; ri < sortedRegions.length; ri++) {
       var regionName = sortedRegions[ri];
+      // Skip Multiple Locations — already rendered above
+      if (regionName === multiLocKey) continue;
+
       var cities = regionGroups[regionName].sort(function (a, b) {
         return a.label.localeCompare(b.label);
       });
 
       var subHeading = document.createElement('div');
-      subHeading.className = 'filters1_region-subheading';
+      subHeading.className = 'filters1_filter-group-subheading';
       subHeading.textContent = regionName;
       groupedContainer.appendChild(subHeading);
 
@@ -1186,14 +1200,8 @@
 
 
   // ── Inject minimal styles ─────────────────
-  function injectStyles() {
-    var style = document.createElement('style');
-    style.textContent =
-      '.filters1_region-subheading{font-weight:600;font-size:13px;' +
-      'padding:10px 0 4px;color:#333;margin-top:4px;}' +
-      '.filters1_region-subheading:first-child{padding-top:0;margin-top:0;}';
-    document.head.appendChild(style);
-  }
+  // Region subheading styles are now handled by Webflow class filters1_filter-group-subheading
+  function injectStyles() {}
 
   // ── Fetch JSON helper ───────────────────
   function fetchJSON(url, cb) {
