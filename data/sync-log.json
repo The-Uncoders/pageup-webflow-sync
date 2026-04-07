@@ -1,5 +1,75 @@
 [
   {
+    "id": "2026-04-07T04:09:24.316Z",
+    "startedAt": "2026-04-07T04:09:24.317Z",
+    "finishedAt": "2026-04-07T04:25:00.573Z",
+    "durationMs": 936256,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 356,
+    "cmsItemsBefore": 357,
+    "created": 2,
+    "updated": 4,
+    "deleted": 3,
+    "unchanged": 350,
+    "createdJobs": [
+      {
+        "jobId": "530615",
+        "title": "Corporate Traveler - Account Executive - Culver City, CA"
+      },
+      {
+        "jobId": "530616",
+        "title": "Corporate Traveler - Account Executive - Irvine, CA"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530186",
+        "title": "Commercial Analyst- South Bank, QLD",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "530210",
+        "title": "Commercial Manager- Product and Pricing- South Bank, QLD",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "529688",
+        "title": "D365 Finance Functional Consultant- South Bank, QLD",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "530194",
+        "title": "Finance Business Analyst - South Bank, QLD",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530261",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529483",
+        "title": "Unknown"
+      },
+      {
+        "jobId": "529752",
+        "title": "Unknown"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-07T01:25:10.120Z",
     "startedAt": "2026-04-07T01:25:10.120Z",
     "finishedAt": "2026-04-07T01:32:52.932Z",
@@ -3632,74 +3702,6 @@
     "startedAt": "2026-04-03T09:43:22.751Z",
     "finishedAt": "2026-04-03T09:51:12.514Z",
     "durationMs": 469763,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 367,
-    "created": 0,
-    "updated": 6,
-    "deleted": 0,
-    "unchanged": 361,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "529701",
-        "title": "Product Coordinator Touring - Broadbeach, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "527864",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "528737",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529105",
-        "title": "Sales Travel Consultant - Sydney CBD, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-03T08:48:07.912Z",
-    "startedAt": "2026-04-03T08:48:07.912Z",
-    "finishedAt": "2026-04-03T08:55:46.136Z",
-    "durationMs": 458224,
     "status": "success",
     "error": null,
     "pageupJobsFound": 367,
