@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 208,
+    "australia": 209,
     "asia": 65,
     "usa": 38,
     "canada": 14,
@@ -11,7 +11,7 @@
     "uae": 1
   },
   "cities": {
-    "queensland": 68,
+    "queensland": 69,
     "hanoi": 4,
     "virtual - usa": 2,
     "pennsylvania": 7,
@@ -68,7 +68,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 249,
+    "sales and customer service": 250,
     "people and culture": 5,
     "operations and logistics": 40,
     "digital and technology": 29,
