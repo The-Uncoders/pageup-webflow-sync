@@ -877,9 +877,12 @@
     var optionsContainer = filterGroup.querySelector('.filters1_filter-options');
     if (!optionsContainer) return;
 
-    // Hide the original CMS list
+    // Hide the original CMS list and any CMS-rendered subheadings
+    // (our JS generates these dynamically with proper region groupings)
     var cmsList = optionsContainer.querySelector('.w-dyn-list');
     if (cmsList) cmsList.style.display = 'none';
+    var cmsSubheadings = optionsContainer.querySelectorAll('.filters1_list-wrapper, .filters1_filter-group-subheading');
+    for (var sh = 0; sh < cmsSubheadings.length; sh++) cmsSubheadings[sh].style.display = 'none';
 
     // Organize cities by region
     var regionGroups = {};
