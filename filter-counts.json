@@ -1,8 +1,8 @@
 {
   "regions": {
+    "asia": 65,
+    "usa": 40,
     "australia": 209,
-    "asia": 64,
-    "usa": 38,
     "canada": 14,
     "uk & europe": 14,
     "multiple locations": 1,
@@ -11,6 +11,8 @@
     "uae": 1
   },
   "cities": {
+    "noida": 17,
+    "california": 11,
     "queensland": 69,
     "hanoi": 4,
     "virtual - usa": 2,
@@ -19,7 +21,6 @@
     "ontario": 8,
     "british columbia": 3,
     "bristol": 1,
-    "noida": 16,
     "new south wales": 57,
     "shanghai": 2,
     "new zealand": 1,
@@ -49,7 +50,6 @@
     "tasmania": 4,
     "wellington": 1,
     "barcelona": 3,
-    "california": 9,
     "invercargill": 1,
     "massachusetts": 3,
     "phuket": 2,
@@ -68,10 +68,10 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 249,
+    "digital and technology": 30,
+    "sales and customer service": 251,
     "people and culture": 5,
     "operations and logistics": 39,
-    "digital and technology": 29,
     "commercial": 22,
     "data and business intelligence": 6,
     "marketing and communication": 10,
@@ -83,6 +83,8 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "noida": "Asia",
+    "california": "USA",
     "queensland": "Australia",
     "hanoi": "Asia",
     "virtual - usa": "USA",
@@ -91,7 +93,6 @@
     "ontario": "Canada",
     "british columbia": "Canada",
     "bristol": "UK & Europe",
-    "noida": "Asia",
     "new south wales": "Australia",
     "shanghai": "Asia",
     "new zealand": "Multiple Locations",
@@ -121,7 +122,6 @@
     "tasmania": "Australia",
     "wellington": "New Zealand",
     "barcelona": "UK & Europe",
-    "california": "USA",
     "invercargill": "New Zealand",
     "massachusetts": "USA",
     "phuket": "Asia",
@@ -140,6 +140,8 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "noida": "Noida",
+    "california": "California",
     "queensland": "Queensland",
     "hanoi": "Hanoi",
     "virtual - usa": "Virtual - USA",
@@ -148,7 +150,6 @@
     "ontario": "Ontario",
     "british columbia": "British Columbia",
     "bristol": "Bristol",
-    "noida": "Noida",
     "new south wales": "New South Wales",
     "shanghai": "Shanghai",
     "new zealand": "New Zealand",
@@ -178,7 +179,6 @@
     "tasmania": "Tasmania",
     "wellington": "Wellington",
     "barcelona": "Barcelona",
-    "california": "California",
     "invercargill": "Invercargill",
     "massachusetts": "Massachusetts",
     "phuket": "Phuket",
@@ -197,10 +197,10 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "people and culture": "People and Culture",
     "operations and logistics": "Operations and Logistics",
-    "digital and technology": "Digital and Technology",
     "commercial": "Commercial",
     "data and business intelligence": "Data and Business Intelligence",
     "marketing and communication": "Marketing and Communication",
