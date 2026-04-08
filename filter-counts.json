@@ -1,16 +1,19 @@
 {
   "regions": {
-    "australia": 204,
+    "usa": 41,
+    "canada": 14,
+    "australia": 205,
     "asia": 66,
-    "usa": 40,
     "uk & europe": 15,
-    "canada": 13,
     "multiple locations": 1,
     "south africa": 6,
     "new zealand": 8,
     "uae": 1
   },
   "cities": {
+    "massachusetts": 3,
+    "alberta": 1,
+    "new south wales": 56,
     "queensland": 68,
     "sarawak": 1,
     "illinois": 4,
@@ -25,7 +28,6 @@
     "ontario": 8,
     "british columbia": 3,
     "bristol": 1,
-    "new south wales": 55,
     "shanghai": 2,
     "new zealand": 1,
     "cape town": 2,
@@ -58,7 +60,6 @@
     "nationwide": 1,
     "kerikeri": 1,
     "singapore": 1,
-    "massachusetts": 2,
     "texas": 1,
     "colorado": 4,
     "kuala lumpur": 2,
@@ -68,9 +69,9 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 250,
+    "leadership": 25,
     "digital and technology": 30,
-    "sales and customer service": 247,
-    "leadership": 24,
     "people and culture": 5,
     "operations and logistics": 39,
     "commercial": 21,
@@ -83,6 +84,9 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "massachusetts": "USA",
+    "alberta": "Canada",
+    "new south wales": "Australia",
     "queensland": "Australia",
     "sarawak": "Asia",
     "illinois": "USA",
@@ -97,7 +101,6 @@
     "ontario": "Canada",
     "british columbia": "Canada",
     "bristol": "UK & Europe",
-    "new south wales": "Australia",
     "shanghai": "Asia",
     "new zealand": "Multiple Locations",
     "cape town": "South Africa",
@@ -130,7 +133,6 @@
     "nationwide": "South Africa",
     "kerikeri": "New Zealand",
     "singapore": "Asia",
-    "massachusetts": "USA",
     "texas": "USA",
     "colorado": "USA",
     "kuala lumpur": "Asia",
@@ -140,6 +142,9 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "massachusetts": "Massachusetts",
+    "alberta": "Alberta",
+    "new south wales": "New South Wales",
     "queensland": "Queensland",
     "sarawak": "Sarawak",
     "illinois": "Illinois",
@@ -154,7 +159,6 @@
     "ontario": "Ontario",
     "british columbia": "British Columbia",
     "bristol": "Bristol",
-    "new south wales": "New South Wales",
     "shanghai": "Shanghai",
     "new zealand": "New Zealand",
     "cape town": "Cape Town",
@@ -187,7 +191,6 @@
     "nationwide": "Nationwide",
     "kerikeri": "Kerikeri",
     "singapore": "Singapore",
-    "massachusetts": "Massachusetts",
     "texas": "Texas",
     "colorado": "Colorado",
     "kuala lumpur": "Kuala Lumpur",
@@ -197,9 +200,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
-    "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "leadership": "Leadership",
+    "digital and technology": "Digital and Technology",
     "people and culture": "People and Culture",
     "operations and logistics": "Operations and Logistics",
     "commercial": "Commercial",

@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-04-08T07:56:53.461Z",
+    "startedAt": "2026-04-08T07:56:53.462Z",
+    "finishedAt": "2026-04-08T08:05:03.907Z",
+    "durationMs": 490445,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 357,
+    "cmsItemsBefore": 354,
+    "created": 3,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 354,
+    "createdJobs": [
+      {
+        "jobId": "530648",
+        "title": "AUS - FCB Sales Travel Consultant - SUBURB, STATE"
+      },
+      {
+        "jobId": "530638",
+        "title": "Corporate Traveller - Account Executive - Calgary, AB"
+      },
+      {
+        "jobId": "530634",
+        "title": "Corporate Traveler - Director of Sales - Boston, MA"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-08T06:27:46.573Z",
     "startedAt": "2026-04-08T06:27:46.573Z",
     "finishedAt": "2026-04-08T06:35:37.451Z",
@@ -2799,74 +2831,6 @@
     "startedAt": "2026-04-04T08:29:27.945Z",
     "finishedAt": "2026-04-04T08:37:51.477Z",
     "durationMs": 503532,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 6,
-    "deleted": 0,
-    "unchanged": 362,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "529701",
-        "title": "Product Coordinator Touring - Broadbeach, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "527864",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "528737",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529105",
-        "title": "Sales Travel Consultant - Sydney CBD, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-04T07:42:00.519Z",
-    "startedAt": "2026-04-04T07:42:00.520Z",
-    "finishedAt": "2026-04-04T07:51:23.089Z",
-    "durationMs": 562569,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
