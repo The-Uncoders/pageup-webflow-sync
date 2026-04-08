@@ -1,5 +1,72 @@
 [
   {
+    "id": "2026-04-08T04:59:19.014Z",
+    "startedAt": "2026-04-08T04:59:19.014Z",
+    "finishedAt": "2026-04-08T05:07:00.884Z",
+    "durationMs": 461870,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 359,
+    "cmsItemsBefore": 357,
+    "created": 4,
+    "updated": 3,
+    "deleted": 2,
+    "unchanged": 352,
+    "createdJobs": [
+      {
+        "jobId": "530416",
+        "title": "Customer Experience Executive (Overnight Shift / Part Time)"
+      },
+      {
+        "jobId": "529483",
+        "title": "Service Product Lead (Workday) - South Bank, QLD"
+      },
+      {
+        "jobId": "530638",
+        "title": "Corporate Traveller - Account Executive - Calgary, AB"
+      },
+      {
+        "jobId": "530634",
+        "title": "Corporate Traveler - Director of Sales - Boston, MA"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529170",
+        "title": "Team Leader ( Cruiseabout)- Geelong, VIC",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "529148",
+        "title": "Sales Travel Consultant - Barrington Coast, NSW",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "525682",
+        "title": "Team Leader ( Cruiseabout) - Sydney North-West",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530363",
+        "title": "Foreign Currency Sales Consultant (Casual) – Travel Money Oz – Erina, NSW"
+      },
+      {
+        "jobId": "527193",
+        "title": "Business Development Manager - Corporate Traveller - Melbourne, VIC"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-08T02:13:14.557Z",
     "startedAt": "2026-04-08T02:13:14.557Z",
     "finishedAt": "2026-04-08T02:21:33.849Z",
@@ -2827,74 +2894,6 @@
     "startedAt": "2026-04-04T06:34:43.529Z",
     "finishedAt": "2026-04-04T06:43:10.795Z",
     "durationMs": 507266,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 6,
-    "deleted": 0,
-    "unchanged": 362,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "529701",
-        "title": "Product Coordinator Touring - Broadbeach, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "527864",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "528737",
-        "title": "Sales Travel Consultant - Toowoomba, QLD",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529105",
-        "title": "Sales Travel Consultant - Sydney CBD, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW",
-        "changedFields": [
-          "description",
-          "banner-image-link"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-04T05:17:44.981Z",
-    "startedAt": "2026-04-04T05:17:44.981Z",
-    "finishedAt": "2026-04-04T05:29:22.786Z",
-    "durationMs": 697805,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
