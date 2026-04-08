@@ -1,7 +1,7 @@
 {
   "regions": {
-    "australia": 206,
-    "asia": 67,
+    "australia": 204,
+    "asia": 66,
     "usa": 40,
     "uk & europe": 15,
     "canada": 13,
@@ -11,7 +11,7 @@
     "uae": 1
   },
   "cities": {
-    "queensland": 69,
+    "queensland": 68,
     "sarawak": 1,
     "illinois": 4,
     "london": 5,
@@ -25,7 +25,7 @@
     "ontario": 8,
     "british columbia": 3,
     "bristol": 1,
-    "new south wales": 56,
+    "new south wales": 55,
     "shanghai": 2,
     "new zealand": 1,
     "cape town": 2,
@@ -57,7 +57,7 @@
     "paris": 1,
     "nationwide": 1,
     "kerikeri": 1,
-    "singapore": 2,
+    "singapore": 1,
     "massachusetts": 2,
     "texas": 1,
     "colorado": 4,
@@ -69,11 +69,11 @@
   },
   "categories": {
     "digital and technology": 30,
-    "sales and customer service": 250,
-    "leadership": 25,
+    "sales and customer service": 247,
+    "leadership": 24,
     "people and culture": 5,
     "operations and logistics": 39,
-    "commercial": 22,
+    "commercial": 21,
     "data and business intelligence": 6,
     "marketing and communication": 10,
     "finance": 21,
