@@ -1,19 +1,20 @@
 {
   "regions": {
-    "usa": 41,
+    "uk & europe": 16,
+    "usa": 40,
     "canada": 14,
-    "australia": 205,
+    "australia": 202,
     "asia": 65,
-    "uk & europe": 15,
     "multiple locations": 1,
     "south africa": 6,
     "new zealand": 8,
     "uae": 1
   },
   "cities": {
+    "manchester": 1,
     "massachusetts": 3,
     "alberta": 1,
-    "new south wales": 56,
+    "new south wales": 54,
     "queensland": 68,
     "sarawak": 1,
     "illinois": 4,
@@ -41,7 +42,7 @@
     "bangkok": 2,
     "pune": 1,
     "remote": 3,
-    "victoria": 27,
+    "victoria": 26,
     "bath": 2,
     "new plymouth": 1,
     "ho chi minh city": 3,
@@ -61,7 +62,7 @@
     "kerikeri": 1,
     "singapore": 1,
     "texas": 1,
-    "colorado": 4,
+    "colorado": 3,
     "kuala lumpur": 2,
     "chennai": 1,
     "dubai": 1,
@@ -69,9 +70,9 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 250,
-    "leadership": 25,
-    "digital and technology": 29,
+    "digital and technology": 30,
+    "sales and customer service": 246,
+    "leadership": 23,
     "people and culture": 5,
     "operations and logistics": 39,
     "commercial": 21,
@@ -84,6 +85,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "manchester": "UK & Europe",
     "massachusetts": "USA",
     "alberta": "Canada",
     "new south wales": "Australia",
@@ -142,6 +144,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "manchester": "Manchester",
     "massachusetts": "Massachusetts",
     "alberta": "Alberta",
     "new south wales": "New South Wales",
@@ -200,9 +203,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "leadership": "Leadership",
-    "digital and technology": "Digital and Technology",
     "people and culture": "People and Culture",
     "operations and logistics": "Operations and Logistics",
     "commercial": "Commercial",
