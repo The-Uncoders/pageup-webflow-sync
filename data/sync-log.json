@@ -1,5 +1,34 @@
 [
   {
+    "id": "2026-04-09T14:52:19.090Z",
+    "startedAt": "2026-04-09T14:52:19.091Z",
+    "finishedAt": "2026-04-09T15:00:20.438Z",
+    "durationMs": 481347,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 352,
+    "cmsItemsBefore": 352,
+    "created": 1,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 351,
+    "createdJobs": [
+      {
+        "jobId": "524945",
+        "title": "FCM Business Development Manager- RSA"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530270",
+        "title": "Flight Centre - Travel Consultant - Toronto, ON"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-09T12:57:48.130Z",
     "startedAt": "2026-04-09T12:57:48.131Z",
     "finishedAt": "2026-04-09T13:04:42.284Z",
@@ -2914,25 +2943,6 @@
     "startedAt": "2026-04-04T23:21:09.245Z",
     "finishedAt": "2026-04-04T23:31:58.374Z",
     "durationMs": 649129,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-04T22:54:11.454Z",
-    "startedAt": "2026-04-04T22:54:11.454Z",
-    "finishedAt": "2026-04-04T23:03:23.898Z",
-    "durationMs": 552444,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,

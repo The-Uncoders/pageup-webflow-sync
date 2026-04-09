@@ -1,16 +1,17 @@
 {
   "regions": {
+    "south africa": 7,
     "australia": 204,
     "asia": 63,
-    "canada": 14,
+    "canada": 13,
     "uk & europe": 16,
     "usa": 39,
     "multiple locations": 1,
-    "south africa": 6,
     "new zealand": 8,
     "uae": 1
   },
   "cities": {
+    "johannesburg": 4,
     "south australia": 13,
     "western australia": 19,
     "northern territory": 2,
@@ -18,7 +19,7 @@
     "queensland": 69,
     "victoria": 26,
     "new south wales": 55,
-    "ontario": 8,
+    "ontario": 7,
     "manchester": 1,
     "massachusetts": 3,
     "alberta": 1,
@@ -37,7 +38,6 @@
     "new zealand": 1,
     "cape town": 2,
     "quebec": 2,
-    "johannesburg": 3,
     "can be based in any global head office": 1,
     "bangalore": 1,
     "bangkok": 2,
@@ -85,6 +85,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "johannesburg": "South Africa",
     "south australia": "Australia",
     "western australia": "Australia",
     "northern territory": "Australia",
@@ -111,7 +112,6 @@
     "new zealand": "Multiple Locations",
     "cape town": "South Africa",
     "quebec": "Canada",
-    "johannesburg": "South Africa",
     "can be based in any global head office": "UK & Europe",
     "bangalore": "Asia",
     "bangkok": "Asia",
@@ -144,6 +144,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "johannesburg": "Johannesburg",
     "south australia": "South Australia",
     "western australia": "Western Australia",
     "northern territory": "Northern Territory",
@@ -170,7 +171,6 @@
     "new zealand": "New Zealand",
     "cape town": "Cape Town",
     "quebec": "Quebec",
-    "johannesburg": "Johannesburg",
     "can be based in any global head office": "Can be based in any global head office",
     "bangalore": "Bangalore",
     "bangkok": "Bangkok",
