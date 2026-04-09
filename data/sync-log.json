@@ -1,5 +1,58 @@
 [
   {
+    "id": "2026-04-08T23:56:35.676Z",
+    "startedAt": "2026-04-08T23:56:35.677Z",
+    "finishedAt": "2026-04-09T00:04:36.152Z",
+    "durationMs": 480475,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 340,
+    "cmsItemsBefore": 334,
+    "created": 7,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 333,
+    "createdJobs": [
+      {
+        "jobId": "519731",
+        "title": "Sales Travel Consultant - South Australia"
+      },
+      {
+        "jobId": "528594",
+        "title": "Retail Sales Travel Consultant - Renmark, SA"
+      },
+      {
+        "jobId": "530298",
+        "title": "Retail Sales Travel Consultant - Mount Barker, SA"
+      },
+      {
+        "jobId": "530335",
+        "title": "Sales Travel Consultant - Hills & Murray Region"
+      },
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns Campaign"
+      },
+      {
+        "jobId": "529166",
+        "title": "Sales Travel Consultant - Greater Newcastle, NSW"
+      },
+      {
+        "jobId": "530625",
+        "title": "Sales Travel Consultant - Cairns. QLD"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530192",
+        "title": "Sales Travel Consultant - Plenty Valley, VIC"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-08T23:05:08.996Z",
     "startedAt": "2026-04-08T23:05:08.996Z",
     "finishedAt": "2026-04-08T23:14:45.329Z",
@@ -2494,25 +2547,6 @@
     "startedAt": "2026-04-04T17:31:27.553Z",
     "finishedAt": "2026-04-04T17:39:42.846Z",
     "durationMs": 495293,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-04T16:59:37.722Z",
-    "startedAt": "2026-04-04T16:59:37.722Z",
-    "finishedAt": "2026-04-04T17:06:58.687Z",
-    "durationMs": 440965,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,

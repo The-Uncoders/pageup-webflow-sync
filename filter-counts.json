@@ -1,9 +1,9 @@
 {
   "regions": {
+    "australia": 186,
     "canada": 14,
     "uk & europe": 16,
     "usa": 39,
-    "australia": 184,
     "asia": 65,
     "multiple locations": 1,
     "south africa": 6,
@@ -11,12 +11,12 @@
     "uae": 1
   },
   "cities": {
+    "queensland": 70,
+    "new south wales": 55,
     "ontario": 8,
     "manchester": 1,
     "massachusetts": 3,
     "alberta": 1,
-    "new south wales": 54,
-    "queensland": 68,
     "sarawak": 1,
     "london": 5,
     "mumbai": 4,
@@ -40,7 +40,7 @@
     "bangkok": 2,
     "pune": 1,
     "remote": 3,
-    "victoria": 26,
+    "victoria": 25,
     "bath": 2,
     "new plymouth": 1,
     "ho chi minh city": 3,
@@ -70,7 +70,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 227,
+    "sales and customer service": 229,
     "digital and technology": 30,
     "leadership": 23,
     "people and culture": 5,
@@ -85,12 +85,12 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "queensland": "Australia",
+    "new south wales": "Australia",
     "ontario": "Canada",
     "manchester": "UK & Europe",
     "massachusetts": "USA",
     "alberta": "Canada",
-    "new south wales": "Australia",
-    "queensland": "Australia",
     "sarawak": "Asia",
     "london": "UK & Europe",
     "mumbai": "Asia",
@@ -144,12 +144,12 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "queensland": "Queensland",
+    "new south wales": "New South Wales",
     "ontario": "Ontario",
     "manchester": "Manchester",
     "massachusetts": "Massachusetts",
     "alberta": "Alberta",
-    "new south wales": "New South Wales",
-    "queensland": "Queensland",
     "sarawak": "Sarawak",
     "london": "London",
     "mumbai": "Mumbai",
