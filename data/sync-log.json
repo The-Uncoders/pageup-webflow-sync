@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-04-09T22:30:54.559Z",
+    "startedAt": "2026-04-09T22:30:54.559Z",
+    "finishedAt": "2026-04-09T22:38:11.735Z",
+    "durationMs": 437176,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 349,
+    "created": 0,
+    "updated": 0,
+    "deleted": 4,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530321",
+        "title": "Sales Travel Consultant - South-West Suburbs"
+      },
+      {
+        "jobId": "530303",
+        "title": "Retail Sales Travel Consultant - Eaton, WA"
+      },
+      {
+        "jobId": "530234",
+        "title": "RSA - Retail Travel Consultant - Bedford Square, Johannesburg"
+      },
+      {
+        "jobId": "530232",
+        "title": "RSA - Retail Travel Consultant - Greenstone, Johannesburg"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-09T21:38:18.224Z",
     "startedAt": "2026-04-09T21:38:18.224Z",
     "finishedAt": "2026-04-09T21:47:05.750Z",
@@ -2950,25 +2986,6 @@
     "startedAt": "2026-04-05T08:32:22.159Z",
     "finishedAt": "2026-04-05T08:40:46.582Z",
     "durationMs": 504423,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-05T07:54:56.437Z",
-    "startedAt": "2026-04-05T07:54:56.437Z",
-    "finishedAt": "2026-04-05T08:03:14.655Z",
-    "durationMs": 498218,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
