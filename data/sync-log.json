@@ -1,5 +1,42 @@
 [
   {
+    "id": "2026-04-09T23:30:13.846Z",
+    "startedAt": "2026-04-09T23:30:13.846Z",
+    "finishedAt": "2026-04-09T23:40:12.202Z",
+    "durationMs": 598356,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 347,
+    "cmsItemsBefore": 345,
+    "created": 3,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 344,
+    "createdJobs": [
+      {
+        "jobId": "528838",
+        "title": "Sales Travel Consultant - Central Queensland"
+      },
+      {
+        "jobId": "530592",
+        "title": "Sales Travel Consultant - Hamilton, VIC"
+      },
+      {
+        "jobId": "530651",
+        "title": "Sales Travel Consultant - Yeppoon, QLD"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530207",
+        "title": "Sales Travel Consultant - Hervey Bay, QLD"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-09T22:30:54.559Z",
     "startedAt": "2026-04-09T22:30:54.559Z",
     "finishedAt": "2026-04-09T22:38:11.735Z",
@@ -2967,25 +3004,6 @@
     "startedAt": "2026-04-05T09:29:55.245Z",
     "finishedAt": "2026-04-05T09:38:18.570Z",
     "durationMs": 503325,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-05T08:32:22.159Z",
-    "startedAt": "2026-04-05T08:32:22.159Z",
-    "finishedAt": "2026-04-05T08:40:46.582Z",
-    "durationMs": 504423,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
