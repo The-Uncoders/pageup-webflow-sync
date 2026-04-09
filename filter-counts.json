@@ -4,7 +4,7 @@
     "australia": 204,
     "asia": 63,
     "canada": 13,
-    "uk & europe": 16,
+    "uk & europe": 15,
     "usa": 39,
     "multiple locations": 1,
     "new zealand": 8,
@@ -43,7 +43,7 @@
     "bangkok": 2,
     "pune": 1,
     "remote": 3,
-    "bath": 2,
+    "bath": 1,
     "new plymouth": 1,
     "ho chi minh city": 3,
     "auckland": 3,
@@ -70,7 +70,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 248,
+    "sales and customer service": 247,
     "marketing and communication": 11,
     "digital and technology": 29,
     "leadership": 23,
