@@ -1,7 +1,7 @@
 {
   "regions": {
+    "australia": 204,
     "asia": 65,
-    "australia": 187,
     "canada": 14,
     "uk & europe": 16,
     "usa": 39,
@@ -11,10 +11,12 @@
     "uae": 1
   },
   "cities": {
+    "south australia": 13,
+    "western australia": 19,
+    "northern territory": 2,
     "singapore": 2,
     "queensland": 69,
     "victoria": 26,
-    "western australia": 7,
     "new south wales": 55,
     "ontario": 8,
     "manchester": 1,
@@ -36,7 +38,6 @@
     "cape town": 2,
     "quebec": 2,
     "johannesburg": 3,
-    "south australia": 9,
     "can be based in any global head office": 1,
     "bangalore": 2,
     "bangkok": 2,
@@ -56,7 +57,6 @@
     "invercargill": 1,
     "phuket": 2,
     "australian capital territory": 14,
-    "northern territory": 1,
     "paris": 1,
     "nationwide": 1,
     "kerikeri": 1,
@@ -70,9 +70,9 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 248,
     "marketing and communication": 11,
     "digital and technology": 31,
-    "sales and customer service": 231,
     "leadership": 23,
     "people and culture": 4,
     "operations and logistics": 37,
@@ -85,10 +85,12 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "south australia": "Australia",
+    "western australia": "Australia",
+    "northern territory": "Australia",
     "singapore": "Asia",
     "queensland": "Australia",
     "victoria": "Australia",
-    "western australia": "Australia",
     "new south wales": "Australia",
     "ontario": "Canada",
     "manchester": "UK & Europe",
@@ -110,7 +112,6 @@
     "cape town": "South Africa",
     "quebec": "Canada",
     "johannesburg": "South Africa",
-    "south australia": "Australia",
     "can be based in any global head office": "UK & Europe",
     "bangalore": "Asia",
     "bangkok": "Asia",
@@ -130,7 +131,6 @@
     "invercargill": "New Zealand",
     "phuket": "Asia",
     "australian capital territory": "Australia",
-    "northern territory": "Australia",
     "paris": "UK & Europe",
     "nationwide": "South Africa",
     "kerikeri": "New Zealand",
@@ -144,10 +144,12 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "south australia": "South Australia",
+    "western australia": "Western Australia",
+    "northern territory": "Northern Territory",
     "singapore": "Singapore",
     "queensland": "Queensland",
     "victoria": "Victoria",
-    "western australia": "Western Australia",
     "new south wales": "New South Wales",
     "ontario": "Ontario",
     "manchester": "Manchester",
@@ -169,7 +171,6 @@
     "cape town": "Cape Town",
     "quebec": "Quebec",
     "johannesburg": "Johannesburg",
-    "south australia": "South Australia",
     "can be based in any global head office": "Can be based in any global head office",
     "bangalore": "Bangalore",
     "bangkok": "Bangkok",
@@ -189,7 +190,6 @@
     "invercargill": "Invercargill",
     "phuket": "Phuket",
     "australian capital territory": "Australian Capital Territory",
-    "northern territory": "Northern Territory",
     "paris": "Paris",
     "nationwide": "Nationwide",
     "kerikeri": "Kerikeri",
@@ -203,9 +203,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "sales and customer service": "Sales and Customer Service",
     "marketing and communication": "Marketing and Communication",
     "digital and technology": "Digital and Technology",
-    "sales and customer service": "Sales and Customer Service",
     "leadership": "Leadership",
     "people and culture": "People and Culture",
     "operations and logistics": "Operations and Logistics",
