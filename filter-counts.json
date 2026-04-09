@@ -1,7 +1,7 @@
 {
   "regions": {
     "australia": 204,
-    "asia": 64,
+    "asia": 63,
     "canada": 14,
     "uk & europe": 16,
     "usa": 39,
@@ -26,7 +26,7 @@
     "london": 5,
     "mumbai": 4,
     "new york": 8,
-    "noida": 17,
+    "noida": 16,
     "california": 11,
     "hanoi": 4,
     "virtual - usa": 2,
@@ -72,7 +72,7 @@
   "categories": {
     "sales and customer service": 248,
     "marketing and communication": 11,
-    "digital and technology": 30,
+    "digital and technology": 29,
     "leadership": 23,
     "people and culture": 4,
     "operations and logistics": 37,

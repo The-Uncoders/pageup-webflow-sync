@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-04-09T11:44:43.662Z",
+    "startedAt": "2026-04-09T11:44:43.662Z",
+    "finishedAt": "2026-04-09T11:52:43.701Z",
+    "durationMs": 480039,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 352,
+    "cmsItemsBefore": 353,
+    "created": 0,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 352,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "528551",
+        "title": "QA Manager - Noida, India"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-09T10:38:17.619Z",
     "startedAt": "2026-04-09T10:38:17.619Z",
     "finishedAt": "2026-04-09T10:45:44.420Z",
@@ -2909,25 +2933,6 @@
     "startedAt": "2026-04-04T22:18:21.210Z",
     "finishedAt": "2026-04-04T22:26:39.532Z",
     "durationMs": 498322,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-04T21:52:43.061Z",
-    "startedAt": "2026-04-04T21:52:43.061Z",
-    "finishedAt": "2026-04-04T22:00:56.035Z",
-    "durationMs": 492974,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
