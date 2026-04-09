@@ -1,5 +1,102 @@
 [
   {
+    "id": "2026-04-09T06:01:41.510Z",
+    "startedAt": "2026-04-09T06:01:41.511Z",
+    "finishedAt": "2026-04-09T06:10:29.805Z",
+    "durationMs": 528294,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 354,
+    "cmsItemsBefore": 337,
+    "created": 18,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 336,
+    "createdJobs": [
+      {
+        "jobId": "519735",
+        "title": "Sales Travel Consultant - WA North/Northern Territory"
+      },
+      {
+        "jobId": "519739",
+        "title": "Sales Travel Consultant - WA South"
+      },
+      {
+        "jobId": "528123",
+        "title": "Sales Travel Consultant - Booragoon, WA"
+      },
+      {
+        "jobId": "529004",
+        "title": "Sales Travel Consultant - Joondalup & Surrounding Suburbs"
+      },
+      {
+        "jobId": "529007",
+        "title": "Sales Travel Consultant - South-East Perth"
+      },
+      {
+        "jobId": "529024",
+        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
+      },
+      {
+        "jobId": "529069",
+        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
+      },
+      {
+        "jobId": "529251",
+        "title": "Sales Travel Consultant - Midland, WA"
+      },
+      {
+        "jobId": "529557",
+        "title": "Sales Travel Consultant - Kalamunda, WA"
+      },
+      {
+        "jobId": "529968",
+        "title": "Retail Sales Travel Consultant - Esperance, WA"
+      },
+      {
+        "jobId": "530178",
+        "title": "Sales Travel Consultant - Whitford City, WA"
+      },
+      {
+        "jobId": "530303",
+        "title": "Retail Sales Travel Consultant - Eaton, WA"
+      },
+      {
+        "jobId": "530321",
+        "title": "Sales Travel Consultant - South-West Suburbs"
+      },
+      {
+        "jobId": "519731",
+        "title": "Sales Travel Consultant - South Australia"
+      },
+      {
+        "jobId": "528594",
+        "title": "Retail Sales Travel Consultant - Renmark, SA"
+      },
+      {
+        "jobId": "530298",
+        "title": "Retail Sales Travel Consultant - Mount Barker, SA"
+      },
+      {
+        "jobId": "530335",
+        "title": "Sales Travel Consultant - Hills & Murray Region"
+      },
+      {
+        "jobId": "530103",
+        "title": "Senior DevOps Engineer - South Bank, QLD"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529915",
+        "title": "Cruise Product Coordinator - Broadbeach, QLD"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-09T04:06:53.980Z",
     "startedAt": "2026-04-09T04:06:53.981Z",
     "finishedAt": "2026-04-09T04:14:39.274Z",
@@ -2679,25 +2776,6 @@
     "startedAt": "2026-04-04T19:51:01.153Z",
     "finishedAt": "2026-04-04T19:58:28.064Z",
     "durationMs": 446911,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-04T19:06:51.992Z",
-    "startedAt": "2026-04-04T19:06:51.992Z",
-    "finishedAt": "2026-04-04T19:15:08.130Z",
-    "durationMs": 496138,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
