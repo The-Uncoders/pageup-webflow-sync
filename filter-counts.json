@@ -1,16 +1,17 @@
 {
   "regions": {
+    "asia": 65,
     "australia": 187,
     "canada": 14,
     "uk & europe": 16,
     "usa": 39,
-    "asia": 65,
     "multiple locations": 1,
     "south africa": 6,
     "new zealand": 8,
     "uae": 1
   },
   "cities": {
+    "singapore": 2,
     "queensland": 69,
     "victoria": 26,
     "western australia": 7,
@@ -47,7 +48,7 @@
     "auckland": 3,
     "siem reap": 1,
     "hong kong": 1,
-    "tokyo": 16,
+    "tokyo": 15,
     "bali": 5,
     "tasmania": 4,
     "wellington": 1,
@@ -59,7 +60,6 @@
     "paris": 1,
     "nationwide": 1,
     "kerikeri": 1,
-    "singapore": 1,
     "illinois": 3,
     "texas": 1,
     "colorado": 3,
@@ -70,14 +70,14 @@
     "new jersey": 1
   },
   "categories": {
+    "marketing and communication": 11,
     "digital and technology": 31,
     "sales and customer service": 231,
     "leadership": 23,
-    "people and culture": 5,
+    "people and culture": 4,
     "operations and logistics": 37,
     "commercial": 19,
     "data and business intelligence": 6,
-    "marketing and communication": 10,
     "finance": 21,
     "administration": 4,
     "project and program management": 4,
@@ -85,6 +85,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "singapore": "Asia",
     "queensland": "Australia",
     "victoria": "Australia",
     "western australia": "Australia",
@@ -133,7 +134,6 @@
     "paris": "UK & Europe",
     "nationwide": "South Africa",
     "kerikeri": "New Zealand",
-    "singapore": "Asia",
     "illinois": "USA",
     "texas": "USA",
     "colorado": "USA",
@@ -144,6 +144,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "singapore": "Singapore",
     "queensland": "Queensland",
     "victoria": "Victoria",
     "western australia": "Western Australia",
@@ -192,7 +193,6 @@
     "paris": "Paris",
     "nationwide": "Nationwide",
     "kerikeri": "Kerikeri",
-    "singapore": "Singapore",
     "illinois": "Illinois",
     "texas": "Texas",
     "colorado": "Colorado",
@@ -203,6 +203,7 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "marketing and communication": "Marketing and Communication",
     "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "leadership": "Leadership",
@@ -210,7 +211,6 @@
     "operations and logistics": "Operations and Logistics",
     "commercial": "Commercial",
     "data and business intelligence": "Data and Business Intelligence",
-    "marketing and communication": "Marketing and Communication",
     "finance": "Finance",
     "administration": "Administration",
     "project and program management": "Project and Program Management",
