@@ -1,7 +1,7 @@
 {
   "regions": {
     "australia": 204,
-    "asia": 65,
+    "asia": 64,
     "canada": 14,
     "uk & europe": 16,
     "usa": 39,
@@ -39,7 +39,7 @@
     "quebec": 2,
     "johannesburg": 3,
     "can be based in any global head office": 1,
-    "bangalore": 2,
+    "bangalore": 1,
     "bangkok": 2,
     "pune": 1,
     "remote": 3,
@@ -72,7 +72,7 @@
   "categories": {
     "sales and customer service": 248,
     "marketing and communication": 11,
-    "digital and technology": 31,
+    "digital and technology": 30,
     "leadership": 23,
     "people and culture": 4,
     "operations and logistics": 37,
