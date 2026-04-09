@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 186,
+    "australia": 187,
     "canada": 14,
     "uk & europe": 16,
     "usa": 39,
@@ -11,6 +11,7 @@
     "uae": 1
   },
   "cities": {
+    "victoria": 26,
     "western australia": 7,
     "queensland": 69,
     "new south wales": 55,
@@ -40,7 +41,6 @@
     "bangkok": 2,
     "pune": 1,
     "remote": 3,
-    "victoria": 25,
     "bath": 2,
     "new plymouth": 1,
     "ho chi minh city": 3,
@@ -70,7 +70,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 230,
+    "sales and customer service": 231,
     "digital and technology": 30,
     "leadership": 23,
     "people and culture": 5,
@@ -85,6 +85,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "victoria": "Australia",
     "western australia": "Australia",
     "queensland": "Australia",
     "new south wales": "Australia",
@@ -114,7 +115,6 @@
     "bangkok": "Asia",
     "pune": "Asia",
     "remote": "Australia",
-    "victoria": "Australia",
     "bath": "UK & Europe",
     "new plymouth": "New Zealand",
     "ho chi minh city": "Asia",
@@ -144,6 +144,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "victoria": "Victoria",
     "western australia": "Western Australia",
     "queensland": "Queensland",
     "new south wales": "New South Wales",
@@ -173,7 +174,6 @@
     "bangkok": "Bangkok",
     "pune": "Pune",
     "remote": "Remote",
-    "victoria": "Victoria",
     "bath": "Bath",
     "new plymouth": "New Plymouth",
     "ho chi minh city": "Ho Chi Minh City",
