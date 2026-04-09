@@ -1,5 +1,33 @@
 [
   {
+    "id": "2026-04-09T20:44:16.253Z",
+    "startedAt": "2026-04-09T20:44:16.253Z",
+    "finishedAt": "2026-04-09T20:52:24.795Z",
+    "durationMs": 488542,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 349,
+    "cmsItemsBefore": 351,
+    "created": 0,
+    "updated": 0,
+    "deleted": 2,
+    "unchanged": 349,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529996",
+        "title": "FCM Meetings and Events - Meetings Manager - Philadelphia, PA"
+      },
+      {
+        "jobId": "529994",
+        "title": "FCM Meetings and Events - Meetings Manager - NYC, NY"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-09T19:57:58.117Z",
     "startedAt": "2026-04-09T19:57:58.118Z",
     "finishedAt": "2026-04-09T20:05:59.872Z",
@@ -2941,25 +2969,6 @@
     "startedAt": "2026-04-05T06:59:26.499Z",
     "finishedAt": "2026-04-05T07:08:59.375Z",
     "durationMs": 572876,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-05T05:57:43.204Z",
-    "startedAt": "2026-04-05T05:57:43.204Z",
-    "finishedAt": "2026-04-05T06:05:54.747Z",
-    "durationMs": 491543,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
