@@ -107,7 +107,7 @@ class WebflowClient {
         console.log(`[webflow] Created batch ${Math.floor(i / BATCH_SIZE) + 1}: ${batch.length} items`);
       } catch (err) {
         // If batch fails, try items individually
-        console.warn(`[webflow] Batch create failed, trying individually: ${err.message.substring(0, 100)}`);
+        console.warn(`[webflow] Batch create failed, trying individually: ${err.message.substring(0, 500)}`);
         for (const item of batch) {
           try {
             const result = await this.request('POST',
@@ -116,7 +116,7 @@ class WebflowClient {
             );
             if (result.items) created.push(...result.items);
           } catch (innerErr) {
-            console.error(`[webflow] Failed to create item "${item.fieldData?.name}": ${innerErr.message.substring(0, 150)}`);
+            console.error(`[webflow] Failed to create item "${item.fieldData?.name}": ${innerErr.message.substring(0, 500)}`);
           }
         }
       }
@@ -139,7 +139,7 @@ class WebflowClient {
         console.log(`[webflow] Updated batch ${Math.floor(i / BATCH_SIZE) + 1}: ${batch.length} items`);
       } catch (err) {
         // If batch fails, try items individually
-        console.warn(`[webflow] Batch update failed, trying individually: ${err.message.substring(0, 100)}`);
+        console.warn(`[webflow] Batch update failed, trying individually: ${err.message.substring(0, 500)}`);
         for (const item of batch) {
           try {
             const result = await this.request('PATCH',
@@ -148,7 +148,7 @@ class WebflowClient {
             );
             if (result.items) updated.push(...result.items);
           } catch (innerErr) {
-            console.error(`[webflow] Failed to update item ${item.id}: ${innerErr.message.substring(0, 150)}`);
+            console.error(`[webflow] Failed to update item ${item.id}: ${innerErr.message.substring(0, 500)}`);
           }
         }
       }
