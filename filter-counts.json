@@ -11,9 +11,9 @@
     "uae": 1
   },
   "cities": {
+    "victoria": 28,
     "new south wales": 56,
     "queensland": 71,
-    "victoria": 27,
     "johannesburg": 2,
     "south australia": 13,
     "western australia": 17,
@@ -56,7 +56,7 @@
     "barcelona": 3,
     "invercargill": 1,
     "phuket": 2,
-    "australian capital territory": 14,
+    "australian capital territory": 13,
     "paris": 1,
     "nationwide": 1,
     "kerikeri": 1,
@@ -85,9 +85,9 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "victoria": "Australia",
     "new south wales": "Australia",
     "queensland": "Australia",
-    "victoria": "Australia",
     "johannesburg": "South Africa",
     "south australia": "Australia",
     "western australia": "Australia",
@@ -144,9 +144,9 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "victoria": "Victoria",
     "new south wales": "New South Wales",
     "queensland": "Queensland",
-    "victoria": "Victoria",
     "johannesburg": "Johannesburg",
     "south australia": "South Australia",
     "western australia": "Western Australia",

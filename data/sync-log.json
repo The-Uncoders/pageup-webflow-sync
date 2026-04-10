@@ -1,5 +1,52 @@
 [
   {
+    "id": "2026-04-10T07:14:51.178Z",
+    "startedAt": "2026-04-10T07:14:51.178Z",
+    "finishedAt": "2026-04-10T07:23:53.344Z",
+    "durationMs": 542166,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 347,
+    "cmsItemsBefore": 347,
+    "created": 1,
+    "updated": 2,
+    "deleted": 1,
+    "unchanged": 344,
+    "createdJobs": [
+      {
+        "jobId": "530677",
+        "title": "Travel Consultant ( Cruiseabout ) - Mornington, Victoria"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529057",
+        "title": "Sales Travel Consultant - ACT",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "530064",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "work-type",
+          "category",
+          "brand-name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "529587",
+        "title": "Sales Travel Consultant - Woden, ACT"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-10T05:52:39.771Z",
     "startedAt": "2026-04-10T05:52:39.771Z",
     "finishedAt": "2026-04-10T06:01:22.390Z",
@@ -3004,25 +3051,6 @@
     "startedAt": "2026-04-05T12:33:03.330Z",
     "finishedAt": "2026-04-05T12:40:46.176Z",
     "durationMs": 462846,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-05T11:31:10.266Z",
-    "startedAt": "2026-04-05T11:31:10.266Z",
-    "finishedAt": "2026-04-05T11:40:53.436Z",
-    "durationMs": 583170,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
