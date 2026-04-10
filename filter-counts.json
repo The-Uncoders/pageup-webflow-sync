@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 205,
+    "australia": 206,
     "south africa": 5,
     "asia": 61,
     "canada": 13,
@@ -11,6 +11,7 @@
     "uae": 1
   },
   "cities": {
+    "new south wales": 56,
     "queensland": 71,
     "victoria": 27,
     "johannesburg": 2,
@@ -18,7 +19,6 @@
     "western australia": 17,
     "northern territory": 2,
     "singapore": 2,
-    "new south wales": 55,
     "ontario": 7,
     "manchester": 1,
     "massachusetts": 3,
@@ -70,7 +70,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 246,
+    "sales and customer service": 247,
     "marketing and communication": 11,
     "digital and technology": 29,
     "leadership": 23,
@@ -85,6 +85,7 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
+    "new south wales": "Australia",
     "queensland": "Australia",
     "victoria": "Australia",
     "johannesburg": "South Africa",
@@ -92,7 +93,6 @@
     "western australia": "Australia",
     "northern territory": "Australia",
     "singapore": "Asia",
-    "new south wales": "Australia",
     "ontario": "Canada",
     "manchester": "UK & Europe",
     "massachusetts": "USA",
@@ -144,6 +144,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new south wales": "New South Wales",
     "queensland": "Queensland",
     "victoria": "Victoria",
     "johannesburg": "Johannesburg",
@@ -151,7 +152,6 @@
     "western australia": "Western Australia",
     "northern territory": "Northern Territory",
     "singapore": "Singapore",
-    "new south wales": "New South Wales",
     "ontario": "Ontario",
     "manchester": "Manchester",
     "massachusetts": "Massachusetts",
