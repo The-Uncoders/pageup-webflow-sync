@@ -1,5 +1,61 @@
 [
   {
+    "id": "2026-04-10T14:10:25.883Z",
+    "startedAt": "2026-04-10T14:10:25.883Z",
+    "finishedAt": "2026-04-10T14:18:25.081Z",
+    "durationMs": 479198,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 348,
+    "cmsItemsBefore": 348,
+    "created": 0,
+    "updated": 3,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "529057",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name",
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "529746",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name",
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "529095",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name",
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-10T12:53:19.537Z",
     "startedAt": "2026-04-10T12:53:19.537Z",
     "finishedAt": "2026-04-10T13:00:20.083Z",
@@ -3079,25 +3135,6 @@
     "startedAt": "2026-04-05T17:00:01.443Z",
     "finishedAt": "2026-04-05T17:07:30.553Z",
     "durationMs": 449110,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-05T16:24:46.982Z",
-    "startedAt": "2026-04-05T16:24:46.982Z",
-    "finishedAt": "2026-04-05T16:33:12.403Z",
-    "durationMs": 505421,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
