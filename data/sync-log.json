@@ -1,5 +1,45 @@
 [
   {
+    "id": "2026-04-10T15:11:34.669Z",
+    "startedAt": "2026-04-10T15:11:34.669Z",
+    "finishedAt": "2026-04-10T15:19:39.249Z",
+    "durationMs": 484580,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 348,
+    "created": 0,
+    "updated": 1,
+    "deleted": 3,
+    "unchanged": 344,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "529572",
+        "title": "Software Engineer",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "529746",
+        "title": "Global Finance Systems Product Lead (Corporate)"
+      },
+      {
+        "jobId": "529057",
+        "title": "Sales Travel Consultant - ACT"
+      },
+      {
+        "jobId": "529095",
+        "title": "Sales Travel Consultant - Western Sydney, NSW"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-10T14:10:25.883Z",
     "startedAt": "2026-04-10T14:10:25.883Z",
     "finishedAt": "2026-04-10T14:18:25.081Z",
@@ -3116,25 +3156,6 @@
     "startedAt": "2026-04-05T17:34:00.786Z",
     "finishedAt": "2026-04-05T17:43:02.831Z",
     "durationMs": 542045,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-05T17:00:01.443Z",
-    "startedAt": "2026-04-05T17:00:01.443Z",
-    "finishedAt": "2026-04-05T17:07:30.553Z",
-    "durationMs": 449110,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
