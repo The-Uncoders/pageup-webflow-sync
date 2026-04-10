@@ -11,9 +11,9 @@
     "uae": 1
   },
   "cities": {
+    "new south wales": 57,
     "victoria": 28,
-    "new south wales": 56,
-    "queensland": 71,
+    "queensland": 70,
     "johannesburg": 2,
     "south australia": 13,
     "western australia": 17,
@@ -70,13 +70,13 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 247,
+    "sales and customer service": 248,
     "marketing and communication": 11,
     "digital and technology": 29,
     "leadership": 23,
     "people and culture": 4,
-    "operations and logistics": 34,
-    "commercial": 18,
+    "operations and logistics": 33,
+    "commercial": 17,
     "data and business intelligence": 6,
     "finance": 21,
     "administration": 4,
@@ -85,8 +85,8 @@
     "risk and compliance": 1
   },
   "cityToRegion": {
-    "victoria": "Australia",
     "new south wales": "Australia",
+    "victoria": "Australia",
     "queensland": "Australia",
     "johannesburg": "South Africa",
     "south australia": "Australia",
@@ -144,8 +144,8 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
-    "victoria": "Victoria",
     "new south wales": "New South Wales",
+    "victoria": "Victoria",
     "queensland": "Queensland",
     "johannesburg": "Johannesburg",
     "south australia": "South Australia",

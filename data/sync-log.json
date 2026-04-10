@@ -1,5 +1,49 @@
 [
   {
+    "id": "2026-04-10T08:51:27.188Z",
+    "startedAt": "2026-04-10T08:51:27.188Z",
+    "finishedAt": "2026-04-10T08:59:15.663Z",
+    "durationMs": 468475,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 347,
+    "cmsItemsBefore": 347,
+    "created": 1,
+    "updated": 2,
+    "deleted": 1,
+    "unchanged": 344,
+    "createdJobs": [
+      {
+        "jobId": "530650",
+        "title": "AUS - FCB Sales Travel Consultant - SUBURB, STATE"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529171",
+        "title": "Team Leader ( Cruiseabout)- Brighton, VIC",
+        "changedFields": [
+          "name"
+        ]
+      },
+      {
+        "jobId": "529095",
+        "title": "Sales Travel Consultant - Western Sydney, NSW",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530064",
+        "title": "Product Coordinator Distributions (Aldi)- Broadbeach, QLD"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-10T07:14:51.178Z",
     "startedAt": "2026-04-10T07:14:51.178Z",
     "finishedAt": "2026-04-10T07:23:53.344Z",
@@ -3032,25 +3076,6 @@
     "startedAt": "2026-04-05T13:45:55.219Z",
     "finishedAt": "2026-04-05T13:54:33.772Z",
     "durationMs": 518553,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-05T12:33:03.330Z",
-    "startedAt": "2026-04-05T12:33:03.330Z",
-    "finishedAt": "2026-04-05T12:40:46.176Z",
-    "durationMs": 462846,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
