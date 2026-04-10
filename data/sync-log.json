@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-04-10T09:59:31.607Z",
+    "startedAt": "2026-04-10T09:59:31.607Z",
+    "finishedAt": "2026-04-10T10:06:49.723Z",
+    "durationMs": 438116,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 348,
+    "cmsItemsBefore": 347,
+    "created": 1,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 346,
+    "createdJobs": [
+      {
+        "jobId": "530236",
+        "title": "Senior BI Analyst"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529827",
+        "title": "Credit Controller",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-10T08:51:27.188Z",
     "startedAt": "2026-04-10T08:51:27.188Z",
     "finishedAt": "2026-04-10T08:59:15.663Z",
@@ -3057,25 +3089,6 @@
     "startedAt": "2026-04-05T14:26:41.755Z",
     "finishedAt": "2026-04-05T14:35:46.807Z",
     "durationMs": 545052,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 368,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-05T13:45:55.219Z",
-    "startedAt": "2026-04-05T13:45:55.219Z",
-    "finishedAt": "2026-04-05T13:54:33.772Z",
-    "durationMs": 518553,
     "status": "success",
     "error": null,
     "pageupJobsFound": 368,
