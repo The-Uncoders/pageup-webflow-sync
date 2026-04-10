@@ -1,9 +1,9 @@
 {
   "regions": {
+    "canada": 14,
     "asia": 62,
     "australia": 204,
     "south africa": 5,
-    "canada": 13,
     "uk & europe": 14,
     "usa": 37,
     "multiple locations": 1,
@@ -11,6 +11,7 @@
     "uae": 1
   },
   "cities": {
+    "ontario": 8,
     "noida": 17,
     "new south wales": 56,
     "victoria": 28,
@@ -20,7 +21,6 @@
     "western australia": 17,
     "northern territory": 2,
     "singapore": 2,
-    "ontario": 7,
     "manchester": 1,
     "massachusetts": 3,
     "alberta": 1,
@@ -69,6 +69,8 @@
     "new jersey": 1
   },
   "categories": {
+    "legal": 2,
+    "risk and compliance": 2,
     "digital and technology": 29,
     "sales and customer service": 246,
     "marketing and communication": 11,
@@ -79,11 +81,10 @@
     "data and business intelligence": 6,
     "finance": 21,
     "administration": 4,
-    "project and program management": 2,
-    "legal": 1,
-    "risk and compliance": 1
+    "project and program management": 2
   },
   "cityToRegion": {
+    "ontario": "Canada",
     "noida": "Asia",
     "new south wales": "Australia",
     "victoria": "Australia",
@@ -93,7 +94,6 @@
     "western australia": "Australia",
     "northern territory": "Australia",
     "singapore": "Asia",
-    "ontario": "Canada",
     "manchester": "UK & Europe",
     "massachusetts": "USA",
     "alberta": "Canada",
@@ -142,6 +142,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "ontario": "Ontario",
     "noida": "Noida",
     "new south wales": "New South Wales",
     "victoria": "Victoria",
@@ -151,7 +152,6 @@
     "western australia": "Western Australia",
     "northern territory": "Northern Territory",
     "singapore": "Singapore",
-    "ontario": "Ontario",
     "manchester": "Manchester",
     "massachusetts": "Massachusetts",
     "alberta": "Alberta",
@@ -200,6 +200,8 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "legal": "Legal",
+    "risk and compliance": "Risk and Compliance",
     "digital and technology": "Digital and Technology",
     "sales and customer service": "Sales and Customer Service",
     "marketing and communication": "Marketing and Communication",
@@ -210,8 +212,6 @@
     "data and business intelligence": "Data and Business Intelligence",
     "finance": "Finance",
     "administration": "Administration",
-    "project and program management": "Project and Program Management",
-    "legal": "Legal",
-    "risk and compliance": "Risk and Compliance"
+    "project and program management": "Project and Program Management"
   }
 }
