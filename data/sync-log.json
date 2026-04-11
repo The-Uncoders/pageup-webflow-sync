@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-11T20:56:48.129Z",
+    "startedAt": "2026-04-11T20:56:48.129Z",
+    "finishedAt": "2026-04-11T21:04:38.222Z",
+    "durationMs": 470093,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-11T20:20:47.898Z",
     "startedAt": "2026-04-11T20:20:47.899Z",
     "finishedAt": "2026-04-11T20:28:51.887Z",
@@ -3018,39 +3037,6 @@
       },
       {
         "jobId": "529752",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-07T01:25:10.120Z",
-    "startedAt": "2026-04-07T01:25:10.120Z",
-    "finishedAt": "2026-04-07T01:32:52.932Z",
-    "durationMs": 462812,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 359,
-    "cmsItemsBefore": 358,
-    "created": 2,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 357,
-    "createdJobs": [
-      {
-        "jobId": "530615",
-        "title": "Corporate Traveler - Account Executive - Culver City, CA"
-      },
-      {
-        "jobId": "530616",
-        "title": "Corporate Traveler - Account Executive - Irvine, CA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529222",
         "title": "Unknown"
       }
     ],
