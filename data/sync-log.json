@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-04-11T10:24:00.057Z",
+    "startedAt": "2026-04-11T10:24:00.057Z",
+    "finishedAt": "2026-04-11T10:31:34.639Z",
+    "durationMs": 454582,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 344,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 344,
+    "createdJobs": [
+      {
+        "jobId": "529844",
+        "title": "HR Leader, India"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-11T09:30:39.849Z",
     "startedAt": "2026-04-11T09:30:39.849Z",
     "finishedAt": "2026-04-11T09:38:11.489Z",
@@ -3129,38 +3153,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-06T10:46:46.851Z",
-    "startedAt": "2026-04-06T10:46:46.852Z",
-    "finishedAt": "2026-04-06T10:56:22.982Z",
-    "durationMs": 576130,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 364,
-    "cmsItemsBefore": 365,
-    "created": 1,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 363,
-    "createdJobs": [
-      {
-        "jobId": "530614",
-        "title": "HR Admin Intern - Hanoi, Vietnam."
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "528702",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529203",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
