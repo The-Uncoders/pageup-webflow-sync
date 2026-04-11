@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-11T13:47:43.267Z",
+    "startedAt": "2026-04-11T13:47:43.267Z",
+    "finishedAt": "2026-04-11T13:55:12.514Z",
+    "durationMs": 449247,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-11T12:33:35.027Z",
     "startedAt": "2026-04-11T12:33:35.027Z",
     "finishedAt": "2026-04-11T12:42:03.803Z",
@@ -3125,33 +3144,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-06T15:10:25.031Z",
-    "startedAt": "2026-04-06T15:10:25.031Z",
-    "finishedAt": "2026-04-06T15:18:11.478Z",
-    "durationMs": 466447,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 362,
-    "cmsItemsBefore": 364,
-    "created": 0,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 362,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "528829",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "530002",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
