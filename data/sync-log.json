@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-11T22:58:24.766Z",
+    "startedAt": "2026-04-11T22:58:24.767Z",
+    "finishedAt": "2026-04-11T23:06:02.401Z",
+    "durationMs": 457634,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-11T22:20:25.330Z",
     "startedAt": "2026-04-11T22:20:25.330Z",
     "finishedAt": "2026-04-11T22:28:16.459Z",
@@ -2926,38 +2945,6 @@
         "title": "Unknown"
       }
     ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-07T08:41:49.616Z",
-    "startedAt": "2026-04-07T08:41:49.617Z",
-    "finishedAt": "2026-04-07T08:50:53.256Z",
-    "durationMs": 543639,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 358,
-    "cmsItemsBefore": 355,
-    "created": 3,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 355,
-    "createdJobs": [
-      {
-        "jobId": "530631",
-        "title": "Flight Centre - Beaudesert Careers Evening"
-      },
-      {
-        "jobId": "530615",
-        "title": "Corporate Traveler - Account Executive - Culver City, CA"
-      },
-      {
-        "jobId": "530616",
-        "title": "Corporate Traveler - Account Executive - Irvine, CA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
   }
