@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-11T21:55:06.019Z",
+    "startedAt": "2026-04-11T21:55:06.019Z",
+    "finishedAt": "2026-04-11T22:02:14.839Z",
+    "durationMs": 428820,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-11T21:26:10.445Z",
     "startedAt": "2026-04-11T21:26:10.445Z",
     "finishedAt": "2026-04-11T21:35:10.527Z",
@@ -2950,46 +2969,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-07T06:00:29.445Z",
-    "startedAt": "2026-04-07T06:00:29.445Z",
-    "finishedAt": "2026-04-07T06:08:48.293Z",
-    "durationMs": 498848,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 357,
-    "cmsItemsBefore": 354,
-    "created": 4,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 353,
-    "createdJobs": [
-      {
-        "jobId": "528836",
-        "title": "Sales Travel Consultant - Northern Gold Coast, QLD"
-      },
-      {
-        "jobId": "530620",
-        "title": "Sales Travel Consultant - Southport, QLD"
-      },
-      {
-        "jobId": "530615",
-        "title": "Corporate Traveler - Account Executive - Culver City, CA"
-      },
-      {
-        "jobId": "530616",
-        "title": "Corporate Traveler - Account Executive - Irvine, CA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "528497",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
