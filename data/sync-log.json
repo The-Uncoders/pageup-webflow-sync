@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-11T21:26:10.445Z",
+    "startedAt": "2026-04-11T21:26:10.445Z",
+    "finishedAt": "2026-04-11T21:35:10.527Z",
+    "durationMs": 540082,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-11T20:56:48.129Z",
     "startedAt": "2026-04-11T20:56:48.129Z",
     "finishedAt": "2026-04-11T21:04:38.222Z",
@@ -2967,76 +2986,6 @@
     "deletedJobs": [
       {
         "jobId": "528497",
-        "title": "Unknown"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-07T04:09:24.316Z",
-    "startedAt": "2026-04-07T04:09:24.317Z",
-    "finishedAt": "2026-04-07T04:25:00.573Z",
-    "durationMs": 936256,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 356,
-    "cmsItemsBefore": 357,
-    "created": 2,
-    "updated": 4,
-    "deleted": 3,
-    "unchanged": 350,
-    "createdJobs": [
-      {
-        "jobId": "530615",
-        "title": "Corporate Traveler - Account Executive - Culver City, CA"
-      },
-      {
-        "jobId": "530616",
-        "title": "Corporate Traveler - Account Executive - Irvine, CA"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530186",
-        "title": "Commercial Analyst- South Bank, QLD",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "530210",
-        "title": "Commercial Manager- Product and Pricing- South Bank, QLD",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "529688",
-        "title": "D365 Finance Functional Consultant- South Bank, QLD",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "530194",
-        "title": "Finance Business Analyst - South Bank, QLD",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "530261",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529483",
-        "title": "Unknown"
-      },
-      {
-        "jobId": "529752",
         "title": "Unknown"
       }
     ],
