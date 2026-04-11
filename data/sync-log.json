@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-11T17:54:38.399Z",
+    "startedAt": "2026-04-11T17:54:38.399Z",
+    "finishedAt": "2026-04-11T18:01:32.933Z",
+    "durationMs": 414534,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-11T17:01:38.889Z",
     "startedAt": "2026-04-11T17:01:38.889Z",
     "finishedAt": "2026-04-11T17:11:13.606Z",
@@ -3056,34 +3075,6 @@
     "startedAt": "2026-04-06T21:56:22.902Z",
     "finishedAt": "2026-04-06T22:03:51.181Z",
     "durationMs": 448279,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 361,
-    "cmsItemsBefore": 359,
-    "created": 2,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 359,
-    "createdJobs": [
-      {
-        "jobId": "530615",
-        "title": "Corporate Traveler - Account Executive - Culver City, CA"
-      },
-      {
-        "jobId": "530616",
-        "title": "Corporate Traveler - Account Executive - Irvine, CA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-06T21:02:33.642Z",
-    "startedAt": "2026-04-06T21:02:33.642Z",
-    "finishedAt": "2026-04-06T21:10:16.663Z",
-    "durationMs": 463021,
     "status": "success",
     "error": null,
     "pageupJobsFound": 361,
