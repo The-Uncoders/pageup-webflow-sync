@@ -1,5 +1,33 @@
 [
   {
+    "id": "2026-04-12T11:53:34.450Z",
+    "startedAt": "2026-04-12T11:53:34.450Z",
+    "finishedAt": "2026-04-12T12:01:37.961Z",
+    "durationMs": 483511,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 343,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 2,
+    "unchanged": 343,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529739",
+        "title": "Accounts Payable Officer - Broadbeach, QLD"
+      },
+      {
+        "jobId": "530083",
+        "title": "My Cruises After Sales Consultant - Broadbeach, QLD"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-12T11:06:28.477Z",
     "startedAt": "2026-04-12T11:06:28.477Z",
     "finishedAt": "2026-04-12T11:13:29.312Z",
@@ -2846,29 +2874,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-07T18:46:29.009Z",
-    "startedAt": "2026-04-07T18:46:29.009Z",
-    "finishedAt": "2026-04-07T18:51:41.909Z",
-    "durationMs": 312900,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 359,
-    "cmsItemsBefore": 358,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 358,
-    "createdJobs": [
-      {
-        "jobId": "530634",
-        "title": "Corporate Traveler - Director of Sales - Boston, MA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
