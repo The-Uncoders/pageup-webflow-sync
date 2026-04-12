@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-12T17:58:19.741Z",
+    "startedAt": "2026-04-12T17:58:19.741Z",
+    "finishedAt": "2026-04-12T18:06:13.203Z",
+    "durationMs": 473462,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 342,
+    "cmsItemsBefore": 342,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 342,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-12T17:26:45.691Z",
     "startedAt": "2026-04-12T17:26:45.691Z",
     "finishedAt": "2026-04-12T17:33:28.349Z",
@@ -2735,73 +2754,6 @@
       {
         "jobId": "525686",
         "title": "Team Leader ( Cruiseabout )- Brisbane Western Suburbs"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-08T04:59:19.014Z",
-    "startedAt": "2026-04-08T04:59:19.014Z",
-    "finishedAt": "2026-04-08T05:07:00.884Z",
-    "durationMs": 461870,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 359,
-    "cmsItemsBefore": 357,
-    "created": 4,
-    "updated": 3,
-    "deleted": 2,
-    "unchanged": 352,
-    "createdJobs": [
-      {
-        "jobId": "530416",
-        "title": "Customer Experience Executive (Overnight Shift / Part Time)"
-      },
-      {
-        "jobId": "529483",
-        "title": "Service Product Lead (Workday) - South Bank, QLD"
-      },
-      {
-        "jobId": "530638",
-        "title": "Corporate Traveller - Account Executive - Calgary, AB"
-      },
-      {
-        "jobId": "530634",
-        "title": "Corporate Traveler - Director of Sales - Boston, MA"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529170",
-        "title": "Team Leader ( Cruiseabout)- Geelong, VIC",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "529148",
-        "title": "Sales Travel Consultant - Barrington Coast, NSW",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "525682",
-        "title": "Team Leader ( Cruiseabout) - Sydney North-West",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "530363",
-        "title": "Foreign Currency Sales Consultant (Casual) – Travel Money Oz – Erina, NSW"
-      },
-      {
-        "jobId": "527193",
-        "title": "Business Development Manager - Corporate Traveller - Melbourne, VIC"
       }
     ],
     "scrapeErrors": [],
