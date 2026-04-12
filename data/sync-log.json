@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-12T18:42:50.843Z",
+    "startedAt": "2026-04-12T18:42:50.843Z",
+    "finishedAt": "2026-04-12T18:49:38.789Z",
+    "durationMs": 407946,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 342,
+    "cmsItemsBefore": 342,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 342,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-12T17:58:19.741Z",
     "startedAt": "2026-04-12T17:58:19.741Z",
     "finishedAt": "2026-04-12T18:06:13.203Z",
@@ -2715,47 +2734,6 @@
     ],
     "updatedJobs": [],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-08T06:27:46.573Z",
-    "startedAt": "2026-04-08T06:27:46.573Z",
-    "finishedAt": "2026-04-08T06:35:37.451Z",
-    "durationMs": 470878,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 356,
-    "cmsItemsBefore": 357,
-    "created": 2,
-    "updated": 0,
-    "deleted": 3,
-    "unchanged": 354,
-    "createdJobs": [
-      {
-        "jobId": "530638",
-        "title": "Corporate Traveller - Account Executive - Calgary, AB"
-      },
-      {
-        "jobId": "530634",
-        "title": "Corporate Traveler - Director of Sales - Boston, MA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530427",
-        "title": "Foreign Currency Sales Consultant (Part Time) – Travel Money Oz – Castle Hill, NSW"
-      },
-      {
-        "jobId": "529178",
-        "title": "Business Development Manager, SEA"
-      },
-      {
-        "jobId": "525686",
-        "title": "Team Leader ( Cruiseabout )- Brisbane Western Suburbs"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }
