@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-12T20:59:45.653Z",
+    "startedAt": "2026-04-12T20:59:45.653Z",
+    "finishedAt": "2026-04-12T21:06:44.071Z",
+    "durationMs": 418418,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 342,
+    "cmsItemsBefore": 342,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 342,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-12T20:23:23.379Z",
     "startedAt": "2026-04-12T20:23:23.379Z",
     "finishedAt": "2026-04-12T20:30:12.680Z",
@@ -2691,37 +2710,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-08T10:01:58.661Z",
-    "startedAt": "2026-04-08T10:01:58.661Z",
-    "finishedAt": "2026-04-08T10:10:52.000Z",
-    "durationMs": 533339,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 356,
-    "cmsItemsBefore": 357,
-    "created": 0,
-    "updated": 1,
-    "deleted": 1,
-    "unchanged": 355,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "530329",
-        "title": "DIGITAL MARKETING MANAGER (B2B Marketing)",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "529853",
-        "title": "QA Automation Engineer"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
