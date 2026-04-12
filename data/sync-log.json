@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-12T11:06:28.477Z",
+    "startedAt": "2026-04-12T11:06:28.477Z",
+    "finishedAt": "2026-04-12T11:13:29.312Z",
+    "durationMs": 420835,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-12T10:29:06.165Z",
     "startedAt": "2026-04-12T10:29:06.165Z",
     "finishedAt": "2026-04-12T10:37:05.741Z",
@@ -2833,30 +2852,6 @@
     "startedAt": "2026-04-07T18:46:29.009Z",
     "finishedAt": "2026-04-07T18:51:41.909Z",
     "durationMs": 312900,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 359,
-    "cmsItemsBefore": 358,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 358,
-    "createdJobs": [
-      {
-        "jobId": "530634",
-        "title": "Corporate Traveler - Director of Sales - Boston, MA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-07T17:48:57.756Z",
-    "startedAt": "2026-04-07T17:48:57.756Z",
-    "finishedAt": "2026-04-07T17:54:44.530Z",
-    "durationMs": 346774,
     "status": "success",
     "error": null,
     "pageupJobsFound": 359,
