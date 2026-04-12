@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-12T14:33:30.455Z",
+    "startedAt": "2026-04-12T14:33:30.456Z",
+    "finishedAt": "2026-04-12T14:40:25.668Z",
+    "durationMs": 415212,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 342,
+    "cmsItemsBefore": 342,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 342,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-12T13:53:23.665Z",
     "startedAt": "2026-04-12T13:53:23.665Z",
     "finishedAt": "2026-04-12T14:00:24.807Z",
@@ -2828,33 +2847,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-07T21:34:28.718Z",
-    "startedAt": "2026-04-07T21:34:28.719Z",
-    "finishedAt": "2026-04-07T21:41:57.891Z",
-    "durationMs": 449172,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 360,
-    "cmsItemsBefore": 358,
-    "created": 2,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 358,
-    "createdJobs": [
-      {
-        "jobId": "530638",
-        "title": "Corporate Traveller - Account Executive - Calgary, AB"
-      },
-      {
-        "jobId": "530634",
-        "title": "Corporate Traveler - Director of Sales - Boston, MA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
