@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-04-12T08:36:45.895Z",
+    "startedAt": "2026-04-12T08:36:45.895Z",
+    "finishedAt": "2026-04-12T08:44:27.434Z",
+    "durationMs": 461539,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 345,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-12T07:47:59.692Z",
     "startedAt": "2026-04-12T07:47:59.693Z",
     "finishedAt": "2026-04-12T07:58:20.183Z",
@@ -2867,43 +2886,6 @@
       {
         "jobId": "530332",
         "title": "Corporate Traveler - Director of Sales - Boston, MA"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-07T14:26:33.517Z",
-    "startedAt": "2026-04-07T14:26:33.518Z",
-    "finishedAt": "2026-04-07T14:35:10.060Z",
-    "durationMs": 516542,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 358,
-    "cmsItemsBefore": 358,
-    "created": 2,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 356,
-    "createdJobs": [
-      {
-        "jobId": "530633",
-        "title": "Corporate Traveler - Director of Sales - New York, NY"
-      },
-      {
-        "jobId": "529474",
-        "title": "Travel Consultant After Hours - Mumbai"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530001",
-        "title": "Principal Product Owner- South Bank, QLD"
-      },
-      {
-        "jobId": "529540",
-        "title": "Corporate Traveler - Director of Sales - New York, NY"
       }
     ],
     "scrapeErrors": [],
