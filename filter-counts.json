@@ -7,7 +7,7 @@
     "south africa": 5,
     "uk & europe": 11,
     "multiple locations": 1,
-    "new zealand": 7,
+    "new zealand": 6,
     "uae": 1
   },
   "cities": {
@@ -52,7 +52,6 @@
     "tokyo": 13,
     "bali": 5,
     "tasmania": 4,
-    "wellington": 1,
     "barcelona": 1,
     "invercargill": 1,
     "phuket": 2,
@@ -70,7 +69,7 @@
   },
   "categories": {
     "people and culture": 5,
-    "sales and customer service": 246,
+    "sales and customer service": 245,
     "legal": 2,
     "risk and compliance": 2,
     "digital and technology": 27,
@@ -125,7 +124,6 @@
     "tokyo": "Asia",
     "bali": "Asia",
     "tasmania": "Australia",
-    "wellington": "New Zealand",
     "barcelona": "UK & Europe",
     "invercargill": "New Zealand",
     "phuket": "Asia",
@@ -183,7 +181,6 @@
     "tokyo": "Tokyo",
     "bali": "Bali",
     "tasmania": "Tasmania",
-    "wellington": "Wellington",
     "barcelona": "Barcelona",
     "invercargill": "Invercargill",
     "phuket": "Phuket",

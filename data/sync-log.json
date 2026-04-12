@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-04-12T22:22:30.605Z",
+    "startedAt": "2026-04-12T22:22:30.605Z",
+    "finishedAt": "2026-04-12T22:29:35.077Z",
+    "durationMs": 424472,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 341,
+    "cmsItemsBefore": 342,
+    "created": 0,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 341,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530360",
+        "title": "Travel Expert - North City"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-12T21:36:28.290Z",
     "startedAt": "2026-04-12T21:36:28.290Z",
     "finishedAt": "2026-04-12T21:44:23.675Z",
@@ -2678,25 +2702,6 @@
     "startedAt": "2026-04-08T12:55:38.487Z",
     "finishedAt": "2026-04-08T13:04:58.289Z",
     "durationMs": 559802,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 356,
-    "cmsItemsBefore": 356,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 356,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-08T11:45:18.103Z",
-    "startedAt": "2026-04-08T11:45:18.103Z",
-    "finishedAt": "2026-04-08T11:52:24.712Z",
-    "durationMs": 426609,
     "status": "success",
     "error": null,
     "pageupJobsFound": 356,
