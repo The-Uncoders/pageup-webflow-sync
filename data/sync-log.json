@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-04-12T23:38:43.017Z",
+    "startedAt": "2026-04-12T23:38:43.017Z",
+    "finishedAt": "2026-04-12T23:46:29.171Z",
+    "durationMs": 466154,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 341,
+    "cmsItemsBefore": 340,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 340,
+    "createdJobs": [
+      {
+        "jobId": "530678",
+        "title": "Sales Travel Consultant - Whitsundays, QLD"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-12T23:00:20.042Z",
     "startedAt": "2026-04-12T23:00:20.042Z",
     "finishedAt": "2026-04-12T23:09:13.683Z",
@@ -2675,47 +2699,6 @@
       {
         "jobId": "530637",
         "title": "Corporate Traveler - Account Executive - Chicago, IL"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-08T15:54:36.411Z",
-    "startedAt": "2026-04-08T15:54:36.411Z",
-    "finishedAt": "2026-04-08T16:03:03.249Z",
-    "durationMs": 506838,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 353,
-    "cmsItemsBefore": 356,
-    "created": 1,
-    "updated": 0,
-    "deleted": 4,
-    "unchanged": 352,
-    "createdJobs": [
-      {
-        "jobId": "529826",
-        "title": "Global DevOps Lead"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529170",
-        "title": "Team Leader ( Cruiseabout)- Geelong, VIC"
-      },
-      {
-        "jobId": "525682",
-        "title": "Team Leader ( Cruiseabout) - Sydney North-West"
-      },
-      {
-        "jobId": "529148",
-        "title": "Sales Travel Consultant - Barrington Coast, NSW"
-      },
-      {
-        "jobId": "529943",
-        "title": "Corporate Traveler - Account Executive - Denver, CO"
       }
     ],
     "scrapeErrors": [],
