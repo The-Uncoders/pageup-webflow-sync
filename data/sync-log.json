@@ -1,5 +1,46 @@
 [
   {
+    "id": "2026-04-13T23:07:47.279Z",
+    "startedAt": "2026-04-13T23:07:47.279Z",
+    "finishedAt": "2026-04-13T23:15:09.920Z",
+    "durationMs": 442641,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 344,
+    "cmsItemsBefore": 345,
+    "created": 2,
+    "updated": 0,
+    "deleted": 3,
+    "unchanged": 342,
+    "createdJobs": [
+      {
+        "jobId": "529976",
+        "title": "Travel Expert - Napier"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "529606",
+        "title": "Remote Travel Manager - FCBT - Remote, Australia"
+      },
+      {
+        "jobId": "529754",
+        "title": "Senior Machine Learning Engineer (Team Lead) - South Bank, QLD"
+      },
+      {
+        "jobId": "529462",
+        "title": "Senior Machine Learning Engineer - South Bank, QLD"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-13T22:06:28.645Z",
     "startedAt": "2026-04-13T22:06:28.645Z",
     "finishedAt": "2026-04-13T22:13:37.431Z",
@@ -2366,30 +2407,6 @@
       {
         "jobId": "528551",
         "title": "QA Manager - Noida, India"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-09T10:38:17.619Z",
-    "startedAt": "2026-04-09T10:38:17.619Z",
-    "finishedAt": "2026-04-09T10:45:44.420Z",
-    "durationMs": 446801,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 353,
-    "cmsItemsBefore": 354,
-    "created": 0,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 353,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530422",
-        "title": "Front End Developer (React JS) - Bangalore"
       }
     ],
     "scrapeErrors": [],
