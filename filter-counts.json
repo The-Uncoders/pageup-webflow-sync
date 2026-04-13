@@ -1,6 +1,6 @@
 {
   "regions": {
-    "asia": 63,
+    "asia": 64,
     "australia": 203,
     "new zealand": 9,
     "usa": 40,
@@ -11,8 +11,9 @@
     "uae": 1
   },
   "cities": {
-    "noida": 17,
+    "kolkata": 1,
     "mumbai": 5,
+    "noida": 17,
     "queensland": 67,
     "south australia": 14,
     "auckland": 3,
@@ -70,14 +71,14 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 252,
+    "sales and customer service": 253,
+    "operations and logistics": 34,
     "digital and technology": 27,
-    "people and culture": 5,
     "legal": 2,
     "risk and compliance": 2,
     "marketing and communication": 10,
     "leadership": 22,
-    "operations and logistics": 33,
+    "people and culture": 4,
     "commercial": 17,
     "data and business intelligence": 6,
     "finance": 19,
@@ -85,8 +86,9 @@
     "project and program management": 2
   },
   "cityToRegion": {
-    "noida": "Asia",
+    "kolkata": "Asia",
     "mumbai": "Asia",
+    "noida": "Asia",
     "queensland": "Australia",
     "south australia": "Australia",
     "auckland": "New Zealand",
@@ -144,8 +146,9 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
-    "noida": "Noida",
+    "kolkata": "Kolkata",
     "mumbai": "Mumbai",
+    "noida": "Noida",
     "queensland": "Queensland",
     "south australia": "South Australia",
     "auckland": "Auckland",
@@ -204,13 +207,13 @@
   },
   "categoryDisplay": {
     "sales and customer service": "Sales and Customer Service",
+    "operations and logistics": "Operations and Logistics",
     "digital and technology": "Digital and Technology",
-    "people and culture": "People and Culture",
     "legal": "Legal",
     "risk and compliance": "Risk and Compliance",
     "marketing and communication": "Marketing and Communication",
     "leadership": "Leadership",
-    "operations and logistics": "Operations and Logistics",
+    "people and culture": "People and Culture",
     "commercial": "Commercial",
     "data and business intelligence": "Data and Business Intelligence",
     "finance": "Finance",
