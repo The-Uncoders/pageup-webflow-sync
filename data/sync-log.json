@@ -1,5 +1,38 @@
 [
   {
+    "id": "2026-04-13T17:51:06.425Z",
+    "startedAt": "2026-04-13T17:51:06.425Z",
+    "finishedAt": "2026-04-13T17:59:25.607Z",
+    "durationMs": 499182,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 349,
+    "cmsItemsBefore": 348,
+    "created": 2,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 347,
+    "createdJobs": [
+      {
+        "jobId": "530707",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Toronto, ON"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530101",
+        "title": "Corporate Traveller - Corporate Travel Consultant - Toronto, ON"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-13T16:53:12.946Z",
     "startedAt": "2026-04-13T16:53:12.947Z",
     "finishedAt": "2026-04-13T17:03:10.830Z",
@@ -2498,98 +2531,6 @@
         "title": "Cruise Product Coordinator - Broadbeach, QLD"
       }
     ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-09T04:06:53.980Z",
-    "startedAt": "2026-04-09T04:06:53.981Z",
-    "finishedAt": "2026-04-09T04:14:39.274Z",
-    "durationMs": 465293,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 354,
-    "cmsItemsBefore": 336,
-    "created": 18,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 336,
-    "createdJobs": [
-      {
-        "jobId": "519735",
-        "title": "Sales Travel Consultant - WA North/Northern Territory"
-      },
-      {
-        "jobId": "519739",
-        "title": "Sales Travel Consultant - WA South"
-      },
-      {
-        "jobId": "528123",
-        "title": "Sales Travel Consultant - Booragoon, WA"
-      },
-      {
-        "jobId": "529004",
-        "title": "Sales Travel Consultant - Joondalup & Surrounding Suburbs"
-      },
-      {
-        "jobId": "529007",
-        "title": "Sales Travel Consultant - South-East Perth"
-      },
-      {
-        "jobId": "529024",
-        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
-      },
-      {
-        "jobId": "529069",
-        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
-      },
-      {
-        "jobId": "529251",
-        "title": "Sales Travel Consultant - Midland, WA"
-      },
-      {
-        "jobId": "529557",
-        "title": "Sales Travel Consultant - Kalamunda, WA"
-      },
-      {
-        "jobId": "529968",
-        "title": "Retail Sales Travel Consultant - Esperance, WA"
-      },
-      {
-        "jobId": "530178",
-        "title": "Sales Travel Consultant - Whitford City, WA"
-      },
-      {
-        "jobId": "530303",
-        "title": "Retail Sales Travel Consultant - Eaton, WA"
-      },
-      {
-        "jobId": "530321",
-        "title": "Sales Travel Consultant - South-West Suburbs"
-      },
-      {
-        "jobId": "519731",
-        "title": "Sales Travel Consultant - South Australia"
-      },
-      {
-        "jobId": "528594",
-        "title": "Retail Sales Travel Consultant - Renmark, SA"
-      },
-      {
-        "jobId": "530298",
-        "title": "Retail Sales Travel Consultant - Mount Barker, SA"
-      },
-      {
-        "jobId": "530335",
-        "title": "Sales Travel Consultant - Hills & Murray Region"
-      },
-      {
-        "jobId": "530393",
-        "title": "Sales Travel Consultant - Malvern, VIC"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
   }

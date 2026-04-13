@@ -1,16 +1,17 @@
 {
   "regions": {
+    "canada": 14,
     "asia": 64,
     "australia": 203,
     "new zealand": 9,
     "usa": 40,
-    "canada": 14,
     "south africa": 5,
     "uk & europe": 11,
     "multiple locations": 1,
     "uae": 1
   },
   "cities": {
+    "ontario": 8,
     "kolkata": 1,
     "mumbai": 5,
     "noida": 17,
@@ -23,7 +24,6 @@
     "pennsylvania": 7,
     "massachusetts": 4,
     "illinois": 4,
-    "ontario": 8,
     "new south wales": 56,
     "victoria": 28,
     "johannesburg": 2,
@@ -86,6 +86,7 @@
     "project and program management": 2
   },
   "cityToRegion": {
+    "ontario": "Canada",
     "kolkata": "Asia",
     "mumbai": "Asia",
     "noida": "Asia",
@@ -98,7 +99,6 @@
     "pennsylvania": "USA",
     "massachusetts": "USA",
     "illinois": "USA",
-    "ontario": "Canada",
     "new south wales": "Australia",
     "victoria": "Australia",
     "johannesburg": "South Africa",
@@ -146,6 +146,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "ontario": "Ontario",
     "kolkata": "Kolkata",
     "mumbai": "Mumbai",
     "noida": "Noida",
@@ -158,7 +159,6 @@
     "pennsylvania": "Pennsylvania",
     "massachusetts": "Massachusetts",
     "illinois": "Illinois",
-    "ontario": "Ontario",
     "new south wales": "New South Wales",
     "victoria": "Victoria",
     "johannesburg": "Johannesburg",
