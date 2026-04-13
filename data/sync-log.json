@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-04-13T07:08:33.580Z",
+    "startedAt": "2026-04-13T07:08:33.580Z",
+    "finishedAt": "2026-04-13T07:18:36.312Z",
+    "durationMs": 602732,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 345,
+    "cmsItemsBefore": 343,
+    "created": 2,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 342,
+    "createdJobs": [
+      {
+        "jobId": "530699",
+        "title": "Travel Advisor - Travel Associates - SA"
+      },
+      {
+        "jobId": "530698",
+        "title": "Travel Advisor - Travel Associates - QLD"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529588",
+        "title": "Travel Advisor - Travel Associates - NSW",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-13T04:37:55.780Z",
     "startedAt": "2026-04-13T04:37:55.780Z",
     "finishedAt": "2026-04-13T04:45:07.072Z",
@@ -2691,25 +2727,6 @@
     "startedAt": "2026-04-08T20:10:33.138Z",
     "finishedAt": "2026-04-08T20:18:22.532Z",
     "durationMs": 469394,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 352,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 352,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-08T19:11:01.085Z",
-    "startedAt": "2026-04-08T19:11:01.085Z",
-    "finishedAt": "2026-04-08T19:20:05.121Z",
-    "durationMs": 544036,
     "status": "success",
     "error": null,
     "pageupJobsFound": 352,
