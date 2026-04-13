@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-04-13T22:06:28.645Z",
+    "startedAt": "2026-04-13T22:06:28.645Z",
+    "finishedAt": "2026-04-13T22:13:37.431Z",
+    "durationMs": 428786,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 346,
+    "cmsItemsBefore": 345,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-13T21:12:08.813Z",
     "startedAt": "2026-04-13T21:12:08.813Z",
     "finishedAt": "2026-04-13T21:19:22.873Z",
@@ -2370,24 +2394,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-09T09:06:52.337Z",
-    "startedAt": "2026-04-09T09:06:52.337Z",
-    "finishedAt": "2026-04-09T09:16:16.887Z",
-    "durationMs": 564550,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 354,
-    "cmsItemsBefore": 354,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 354,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
