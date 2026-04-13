@@ -1,5 +1,54 @@
 [
   {
+    "id": "2026-04-13T20:06:53.433Z",
+    "startedAt": "2026-04-13T20:06:53.433Z",
+    "finishedAt": "2026-04-13T20:17:40.049Z",
+    "durationMs": 646616,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 347,
+    "cmsItemsBefore": 349,
+    "created": 1,
+    "updated": 1,
+    "deleted": 3,
+    "unchanged": 345,
+    "createdJobs": [
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530155",
+        "title": "Unknown",
+        "changedFields": [
+          "name",
+          "location",
+          "work-type",
+          "category",
+          "brand-name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "529199",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "529198",
+        "title": "FCM - Director of Enterprise Sales - Philadelphia, PA"
+      },
+      {
+        "jobId": "529200",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-13T18:59:52.748Z",
     "startedAt": "2026-04-13T18:59:52.748Z",
     "finishedAt": "2026-04-13T19:09:02.516Z",
@@ -2397,103 +2446,6 @@
     ],
     "updatedJobs": [],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-09T07:59:09.002Z",
-    "startedAt": "2026-04-09T07:59:09.002Z",
-    "finishedAt": "2026-04-09T08:07:05.447Z",
-    "durationMs": 476445,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 354,
-    "cmsItemsBefore": 337,
-    "created": 18,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 336,
-    "createdJobs": [
-      {
-        "jobId": "530666",
-        "title": "PR and Communications Manager, Asia"
-      },
-      {
-        "jobId": "519735",
-        "title": "Sales Travel Consultant - WA North/Northern Territory"
-      },
-      {
-        "jobId": "519739",
-        "title": "Sales Travel Consultant - WA South"
-      },
-      {
-        "jobId": "528123",
-        "title": "Sales Travel Consultant - Booragoon, WA"
-      },
-      {
-        "jobId": "529004",
-        "title": "Sales Travel Consultant - Joondalup & Surrounding Suburbs"
-      },
-      {
-        "jobId": "529007",
-        "title": "Sales Travel Consultant - South-East Perth"
-      },
-      {
-        "jobId": "529024",
-        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
-      },
-      {
-        "jobId": "529069",
-        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
-      },
-      {
-        "jobId": "529251",
-        "title": "Sales Travel Consultant - Midland, WA"
-      },
-      {
-        "jobId": "529557",
-        "title": "Sales Travel Consultant - Kalamunda, WA"
-      },
-      {
-        "jobId": "529968",
-        "title": "Retail Sales Travel Consultant - Esperance, WA"
-      },
-      {
-        "jobId": "530178",
-        "title": "Sales Travel Consultant - Whitford City, WA"
-      },
-      {
-        "jobId": "530303",
-        "title": "Retail Sales Travel Consultant - Eaton, WA"
-      },
-      {
-        "jobId": "530321",
-        "title": "Sales Travel Consultant - South-West Suburbs"
-      },
-      {
-        "jobId": "519731",
-        "title": "Sales Travel Consultant - South Australia"
-      },
-      {
-        "jobId": "528594",
-        "title": "Retail Sales Travel Consultant - Renmark, SA"
-      },
-      {
-        "jobId": "530298",
-        "title": "Retail Sales Travel Consultant - Mount Barker, SA"
-      },
-      {
-        "jobId": "530335",
-        "title": "Sales Travel Consultant - Hills & Murray Region"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529858",
-        "title": "HR Executive, Japan"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }
