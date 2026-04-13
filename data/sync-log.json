@@ -1,5 +1,54 @@
 [
   {
+    "id": "2026-04-13T04:37:55.780Z",
+    "startedAt": "2026-04-13T04:37:55.780Z",
+    "finishedAt": "2026-04-13T04:45:07.072Z",
+    "durationMs": 431292,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 343,
+    "cmsItemsBefore": 342,
+    "created": 3,
+    "updated": 1,
+    "deleted": 2,
+    "unchanged": 339,
+    "createdJobs": [
+      {
+        "jobId": "530674",
+        "title": "Sales Travel Consultant - Mt Lawley, WA"
+      },
+      {
+        "jobId": "528947",
+        "title": "Foreign Currency Sales Consultant (Part Time) - Travel Money NZ - Northlands, NZ"
+      },
+      {
+        "jobId": "530262",
+        "title": "Foreign Currency Sales Consultant (Part Time) - Travel Money NZ - Albany, NZ"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530405",
+        "title": "Foreign Currency Sales Consultant (Casual) – Travel Money Oz – Indooroopilly, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "528838",
+        "title": "Sales Travel Consultant - Central Queensland"
+      },
+      {
+        "jobId": "528836",
+        "title": "Sales Travel Consultant - Northern Gold Coast, QLD"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-13T01:27:06.886Z",
     "startedAt": "2026-04-13T01:27:06.886Z",
     "finishedAt": "2026-04-13T01:34:20.949Z",
@@ -2674,34 +2723,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-08T17:58:02.280Z",
-    "startedAt": "2026-04-08T17:58:02.281Z",
-    "finishedAt": "2026-04-08T18:06:35.703Z",
-    "durationMs": 513422,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 352,
-    "created": 1,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 351,
-    "createdJobs": [
-      {
-        "jobId": "530655",
-        "title": "Corporate Traveller - Account Executive - Toronto, ON"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529677",
-        "title": "Corporate Traveller - Account Executive - Toronto, ON"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]

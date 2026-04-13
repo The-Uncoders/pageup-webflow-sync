@@ -1,7 +1,7 @@
 {
   "regions": {
-    "new zealand": 7,
-    "australia": 202,
+    "new zealand": 9,
+    "australia": 201,
     "asia": 61,
     "usa": 40,
     "canada": 14,
@@ -11,8 +11,11 @@
     "uae": 1
   },
   "cities": {
+    "auckland": 3,
+    "christchurch": 1,
+    "western australia": 18,
     "bay of plenty": 1,
-    "queensland": 68,
+    "queensland": 66,
     "mumbai": 4,
     "pennsylvania": 7,
     "massachusetts": 4,
@@ -23,7 +26,6 @@
     "victoria": 28,
     "johannesburg": 2,
     "south australia": 13,
-    "western australia": 17,
     "northern territory": 2,
     "singapore": 2,
     "manchester": 1,
@@ -47,7 +49,6 @@
     "bath": 1,
     "new plymouth": 1,
     "ho chi minh city": 3,
-    "auckland": 2,
     "siem reap": 1,
     "hong kong": 1,
     "tokyo": 13,
@@ -69,7 +70,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 247,
+    "sales and customer service": 248,
     "people and culture": 5,
     "legal": 2,
     "risk and compliance": 2,
@@ -84,6 +85,9 @@
     "project and program management": 2
   },
   "cityToRegion": {
+    "auckland": "New Zealand",
+    "christchurch": "New Zealand",
+    "western australia": "Australia",
     "bay of plenty": "New Zealand",
     "queensland": "Australia",
     "mumbai": "Asia",
@@ -96,7 +100,6 @@
     "victoria": "Australia",
     "johannesburg": "South Africa",
     "south australia": "Australia",
-    "western australia": "Australia",
     "northern territory": "Australia",
     "singapore": "Asia",
     "manchester": "UK & Europe",
@@ -120,7 +123,6 @@
     "bath": "UK & Europe",
     "new plymouth": "New Zealand",
     "ho chi minh city": "Asia",
-    "auckland": "New Zealand",
     "siem reap": "Asia",
     "hong kong": "Asia",
     "tokyo": "Asia",
@@ -142,6 +144,9 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "auckland": "Auckland",
+    "christchurch": "Christchurch",
+    "western australia": "Western Australia",
     "bay of plenty": "Bay of Plenty",
     "queensland": "Queensland",
     "mumbai": "Mumbai",
@@ -154,7 +159,6 @@
     "victoria": "Victoria",
     "johannesburg": "Johannesburg",
     "south australia": "South Australia",
-    "western australia": "Western Australia",
     "northern territory": "Northern Territory",
     "singapore": "Singapore",
     "manchester": "Manchester",
@@ -178,7 +182,6 @@
     "bath": "Bath",
     "new plymouth": "New Plymouth",
     "ho chi minh city": "Ho Chi Minh City",
-    "auckland": "Auckland",
     "siem reap": "Siem Reap",
     "hong kong": "Hong Kong",
     "tokyo": "Tokyo",
