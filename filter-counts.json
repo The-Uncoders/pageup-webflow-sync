@@ -1,6 +1,6 @@
 {
   "regions": {
-    "usa": 38,
+    "usa": 37,
     "canada": 14,
     "asia": 64,
     "australia": 203,
@@ -36,7 +36,7 @@
     "london": 4,
     "california": 11,
     "hanoi": 4,
-    "virtual - usa": 2,
+    "virtual - usa": 1,
     "british columbia": 3,
     "east of england": 1,
     "shanghai": 2,
@@ -72,7 +72,7 @@
   },
   "categories": {
     "sales and customer service": 251,
-    "operations and logistics": 34,
+    "operations and logistics": 33,
     "digital and technology": 27,
     "legal": 2,
     "risk and compliance": 2,

@@ -1,5 +1,34 @@
 [
   {
+    "id": "2026-04-13T21:12:08.813Z",
+    "startedAt": "2026-04-13T21:12:08.813Z",
+    "finishedAt": "2026-04-13T21:19:22.873Z",
+    "durationMs": 434060,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 346,
+    "cmsItemsBefore": 346,
+    "created": 1,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 345,
+    "createdJobs": [
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530155",
+        "title": "FCM – Dedicated Overnight Corporate Travel Consultant – Remote, USA"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-13T20:06:53.433Z",
     "startedAt": "2026-04-13T20:06:53.433Z",
     "finishedAt": "2026-04-13T20:17:40.049Z",
@@ -2360,93 +2389,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-09T08:36:05.764Z",
-    "startedAt": "2026-04-09T08:36:05.764Z",
-    "finishedAt": "2026-04-09T08:43:38.131Z",
-    "durationMs": 452367,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 354,
-    "cmsItemsBefore": 337,
-    "created": 17,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 337,
-    "createdJobs": [
-      {
-        "jobId": "519735",
-        "title": "Sales Travel Consultant - WA North/Northern Territory"
-      },
-      {
-        "jobId": "519739",
-        "title": "Sales Travel Consultant - WA South"
-      },
-      {
-        "jobId": "528123",
-        "title": "Sales Travel Consultant - Booragoon, WA"
-      },
-      {
-        "jobId": "529004",
-        "title": "Sales Travel Consultant - Joondalup & Surrounding Suburbs"
-      },
-      {
-        "jobId": "529007",
-        "title": "Sales Travel Consultant - South-East Perth"
-      },
-      {
-        "jobId": "529024",
-        "title": "Sales Travel Consultant - Perth Inner City Suburbs"
-      },
-      {
-        "jobId": "529069",
-        "title": "Sales Travel Consultant - Southern Inner City Suburbs"
-      },
-      {
-        "jobId": "529251",
-        "title": "Sales Travel Consultant - Midland, WA"
-      },
-      {
-        "jobId": "529557",
-        "title": "Sales Travel Consultant - Kalamunda, WA"
-      },
-      {
-        "jobId": "529968",
-        "title": "Retail Sales Travel Consultant - Esperance, WA"
-      },
-      {
-        "jobId": "530178",
-        "title": "Sales Travel Consultant - Whitford City, WA"
-      },
-      {
-        "jobId": "530303",
-        "title": "Retail Sales Travel Consultant - Eaton, WA"
-      },
-      {
-        "jobId": "530321",
-        "title": "Sales Travel Consultant - South-West Suburbs"
-      },
-      {
-        "jobId": "519731",
-        "title": "Sales Travel Consultant - South Australia"
-      },
-      {
-        "jobId": "528594",
-        "title": "Retail Sales Travel Consultant - Renmark, SA"
-      },
-      {
-        "jobId": "530298",
-        "title": "Retail Sales Travel Consultant - Mount Barker, SA"
-      },
-      {
-        "jobId": "530335",
-        "title": "Sales Travel Consultant - Hills & Murray Region"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
