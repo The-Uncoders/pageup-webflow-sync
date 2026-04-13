@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-04-13T01:27:06.886Z",
+    "startedAt": "2026-04-13T01:27:06.886Z",
+    "finishedAt": "2026-04-13T01:34:20.949Z",
+    "durationMs": 434063,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 342,
+    "cmsItemsBefore": 341,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 341,
+    "createdJobs": [
+      {
+        "jobId": "529439",
+        "title": "Travel Expert - Bayfair, New Zealand"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-12T23:38:43.017Z",
     "startedAt": "2026-04-12T23:38:43.017Z",
     "finishedAt": "2026-04-12T23:46:29.171Z",
@@ -2675,30 +2699,6 @@
       {
         "jobId": "529677",
         "title": "Corporate Traveller - Account Executive - Toronto, ON"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-08T16:51:07.629Z",
-    "startedAt": "2026-04-08T16:51:07.630Z",
-    "finishedAt": "2026-04-08T17:01:56.950Z",
-    "durationMs": 649320,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 353,
-    "created": 0,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 352,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530637",
-        "title": "Corporate Traveler - Account Executive - Chicago, IL"
       }
     ],
     "scrapeErrors": [],
