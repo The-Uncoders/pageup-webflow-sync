@@ -1,16 +1,18 @@
 {
   "regions": {
+    "usa": 41,
     "canada": 14,
     "asia": 64,
     "australia": 203,
     "new zealand": 9,
-    "usa": 40,
     "south africa": 5,
     "uk & europe": 11,
     "multiple locations": 1,
     "uae": 1
   },
   "cities": {
+    "pennsylvania": 8,
+    "new york": 7,
     "ontario": 8,
     "kolkata": 1,
     "mumbai": 5,
@@ -21,7 +23,6 @@
     "christchurch": 1,
     "western australia": 18,
     "bay of plenty": 1,
-    "pennsylvania": 7,
     "massachusetts": 4,
     "illinois": 4,
     "new south wales": 56,
@@ -33,7 +34,6 @@
     "alberta": 1,
     "sarawak": 1,
     "london": 4,
-    "new york": 7,
     "california": 11,
     "hanoi": 4,
     "virtual - usa": 2,
@@ -71,7 +71,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 253,
+    "sales and customer service": 254,
     "operations and logistics": 34,
     "digital and technology": 27,
     "legal": 2,
@@ -86,6 +86,8 @@
     "project and program management": 2
   },
   "cityToRegion": {
+    "pennsylvania": "USA",
+    "new york": "USA",
     "ontario": "Canada",
     "kolkata": "Asia",
     "mumbai": "Asia",
@@ -96,7 +98,6 @@
     "christchurch": "New Zealand",
     "western australia": "Australia",
     "bay of plenty": "New Zealand",
-    "pennsylvania": "USA",
     "massachusetts": "USA",
     "illinois": "USA",
     "new south wales": "Australia",
@@ -108,7 +109,6 @@
     "alberta": "Canada",
     "sarawak": "Asia",
     "london": "UK & Europe",
-    "new york": "USA",
     "california": "USA",
     "hanoi": "Asia",
     "virtual - usa": "USA",
@@ -146,6 +146,8 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "pennsylvania": "Pennsylvania",
+    "new york": "New York",
     "ontario": "Ontario",
     "kolkata": "Kolkata",
     "mumbai": "Mumbai",
@@ -156,7 +158,6 @@
     "christchurch": "Christchurch",
     "western australia": "Western Australia",
     "bay of plenty": "Bay of Plenty",
-    "pennsylvania": "Pennsylvania",
     "massachusetts": "Massachusetts",
     "illinois": "Illinois",
     "new south wales": "New South Wales",
@@ -168,7 +169,6 @@
     "alberta": "Alberta",
     "sarawak": "Sarawak",
     "london": "London",
-    "new york": "New York",
     "california": "California",
     "hanoi": "Hanoi",
     "virtual - usa": "Virtual - USA",
