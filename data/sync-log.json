@@ -1,5 +1,33 @@
 [
   {
+    "id": "2026-04-13T12:02:27.841Z",
+    "startedAt": "2026-04-13T12:02:27.842Z",
+    "finishedAt": "2026-04-13T12:09:54.196Z",
+    "durationMs": 446354,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 347,
+    "cmsItemsBefore": 345,
+    "created": 2,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 345,
+    "createdJobs": [
+      {
+        "jobId": "530187",
+        "title": "Solutions Consultant"
+      },
+      {
+        "jobId": "528252",
+        "title": "Business Development General Manager"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-13T10:59:18.959Z",
     "startedAt": "2026-04-13T10:59:18.959Z",
     "finishedAt": "2026-04-13T11:06:11.476Z",
@@ -2721,24 +2749,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-08T22:03:57.465Z",
-    "startedAt": "2026-04-08T22:03:57.465Z",
-    "finishedAt": "2026-04-08T22:11:54.015Z",
-    "durationMs": 476550,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 352,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 352,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
