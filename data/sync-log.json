@@ -1,5 +1,62 @@
 [
   {
+    "id": "2026-04-14T03:46:42.268Z",
+    "startedAt": "2026-04-14T03:46:42.268Z",
+    "finishedAt": "2026-04-14T03:56:25.147Z",
+    "durationMs": 582879,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 350,
+    "cmsItemsBefore": 343,
+    "created": 8,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 342,
+    "createdJobs": [
+      {
+        "jobId": "529462",
+        "title": "Senior Machine Learning Engineer - Various Australian Cities"
+      },
+      {
+        "jobId": "529754",
+        "title": "Senior Machine Learning Engineer (Team Lead) - Various Australian Cities"
+      },
+      {
+        "jobId": "530290",
+        "title": "Marketing Coordinator - Broadbeach, QLD"
+      },
+      {
+        "jobId": "530700",
+        "title": "My Holidays Travel Sales Consultant - Broadbeach, QLD"
+      },
+      {
+        "jobId": "530713",
+        "title": "AUS - FCB Sales Travel Consultant - SUBURB, STATE"
+      },
+      {
+        "jobId": "530672",
+        "title": "Travel Expert - Queensgate"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530397",
+        "title": "Travel Expert - Sylvia Park"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-14T00:03:56.473Z",
     "startedAt": "2026-04-14T00:03:56.473Z",
     "finishedAt": "2026-04-14T00:11:41.642Z",
@@ -2424,24 +2481,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-09T12:57:48.130Z",
-    "startedAt": "2026-04-09T12:57:48.131Z",
-    "finishedAt": "2026-04-09T13:04:42.284Z",
-    "durationMs": 414153,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 352,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 352,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
