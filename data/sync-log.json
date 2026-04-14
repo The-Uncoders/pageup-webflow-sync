@@ -1,5 +1,61 @@
 [
   {
+    "id": "2026-04-14T00:03:56.473Z",
+    "startedAt": "2026-04-14T00:03:56.473Z",
+    "finishedAt": "2026-04-14T00:11:41.642Z",
+    "durationMs": 465169,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 346,
+    "cmsItemsBefore": 343,
+    "created": 4,
+    "updated": 2,
+    "deleted": 1,
+    "unchanged": 340,
+    "createdJobs": [
+      {
+        "jobId": "529462",
+        "title": "Senior Machine Learning Engineer - South Bank, QLD"
+      },
+      {
+        "jobId": "529754",
+        "title": "Senior Machine Learning Engineer (Team Lead) - South Bank, QLD"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      },
+      {
+        "jobId": "529232",
+        "title": "Travel Expert - Dunedin, New Zealand"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530186",
+        "title": "Commercial Analyst- South Bank, QLD",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "530210",
+        "title": "Commercial Manager- Product and Pricing- South Bank, QLD",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530368",
+        "title": "FCBT Account Manager - London, United Kingdom"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-13T23:07:47.279Z",
     "startedAt": "2026-04-13T23:07:47.279Z",
     "finishedAt": "2026-04-13T23:15:09.920Z",
@@ -2387,29 +2443,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-09T11:44:43.662Z",
-    "startedAt": "2026-04-09T11:44:43.662Z",
-    "finishedAt": "2026-04-09T11:52:43.701Z",
-    "durationMs": 480039,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 353,
-    "created": 0,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 352,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "528551",
-        "title": "QA Manager - Noida, India"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
