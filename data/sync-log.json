@@ -1,5 +1,45 @@
 [
   {
+    "id": "2026-04-14T21:11:34.192Z",
+    "startedAt": "2026-04-14T21:11:34.192Z",
+    "finishedAt": "2026-04-14T21:21:37.641Z",
+    "durationMs": 603449,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 360,
+    "cmsItemsBefore": 355,
+    "created": 5,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 355,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-14T20:02:51.165Z",
     "startedAt": "2026-04-14T20:02:51.165Z",
     "finishedAt": "2026-04-14T20:16:28.041Z",
@@ -2562,24 +2602,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-10T00:04:30.615Z",
-    "startedAt": "2026-04-10T00:04:30.616Z",
-    "finishedAt": "2026-04-10T00:11:29.071Z",
-    "durationMs": 418455,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 347,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 347,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
