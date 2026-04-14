@@ -1,5 +1,45 @@
 [
   {
+    "id": "2026-04-14T23:07:57.212Z",
+    "startedAt": "2026-04-14T23:07:57.213Z",
+    "finishedAt": "2026-04-14T23:18:49.567Z",
+    "durationMs": 652354,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 361,
+    "cmsItemsBefore": 356,
+    "created": 5,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 356,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-14T22:08:55.224Z",
     "startedAt": "2026-04-14T22:08:55.224Z",
     "finishedAt": "2026-04-14T22:20:03.177Z",
@@ -2587,30 +2627,6 @@
         "title": "Sales Travel Consultant - Woden, ACT"
       }
     ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-10T05:52:39.771Z",
-    "startedAt": "2026-04-10T05:52:39.771Z",
-    "finishedAt": "2026-04-10T06:01:22.390Z",
-    "durationMs": 522619,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 346,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 346,
-    "createdJobs": [
-      {
-        "jobId": "530649",
-        "title": "AUS - FCB Sales Travel Consultant - SUBURB, STATE"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
   }
