@@ -1,5 +1,45 @@
 [
   {
+    "id": "2026-04-14T20:02:51.165Z",
+    "startedAt": "2026-04-14T20:02:51.165Z",
+    "finishedAt": "2026-04-14T20:16:28.041Z",
+    "durationMs": 816876,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 360,
+    "cmsItemsBefore": 355,
+    "created": 5,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 355,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-14T18:58:01.283Z",
     "startedAt": "2026-04-14T18:58:01.283Z",
     "finishedAt": "2026-04-14T19:05:22.602Z",
@@ -2541,42 +2581,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-09T23:30:13.846Z",
-    "startedAt": "2026-04-09T23:30:13.846Z",
-    "finishedAt": "2026-04-09T23:40:12.202Z",
-    "durationMs": 598356,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 345,
-    "created": 3,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 344,
-    "createdJobs": [
-      {
-        "jobId": "528838",
-        "title": "Sales Travel Consultant - Central Queensland"
-      },
-      {
-        "jobId": "530592",
-        "title": "Sales Travel Consultant - Hamilton, VIC"
-      },
-      {
-        "jobId": "530651",
-        "title": "Sales Travel Consultant - Yeppoon, QLD"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530207",
-        "title": "Sales Travel Consultant - Hervey Bay, QLD"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
