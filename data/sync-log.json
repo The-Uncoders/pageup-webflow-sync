@@ -1,5 +1,53 @@
 [
   {
+    "id": "2026-04-14T07:16:48.313Z",
+    "startedAt": "2026-04-14T07:16:48.313Z",
+    "finishedAt": "2026-04-14T07:24:03.925Z",
+    "durationMs": 435612,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 354,
+    "cmsItemsBefore": 347,
+    "created": 7,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 347,
+    "createdJobs": [
+      {
+        "jobId": "530464",
+        "title": "Content Marketing Manager - South Bank, QLD"
+      },
+      {
+        "jobId": "530659",
+        "title": "Head of Marketing- CruiseHQ- Sydney, NSW"
+      },
+      {
+        "jobId": "530721",
+        "title": "Travel Consultant ( Cruiseabout ) - Mermaid Waters, QLD"
+      },
+      {
+        "jobId": "530422",
+        "title": "Front End Developer (JSF with React JS) - Bangalore"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      },
+      {
+        "jobId": "528033",
+        "title": "Senior Human Resources Business Partner"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-14T05:54:53.004Z",
     "startedAt": "2026-04-14T05:54:53.004Z",
     "finishedAt": "2026-04-14T06:03:11.002Z",
@@ -2470,36 +2518,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-09T16:12:07.529Z",
-    "startedAt": "2026-04-09T16:12:07.529Z",
-    "finishedAt": "2026-04-09T16:20:43.596Z",
-    "durationMs": 516067,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 352,
-    "created": 0,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 351,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "527346",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category",
-          "brand-name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
