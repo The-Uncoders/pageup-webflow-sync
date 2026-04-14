@@ -1,5 +1,54 @@
 [
   {
+    "id": "2026-04-14T05:54:53.004Z",
+    "startedAt": "2026-04-14T05:54:53.004Z",
+    "finishedAt": "2026-04-14T06:03:11.002Z",
+    "durationMs": 497998,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 349,
+    "cmsItemsBefore": 348,
+    "created": 4,
+    "updated": 0,
+    "deleted": 3,
+    "unchanged": 345,
+    "createdJobs": [
+      {
+        "jobId": "530693",
+        "title": "Foreign Currency Sales Consultant (Part Time) - Travel Money NZ - Botany, NZ"
+      },
+      {
+        "jobId": "530694",
+        "title": "Foreign Currency Sales Consultant (Part Time) - Travel Money NZ - Riccarton, NZ"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530361",
+        "title": "Sales Travel Consultant - Hawthorn, VIC"
+      },
+      {
+        "jobId": "530286",
+        "title": "Sales Travel Consultant - Hurstville, NSW"
+      },
+      {
+        "jobId": "529688",
+        "title": "D365 Finance Functional Consultant- South Bank, QLD"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-14T03:46:42.268Z",
     "startedAt": "2026-04-14T03:46:42.268Z",
     "finishedAt": "2026-04-14T03:56:25.147Z",
@@ -2452,34 +2501,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-09T14:52:19.090Z",
-    "startedAt": "2026-04-09T14:52:19.091Z",
-    "finishedAt": "2026-04-09T15:00:20.438Z",
-    "durationMs": 481347,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 352,
-    "cmsItemsBefore": 352,
-    "created": 1,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 351,
-    "createdJobs": [
-      {
-        "jobId": "524945",
-        "title": "FCM Business Development Manager- RSA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530270",
-        "title": "Flight Centre - Travel Consultant - Toronto, ON"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
