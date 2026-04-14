@@ -1,5 +1,54 @@
 [
   {
+    "id": "2026-04-14T17:39:23.847Z",
+    "startedAt": "2026-04-14T17:39:23.848Z",
+    "finishedAt": "2026-04-14T17:50:04.964Z",
+    "durationMs": 641116,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 358,
+    "cmsItemsBefore": 353,
+    "created": 6,
+    "updated": 0,
+    "deleted": 1,
+    "unchanged": 352,
+    "createdJobs": [
+      {
+        "jobId": "530717",
+        "title": "FCM - Corporate Travel Consultant - Remote, USA"
+      },
+      {
+        "jobId": "530726",
+        "title": "Envoyage - National Sales Director - Toronto, Canada"
+      },
+      {
+        "jobId": "530716",
+        "title": "FCM - Dedicated Onsite Corporate Travel Consultant - St. Louis, Missouri"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530612",
+        "title": "FCM - VIP Corporate Travel Consultant - Remote, USA"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-14T12:59:22.549Z",
     "startedAt": "2026-04-14T12:59:22.549Z",
     "finishedAt": "2026-04-14T13:06:24.510Z",
@@ -2525,24 +2574,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-09T21:38:18.224Z",
-    "startedAt": "2026-04-09T21:38:18.224Z",
-    "finishedAt": "2026-04-09T21:47:05.750Z",
-    "durationMs": 527526,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 349,
-    "cmsItemsBefore": 349,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 349,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
