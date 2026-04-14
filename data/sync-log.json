@@ -1,5 +1,45 @@
 [
   {
+    "id": "2026-04-14T18:58:01.283Z",
+    "startedAt": "2026-04-14T18:58:01.283Z",
+    "finishedAt": "2026-04-14T19:05:22.602Z",
+    "durationMs": 441319,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 360,
+    "cmsItemsBefore": 355,
+    "created": 5,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 355,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-14T17:39:23.847Z",
     "startedAt": "2026-04-14T17:39:23.848Z",
     "finishedAt": "2026-04-14T17:50:04.964Z",
@@ -2534,42 +2574,6 @@
       {
         "jobId": "530207",
         "title": "Sales Travel Consultant - Hervey Bay, QLD"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-09T22:30:54.559Z",
-    "startedAt": "2026-04-09T22:30:54.559Z",
-    "finishedAt": "2026-04-09T22:38:11.735Z",
-    "durationMs": 437176,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 349,
-    "created": 0,
-    "updated": 0,
-    "deleted": 4,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530321",
-        "title": "Sales Travel Consultant - South-West Suburbs"
-      },
-      {
-        "jobId": "530303",
-        "title": "Retail Sales Travel Consultant - Eaton, WA"
-      },
-      {
-        "jobId": "530234",
-        "title": "RSA - Retail Travel Consultant - Bedford Square, Johannesburg"
-      },
-      {
-        "jobId": "530232",
-        "title": "RSA - Retail Travel Consultant - Greenstone, Johannesburg"
       }
     ],
     "scrapeErrors": [],
