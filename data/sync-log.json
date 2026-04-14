@@ -1,5 +1,49 @@
 [
   {
+    "id": "2026-04-14T22:08:55.224Z",
+    "startedAt": "2026-04-14T22:08:55.224Z",
+    "finishedAt": "2026-04-14T22:20:03.177Z",
+    "durationMs": 667953,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 361,
+    "cmsItemsBefore": 355,
+    "created": 6,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 355,
+    "createdJobs": [
+      {
+        "jobId": "530663",
+        "title": "Corporate Traveller - Travel Manager"
+      },
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-14T21:11:34.192Z",
     "startedAt": "2026-04-14T21:11:34.192Z",
     "finishedAt": "2026-04-14T21:21:37.641Z",
@@ -2567,39 +2611,6 @@
     ],
     "updatedJobs": [],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-10T03:45:30.966Z",
-    "startedAt": "2026-04-10T03:45:30.966Z",
-    "finishedAt": "2026-04-10T03:53:35.198Z",
-    "durationMs": 484232,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 346,
-    "cmsItemsBefore": 347,
-    "created": 1,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 345,
-    "createdJobs": [
-      {
-        "jobId": "530669",
-        "title": "Sales Travel Consultant - Garden City, QLD"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530164",
-        "title": "Contracting Executive - Tokyo"
-      },
-      {
-        "jobId": "530136",
-        "title": "Reservation Manager - Tokyo, Japan"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }

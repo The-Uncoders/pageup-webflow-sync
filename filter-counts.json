@@ -1,6 +1,6 @@
 {
   "regions": {
-    "multiple locations": 2,
+    "multiple locations": 3,
     "canada": 15,
     "usa": 37,
     "asia": 67,
@@ -11,6 +11,7 @@
     "uae": 1
   },
   "cities": {
+    "new zealand": 2,
     "missouri": 1,
     "ontario": 9,
     "virtual - usa": 1,
@@ -46,7 +47,6 @@
     "british columbia": 3,
     "east of england": 1,
     "shanghai": 2,
-    "new zealand": 1,
     "cape town": 2,
     "quebec": 2,
     "bangkok": 2,
@@ -75,8 +75,8 @@
     "new jersey": 1
   },
   "categories": {
-    "operations and logistics": 34,
-    "sales and customer service": 256,
+    "sales and customer service": 257,
+    "operations and logistics": 35,
     "leadership": 24,
     "people and culture": 5,
     "digital and technology": 27,
@@ -90,6 +90,7 @@
     "project and program management": 2
   },
   "cityToRegion": {
+    "new zealand": "Multiple Locations",
     "missouri": "Multiple Locations",
     "ontario": "Canada",
     "virtual - usa": "USA",
@@ -125,7 +126,6 @@
     "british columbia": "Canada",
     "east of england": "UK & Europe",
     "shanghai": "Asia",
-    "new zealand": "Multiple Locations",
     "cape town": "South Africa",
     "quebec": "Canada",
     "bangkok": "Asia",
@@ -154,6 +154,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new zealand": "New Zealand",
     "missouri": "Missouri",
     "ontario": "Ontario",
     "virtual - usa": "Virtual - USA",
@@ -189,7 +190,6 @@
     "british columbia": "British Columbia",
     "east of england": "East of England",
     "shanghai": "Shanghai",
-    "new zealand": "New Zealand",
     "cape town": "Cape Town",
     "quebec": "Quebec",
     "bangkok": "Bangkok",
@@ -218,8 +218,8 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
-    "operations and logistics": "Operations and Logistics",
     "sales and customer service": "Sales and Customer Service",
+    "operations and logistics": "Operations and Logistics",
     "leadership": "Leadership",
     "people and culture": "People and Culture",
     "digital and technology": "Digital and Technology",
