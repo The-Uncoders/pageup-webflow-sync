@@ -1,5 +1,33 @@
 [
   {
+    "id": "2026-04-14T11:40:50.336Z",
+    "startedAt": "2026-04-14T11:40:50.336Z",
+    "finishedAt": "2026-04-14T11:51:55.316Z",
+    "durationMs": 664980,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 355,
+    "cmsItemsBefore": 353,
+    "created": 2,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 353,
+    "createdJobs": [
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-14T10:14:03.360Z",
     "startedAt": "2026-04-14T10:14:03.360Z",
     "finishedAt": "2026-04-14T10:28:23.163Z",
@@ -2516,24 +2544,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-09T19:57:58.117Z",
-    "startedAt": "2026-04-09T19:57:58.118Z",
-    "finishedAt": "2026-04-09T20:05:59.872Z",
-    "durationMs": 481754,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 351,
-    "cmsItemsBefore": 351,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 351,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
