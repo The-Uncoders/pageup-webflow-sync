@@ -1,5 +1,57 @@
 [
   {
+    "id": "2026-04-15T21:11:33.184Z",
+    "startedAt": "2026-04-15T21:11:33.185Z",
+    "finishedAt": "2026-04-15T21:20:15.747Z",
+    "durationMs": 522562,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 364,
+    "created": 6,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 363,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-15T20:12:38.211Z",
     "startedAt": "2026-04-15T20:12:38.211Z",
     "finishedAt": "2026-04-15T20:21:03.232Z",
@@ -3015,25 +3067,6 @@
     "startedAt": "2026-04-10T21:27:52.875Z",
     "finishedAt": "2026-04-10T21:34:54.224Z",
     "durationMs": 421349,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 347,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 347,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-10T20:39:47.233Z",
-    "startedAt": "2026-04-10T20:39:47.233Z",
-    "finishedAt": "2026-04-10T20:46:51.226Z",
-    "durationMs": 423993,
     "status": "success",
     "error": null,
     "pageupJobsFound": 347,
