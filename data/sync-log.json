@@ -1,5 +1,89 @@
 [
   {
+    "id": "2026-04-15T03:45:15.881Z",
+    "startedAt": "2026-04-15T03:45:15.881Z",
+    "finishedAt": "2026-04-15T03:54:51.797Z",
+    "durationMs": 575916,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 363,
+    "cmsItemsBefore": 353,
+    "created": 11,
+    "updated": 2,
+    "deleted": 1,
+    "unchanged": 350,
+    "createdJobs": [
+      {
+        "jobId": "530675",
+        "title": "Guide AP executive"
+      },
+      {
+        "jobId": "530237",
+        "title": "Travel Manager - Corporate Traveller - Perth, WA"
+      },
+      {
+        "jobId": "530602",
+        "title": "Accredited Trainer & Facilitator - Perth WA"
+      },
+      {
+        "jobId": "530465",
+        "title": "Capability Owner (Content Load and Optimisation) - ANZ"
+      },
+      {
+        "jobId": "530619",
+        "title": "Luxury Travel Consultant - Cruise Boutique TA"
+      },
+      {
+        "jobId": "530712",
+        "title": "Travel Expert - Cambridge"
+      },
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      },
+      {
+        "jobId": "529048",
+        "title": "Sales Travel Consultant - Outer North Melbourne, VIC",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "528894",
+        "title": "Travel Manager - Corporate Traveller - Perth, WA"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-15T00:03:53.324Z",
     "startedAt": "2026-04-15T00:03:53.324Z",
     "finishedAt": "2026-04-15T00:11:49.754Z",
@@ -2605,50 +2689,6 @@
       }
     ],
     "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-10T08:51:27.188Z",
-    "startedAt": "2026-04-10T08:51:27.188Z",
-    "finishedAt": "2026-04-10T08:59:15.663Z",
-    "durationMs": 468475,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 347,
-    "created": 1,
-    "updated": 2,
-    "deleted": 1,
-    "unchanged": 344,
-    "createdJobs": [
-      {
-        "jobId": "530650",
-        "title": "AUS - FCB Sales Travel Consultant - SUBURB, STATE"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529171",
-        "title": "Team Leader ( Cruiseabout)- Brighton, VIC",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "529095",
-        "title": "Sales Travel Consultant - Western Sydney, NSW",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "530064",
-        "title": "Product Coordinator Distributions (Aldi)- Broadbeach, QLD"
-      }
-    ],
     "scrapeErrors": [],
     "published": true
   }
