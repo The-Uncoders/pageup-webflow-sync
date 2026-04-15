@@ -1,16 +1,17 @@
 {
   "regions": {
+    "canada": 16,
     "south africa": 7,
     "uk & europe": 11,
     "asia": 71,
     "australia": 206,
     "new zealand": 15,
     "multiple locations": 4,
-    "canada": 15,
     "usa": 37,
     "uae": 1
   },
   "cities": {
+    "ontario": 10,
     "cape town": 4,
     "paris": 3,
     "baroda": 1,
@@ -24,7 +25,6 @@
     "western australia": 18,
     "siem reap": 2,
     "missouri": 1,
-    "ontario": 9,
     "virtual - usa": 1,
     "bali": 6,
     "bangalore": 2,
@@ -76,9 +76,9 @@
     "new jersey": 1
   },
   "categories": {
+    "marketing and communication": 15,
     "sales and customer service": 262,
     "operations and logistics": 39,
-    "marketing and communication": 14,
     "commercial": 17,
     "digital and technology": 28,
     "people and culture": 7,
@@ -91,6 +91,7 @@
     "project and program management": 2
   },
   "cityToRegion": {
+    "ontario": "Canada",
     "cape town": "South Africa",
     "paris": "UK & Europe",
     "baroda": "Asia",
@@ -104,7 +105,6 @@
     "western australia": "Australia",
     "siem reap": "Asia",
     "missouri": "Multiple Locations",
-    "ontario": "Canada",
     "virtual - usa": "USA",
     "bali": "Asia",
     "bangalore": "Asia",
@@ -156,6 +156,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "ontario": "Ontario",
     "cape town": "Cape Town",
     "paris": "Paris",
     "baroda": "Baroda",
@@ -169,7 +170,6 @@
     "western australia": "Western Australia",
     "siem reap": "Siem Reap",
     "missouri": "Missouri",
-    "ontario": "Ontario",
     "virtual - usa": "Virtual - USA",
     "bali": "Bali",
     "bangalore": "Bangalore",
@@ -221,9 +221,9 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
+    "marketing and communication": "Marketing and Communication",
     "sales and customer service": "Sales and Customer Service",
     "operations and logistics": "Operations and Logistics",
-    "marketing and communication": "Marketing and Communication",
     "commercial": "Commercial",
     "digital and technology": "Digital and Technology",
     "people and culture": "People and Culture",

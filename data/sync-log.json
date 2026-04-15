@@ -1,5 +1,61 @@
 [
   {
+    "id": "2026-04-15T17:58:57.154Z",
+    "startedAt": "2026-04-15T17:58:57.154Z",
+    "finishedAt": "2026-04-15T18:06:58.590Z",
+    "durationMs": 481436,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 374,
+    "cmsItemsBefore": 367,
+    "created": 7,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 366,
+    "createdJobs": [
+      {
+        "jobId": "530754",
+        "title": "Flight Centre - Growth & Demand Specialist - Toronto, Canada"
+      },
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-15T16:52:40.027Z",
     "startedAt": "2026-04-15T16:52:40.027Z",
     "finishedAt": "2026-04-15T17:05:37.406Z",
@@ -2928,30 +2984,6 @@
         "title": "General Manager - Business Development"
       }
     ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-10T18:06:00.355Z",
-    "startedAt": "2026-04-10T18:06:00.355Z",
-    "finishedAt": "2026-04-10T18:13:22.291Z",
-    "durationMs": 441936,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 346,
-    "cmsItemsBefore": 345,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [
-      {
-        "jobId": "530680",
-        "title": "Flight Centre - Information Security Trust and Compliance Adviser - Toronto, Canada"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
     "scrapeErrors": [],
     "published": true
   }
