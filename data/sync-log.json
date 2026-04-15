@@ -1,5 +1,61 @@
 [
   {
+    "id": "2026-04-15T23:07:07.771Z",
+    "startedAt": "2026-04-15T23:07:07.771Z",
+    "finishedAt": "2026-04-15T23:20:40.259Z",
+    "durationMs": 812488,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 371,
+    "cmsItemsBefore": 364,
+    "created": 7,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 363,
+    "createdJobs": [
+      {
+        "jobId": "530732",
+        "title": "Sales Travel Consultant - Croydon, VIC"
+      },
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-15T22:07:29.258Z",
     "startedAt": "2026-04-15T22:07:29.258Z",
     "finishedAt": "2026-04-15T22:21:09.273Z",
@@ -3101,24 +3157,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-10T22:01:47.865Z",
-    "startedAt": "2026-04-10T22:01:47.865Z",
-    "finishedAt": "2026-04-10T22:08:56.336Z",
-    "durationMs": 428471,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 347,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 347,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]

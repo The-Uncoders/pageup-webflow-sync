@@ -1,23 +1,23 @@
 {
   "regions": {
+    "australia": 207,
     "canada": 16,
     "south africa": 7,
     "uk & europe": 11,
     "asia": 67,
-    "australia": 206,
     "new zealand": 15,
     "multiple locations": 4,
     "usa": 37,
     "uae": 1
   },
   "cities": {
+    "victoria": 29,
     "ontario": 10,
     "cape town": 4,
     "paris": 3,
     "baroda": 1,
     "chennai": 2,
     "new south wales": 59,
-    "victoria": 28,
     "queensland": 69,
     "noida": 15,
     "cambridge": 1,
@@ -76,8 +76,8 @@
     "new jersey": 1
   },
   "categories": {
+    "sales and customer service": 263,
     "marketing and communication": 15,
-    "sales and customer service": 262,
     "operations and logistics": 38,
     "commercial": 17,
     "digital and technology": 27,
@@ -91,13 +91,13 @@
     "project and program management": 1
   },
   "cityToRegion": {
+    "victoria": "Australia",
     "ontario": "Canada",
     "cape town": "South Africa",
     "paris": "UK & Europe",
     "baroda": "Asia",
     "chennai": "Asia",
     "new south wales": "Australia",
-    "victoria": "Australia",
     "queensland": "Australia",
     "noida": "Asia",
     "cambridge": "New Zealand",
@@ -156,13 +156,13 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "victoria": "Victoria",
     "ontario": "Ontario",
     "cape town": "Cape Town",
     "paris": "Paris",
     "baroda": "Baroda",
     "chennai": "Chennai",
     "new south wales": "New South Wales",
-    "victoria": "Victoria",
     "queensland": "Queensland",
     "noida": "Noida",
     "cambridge": "Cambridge",
@@ -221,8 +221,8 @@
     "new jersey": "New Jersey"
   },
   "categoryDisplay": {
-    "marketing and communication": "Marketing and Communication",
     "sales and customer service": "Sales and Customer Service",
+    "marketing and communication": "Marketing and Communication",
     "operations and logistics": "Operations and Logistics",
     "commercial": "Commercial",
     "digital and technology": "Digital and Technology",
