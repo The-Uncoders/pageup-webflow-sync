@@ -1,5 +1,64 @@
 [
   {
+    "id": "2026-04-15T07:17:19.582Z",
+    "startedAt": "2026-04-15T07:17:19.582Z",
+    "finishedAt": "2026-04-15T07:26:04.398Z",
+    "durationMs": 524816,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 367,
+    "cmsItemsBefore": 361,
+    "created": 6,
+    "updated": 2,
+    "deleted": 0,
+    "unchanged": 359,
+    "createdJobs": [
+      {
+        "jobId": "530403",
+        "title": "Air Systems Analyst - ANZ"
+      },
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "529489",
+        "title": "Marketing Executive- South Bank, QLD",
+        "changedFields": [
+          "name"
+        ]
+      },
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-15T05:54:45.605Z",
     "startedAt": "2026-04-15T05:54:45.605Z",
     "finishedAt": "2026-04-15T06:03:36.876Z",
@@ -2733,33 +2792,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-10T11:03:44.026Z",
-    "startedAt": "2026-04-10T11:03:44.027Z",
-    "finishedAt": "2026-04-10T11:11:43.700Z",
-    "durationMs": 479673,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 348,
-    "cmsItemsBefore": 348,
-    "created": 0,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 347,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "530606",
-        "title": "Inside Sales Manager - Bristol, Brighton & Crawley",
-        "changedFields": [
-          "name",
-          "location"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
   }
 ]

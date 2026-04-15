@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 205,
+    "australia": 206,
     "asia": 69,
     "new zealand": 15,
     "multiple locations": 4,
@@ -11,12 +11,12 @@
     "uae": 1
   },
   "cities": {
+    "new south wales": 59,
     "victoria": 28,
     "queensland": 69,
     "noida": 19,
     "cambridge": 1,
     "new zealand": 3,
-    "new south wales": 58,
     "western australia": 18,
     "siem reap": 2,
     "missouri": 1,
@@ -76,11 +76,11 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 258,
+    "sales and customer service": 259,
+    "operations and logistics": 37,
     "marketing and communication": 14,
     "commercial": 17,
     "digital and technology": 28,
-    "operations and logistics": 36,
     "people and culture": 7,
     "finance": 19,
     "leadership": 24,
@@ -91,12 +91,12 @@
     "project and program management": 2
   },
   "cityToRegion": {
+    "new south wales": "Australia",
     "victoria": "Australia",
     "queensland": "Australia",
     "noida": "Asia",
     "cambridge": "New Zealand",
     "new zealand": "Multiple Locations",
-    "new south wales": "New Zealand",
     "western australia": "Australia",
     "siem reap": "Asia",
     "missouri": "Multiple Locations",
@@ -156,12 +156,12 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "new south wales": "New South Wales",
     "victoria": "Victoria",
     "queensland": "Queensland",
     "noida": "Noida",
     "cambridge": "Cambridge",
     "new zealand": "New Zealand",
-    "new south wales": "New South Wales",
     "western australia": "Western Australia",
     "siem reap": "Siem Reap",
     "missouri": "Missouri",
@@ -222,10 +222,10 @@
   },
   "categoryDisplay": {
     "sales and customer service": "Sales and Customer Service",
+    "operations and logistics": "Operations and Logistics",
     "marketing and communication": "Marketing and Communication",
     "commercial": "Commercial",
     "digital and technology": "Digital and Technology",
-    "operations and logistics": "Operations and Logistics",
     "people and culture": "People and Culture",
     "finance": "Finance",
     "leadership": "Leadership",
