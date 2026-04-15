@@ -1,5 +1,57 @@
 [
   {
+    "id": "2026-04-15T11:31:46.915Z",
+    "startedAt": "2026-04-15T11:31:46.915Z",
+    "finishedAt": "2026-04-15T11:39:35.011Z",
+    "durationMs": 468096,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 362,
+    "created": 6,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 361,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-15T10:15:59.448Z",
     "startedAt": "2026-04-15T10:15:59.449Z",
     "finishedAt": "2026-04-15T10:31:48.938Z",
@@ -2805,61 +2857,5 @@
     ],
     "scrapeErrors": [],
     "published": true
-  },
-  {
-    "id": "2026-04-10T14:10:25.883Z",
-    "startedAt": "2026-04-10T14:10:25.883Z",
-    "finishedAt": "2026-04-10T14:18:25.081Z",
-    "durationMs": 479198,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 348,
-    "cmsItemsBefore": 348,
-    "created": 0,
-    "updated": 3,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "529057",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category",
-          "brand-name",
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "529746",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category",
-          "brand-name",
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "529095",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category",
-          "brand-name",
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
   }
 ]
