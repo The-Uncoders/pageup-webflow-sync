@@ -1,5 +1,74 @@
 [
   {
+    "id": "2026-04-15T00:03:53.324Z",
+    "startedAt": "2026-04-15T00:03:53.324Z",
+    "finishedAt": "2026-04-15T00:11:49.754Z",
+    "durationMs": 476430,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 358,
+    "cmsItemsBefore": 356,
+    "created": 7,
+    "updated": 0,
+    "deleted": 5,
+    "unchanged": 351,
+    "createdJobs": [
+      {
+        "jobId": "530284",
+        "title": "Sales Travel Consultant - Albury, NSW"
+      },
+      {
+        "jobId": "530598",
+        "title": "Accredited Trainers & Facilitators - North Sydney NSW"
+      },
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [
+      {
+        "jobId": "530127",
+        "title": "Travel Manager - FCBT - Perth, WA"
+      },
+      {
+        "jobId": "519924",
+        "title": "Sales Travel Consultant - Northern Beaches, NSW"
+      },
+      {
+        "jobId": "529078",
+        "title": "Sales Travel Consultant - Sutherland Shire , NSW"
+      },
+      {
+        "jobId": "529067",
+        "title": "Sales Travel Consultant - South Sydney, NSW"
+      },
+      {
+        "jobId": "529066",
+        "title": "Sales Travel Consultant - South Eastern Sydney, NSW"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-14T23:07:57.212Z",
     "startedAt": "2026-04-14T23:07:57.213Z",
     "finishedAt": "2026-04-14T23:18:49.567Z",
@@ -2578,53 +2647,6 @@
       {
         "jobId": "530064",
         "title": "Product Coordinator Distributions (Aldi)- Broadbeach, QLD"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-10T07:14:51.178Z",
-    "startedAt": "2026-04-10T07:14:51.178Z",
-    "finishedAt": "2026-04-10T07:23:53.344Z",
-    "durationMs": 542166,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 347,
-    "created": 1,
-    "updated": 2,
-    "deleted": 1,
-    "unchanged": 344,
-    "createdJobs": [
-      {
-        "jobId": "530677",
-        "title": "Travel Consultant ( Cruiseabout ) - Mornington, Victoria"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529057",
-        "title": "Sales Travel Consultant - ACT",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "530064",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "work-type",
-          "category",
-          "brand-name"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "529587",
-        "title": "Sales Travel Consultant - Woden, ACT"
       }
     ],
     "scrapeErrors": [],
