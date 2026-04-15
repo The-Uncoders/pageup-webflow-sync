@@ -1,5 +1,74 @@
 [
   {
+    "id": "2026-04-15T19:15:54.344Z",
+    "startedAt": "2026-04-15T19:15:54.344Z",
+    "finishedAt": "2026-04-15T19:26:34.001Z",
+    "durationMs": 639657,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 368,
+    "created": 6,
+    "updated": 1,
+    "deleted": 4,
+    "unchanged": 363,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "529533",
+        "title": "Team Leader - Japan Operations - Noida, India"
+      },
+      {
+        "jobId": "529399",
+        "title": "Azure data Engineer - Noida, India"
+      },
+      {
+        "jobId": "529440",
+        "title": "Manager - Credit Control"
+      },
+      {
+        "jobId": "530269",
+        "title": "RPA Business Analyst  - Noida, India"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-15T17:58:57.154Z",
     "startedAt": "2026-04-15T17:58:57.154Z",
     "finishedAt": "2026-04-15T18:06:58.590Z",
@@ -2945,46 +3014,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-10T19:25:13.462Z",
-    "startedAt": "2026-04-10T19:25:13.462Z",
-    "finishedAt": "2026-04-10T19:33:17.940Z",
-    "durationMs": 484478,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 346,
-    "created": 3,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 344,
-    "createdJobs": [
-      {
-        "jobId": "530682",
-        "title": "FCM - Senior Account Manager - Chicago, USA"
-      },
-      {
-        "jobId": "530681",
-        "title": "FCM - Senior Account Manager - Boston, USA"
-      },
-      {
-        "jobId": "530683",
-        "title": "FCM - Senior Account Manager - Philadelphia, USA"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529160",
-        "title": "Graphic Digital Designer - Mumbai, India"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
