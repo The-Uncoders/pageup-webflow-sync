@@ -1,5 +1,64 @@
 [
   {
+    "id": "2026-04-15T10:15:59.448Z",
+    "startedAt": "2026-04-15T10:15:59.449Z",
+    "finishedAt": "2026-04-15T10:31:48.938Z",
+    "durationMs": 949489,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 368,
+    "cmsItemsBefore": 362,
+    "created": 6,
+    "updated": 2,
+    "deleted": 0,
+    "unchanged": 360,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      },
+      {
+        "jobId": "530329",
+        "title": "Growth & Demand Generation Manager (B2B)",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-15T08:58:54.133Z",
     "startedAt": "2026-04-15T08:58:54.134Z",
     "finishedAt": "2026-04-15T09:10:29.430Z",
@@ -2799,25 +2858,6 @@
         ]
       }
     ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-10T12:53:19.537Z",
-    "startedAt": "2026-04-10T12:53:19.537Z",
-    "finishedAt": "2026-04-10T13:00:20.083Z",
-    "durationMs": 420546,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 348,
-    "cmsItemsBefore": 348,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 348,
-    "createdJobs": [],
-    "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
