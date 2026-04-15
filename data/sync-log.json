@@ -1,5 +1,64 @@
 [
   {
+    "id": "2026-04-15T22:07:29.258Z",
+    "startedAt": "2026-04-15T22:07:29.258Z",
+    "finishedAt": "2026-04-15T22:21:09.273Z",
+    "durationMs": 820015,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 364,
+    "created": 6,
+    "updated": 2,
+    "deleted": 0,
+    "unchanged": 362,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530712",
+        "title": "Travel Expert - Cambridge, New Zealand",
+        "changedFields": [
+          "name"
+        ]
+      },
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-15T21:11:33.184Z",
     "startedAt": "2026-04-15T21:11:33.185Z",
     "finishedAt": "2026-04-15T21:20:15.747Z",
@@ -3048,25 +3107,6 @@
     "startedAt": "2026-04-10T22:01:47.865Z",
     "finishedAt": "2026-04-10T22:08:56.336Z",
     "durationMs": 428471,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 347,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 347,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-10T21:27:52.874Z",
-    "startedAt": "2026-04-10T21:27:52.875Z",
-    "finishedAt": "2026-04-10T21:34:54.224Z",
-    "durationMs": 421349,
     "status": "success",
     "error": null,
     "pageupJobsFound": 347,
