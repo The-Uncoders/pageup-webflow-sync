@@ -1,5 +1,32 @@
 [
   {
+    "id": "2026-04-16T19:41:42.593Z",
+    "startedAt": "2026-04-16T19:41:42.593Z",
+    "finishedAt": "2026-04-16T19:49:19.929Z",
+    "durationMs": 457336,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 369,
+    "cmsItemsBefore": 369,
+    "created": 0,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 368,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-16T18:02:30.162Z",
     "startedAt": "2026-04-16T18:02:30.162Z",
     "finishedAt": "2026-04-16T18:10:01.445Z",
@@ -3306,25 +3333,6 @@
     "startedAt": "2026-04-11T11:32:51.101Z",
     "finishedAt": "2026-04-11T11:40:30.067Z",
     "durationMs": 458966,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T11:00:21.750Z",
-    "startedAt": "2026-04-11T11:00:21.750Z",
-    "finishedAt": "2026-04-11T11:08:38.914Z",
-    "durationMs": 497164,
     "status": "success",
     "error": null,
     "pageupJobsFound": 345,
