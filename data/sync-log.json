@@ -1,5 +1,46 @@
 [
   {
+    "id": "2026-04-16T05:55:30.804Z",
+    "startedAt": "2026-04-16T05:55:30.804Z",
+    "finishedAt": "2026-04-16T06:03:27.244Z",
+    "durationMs": 476440,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 367,
+    "created": 1,
+    "updated": 1,
+    "deleted": 2,
+    "unchanged": 364,
+    "createdJobs": [
+      {
+        "jobId": "530657",
+        "title": "Sales Travel Consultant - Capalaba, QLD"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530147",
+        "title": "Finance Business Partner - South Bank, QLD"
+      },
+      {
+        "jobId": "530125",
+        "title": "Sales Travel Consultant - Leichhardt, NSW"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-16T03:51:09.044Z",
     "startedAt": "2026-04-16T03:51:09.045Z",
     "finishedAt": "2026-04-16T03:58:52.888Z",
@@ -3202,25 +3243,6 @@
     "startedAt": "2026-04-11T03:58:35.512Z",
     "finishedAt": "2026-04-11T04:06:14.369Z",
     "durationMs": 458857,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 344,
-    "cmsItemsBefore": 344,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 344,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T01:25:56.919Z",
-    "startedAt": "2026-04-11T01:25:56.919Z",
-    "finishedAt": "2026-04-11T01:35:07.087Z",
-    "durationMs": 550168,
     "status": "success",
     "error": null,
     "pageupJobsFound": 344,

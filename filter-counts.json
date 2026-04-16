@@ -1,16 +1,17 @@
 {
   "regions": {
+    "australia": 204,
     "asia": 66,
     "uk & europe": 13,
     "new zealand": 16,
     "usa": 39,
-    "australia": 205,
     "canada": 16,
     "south africa": 7,
     "multiple locations": 4,
     "uae": 1
   },
   "cities": {
+    "queensland": 67,
     "noida": 16,
     "barcelona": 2,
     "london": 4,
@@ -23,8 +24,7 @@
     "paris": 3,
     "baroda": 1,
     "chennai": 2,
-    "new south wales": 59,
-    "queensland": 67,
+    "new south wales": 58,
     "cambridge": 1,
     "new zealand": 3,
     "western australia": 18,
@@ -79,8 +79,8 @@
     "sales and customer service": 265,
     "digital and technology": 27,
     "administration": 3,
-    "finance": 18,
-    "leadership": 25,
+    "finance": 17,
+    "leadership": 24,
     "marketing and communication": 15,
     "operations and logistics": 37,
     "commercial": 17,
@@ -90,6 +90,7 @@
     "risk and compliance": 2
   },
   "cityToRegion": {
+    "queensland": "Australia",
     "noida": "Asia",
     "barcelona": "UK & Europe",
     "london": "UK & Europe",
@@ -103,7 +104,6 @@
     "baroda": "Asia",
     "chennai": "Asia",
     "new south wales": "Australia",
-    "queensland": "Australia",
     "cambridge": "New Zealand",
     "new zealand": "Multiple Locations",
     "western australia": "Australia",
@@ -155,6 +155,7 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
+    "queensland": "Queensland",
     "noida": "Noida",
     "barcelona": "Barcelona",
     "london": "London",
@@ -168,7 +169,6 @@
     "baroda": "Baroda",
     "chennai": "Chennai",
     "new south wales": "New South Wales",
-    "queensland": "Queensland",
     "cambridge": "Cambridge",
     "new zealand": "New Zealand",
     "western australia": "Western Australia",
