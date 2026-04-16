@@ -1,5 +1,32 @@
 [
   {
+    "id": "2026-04-16T18:02:30.162Z",
+    "startedAt": "2026-04-16T18:02:30.162Z",
+    "finishedAt": "2026-04-16T18:10:01.445Z",
+    "durationMs": 451283,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 369,
+    "cmsItemsBefore": 369,
+    "created": 0,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 368,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-16T16:52:38.509Z",
     "startedAt": "2026-04-16T16:52:38.509Z",
     "finishedAt": "2026-04-16T17:00:15.171Z",
@@ -3311,29 +3338,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-11T10:24:00.057Z",
-    "startedAt": "2026-04-11T10:24:00.057Z",
-    "finishedAt": "2026-04-11T10:31:34.639Z",
-    "durationMs": 454582,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 344,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 344,
-    "createdJobs": [
-      {
-        "jobId": "529844",
-        "title": "HR Leader, India"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
