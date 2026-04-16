@@ -1,5 +1,57 @@
 [
   {
+    "id": "2026-04-16T00:03:53.144Z",
+    "startedAt": "2026-04-16T00:03:53.144Z",
+    "finishedAt": "2026-04-16T00:14:57.190Z",
+    "durationMs": 664046,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 371,
+    "cmsItemsBefore": 365,
+    "created": 6,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 364,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
     "id": "2026-04-15T23:07:07.771Z",
     "startedAt": "2026-04-15T23:07:07.771Z",
     "finishedAt": "2026-04-15T23:20:40.259Z",
@@ -3125,37 +3177,5 @@
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
-  },
-  {
-    "id": "2026-04-10T23:00:40.041Z",
-    "startedAt": "2026-04-10T23:00:40.041Z",
-    "finishedAt": "2026-04-10T23:09:37.779Z",
-    "durationMs": 537738,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 344,
-    "cmsItemsBefore": 347,
-    "created": 0,
-    "updated": 0,
-    "deleted": 3,
-    "unchanged": 344,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529830",
-        "title": "Backend Engineer"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
   }
 ]
