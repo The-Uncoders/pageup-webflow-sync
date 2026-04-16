@@ -1,5 +1,81 @@
 [
   {
+    "id": "2026-04-16T03:51:09.044Z",
+    "startedAt": "2026-04-16T03:51:09.045Z",
+    "finishedAt": "2026-04-16T03:58:52.888Z",
+    "durationMs": 463843,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 367,
+    "cmsItemsBefore": 365,
+    "created": 6,
+    "updated": 2,
+    "deleted": 4,
+    "unchanged": 359,
+    "createdJobs": [
+      {
+        "jobId": "530729",
+        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
+      },
+      {
+        "jobId": "530728",
+        "title": "FCM - Director of Enterprise Sales - Boston, MA"
+      },
+      {
+        "jobId": "530227",
+        "title": "Travel Expert - Birkenhead"
+      },
+      {
+        "jobId": "529637",
+        "title": "Financial Accounting Team Leader"
+      },
+      {
+        "jobId": "529571",
+        "title": "Salesforce Developer"
+      },
+      {
+        "jobId": "529502",
+        "title": "General Manager - Business Development"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "530403",
+        "title": "Air Systems Analyst - ANZ",
+        "changedFields": [
+          "closing-date"
+        ]
+      },
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "529416",
+        "title": "Product Manager (Air Fulfilment) - South Bank, QLD"
+      },
+      {
+        "jobId": "528772",
+        "title": "Staff & Duty Travel Expert - Bali, Indonesia"
+      },
+      {
+        "jobId": "529570",
+        "title": "Customer Experience and Touring Executive"
+      },
+      {
+        "jobId": "529809",
+        "title": "Employee Travel Advisor - South Bank, QLD"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-16T00:03:53.144Z",
     "startedAt": "2026-04-16T00:03:53.144Z",
     "finishedAt": "2026-04-16T00:14:57.190Z",
@@ -3145,25 +3221,6 @@
     "startedAt": "2026-04-11T01:25:56.919Z",
     "finishedAt": "2026-04-11T01:35:07.087Z",
     "durationMs": 550168,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 344,
-    "cmsItemsBefore": 344,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 344,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-10T23:56:25.480Z",
-    "startedAt": "2026-04-10T23:56:25.480Z",
-    "finishedAt": "2026-04-11T00:03:13.608Z",
-    "durationMs": 408128,
     "status": "success",
     "error": null,
     "pageupJobsFound": 344,
