@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 205,
+    "australia": 204,
     "asia": 66,
     "uk & europe": 13,
     "new zealand": 16,
@@ -65,7 +65,7 @@
     "invercargill": 1,
     "remote": 2,
     "phuket": 2,
-    "australian capital territory": 12,
+    "australian capital territory": 11,
     "nationwide": 1,
     "kerikeri": 1,
     "texas": 1,
@@ -76,7 +76,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 266,
+    "sales and customer service": 265,
     "digital and technology": 27,
     "administration": 3,
     "finance": 17,

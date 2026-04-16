@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-04-16T10:16:32.001Z",
+    "startedAt": "2026-04-16T10:16:32.001Z",
+    "finishedAt": "2026-04-16T10:24:56.091Z",
+    "durationMs": 504090,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 366,
+    "cmsItemsBefore": 367,
+    "created": 0,
+    "updated": 1,
+    "deleted": 1,
+    "unchanged": 365,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530145",
+        "title": "Sales Travel Consultant - Belconnen, ACT"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-16T07:18:11.401Z",
     "startedAt": "2026-04-16T07:18:11.402Z",
     "finishedAt": "2026-04-16T07:25:34.923Z",
@@ -3237,25 +3269,6 @@
     "startedAt": "2026-04-11T06:36:09.338Z",
     "finishedAt": "2026-04-11T06:43:13.340Z",
     "durationMs": 424002,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 344,
-    "cmsItemsBefore": 344,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 344,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T05:24:38.389Z",
-    "startedAt": "2026-04-11T05:24:38.390Z",
-    "finishedAt": "2026-04-11T05:33:08.509Z",
-    "durationMs": 510119,
     "status": "success",
     "error": null,
     "pageupJobsFound": 344,
