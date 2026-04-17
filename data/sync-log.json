@@ -1,5 +1,61 @@
 [
   {
+    "id": "2026-04-17T03:49:13.173Z",
+    "startedAt": "2026-04-17T03:49:13.173Z",
+    "finishedAt": "2026-04-17T03:57:03.691Z",
+    "durationMs": 470518,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 377,
+    "cmsItemsBefore": 370,
+    "created": 7,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 369,
+    "createdJobs": [
+      {
+        "jobId": "530734",
+        "title": "Reservations Executive - Tokyo, Japan"
+      },
+      {
+        "jobId": "530759",
+        "title": "Sales Travel Consultant - Murray Street Mall, WA"
+      },
+      {
+        "jobId": "530768",
+        "title": "Sales Travel Consultant - Hallet Cove, SA"
+      },
+      {
+        "jobId": "528865",
+        "title": "Sales Travel Consultant - Inner City Brisbane"
+      },
+      {
+        "jobId": "530764",
+        "title": "Sales Travel Consultant - Wynnum Plaza, QLD"
+      },
+      {
+        "jobId": "530765",
+        "title": "Sales Travel Consultant - South Bank, QLD"
+      },
+      {
+        "jobId": "530775",
+        "title": "Team Leader ( Cruiseabout) Expressions of Interest, Australia"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-17T00:02:30.866Z",
     "startedAt": "2026-04-17T00:02:30.866Z",
     "finishedAt": "2026-04-17T00:21:42.786Z",
@@ -3359,25 +3415,6 @@
     "startedAt": "2026-04-11T16:24:06.298Z",
     "finishedAt": "2026-04-11T16:32:04.489Z",
     "durationMs": 478191,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T15:53:05.060Z",
-    "startedAt": "2026-04-11T15:53:05.060Z",
-    "finishedAt": "2026-04-11T16:01:42.469Z",
-    "durationMs": 517409,
     "status": "success",
     "error": null,
     "pageupJobsFound": 345,
