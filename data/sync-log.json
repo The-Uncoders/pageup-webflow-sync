@@ -1,5 +1,37 @@
 [
   {
+    "id": "2026-04-17T00:02:30.866Z",
+    "startedAt": "2026-04-17T00:02:30.866Z",
+    "finishedAt": "2026-04-17T00:21:42.786Z",
+    "durationMs": 1151920,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 370,
+    "cmsItemsBefore": 369,
+    "created": 1,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 368,
+    "createdJobs": [
+      {
+        "jobId": "530711",
+        "title": "Sales Travel Consultant - Epping Plaza, VIC"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-16T23:09:56.592Z",
     "startedAt": "2026-04-16T23:09:56.592Z",
     "finishedAt": "2026-04-16T23:18:19.849Z",
@@ -3346,25 +3378,6 @@
     "startedAt": "2026-04-11T15:53:05.060Z",
     "finishedAt": "2026-04-11T16:01:42.469Z",
     "durationMs": 517409,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T15:01:39.398Z",
-    "startedAt": "2026-04-11T15:01:39.398Z",
-    "finishedAt": "2026-04-11T15:10:04.844Z",
-    "durationMs": 505446,
     "status": "success",
     "error": null,
     "pageupJobsFound": 345,
