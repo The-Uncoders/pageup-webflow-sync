@@ -1173,35 +1173,13 @@
   // filters section without any programmatic scrolling that could
   // interfere with Webflow page-load animations.
   //
-  // The selector is deliberately loose because the Designer may style this
-  // button with different class modifiers over time. We match any anchor
-  // using Webflow's `.button` class whose text is "All" / "All jobs" /
-  // "View all", with an `href="#"` that signals it isn't already wired.
+  // Target is an element with ID `all-jobs-button`, set on the back button
+  // in the Webflow Designer. ID is the most stable hook — survives class
+  // renames, text changes, and restyles.
   function setupBackButton() {
     if (document.querySelector('.career_list')) return;
 
-    var BACK_TEXTS = ['all jobs', 'view all', 'back to jobs', 'all'];
-
-    // Candidate anchors: any <a> with the Webflow button class, OR anything
-    // that looks like a button-styled link. Keeps the selector permissive
-    // so it survives Designer restyles without needing code edits.
-    var candidates = document.querySelectorAll(
-      'a.button, a.w-button, a[class*="button"]'
-    );
-
-    var backBtn = null;
-    for (var i = 0; i < candidates.length; i++) {
-      var a = candidates[i];
-      var txt = (a.textContent || '').trim().toLowerCase();
-      if (!txt) continue;
-      var matched = false;
-      for (var t = 0; t < BACK_TEXTS.length; t++) {
-        if (txt === BACK_TEXTS[t]) { matched = true; break; }
-      }
-      if (!matched && txt.indexOf('all jobs') !== -1) matched = true;
-      if (!matched && txt.indexOf('view all') !== -1) matched = true;
-      if (matched) { backBtn = a; break; }
-    }
+    var backBtn = document.getElementById('all-jobs-button');
     if (!backBtn) return;
 
     backBtn.setAttribute('href', '/jobs#filters');
