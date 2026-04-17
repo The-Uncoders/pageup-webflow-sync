@@ -1,5 +1,44 @@
 [
   {
+    "id": "2026-04-17T07:28:28.361Z",
+    "startedAt": "2026-04-17T07:28:28.362Z",
+    "finishedAt": "2026-04-17T07:36:32.763Z",
+    "durationMs": 484401,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 383,
+    "cmsItemsBefore": 384,
+    "created": 0,
+    "updated": 2,
+    "deleted": 1,
+    "unchanged": 381,
+    "createdJobs": [],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      },
+      {
+        "jobId": "527858",
+        "title": "Financial Accountant - Bangkok, Thailand",
+        "changedFields": [
+          "closing-date"
+        ]
+      }
+    ],
+    "deletedJobs": [
+      {
+        "jobId": "530422",
+        "title": "Front End Developer (JSF with React JS) - Bangalore"
+      }
+    ],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-17T05:58:05.665Z",
     "startedAt": "2026-04-17T05:58:05.665Z",
     "finishedAt": "2026-04-17T06:06:37.835Z",
@@ -3433,25 +3472,6 @@
     "startedAt": "2026-04-11T17:54:38.399Z",
     "finishedAt": "2026-04-11T18:01:32.933Z",
     "durationMs": 414534,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T17:01:38.889Z",
-    "startedAt": "2026-04-11T17:01:38.889Z",
-    "finishedAt": "2026-04-11T17:11:13.606Z",
-    "durationMs": 574717,
     "status": "success",
     "error": null,
     "pageupJobsFound": 345,
