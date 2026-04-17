@@ -411,6 +411,14 @@ async function runSync() {
 
         const newFieldData = buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand);
 
+        // Slugs are immutable once created. If PageUp renames a job into a
+        // title whose slugified form collides with another CMS item, Webflow
+        // rejects the entire PATCH — causing an update loop where every
+        // sync detects the same change and fails to persist it. Strip slug
+        // from updates so the original URL stays stable and the rest of the
+        // fields can update cleanly.
+        delete newFieldData.slug;
+
         const changedFields = hasChanged(cmsItem, newFieldData);
         if (changedFields) {
           itemsToUpdate.push({
