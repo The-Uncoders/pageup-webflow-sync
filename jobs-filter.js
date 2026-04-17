@@ -29,9 +29,11 @@
   var DEBOUNCE = 250;
   var INIT_DELAY = 300;
   var PAGE_SIZE = 30;
-  // Cache bust every 30 minutes (aligned to sync schedule) so visitors always see fresh data
-  var CACHE_EPOCH = Math.floor(Date.now() / (30 * 60 * 1000));
-  var ALL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/all-jobs.json?v=' + CACHE_EPOCH;
+  // Cache bust every 20 minutes (aligned to sync schedule) so visitors always see fresh data.
+  // JSON artifacts live on the `data` branch — isolated from the code branch to keep
+  // main's history clean. See PROJECT-DOCUMENTATION.md for the split.
+  var CACHE_EPOCH = Math.floor(Date.now() / (20 * 60 * 1000));
+  var ALL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/all-jobs.json?v=' + CACHE_EPOCH;
 
   // ── State ─────────────────────────────────
   var keyword = '';

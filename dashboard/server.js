@@ -15,11 +15,11 @@ const LOCAL_DATA_DIR = path.join(__dirname, '..', 'data');
 const DATA_DIR = fs.existsSync(path.dirname(ICLOUD_DATA_DIR)) ? ICLOUD_DATA_DIR : LOCAL_DATA_DIR;
 const LOG_FILE = path.join(DATA_DIR, 'sync-log.json');
 const FIELD_CONFIG = path.join(DATA_DIR, 'field-config.json');
-const SYNC_INTERVAL_MS = 30 * 60 * 1000; // 30 minutes
+const SYNC_INTERVAL_MS = 20 * 60 * 1000; // 20 minutes
 const REPO_DIR = path.join(__dirname, '..');
 
-// CI sync log on CDN
-const CI_LOG_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/data/sync-log.json';
+// CI sync log on CDN. Lives on the `data` branch (separate from code branch).
+const CI_LOG_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/sync-log.json';
 const CI_REFRESH_INTERVAL = 5 * 60 * 1000; // refresh CI logs every 5 minutes
 let cachedCiLogs = [];
 let lastCiFetch = 0;

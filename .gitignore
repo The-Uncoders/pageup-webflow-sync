@@ -1,3 +1,9 @@
 node_modules/
 .env
 data/
+
+# JSON artifacts are published to the `data` branch by CI,
+# not tracked on main. The sync writes them locally as a build
+# output but they must not be committed to main.
+all-jobs.json
+filter-counts.json

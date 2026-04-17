@@ -43,20 +43,47 @@ jobs:
           WEBFLOW_COUNTRY_COLLECTION_ID: ${{ secrets.WEBFLOW_COUNTRY_COLLECTION_ID }}
         run: npm run sync
 
-      - name: Commit updated JSON data
+      - name: Publish artifacts to data branch
+        if: success()
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add all-jobs.json filter-counts.json
-          git add -f data/sync-log.json 2>/dev/null || true
-          git diff --staged --quiet || git commit -m "chore: regenerate job data from CMS sync"
 
-      - name: Push changes
-        run: git diff HEAD~1 --quiet || git push
+          # JSON artifacts live on a dedicated `data` branch so main's history
+          # stays clean. The data branch is amended in-place every run rather
+          # than growing with one commit per sync.
+          git fetch origin data
+          git worktree add /tmp/data-branch origin/data
+
+          # Copy freshly generated artifacts from the main working tree
+          cp "$GITHUB_WORKSPACE/all-jobs.json"      /tmp/data-branch/all-jobs.json
+          cp "$GITHUB_WORKSPACE/filter-counts.json" /tmp/data-branch/filter-counts.json
+          if [ -f "$GITHUB_WORKSPACE/data/sync-log.json" ]; then
+            cp "$GITHUB_WORKSPACE/data/sync-log.json" /tmp/data-branch/sync-log.json
+          fi
+
+          cd /tmp/data-branch
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No artifact changes — skipping commit."
+            exit 0
+          fi
+
+          # Amend the previous CI commit so the data branch stays a single
+          # moving commit; fall back to a fresh commit if the last commit
+          # wasn't by the bot.
+          if [ "$(git log -1 --pretty=%an 2>/dev/null)" = "github-actions[bot]" ]; then
+            git commit --amend --no-edit
+            git push --force-with-lease origin HEAD:data
+          else
+            git commit -m "chore: regenerate job data"
+            git push origin HEAD:data
+          fi
 
       - name: Purge jsDelivr CDN cache
         if: success()
         run: |
-          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/all-jobs.json" || true
-          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/filter-counts.json" || true
-          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/data/sync-log.json" || true
+          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/all-jobs.json" || true
+          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/filter-counts.json" || true
+          curl -sf "https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/sync-log.json" || true
