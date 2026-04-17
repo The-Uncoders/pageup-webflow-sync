@@ -1,609 +1,349 @@
 [
   {
-    "id": "2026-04-17T09:00:44.989Z",
-    "startedAt": "2026-04-17T09:00:44.989Z",
-    "finishedAt": "2026-04-17T09:14:01.166Z",
-    "durationMs": 796177,
+    "id": "2026-09-07T05:31:12.098Z",
+    "startedAt": "2026-09-07T05:31:12.098Z",
+    "finishedAt": "2026-09-07T05:31:59.662Z",
+    "durationMs": 47564,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 382,
-    "cmsItemsBefore": 383,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
     "created": 0,
-    "updated": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T05:20:59.892Z",
+    "startedAt": "2026-09-07T05:20:59.892Z",
+    "finishedAt": "2026-09-07T05:21:45.978Z",
+    "durationMs": 46086,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T05:10:57.050Z",
+    "startedAt": "2026-09-07T05:10:57.050Z",
+    "finishedAt": "2026-09-07T05:11:44.516Z",
+    "durationMs": 47466,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T05:01:09.892Z",
+    "startedAt": "2026-09-07T05:01:09.893Z",
+    "finishedAt": "2026-09-07T05:01:58.824Z",
+    "durationMs": 48931,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T04:51:11.057Z",
+    "startedAt": "2026-09-07T04:51:11.058Z",
+    "finishedAt": "2026-09-07T04:51:58.377Z",
+    "durationMs": 47319,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T04:40:53.986Z",
+    "startedAt": "2026-09-07T04:40:53.986Z",
+    "finishedAt": "2026-09-07T04:41:40.242Z",
+    "durationMs": 46256,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T04:31:02.124Z",
+    "startedAt": "2026-09-07T04:31:02.124Z",
+    "finishedAt": "2026-09-07T04:31:48.569Z",
+    "durationMs": 46445,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T04:21:02.720Z",
+    "startedAt": "2026-09-07T04:21:02.720Z",
+    "finishedAt": "2026-09-07T04:21:49.976Z",
+    "durationMs": 47256,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T04:10:56.696Z",
+    "startedAt": "2026-09-07T04:10:56.696Z",
+    "finishedAt": "2026-09-07T04:11:45.066Z",
+    "durationMs": 48370,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T04:01:08.752Z",
+    "startedAt": "2026-09-07T04:01:08.752Z",
+    "finishedAt": "2026-09-07T04:02:28.463Z",
+    "durationMs": 79711,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
     "deleted": 1,
-    "unchanged": 381,
+    "unchanged": 430,
     "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
+    "updatedJobs": [],
     "deletedJobs": [
       {
-        "jobId": "527858",
-        "title": "Financial Accountant - Bangkok, Thailand"
+        "jobId": "531980",
+        "title": "Travel Consultant - West Lakes, SA"
       }
     ],
     "scrapeErrors": [],
     "published": true
   },
   {
-    "id": "2026-04-17T07:28:28.361Z",
-    "startedAt": "2026-04-17T07:28:28.362Z",
-    "finishedAt": "2026-04-17T07:36:32.763Z",
-    "durationMs": 484401,
+    "id": "2026-09-07T03:50:58.959Z",
+    "startedAt": "2026-09-07T03:50:58.959Z",
+    "finishedAt": "2026-09-07T03:51:44.852Z",
+    "durationMs": 45893,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 383,
-    "cmsItemsBefore": 384,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
-    "updated": 2,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 431,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T03:41:07.191Z",
+    "startedAt": "2026-09-07T03:41:07.191Z",
+    "finishedAt": "2026-09-07T03:42:26.297Z",
+    "durationMs": 79106,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 432,
+    "liveJobsAfter": 431,
+    "created": 0,
+    "updated": 0,
     "deleted": 1,
-    "unchanged": 381,
+    "unchanged": 431,
     "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "527858",
-        "title": "Financial Accountant - Bangkok, Thailand",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
+    "updatedJobs": [],
     "deletedJobs": [
       {
-        "jobId": "530422",
-        "title": "Front End Developer (JSF with React JS) - Bangalore"
+        "jobId": "531887",
+        "title": "Sales Travel Consultant - Forster, NSW"
       }
     ],
     "scrapeErrors": [],
     "published": true
   },
   {
-    "id": "2026-04-17T05:58:05.665Z",
-    "startedAt": "2026-04-17T05:58:05.665Z",
-    "finishedAt": "2026-04-17T06:06:37.835Z",
-    "durationMs": 512170,
+    "id": "2026-09-07T03:31:13.259Z",
+    "startedAt": "2026-09-07T03:31:13.259Z",
+    "finishedAt": "2026-09-07T03:31:59.540Z",
+    "durationMs": 46281,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 384,
-    "cmsItemsBefore": 377,
-    "created": 7,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 376,
-    "createdJobs": [
-      {
-        "jobId": "529020",
-        "title": "Sales Travel Consultant - Adelaide South"
-      },
-      {
-        "jobId": "528835",
-        "title": "Sales Travel Consultant - Greater Logan Area"
-      },
-      {
-        "jobId": "528882",
-        "title": "Sales Travel Consultant - Mackay, QLD"
-      },
-      {
-        "jobId": "530710",
-        "title": "Sales Travel Consultant - Broadmeadows, VIC"
-      },
-      {
-        "jobId": "530714",
-        "title": "Sales Travel Consultant - Mackay, QLD"
-      },
-      {
-        "jobId": "530719",
-        "title": "Sales Travel Consultant - Beenleigh, QLD"
-      },
-      {
-        "jobId": "530782",
-        "title": "Travel Consultant ( Cruiseabout) Expression of Interest- Australia"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-17T03:49:13.173Z",
-    "startedAt": "2026-04-17T03:49:13.173Z",
-    "finishedAt": "2026-04-17T03:57:03.691Z",
-    "durationMs": 470518,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 377,
-    "cmsItemsBefore": 370,
-    "created": 7,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 369,
-    "createdJobs": [
-      {
-        "jobId": "530734",
-        "title": "Reservations Executive - Tokyo, Japan"
-      },
-      {
-        "jobId": "530759",
-        "title": "Sales Travel Consultant - Murray Street Mall, WA"
-      },
-      {
-        "jobId": "530768",
-        "title": "Sales Travel Consultant - Hallet Cove, SA"
-      },
-      {
-        "jobId": "528865",
-        "title": "Sales Travel Consultant - Inner City Brisbane"
-      },
-      {
-        "jobId": "530764",
-        "title": "Sales Travel Consultant - Wynnum Plaza, QLD"
-      },
-      {
-        "jobId": "530765",
-        "title": "Sales Travel Consultant - South Bank, QLD"
-      },
-      {
-        "jobId": "530775",
-        "title": "Team Leader ( Cruiseabout) Expressions of Interest, Australia"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-17T00:02:30.866Z",
-    "startedAt": "2026-04-17T00:02:30.866Z",
-    "finishedAt": "2026-04-17T00:21:42.786Z",
-    "durationMs": 1151920,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 370,
-    "cmsItemsBefore": 369,
-    "created": 1,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [
-      {
-        "jobId": "530711",
-        "title": "Sales Travel Consultant - Epping Plaza, VIC"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-16T23:09:56.592Z",
-    "startedAt": "2026-04-16T23:09:56.592Z",
-    "finishedAt": "2026-04-16T23:18:19.849Z",
-    "durationMs": 503257,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
+    "source": "manual",
+    "pageupJobsFound": 432,
+    "cmsItemsBefore": 432,
+    "liveJobsAfter": 432,
     "created": 0,
-    "updated": 1,
+    "updated": 0,
     "deleted": 0,
-    "unchanged": 368,
+    "unchanged": 432,
     "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
+    "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-16T22:29:45.921Z",
-    "startedAt": "2026-04-16T22:29:45.921Z",
-    "finishedAt": "2026-04-16T22:37:49.461Z",
-    "durationMs": 483540,
+    "id": "2026-09-07T03:20:53.988Z",
+    "startedAt": "2026-09-07T03:20:53.989Z",
+    "finishedAt": "2026-09-07T03:21:40.165Z",
+    "durationMs": 46176,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
+    "source": "manual",
+    "pageupJobsFound": 432,
+    "cmsItemsBefore": 432,
+    "liveJobsAfter": 432,
     "created": 0,
-    "updated": 1,
+    "updated": 0,
     "deleted": 0,
-    "unchanged": 368,
+    "unchanged": 432,
     "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
+    "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-16T21:33:55.353Z",
-    "startedAt": "2026-04-16T21:33:55.353Z",
-    "finishedAt": "2026-04-16T21:41:22.825Z",
-    "durationMs": 447472,
+    "id": "2026-09-07T03:10:57.770Z",
+    "startedAt": "2026-09-07T03:10:57.771Z",
+    "finishedAt": "2026-09-07T03:11:43.787Z",
+    "durationMs": 46016,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
+    "source": "manual",
+    "pageupJobsFound": 432,
+    "cmsItemsBefore": 432,
+    "liveJobsAfter": 432,
     "created": 0,
-    "updated": 1,
+    "updated": 0,
     "deleted": 0,
-    "unchanged": 368,
+    "unchanged": 432,
     "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
+    "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-16T20:38:48.568Z",
-    "startedAt": "2026-04-16T20:38:48.568Z",
-    "finishedAt": "2026-04-16T20:46:24.396Z",
-    "durationMs": 455828,
+    "id": "2026-09-07T03:01:05.532Z",
+    "startedAt": "2026-09-07T03:01:05.532Z",
+    "finishedAt": "2026-09-07T03:02:26.004Z",
+    "durationMs": 80472,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
+    "source": "manual",
+    "pageupJobsFound": 432,
+    "cmsItemsBefore": 433,
+    "liveJobsAfter": 432,
     "created": 0,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-16T19:41:42.593Z",
-    "startedAt": "2026-04-16T19:41:42.593Z",
-    "finishedAt": "2026-04-16T19:49:19.929Z",
-    "durationMs": 457336,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
-    "created": 0,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-16T18:02:30.162Z",
-    "startedAt": "2026-04-16T18:02:30.162Z",
-    "finishedAt": "2026-04-16T18:10:01.445Z",
-    "durationMs": 451283,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
-    "created": 0,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-16T16:52:38.509Z",
-    "startedAt": "2026-04-16T16:52:38.509Z",
-    "finishedAt": "2026-04-16T17:00:15.171Z",
-    "durationMs": 456662,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 369,
-    "created": 0,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 368,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-16T15:10:02.377Z",
-    "startedAt": "2026-04-16T15:10:02.378Z",
-    "finishedAt": "2026-04-16T15:18:38.141Z",
-    "durationMs": 515763,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 369,
-    "cmsItemsBefore": 367,
-    "created": 2,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "530652",
-        "title": "FCM Business Travel Consultant EN/DE/ES"
-      },
-      {
-        "jobId": "530770",
-        "title": "RSA - Retail Travel Consultant - Ballito Junction, Durban KZN"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-16T13:03:16.972Z",
-    "startedAt": "2026-04-16T13:03:16.972Z",
-    "finishedAt": "2026-04-16T13:13:55.490Z",
-    "durationMs": 638518,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 367,
-    "created": 0,
-    "updated": 2,
-    "deleted": 0,
-    "unchanged": 365,
-    "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "530749",
-        "title": "Business Travel Consultant - Barcelona, ES",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-16T11:35:46.044Z",
-    "startedAt": "2026-04-16T11:35:46.044Z",
-    "finishedAt": "2026-04-16T11:43:30.309Z",
-    "durationMs": 464265,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 366,
-    "created": 1,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 365,
-    "createdJobs": [
-      {
-        "jobId": "530749",
-        "title": "FCM Business Travel Consultant - Barcelona, ES"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-16T10:16:32.001Z",
-    "startedAt": "2026-04-16T10:16:32.001Z",
-    "finishedAt": "2026-04-16T10:24:56.091Z",
-    "durationMs": 504090,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 366,
-    "cmsItemsBefore": 367,
-    "created": 0,
-    "updated": 1,
+    "updated": 0,
     "deleted": 1,
-    "unchanged": 365,
+    "unchanged": 432,
     "createdJobs": [],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
+    "updatedJobs": [],
     "deletedJobs": [
       {
-        "jobId": "530145",
-        "title": "Sales Travel Consultant - Belconnen, ACT"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-16T07:18:11.401Z",
-    "startedAt": "2026-04-16T07:18:11.402Z",
-    "finishedAt": "2026-04-16T07:25:34.923Z",
-    "durationMs": 443521,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 366,
-    "created": 1,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 365,
-    "createdJobs": [
-      {
-        "jobId": "528864",
-        "title": "Sales Travel Consultant - Brisbane Bayside, QLD"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-16T05:55:30.804Z",
-    "startedAt": "2026-04-16T05:55:30.804Z",
-    "finishedAt": "2026-04-16T06:03:27.244Z",
-    "durationMs": 476440,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 366,
-    "cmsItemsBefore": 367,
-    "created": 1,
-    "updated": 1,
-    "deleted": 2,
-    "unchanged": 364,
-    "createdJobs": [
-      {
-        "jobId": "530657",
-        "title": "Sales Travel Consultant - Capalaba, QLD"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "530147",
-        "title": "Finance Business Partner - South Bank, QLD"
-      },
-      {
-        "jobId": "530125",
+        "jobId": "531127",
         "title": "Sales Travel Consultant - Leichhardt, NSW"
       }
     ],
@@ -611,1202 +351,321 @@
     "published": true
   },
   {
-    "id": "2026-04-16T03:51:09.044Z",
-    "startedAt": "2026-04-16T03:51:09.045Z",
-    "finishedAt": "2026-04-16T03:58:52.888Z",
-    "durationMs": 463843,
+    "id": "2026-09-07T02:50:56.099Z",
+    "startedAt": "2026-09-07T02:50:56.099Z",
+    "finishedAt": "2026-09-07T02:51:52.415Z",
+    "durationMs": 56316,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 365,
-    "created": 6,
-    "updated": 2,
-    "deleted": 4,
-    "unchanged": 359,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530403",
-        "title": "Air Systems Analyst - ANZ",
-        "changedFields": [
-          "closing-date"
-        ]
-      },
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "529416",
-        "title": "Product Manager (Air Fulfilment) - South Bank, QLD"
-      },
-      {
-        "jobId": "528772",
-        "title": "Staff & Duty Travel Expert - Bali, Indonesia"
-      },
-      {
-        "jobId": "529570",
-        "title": "Customer Experience and Touring Executive"
-      },
-      {
-        "jobId": "529809",
-        "title": "Employee Travel Advisor - South Bank, QLD"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-16T00:03:53.144Z",
-    "startedAt": "2026-04-16T00:03:53.144Z",
-    "finishedAt": "2026-04-16T00:14:57.190Z",
-    "durationMs": 664046,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 371,
-    "cmsItemsBefore": 365,
-    "created": 6,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 364,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-15T23:07:07.771Z",
-    "startedAt": "2026-04-15T23:07:07.771Z",
-    "finishedAt": "2026-04-15T23:20:40.259Z",
-    "durationMs": 812488,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 371,
-    "cmsItemsBefore": 364,
-    "created": 7,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 363,
-    "createdJobs": [
-      {
-        "jobId": "530732",
-        "title": "Sales Travel Consultant - Croydon, VIC"
-      },
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T22:07:29.258Z",
-    "startedAt": "2026-04-15T22:07:29.258Z",
-    "finishedAt": "2026-04-15T22:21:09.273Z",
-    "durationMs": 820015,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 370,
-    "cmsItemsBefore": 364,
-    "created": 6,
-    "updated": 2,
-    "deleted": 0,
-    "unchanged": 362,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530712",
-        "title": "Travel Expert - Cambridge, New Zealand",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T21:11:33.184Z",
-    "startedAt": "2026-04-15T21:11:33.185Z",
-    "finishedAt": "2026-04-15T21:20:15.747Z",
-    "durationMs": 522562,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 370,
-    "cmsItemsBefore": 364,
-    "created": 6,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 363,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-15T20:12:38.211Z",
-    "startedAt": "2026-04-15T20:12:38.211Z",
-    "finishedAt": "2026-04-15T20:21:03.232Z",
-    "durationMs": 505021,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 370,
-    "cmsItemsBefore": 364,
-    "created": 6,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 363,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-15T19:15:54.344Z",
-    "startedAt": "2026-04-15T19:15:54.344Z",
-    "finishedAt": "2026-04-15T19:26:34.001Z",
-    "durationMs": 639657,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 370,
-    "cmsItemsBefore": 368,
-    "created": 6,
-    "updated": 1,
-    "deleted": 4,
-    "unchanged": 363,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "529533",
-        "title": "Team Leader - Japan Operations - Noida, India"
-      },
-      {
-        "jobId": "529399",
-        "title": "Azure data Engineer - Noida, India"
-      },
-      {
-        "jobId": "529440",
-        "title": "Manager - Credit Control"
-      },
-      {
-        "jobId": "530269",
-        "title": "RPA Business Analyst  - Noida, India"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T17:58:57.154Z",
-    "startedAt": "2026-04-15T17:58:57.154Z",
-    "finishedAt": "2026-04-15T18:06:58.590Z",
-    "durationMs": 481436,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 374,
-    "cmsItemsBefore": 367,
-    "created": 7,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "530754",
-        "title": "Flight Centre - Growth & Demand Specialist - Toronto, Canada"
-      },
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T16:52:40.027Z",
-    "startedAt": "2026-04-15T16:52:40.027Z",
-    "finishedAt": "2026-04-15T17:05:37.406Z",
-    "durationMs": 777379,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 373,
-    "cmsItemsBefore": 367,
-    "created": 6,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-15T15:46:29.472Z",
-    "startedAt": "2026-04-15T15:46:29.472Z",
-    "finishedAt": "2026-04-15T15:55:11.188Z",
-    "durationMs": 521716,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 373,
-    "cmsItemsBefore": 367,
-    "created": 6,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 366,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-15T14:28:52.047Z",
-    "startedAt": "2026-04-15T14:28:52.048Z",
-    "finishedAt": "2026-04-15T14:37:48.343Z",
-    "durationMs": 536295,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 373,
-    "cmsItemsBefore": 364,
-    "created": 9,
-    "updated": 2,
-    "deleted": 0,
-    "unchanged": 362,
-    "createdJobs": [
-      {
-        "jobId": "530630",
-        "title": "FCM - Sales Development Representative - Paris/Bordeaux, France"
-      },
-      {
-        "jobId": "530750",
-        "title": "RSA - FCB Retail Travel Consultant - Somerset, Cape Town"
-      },
-      {
-        "jobId": "530751",
-        "title": "RSA - FCB Retail Travel Consultant - Waterstone, Cape Town"
-      },
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530629",
-        "title": "FCM - Business Development Manager - Paris / Bordeaux, France",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T11:31:46.915Z",
-    "startedAt": "2026-04-15T11:31:46.915Z",
-    "finishedAt": "2026-04-15T11:39:35.011Z",
-    "durationMs": 468096,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 362,
-    "created": 6,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 361,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-15T10:15:59.448Z",
-    "startedAt": "2026-04-15T10:15:59.449Z",
-    "finishedAt": "2026-04-15T10:31:48.938Z",
-    "durationMs": 949489,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 368,
-    "cmsItemsBefore": 362,
-    "created": 6,
-    "updated": 2,
-    "deleted": 0,
-    "unchanged": 360,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529637",
-        "title": "Financial Accounting Team Leader"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "530329",
-        "title": "Growth & Demand Generation Manager (B2B)",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T08:58:54.133Z",
-    "startedAt": "2026-04-15T08:58:54.134Z",
-    "finishedAt": "2026-04-15T09:10:29.430Z",
-    "durationMs": 695296,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 362,
-    "created": 5,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 361,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-15T07:17:19.582Z",
-    "startedAt": "2026-04-15T07:17:19.582Z",
-    "finishedAt": "2026-04-15T07:26:04.398Z",
-    "durationMs": 524816,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 367,
-    "cmsItemsBefore": 361,
-    "created": 6,
-    "updated": 2,
-    "deleted": 0,
-    "unchanged": 359,
-    "createdJobs": [
-      {
-        "jobId": "530403",
-        "title": "Air Systems Analyst - ANZ"
-      },
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529489",
-        "title": "Marketing Executive- South Bank, QLD",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T05:54:45.605Z",
-    "startedAt": "2026-04-15T05:54:45.605Z",
-    "finishedAt": "2026-04-15T06:03:36.876Z",
-    "durationMs": 531271,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 366,
-    "cmsItemsBefore": 358,
-    "created": 8,
-    "updated": 7,
-    "deleted": 0,
-    "unchanged": 351,
-    "createdJobs": [
-      {
-        "jobId": "530461",
-        "title": "Senior AI Engineer"
-      },
-      {
-        "jobId": "529489",
-        "title": "Retail Marketing Specialist- South Bank, QLD"
-      },
-      {
-        "jobId": "530591",
-        "title": "Sales Travel Consultant - Highpoint, VIC"
-      },
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530598",
-        "title": "Accredited Trainer & Facilitator - North Sydney NSW",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "530713",
-        "title": "Sales Travel Consultant -Goulburn, NSW",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "530649",
-        "title": "Sales Travel Consultant - Lake Haven, NSW",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "530650",
-        "title": "Sales Travel Consultant - Tuggerah, NSW",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "530648",
-        "title": "Sales Travel Consultant - Cessnock, NSW",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "530194",
-        "title": "Finance Business Analyst - South Bank, QLD",
-        "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T03:45:15.881Z",
-    "startedAt": "2026-04-15T03:45:15.881Z",
-    "finishedAt": "2026-04-15T03:54:51.797Z",
-    "durationMs": 575916,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 363,
-    "cmsItemsBefore": 353,
-    "created": 11,
-    "updated": 2,
-    "deleted": 1,
-    "unchanged": 350,
-    "createdJobs": [
-      {
-        "jobId": "530675",
-        "title": "Guide AP executive"
-      },
-      {
-        "jobId": "530237",
-        "title": "Travel Manager - Corporate Traveller - Perth, WA"
-      },
-      {
-        "jobId": "530602",
-        "title": "Accredited Trainer & Facilitator - Perth WA"
-      },
-      {
-        "jobId": "530465",
-        "title": "Capability Owner (Content Load and Optimisation) - ANZ"
-      },
-      {
-        "jobId": "530619",
-        "title": "Luxury Travel Consultant - Cruise Boutique TA"
-      },
-      {
-        "jobId": "530712",
-        "title": "Travel Expert - Cambridge"
-      },
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "528880",
-        "title": "Sales Travel Consultant - Cairns, QLD",
-        "changedFields": [
-          "name"
-        ]
-      },
-      {
-        "jobId": "529048",
-        "title": "Sales Travel Consultant - Outer North Melbourne, VIC",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "528894",
-        "title": "Travel Manager - Corporate Traveller - Perth, WA"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-15T00:03:53.324Z",
-    "startedAt": "2026-04-15T00:03:53.324Z",
-    "finishedAt": "2026-04-15T00:11:49.754Z",
-    "durationMs": 476430,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 358,
-    "cmsItemsBefore": 356,
-    "created": 7,
-    "updated": 0,
-    "deleted": 5,
-    "unchanged": 351,
-    "createdJobs": [
-      {
-        "jobId": "530284",
-        "title": "Sales Travel Consultant - Albury, NSW"
-      },
-      {
-        "jobId": "530598",
-        "title": "Accredited Trainers & Facilitators - North Sydney NSW"
-      },
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530127",
-        "title": "Travel Manager - FCBT - Perth, WA"
-      },
-      {
-        "jobId": "519924",
-        "title": "Sales Travel Consultant - Northern Beaches, NSW"
-      },
-      {
-        "jobId": "529078",
-        "title": "Sales Travel Consultant - Sutherland Shire , NSW"
-      },
-      {
-        "jobId": "529067",
-        "title": "Sales Travel Consultant - South Sydney, NSW"
-      },
-      {
-        "jobId": "529066",
-        "title": "Sales Travel Consultant - South Eastern Sydney, NSW"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-14T23:07:57.212Z",
-    "startedAt": "2026-04-14T23:07:57.213Z",
-    "finishedAt": "2026-04-14T23:18:49.567Z",
-    "durationMs": 652354,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 361,
-    "cmsItemsBefore": 356,
-    "created": 5,
+    "source": "manual",
+    "pageupJobsFound": 433,
+    "cmsItemsBefore": 433,
+    "liveJobsAfter": 433,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 356,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
+    "unchanged": 433,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-14T22:08:55.224Z",
-    "startedAt": "2026-04-14T22:08:55.224Z",
-    "finishedAt": "2026-04-14T22:20:03.177Z",
-    "durationMs": 667953,
+    "id": "2026-09-07T02:41:01.959Z",
+    "startedAt": "2026-09-07T02:41:01.959Z",
+    "finishedAt": "2026-09-07T02:41:47.774Z",
+    "durationMs": 45815,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 361,
-    "cmsItemsBefore": 355,
-    "created": 6,
+    "source": "manual",
+    "pageupJobsFound": 433,
+    "cmsItemsBefore": 433,
+    "liveJobsAfter": 433,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 355,
+    "unchanged": 433,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T02:33:58.102Z",
+    "startedAt": "2026-09-07T02:33:58.102Z",
+    "finishedAt": "2026-09-07T02:35:17.911Z",
+    "durationMs": 79809,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 433,
+    "cmsItemsBefore": 432,
+    "liveJobsAfter": 433,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 432,
     "createdJobs": [
       {
-        "jobId": "530663",
+        "jobId": "532549",
+        "title": "Travel Expert - Manukau"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
+    "id": "2026-09-07T02:01:06.399Z",
+    "startedAt": "2026-09-07T02:01:06.399Z",
+    "finishedAt": "2026-09-07T02:02:32.627Z",
+    "durationMs": 86228,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 432,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 432,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 431,
+    "createdJobs": [
+      {
+        "jobId": "532576",
+        "title": "Retail Sales Travel Consultant - Whitsundays, QLD"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
+    "id": "2026-09-07T01:51:03.132Z",
+    "startedAt": "2026-09-07T01:51:03.132Z",
+    "finishedAt": "2026-09-07T01:51:49.072Z",
+    "durationMs": 45940,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 431,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T01:41:05.325Z",
+    "startedAt": "2026-09-07T01:41:05.325Z",
+    "finishedAt": "2026-09-07T01:41:51.085Z",
+    "durationMs": 45760,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 431,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T01:30:57.039Z",
+    "startedAt": "2026-09-07T01:30:57.039Z",
+    "finishedAt": "2026-09-07T01:31:43.773Z",
+    "durationMs": 46734,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 431,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T01:20:55.750Z",
+    "startedAt": "2026-09-07T01:20:55.750Z",
+    "finishedAt": "2026-09-07T01:21:44.110Z",
+    "durationMs": 48360,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 431,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T01:10:53.493Z",
+    "startedAt": "2026-09-07T01:10:53.493Z",
+    "finishedAt": "2026-09-07T01:12:13.572Z",
+    "durationMs": 80079,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 431,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [
+      {
+        "jobId": "532575",
+        "title": "Retail Sales Travel Consultant - Townsville Willows, QLD"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
+    "id": "2026-09-07T01:01:07.227Z",
+    "startedAt": "2026-09-07T01:01:07.227Z",
+    "finishedAt": "2026-09-07T01:01:56.046Z",
+    "durationMs": 48819,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T00:50:53.049Z",
+    "startedAt": "2026-09-07T00:50:53.049Z",
+    "finishedAt": "2026-09-07T00:52:13.847Z",
+    "durationMs": 80798,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 428,
+    "liveJobsAfter": 430,
+    "created": 2,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 428,
+    "createdJobs": [
+      {
+        "jobId": "532572",
+        "title": "Sales Travel Consultant - Aspley, QLD"
+      },
+      {
+        "jobId": "532574",
+        "title": "Retail Sales Travel Consultant - Toowoomba, QLD"
+      }
+    ],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
+    "id": "2026-09-07T00:40:55.441Z",
+    "startedAt": "2026-09-07T00:40:55.442Z",
+    "finishedAt": "2026-09-07T00:41:41.807Z",
+    "durationMs": 46365,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 428,
+    "cmsItemsBefore": 428,
+    "liveJobsAfter": 428,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 428,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T00:30:53.881Z",
+    "startedAt": "2026-09-07T00:30:53.881Z",
+    "finishedAt": "2026-09-07T00:31:40.799Z",
+    "durationMs": 46918,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 428,
+    "cmsItemsBefore": 428,
+    "liveJobsAfter": 428,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 428,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-07T00:21:03.083Z",
+    "startedAt": "2026-09-07T00:21:03.083Z",
+    "finishedAt": "2026-09-07T00:22:25.430Z",
+    "durationMs": 82347,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 428,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 428,
+    "created": 1,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 427,
+    "createdJobs": [
+      {
+        "jobId": "532567",
         "title": "Corporate Traveller - Travel Manager"
-      },
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
       }
     ],
     "updatedJobs": [],
@@ -1815,916 +674,573 @@
     "published": true
   },
   {
-    "id": "2026-04-14T21:11:34.192Z",
-    "startedAt": "2026-04-14T21:11:34.192Z",
-    "finishedAt": "2026-04-14T21:21:37.641Z",
-    "durationMs": 603449,
+    "id": "2026-09-07T00:11:02.756Z",
+    "startedAt": "2026-09-07T00:11:02.757Z",
+    "finishedAt": "2026-09-07T00:11:48.638Z",
+    "durationMs": 45881,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 360,
-    "cmsItemsBefore": 355,
-    "created": 5,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 427,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 355,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
+    "unchanged": 427,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-14T20:02:51.165Z",
-    "startedAt": "2026-04-14T20:02:51.165Z",
-    "finishedAt": "2026-04-14T20:16:28.041Z",
-    "durationMs": 816876,
+    "id": "2026-09-07T00:01:14.614Z",
+    "startedAt": "2026-09-07T00:01:14.614Z",
+    "finishedAt": "2026-09-07T00:02:02.175Z",
+    "durationMs": 47561,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 360,
-    "cmsItemsBefore": 355,
-    "created": 5,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 427,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 355,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
+    "unchanged": 427,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-14T18:58:01.283Z",
-    "startedAt": "2026-04-14T18:58:01.283Z",
-    "finishedAt": "2026-04-14T19:05:22.602Z",
-    "durationMs": 441319,
+    "id": "2026-09-06T23:50:54.533Z",
+    "startedAt": "2026-09-06T23:50:54.534Z",
+    "finishedAt": "2026-09-06T23:51:40.500Z",
+    "durationMs": 45966,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 360,
-    "cmsItemsBefore": 355,
-    "created": 5,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 427,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 355,
-    "createdJobs": [
-      {
-        "jobId": "530729",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      },
-      {
-        "jobId": "530728",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
+    "unchanged": 427,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-14T17:39:23.847Z",
-    "startedAt": "2026-04-14T17:39:23.848Z",
-    "finishedAt": "2026-04-14T17:50:04.964Z",
-    "durationMs": 641116,
+    "id": "2026-09-06T23:41:04.114Z",
+    "startedAt": "2026-09-06T23:41:04.114Z",
+    "finishedAt": "2026-09-06T23:41:50.619Z",
+    "durationMs": 46505,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 358,
-    "cmsItemsBefore": 353,
-    "created": 6,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 427,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 427,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T23:31:05.856Z",
+    "startedAt": "2026-09-06T23:31:05.856Z",
+    "finishedAt": "2026-09-06T23:31:52.014Z",
+    "durationMs": 46158,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 427,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 427,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T23:21:07.789Z",
+    "startedAt": "2026-09-06T23:21:07.789Z",
+    "finishedAt": "2026-09-06T23:21:55.238Z",
+    "durationMs": 47449,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 427,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 427,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T23:10:57.461Z",
+    "startedAt": "2026-09-06T23:10:57.461Z",
+    "finishedAt": "2026-09-06T23:11:43.430Z",
+    "durationMs": 45969,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 427,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 427,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T23:01:06.623Z",
+    "startedAt": "2026-09-06T23:01:06.623Z",
+    "finishedAt": "2026-09-06T23:01:53.097Z",
+    "durationMs": 46474,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 427,
+    "liveJobsAfter": 427,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 427,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T22:50:57.267Z",
+    "startedAt": "2026-09-06T22:50:57.267Z",
+    "finishedAt": "2026-09-06T22:52:15.618Z",
+    "durationMs": 78351,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 427,
+    "cmsItemsBefore": 428,
+    "liveJobsAfter": 427,
+    "created": 0,
     "updated": 0,
     "deleted": 1,
-    "unchanged": 352,
-    "createdJobs": [
-      {
-        "jobId": "530717",
-        "title": "FCM - Corporate Travel Consultant - Remote, USA"
-      },
-      {
-        "jobId": "530726",
-        "title": "Envoyage - National Sales Director - Toronto, Canada"
-      },
-      {
-        "jobId": "530716",
-        "title": "FCM - Dedicated Onsite Corporate Travel Consultant - St. Louis, Missouri"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529571",
-        "title": "Salesforce Developer"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
+    "unchanged": 427,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [
       {
-        "jobId": "530612",
-        "title": "FCM - VIP Corporate Travel Consultant - Remote, USA"
+        "jobId": "531035",
+        "title": "Sales Travel Consultant - Macquarie, NSW"
       }
     ],
     "scrapeErrors": [],
     "published": true
   },
   {
-    "id": "2026-04-14T12:59:22.549Z",
-    "startedAt": "2026-04-14T12:59:22.549Z",
-    "finishedAt": "2026-04-14T13:06:24.510Z",
-    "durationMs": 421961,
+    "id": "2026-09-06T22:41:00.632Z",
+    "startedAt": "2026-09-06T22:41:00.633Z",
+    "finishedAt": "2026-09-06T22:41:46.861Z",
+    "durationMs": 46228,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 355,
-    "cmsItemsBefore": 353,
-    "created": 2,
+    "source": "manual",
+    "pageupJobsFound": 428,
+    "cmsItemsBefore": 428,
+    "liveJobsAfter": 428,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 353,
-    "createdJobs": [
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
+    "unchanged": 428,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-14T11:40:50.336Z",
-    "startedAt": "2026-04-14T11:40:50.336Z",
-    "finishedAt": "2026-04-14T11:51:55.316Z",
-    "durationMs": 664980,
+    "id": "2026-09-06T22:32:39.809Z",
+    "startedAt": "2026-09-06T22:32:39.809Z",
+    "finishedAt": "2026-09-06T22:33:26.031Z",
+    "durationMs": 46222,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 355,
-    "cmsItemsBefore": 353,
-    "created": 2,
+    "source": "manual",
+    "pageupJobsFound": 428,
+    "cmsItemsBefore": 428,
+    "liveJobsAfter": 428,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 353,
-    "createdJobs": [
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
+    "unchanged": 428,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
     "published": false
   },
   {
-    "id": "2026-04-14T10:14:03.360Z",
-    "startedAt": "2026-04-14T10:14:03.360Z",
-    "finishedAt": "2026-04-14T10:28:23.163Z",
-    "durationMs": 859803,
+    "id": "2026-09-06T22:30:37.946Z",
+    "startedAt": "2026-09-06T22:30:37.946Z",
+    "finishedAt": "2026-09-06T22:31:57.592Z",
+    "durationMs": 79646,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 355,
-    "cmsItemsBefore": 353,
-    "created": 2,
+    "source": "manual",
+    "pageupJobsFound": 428,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 428,
+    "created": 0,
     "updated": 0,
-    "deleted": 0,
-    "unchanged": 353,
-    "createdJobs": [
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-14T08:58:32.838Z",
-    "startedAt": "2026-04-14T08:58:32.838Z",
-    "finishedAt": "2026-04-14T09:07:03.823Z",
-    "durationMs": 510985,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 355,
-    "cmsItemsBefore": 352,
-    "created": 3,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 352,
-    "createdJobs": [
-      {
-        "jobId": "530267",
-        "title": "Customer Experience Team Leader - Bali, Indonesia"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-14T07:16:48.313Z",
-    "startedAt": "2026-04-14T07:16:48.313Z",
-    "finishedAt": "2026-04-14T07:24:03.925Z",
-    "durationMs": 435612,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 354,
-    "cmsItemsBefore": 347,
-    "created": 7,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 347,
-    "createdJobs": [
-      {
-        "jobId": "530464",
-        "title": "Content Marketing Manager - South Bank, QLD"
-      },
-      {
-        "jobId": "530659",
-        "title": "Head of Marketing- CruiseHQ- Sydney, NSW"
-      },
-      {
-        "jobId": "530721",
-        "title": "Travel Consultant ( Cruiseabout ) - Mermaid Waters, QLD"
-      },
-      {
-        "jobId": "530422",
-        "title": "Front End Developer (JSF with React JS) - Bangalore"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      },
-      {
-        "jobId": "528033",
-        "title": "Senior Human Resources Business Partner"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-14T05:54:53.004Z",
-    "startedAt": "2026-04-14T05:54:53.004Z",
-    "finishedAt": "2026-04-14T06:03:11.002Z",
-    "durationMs": 497998,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 349,
-    "cmsItemsBefore": 348,
-    "created": 4,
-    "updated": 0,
-    "deleted": 3,
-    "unchanged": 345,
-    "createdJobs": [
-      {
-        "jobId": "530693",
-        "title": "Foreign Currency Sales Consultant (Part Time) - Travel Money NZ - Botany, NZ"
-      },
-      {
-        "jobId": "530694",
-        "title": "Foreign Currency Sales Consultant (Part Time) - Travel Money NZ - Riccarton, NZ"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
+    "deleted": 2,
+    "unchanged": 428,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [
       {
-        "jobId": "530361",
-        "title": "Sales Travel Consultant - Hawthorn, VIC"
+        "jobId": "531685",
+        "title": "RSA - Retail Travel Consultant - Somerset Mall, Cape Town"
       },
       {
-        "jobId": "530286",
-        "title": "Sales Travel Consultant - Hurstville, NSW"
-      },
-      {
-        "jobId": "529688",
-        "title": "D365 Finance Functional Consultant- South Bank, QLD"
+        "jobId": "531308",
+        "title": "RSA - Retail Travel Consultant (Stellenbosch, Western Cape)"
       }
     ],
     "scrapeErrors": [],
     "published": true
   },
   {
-    "id": "2026-04-14T03:46:42.268Z",
-    "startedAt": "2026-04-14T03:46:42.268Z",
-    "finishedAt": "2026-04-14T03:56:25.147Z",
-    "durationMs": 582879,
+    "id": "2026-09-06T22:02:47.583Z",
+    "startedAt": "2026-09-06T22:02:47.583Z",
+    "finishedAt": "2026-09-06T22:29:58.299Z",
+    "durationMs": 1630716,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 350,
-    "cmsItemsBefore": 343,
-    "created": 8,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 342,
-    "createdJobs": [
-      {
-        "jobId": "529462",
-        "title": "Senior Machine Learning Engineer - Various Australian Cities"
-      },
-      {
-        "jobId": "529754",
-        "title": "Senior Machine Learning Engineer (Team Lead) - Various Australian Cities"
-      },
-      {
-        "jobId": "530290",
-        "title": "Marketing Coordinator - Broadbeach, QLD"
-      },
-      {
-        "jobId": "530700",
-        "title": "My Holidays Travel Sales Consultant - Broadbeach, QLD"
-      },
-      {
-        "jobId": "530713",
-        "title": "AUS - FCB Sales Travel Consultant - SUBURB, STATE"
-      },
-      {
-        "jobId": "530672",
-        "title": "Travel Expert - Queensgate"
-      },
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530397",
-        "title": "Travel Expert - Sylvia Park"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-14T00:03:56.473Z",
-    "startedAt": "2026-04-14T00:03:56.473Z",
-    "finishedAt": "2026-04-14T00:11:41.642Z",
-    "durationMs": 465169,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 346,
-    "cmsItemsBefore": 343,
-    "created": 4,
-    "updated": 2,
-    "deleted": 1,
-    "unchanged": 340,
-    "createdJobs": [
-      {
-        "jobId": "529462",
-        "title": "Senior Machine Learning Engineer - South Bank, QLD"
-      },
-      {
-        "jobId": "529754",
-        "title": "Senior Machine Learning Engineer (Team Lead) - South Bank, QLD"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      },
-      {
-        "jobId": "529232",
-        "title": "Travel Expert - Dunedin, New Zealand"
-      }
-    ],
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 41,
+    "deleted": 0,
+    "unchanged": 389,
+    "createdJobs": [],
     "updatedJobs": [
       {
-        "jobId": "530186",
-        "title": "Commercial Analyst- South Bank, QLD",
+        "jobId": "531891",
+        "title": "Transactional Finance Team Leader - London, UK",
         "changedFields": [
-          "closing-date"
+          "description-or-banner"
         ]
       },
       {
-        "jobId": "530210",
-        "title": "Commercial Manager- Product and Pricing- South Bank, QLD",
+        "jobId": "532581",
+        "title": "RSA - FCM Senior Travel Manager - Johannesburg & Cape Town",
         "changedFields": [
-          "closing-date"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "530368",
-        "title": "FCBT Account Manager - London, United Kingdom"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T23:07:47.279Z",
-    "startedAt": "2026-04-13T23:07:47.279Z",
-    "finishedAt": "2026-04-13T23:15:09.920Z",
-    "durationMs": 442641,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 344,
-    "cmsItemsBefore": 345,
-    "created": 2,
-    "updated": 0,
-    "deleted": 3,
-    "unchanged": 342,
-    "createdJobs": [
-      {
-        "jobId": "529976",
-        "title": "Travel Expert - Napier"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529606",
-        "title": "Remote Travel Manager - FCBT - Remote, Australia"
-      },
-      {
-        "jobId": "529754",
-        "title": "Senior Machine Learning Engineer (Team Lead) - South Bank, QLD"
-      },
-      {
-        "jobId": "529462",
-        "title": "Senior Machine Learning Engineer - South Bank, QLD"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T22:06:28.645Z",
-    "startedAt": "2026-04-13T22:06:28.645Z",
-    "finishedAt": "2026-04-13T22:13:37.431Z",
-    "durationMs": 428786,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 346,
-    "cmsItemsBefore": 345,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-13T21:12:08.813Z",
-    "startedAt": "2026-04-13T21:12:08.813Z",
-    "finishedAt": "2026-04-13T21:19:22.873Z",
-    "durationMs": 434060,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 346,
-    "cmsItemsBefore": 346,
-    "created": 1,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 345,
-    "createdJobs": [
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530155",
-        "title": "FCM – Dedicated Overnight Corporate Travel Consultant – Remote, USA"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T20:06:53.433Z",
-    "startedAt": "2026-04-13T20:06:53.433Z",
-    "finishedAt": "2026-04-13T20:17:40.049Z",
-    "durationMs": 646616,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 349,
-    "created": 1,
-    "updated": 1,
-    "deleted": 3,
-    "unchanged": 345,
-    "createdJobs": [
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530155",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category",
-          "brand-name"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "529199",
-        "title": "FCM - Director of Enterprise Sales - Boston, MA"
-      },
-      {
-        "jobId": "529198",
-        "title": "FCM - Director of Enterprise Sales - Philadelphia, PA"
-      },
-      {
-        "jobId": "529200",
-        "title": "FCM - Director of Enterprise Sales - Chicago, IL"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T18:59:52.748Z",
-    "startedAt": "2026-04-13T18:59:52.748Z",
-    "finishedAt": "2026-04-13T19:09:02.516Z",
-    "durationMs": 549768,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 350,
-    "cmsItemsBefore": 348,
-    "created": 3,
-    "updated": 2,
-    "deleted": 1,
-    "unchanged": 345,
-    "createdJobs": [
-      {
-        "jobId": "530708",
-        "title": "FCM - Director of Enterprise Sales - New York, NY"
-      },
-      {
-        "jobId": "530709",
-        "title": "FCM - Director of Enterprise Sales - Philadelphia, PA"
-      },
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529200",
-        "title": "Unknown",
-        "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category",
-          "brand-name"
+          "description-or-banner"
         ]
       },
       {
-        "jobId": "529199",
-        "title": "Unknown",
+        "jobId": "532582",
+        "title": "Sales Development Representative (SDR)- RSA",
         "changedFields": [
-          "name",
-          "location",
-          "work-type",
-          "category",
-          "brand-name"
+          "description-or-banner"
         ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "529196",
-        "title": "FCM - Director of Enterprise Sales - New York, NY"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T17:51:06.425Z",
-    "startedAt": "2026-04-13T17:51:06.425Z",
-    "finishedAt": "2026-04-13T17:59:25.607Z",
-    "durationMs": 499182,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 349,
-    "cmsItemsBefore": 348,
-    "created": 2,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 347,
-    "createdJobs": [
-      {
-        "jobId": "530707",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Toronto, ON"
       },
       {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530101",
-        "title": "Corporate Traveller - Corporate Travel Consultant - Toronto, ON"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T16:53:12.946Z",
-    "startedAt": "2026-04-13T16:53:12.947Z",
-    "finishedAt": "2026-04-13T17:03:10.830Z",
-    "durationMs": 597883,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 349,
-    "cmsItemsBefore": 348,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 348,
-    "createdJobs": [
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-13T15:52:36.286Z",
-    "startedAt": "2026-04-13T15:52:36.286Z",
-    "finishedAt": "2026-04-13T16:03:04.143Z",
-    "durationMs": 627857,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 349,
-    "cmsItemsBefore": 348,
-    "created": 1,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 348,
-    "createdJobs": [
-      {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-13T14:12:36.139Z",
-    "startedAt": "2026-04-13T14:12:36.139Z",
-    "finishedAt": "2026-04-13T14:20:11.775Z",
-    "durationMs": 455636,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 349,
-    "cmsItemsBefore": 347,
-    "created": 3,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 346,
-    "createdJobs": [
-      {
-        "jobId": "529730",
-        "title": "M&E contracting - Domestic Operations - Mumbai"
+        "jobId": "531509",
+        "title": "Sr. Executive - Transaction Finance",
+        "changedFields": [
+          "description-or-banner"
+        ]
       },
       {
-        "jobId": "529369",
-        "title": "Manager - MICE Sales, Kolkata"
+        "jobId": "531965",
+        "title": "MICE Airline Manager/ Mumbai",
+        "changedFields": [
+          "description-or-banner"
+        ]
       },
       {
-        "jobId": "529502",
-        "title": "General Manager - Business Development"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [
+        "jobId": "532432",
+        "title": "Business Development Manager - Perth, WA",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
       {
-        "jobId": "529844",
-        "title": "HR Leader, India"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T12:02:27.841Z",
-    "startedAt": "2026-04-13T12:02:27.842Z",
-    "finishedAt": "2026-04-13T12:09:54.196Z",
-    "durationMs": 446354,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 347,
-    "cmsItemsBefore": 345,
-    "created": 2,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [
+        "jobId": "532524",
+        "title": "Future Team Leader - Flight Centre Luxury - Perth, WA",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
       {
-        "jobId": "530187",
-        "title": "Solutions Consultant"
+        "jobId": "532557",
+        "title": "Sales Travel Consultant - Gawler, SA",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532571",
+        "title": "Sales Travel Consultant - Adelaide North",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532512",
+        "title": "Foreign Currency Sales Consultant (Full Time) – Travel Money Oz – Preston, VIC",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532534",
+        "title": "Foreign Currency Sales Consultant (Casual) – Travel Money Oz – Camberwell, VIC",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532573",
+        "title": "Retail Sales Travel Consultant - Redbank Plains, QLD",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532565",
+        "title": "Scott Dunn Private - Private Relationship Travel Manager - Dallas, TX",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532219",
+        "title": "Scott Dunn - Travel Consultant - Asia Specialist - New York, NY",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532560",
+        "title": "Flight Centre - Travel Consultant - Newmarket, ON",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532561",
+        "title": "Flight Centre - Travel Consultant - Toronto, ON",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532564",
+        "title": "Flight Centre - BI Developer / Analyst II - Woburn, MA",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532568",
+        "title": "FCM – Conseiller en voyages d’affaires – Montreal, QC",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532569",
+        "title": "FCM - Corporate Travel Consultant - Montreal, QC",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532563",
+        "title": "Senior Travel Consultant - Latin America",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "529009",
+        "title": "Sales Travel Consultant - Adelaide City & West",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "528858",
+        "title": "Sales Travel Consultant - North Brisbane, QLD",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532128",
+        "title": "Quality Assurance Engineer - South Bank, QLD",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532520",
+        "title": "Sales Travel Consultant - Chermside, QLD",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532529",
+        "title": "Systems Support - Systems Analyst - South Bank, QLD",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532530",
+        "title": "Sales Travel Consultant - Williamstown, VIC",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532531",
+        "title": "Sales Travel Consultant - Airport West, VIC",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532532",
+        "title": "Sales Travel Consultant - Watergardens, VIC",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532547",
+        "title": "Flight Centre - Mt Ommaney Careers Evening",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532548",
+        "title": "Flight Centre - Garden City Careers Evening",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532551",
+        "title": "Flight Centre Careers Information Night - Townsville, QLD",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532552",
+        "title": "After Sales Consultant (My Cruises) - Broadbeach, QLD",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532299",
+        "title": "Senior Business Analyst -  Ho Chi Minh City, Vietnam",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "531159",
+        "title": "People Experience Leader - Kuala Lumpur, Malaysia / Bangkok, Thailand / Hanoi, Vietnam",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "528881",
+        "title": "Retail Sales Travel Consultant - Ipswich & Surrounding Suburbs",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "532371",
+        "title": "Business Leader - Canterbury, VIC",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "531242",
+        "title": "M&E International Contracting - Senior Manager",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "531751",
+        "title": "Software Engineer - South Bank, QLD",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "529612",
+        "title": "Product Marketing Manager",
+        "changedFields": [
+          "description-or-banner"
+        ]
+      },
+      {
+        "jobId": "530689",
+        "title": "D365 Expert - London, UK",
+        "changedFields": [
+          "description-or-banner"
+        ]
       },
       {
         "jobId": "528252",
-        "title": "Business Development General Manager"
-      }
-    ],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T10:59:18.959Z",
-    "startedAt": "2026-04-13T10:59:18.959Z",
-    "finishedAt": "2026-04-13T11:06:11.476Z",
-    "durationMs": 412517,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-13T09:16:16.220Z",
-    "startedAt": "2026-04-13T09:16:16.220Z",
-    "finishedAt": "2026-04-13T09:24:40.713Z",
-    "durationMs": 504493,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-13T07:08:33.580Z",
-    "startedAt": "2026-04-13T07:08:33.580Z",
-    "finishedAt": "2026-04-13T07:18:36.312Z",
-    "durationMs": 602732,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 343,
-    "created": 2,
-    "updated": 1,
-    "deleted": 0,
-    "unchanged": 342,
-    "createdJobs": [
-      {
-        "jobId": "530699",
-        "title": "Travel Advisor - Travel Associates - SA"
-      },
-      {
-        "jobId": "530698",
-        "title": "Travel Advisor - Travel Associates - QLD"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "529588",
-        "title": "Travel Advisor - Travel Associates - NSW",
+        "title": "Business Development DGM",
         "changedFields": [
-          "name"
+          "description-or-banner"
         ]
       }
     ],
@@ -2733,163 +1249,844 @@
     "published": true
   },
   {
-    "id": "2026-04-13T04:37:55.780Z",
-    "startedAt": "2026-04-13T04:37:55.780Z",
-    "finishedAt": "2026-04-13T04:45:07.072Z",
-    "durationMs": 431292,
+    "id": "2026-09-06T21:50:52.379Z",
+    "startedAt": "2026-09-06T21:50:52.379Z",
+    "finishedAt": "2026-09-06T21:51:38.476Z",
+    "durationMs": 46097,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 343,
-    "cmsItemsBefore": 342,
-    "created": 3,
-    "updated": 1,
-    "deleted": 2,
-    "unchanged": 339,
-    "createdJobs": [
-      {
-        "jobId": "530674",
-        "title": "Sales Travel Consultant - Mt Lawley, WA"
-      },
-      {
-        "jobId": "528947",
-        "title": "Foreign Currency Sales Consultant (Part Time) - Travel Money NZ - Northlands, NZ"
-      },
-      {
-        "jobId": "530262",
-        "title": "Foreign Currency Sales Consultant (Part Time) - Travel Money NZ - Albany, NZ"
-      }
-    ],
-    "updatedJobs": [
-      {
-        "jobId": "530405",
-        "title": "Foreign Currency Sales Consultant (Casual) – Travel Money Oz – Indooroopilly, QLD",
-        "changedFields": [
-          "name"
-        ]
-      }
-    ],
-    "deletedJobs": [
-      {
-        "jobId": "528838",
-        "title": "Sales Travel Consultant - Central Queensland"
-      },
-      {
-        "jobId": "528836",
-        "title": "Sales Travel Consultant - Northern Gold Coast, QLD"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-13T01:27:06.886Z",
-    "startedAt": "2026-04-13T01:27:06.886Z",
-    "finishedAt": "2026-04-13T01:34:20.949Z",
-    "durationMs": 434063,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 341,
-    "created": 1,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 341,
-    "createdJobs": [
-      {
-        "jobId": "529439",
-        "title": "Travel Expert - Bayfair, New Zealand"
-      }
-    ],
+    "unchanged": 430,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
-    "published": true
+    "published": false
   },
   {
-    "id": "2026-04-12T23:38:43.017Z",
-    "startedAt": "2026-04-12T23:38:43.017Z",
-    "finishedAt": "2026-04-12T23:46:29.171Z",
-    "durationMs": 466154,
+    "id": "2026-09-06T21:40:59.347Z",
+    "startedAt": "2026-09-06T21:40:59.348Z",
+    "finishedAt": "2026-09-06T21:41:47.408Z",
+    "durationMs": 48060,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 341,
-    "cmsItemsBefore": 340,
-    "created": 1,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 340,
-    "createdJobs": [
-      {
-        "jobId": "530678",
-        "title": "Sales Travel Consultant - Whitsundays, QLD"
-      }
-    ],
+    "unchanged": 430,
+    "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
     "scrapeErrors": [],
-    "published": true
+    "published": false
   },
   {
-    "id": "2026-04-12T23:00:20.042Z",
-    "startedAt": "2026-04-12T23:00:20.042Z",
-    "finishedAt": "2026-04-12T23:09:13.683Z",
-    "durationMs": 533641,
+    "id": "2026-09-06T21:31:03.412Z",
+    "startedAt": "2026-09-06T21:31:03.412Z",
+    "finishedAt": "2026-09-06T21:31:50.345Z",
+    "durationMs": 46933,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 340,
-    "cmsItemsBefore": 341,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T21:21:00.613Z",
+    "startedAt": "2026-09-06T21:21:00.613Z",
+    "finishedAt": "2026-09-06T21:23:01.992Z",
+    "durationMs": 121379,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T21:11:02.928Z",
+    "startedAt": "2026-09-06T21:11:02.928Z",
+    "finishedAt": "2026-09-06T21:11:49.498Z",
+    "durationMs": 46570,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T21:01:26.204Z",
+    "startedAt": "2026-09-06T21:01:26.204Z",
+    "finishedAt": "2026-09-06T21:02:17.204Z",
+    "durationMs": 51000,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T20:50:52.581Z",
+    "startedAt": "2026-09-06T20:50:52.581Z",
+    "finishedAt": "2026-09-06T20:51:38.485Z",
+    "durationMs": 45904,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T20:41:04.338Z",
+    "startedAt": "2026-09-06T20:41:04.338Z",
+    "finishedAt": "2026-09-06T20:41:50.865Z",
+    "durationMs": 46527,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T20:31:13.194Z",
+    "startedAt": "2026-09-06T20:31:13.195Z",
+    "finishedAt": "2026-09-06T20:32:00.223Z",
+    "durationMs": 47028,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T20:20:58.061Z",
+    "startedAt": "2026-09-06T20:20:58.061Z",
+    "finishedAt": "2026-09-06T20:21:44.950Z",
+    "durationMs": 46889,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T20:10:56.125Z",
+    "startedAt": "2026-09-06T20:10:56.125Z",
+    "finishedAt": "2026-09-06T20:11:43.304Z",
+    "durationMs": 47179,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T20:01:18.477Z",
+    "startedAt": "2026-09-06T20:01:18.477Z",
+    "finishedAt": "2026-09-06T20:02:05.177Z",
+    "durationMs": 46700,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T19:51:13.339Z",
+    "startedAt": "2026-09-06T19:51:13.339Z",
+    "finishedAt": "2026-09-06T19:51:59.537Z",
+    "durationMs": 46198,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T19:41:00.907Z",
+    "startedAt": "2026-09-06T19:41:00.907Z",
+    "finishedAt": "2026-09-06T19:41:46.925Z",
+    "durationMs": 46018,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T19:31:14.510Z",
+    "startedAt": "2026-09-06T19:31:14.510Z",
+    "finishedAt": "2026-09-06T19:32:01.776Z",
+    "durationMs": 47266,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T19:21:00.061Z",
+    "startedAt": "2026-09-06T19:21:00.061Z",
+    "finishedAt": "2026-09-06T19:21:46.313Z",
+    "durationMs": 46252,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T19:11:06.835Z",
+    "startedAt": "2026-09-06T19:11:06.835Z",
+    "finishedAt": "2026-09-06T19:11:55.129Z",
+    "durationMs": 48294,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T19:01:17.258Z",
+    "startedAt": "2026-09-06T19:01:17.258Z",
+    "finishedAt": "2026-09-06T19:02:03.653Z",
+    "durationMs": 46395,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T18:51:08.098Z",
+    "startedAt": "2026-09-06T18:51:08.099Z",
+    "finishedAt": "2026-09-06T18:51:55.501Z",
+    "durationMs": 47402,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T18:40:59.392Z",
+    "startedAt": "2026-09-06T18:40:59.393Z",
+    "finishedAt": "2026-09-06T18:41:45.852Z",
+    "durationMs": 46459,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T18:33:27.873Z",
+    "startedAt": "2026-09-06T18:33:27.873Z",
+    "finishedAt": "2026-09-06T18:34:14.415Z",
+    "durationMs": 46542,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T18:01:41.008Z",
+    "startedAt": "2026-09-06T18:01:41.008Z",
+    "finishedAt": "2026-09-06T18:02:33.059Z",
+    "durationMs": 52051,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T17:51:02.915Z",
+    "startedAt": "2026-09-06T17:51:02.915Z",
+    "finishedAt": "2026-09-06T17:51:49.234Z",
+    "durationMs": 46319,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T17:41:02.026Z",
+    "startedAt": "2026-09-06T17:41:02.026Z",
+    "finishedAt": "2026-09-06T17:41:48.757Z",
+    "durationMs": 46731,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T17:30:58.250Z",
+    "startedAt": "2026-09-06T17:30:58.250Z",
+    "finishedAt": "2026-09-06T17:31:44.490Z",
+    "durationMs": 46240,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T17:20:57.766Z",
+    "startedAt": "2026-09-06T17:20:57.766Z",
+    "finishedAt": "2026-09-06T17:21:44.175Z",
+    "durationMs": 46409,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T17:11:10.451Z",
+    "startedAt": "2026-09-06T17:11:10.451Z",
+    "finishedAt": "2026-09-06T17:11:57.238Z",
+    "durationMs": 46787,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T17:01:15.317Z",
+    "startedAt": "2026-09-06T17:01:15.318Z",
+    "finishedAt": "2026-09-06T17:02:06.205Z",
+    "durationMs": 50887,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T16:50:58.524Z",
+    "startedAt": "2026-09-06T16:50:58.524Z",
+    "finishedAt": "2026-09-06T16:51:44.462Z",
+    "durationMs": 45938,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T16:40:56.668Z",
+    "startedAt": "2026-09-06T16:40:56.668Z",
+    "finishedAt": "2026-09-06T16:41:42.902Z",
+    "durationMs": 46234,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T16:31:12.958Z",
+    "startedAt": "2026-09-06T16:31:12.958Z",
+    "finishedAt": "2026-09-06T16:32:00.329Z",
+    "durationMs": 47371,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T16:21:22.769Z",
+    "startedAt": "2026-09-06T16:21:22.769Z",
+    "finishedAt": "2026-09-06T16:22:10.941Z",
+    "durationMs": 48172,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T16:11:01.966Z",
+    "startedAt": "2026-09-06T16:11:01.966Z",
+    "finishedAt": "2026-09-06T16:11:49.599Z",
+    "durationMs": 47633,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T16:01:26.825Z",
+    "startedAt": "2026-09-06T16:01:26.825Z",
+    "finishedAt": "2026-09-06T16:02:24.194Z",
+    "durationMs": 57369,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T15:50:58.571Z",
+    "startedAt": "2026-09-06T15:50:58.571Z",
+    "finishedAt": "2026-09-06T15:51:48.325Z",
+    "durationMs": 49754,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T15:41:15.550Z",
+    "startedAt": "2026-09-06T15:41:15.550Z",
+    "finishedAt": "2026-09-06T15:42:02.365Z",
+    "durationMs": 46815,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T15:31:07.553Z",
+    "startedAt": "2026-09-06T15:31:07.553Z",
+    "finishedAt": "2026-09-06T15:31:53.601Z",
+    "durationMs": 46048,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T15:21:01.121Z",
+    "startedAt": "2026-09-06T15:21:01.121Z",
+    "finishedAt": "2026-09-06T15:21:47.106Z",
+    "durationMs": 45985,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 430,
+    "liveJobsAfter": 430,
+    "created": 0,
+    "updated": 0,
+    "deleted": 0,
+    "unchanged": 430,
+    "createdJobs": [],
+    "updatedJobs": [],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": false
+  },
+  {
+    "id": "2026-09-06T15:10:59.880Z",
+    "startedAt": "2026-09-06T15:10:59.880Z",
+    "finishedAt": "2026-09-06T15:12:23.479Z",
+    "durationMs": 83599,
+    "status": "success",
+    "error": null,
+    "source": "manual",
+    "pageupJobsFound": 430,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 430,
     "created": 0,
     "updated": 0,
     "deleted": 1,
-    "unchanged": 340,
+    "unchanged": 430,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [
       {
-        "jobId": "529255",
-        "title": "Service Product Lead (Monitoring & Observability) - South Bank, QLD"
+        "jobId": "530603",
+        "title": "In-Destination Experiences Leader - Phuket"
       }
     ],
     "scrapeErrors": [],
     "published": true
   },
   {
-    "id": "2026-04-12T22:22:30.605Z",
-    "startedAt": "2026-04-12T22:22:30.605Z",
-    "finishedAt": "2026-04-12T22:29:35.077Z",
-    "durationMs": 424472,
+    "id": "2026-09-06T15:01:18.057Z",
+    "startedAt": "2026-09-06T15:01:18.057Z",
+    "finishedAt": "2026-09-06T15:02:08.193Z",
+    "durationMs": 50136,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 341,
-    "cmsItemsBefore": 342,
-    "created": 0,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 341,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530360",
-        "title": "Travel Expert - North City"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-12T21:36:28.290Z",
-    "startedAt": "2026-04-12T21:36:28.290Z",
-    "finishedAt": "2026-04-12T21:44:23.675Z",
-    "durationMs": 475385,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -2897,18 +2094,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T20:59:45.653Z",
-    "startedAt": "2026-04-12T20:59:45.653Z",
-    "finishedAt": "2026-04-12T21:06:44.071Z",
-    "durationMs": 418418,
+    "id": "2026-09-06T14:50:54.772Z",
+    "startedAt": "2026-09-06T14:50:54.772Z",
+    "finishedAt": "2026-09-06T14:51:40.877Z",
+    "durationMs": 46105,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -2916,18 +2115,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T20:23:23.379Z",
-    "startedAt": "2026-04-12T20:23:23.379Z",
-    "finishedAt": "2026-04-12T20:30:12.680Z",
-    "durationMs": 409301,
+    "id": "2026-09-06T14:41:08.706Z",
+    "startedAt": "2026-09-06T14:41:08.706Z",
+    "finishedAt": "2026-09-06T14:41:54.358Z",
+    "durationMs": 45652,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -2935,18 +2136,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T19:32:25.480Z",
-    "startedAt": "2026-04-12T19:32:25.480Z",
-    "finishedAt": "2026-04-12T19:39:05.722Z",
-    "durationMs": 400242,
+    "id": "2026-09-06T14:33:02.464Z",
+    "startedAt": "2026-09-06T14:33:02.464Z",
+    "finishedAt": "2026-09-06T14:33:48.973Z",
+    "durationMs": 46509,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -2954,18 +2157,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T18:42:50.843Z",
-    "startedAt": "2026-04-12T18:42:50.843Z",
-    "finishedAt": "2026-04-12T18:49:38.789Z",
-    "durationMs": 407946,
+    "id": "2026-09-06T14:01:22.618Z",
+    "startedAt": "2026-09-06T14:01:22.618Z",
+    "finishedAt": "2026-09-06T14:02:11.875Z",
+    "durationMs": 49257,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -2973,18 +2178,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T17:58:19.741Z",
-    "startedAt": "2026-04-12T17:58:19.741Z",
-    "finishedAt": "2026-04-12T18:06:13.203Z",
-    "durationMs": 473462,
+    "id": "2026-09-06T13:50:59.859Z",
+    "startedAt": "2026-09-06T13:50:59.859Z",
+    "finishedAt": "2026-09-06T13:51:45.889Z",
+    "durationMs": 46030,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -2992,18 +2199,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T17:26:45.691Z",
-    "startedAt": "2026-04-12T17:26:45.691Z",
-    "finishedAt": "2026-04-12T17:33:28.349Z",
-    "durationMs": 402658,
+    "id": "2026-09-06T13:41:23.679Z",
+    "startedAt": "2026-09-06T13:41:23.679Z",
+    "finishedAt": "2026-09-06T13:42:09.835Z",
+    "durationMs": 46156,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3011,18 +2220,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T16:36:06.413Z",
-    "startedAt": "2026-04-12T16:36:06.414Z",
-    "finishedAt": "2026-04-12T16:42:55.990Z",
-    "durationMs": 409576,
+    "id": "2026-09-06T13:31:12.551Z",
+    "startedAt": "2026-09-06T13:31:12.551Z",
+    "finishedAt": "2026-09-06T13:31:58.996Z",
+    "durationMs": 46445,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3030,18 +2241,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T15:58:29.539Z",
-    "startedAt": "2026-04-12T15:58:29.539Z",
-    "finishedAt": "2026-04-12T16:05:28.623Z",
-    "durationMs": 419084,
+    "id": "2026-09-06T13:20:55.991Z",
+    "startedAt": "2026-09-06T13:20:55.991Z",
+    "finishedAt": "2026-09-06T13:21:42.421Z",
+    "durationMs": 46430,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3049,18 +2262,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T15:27:32.651Z",
-    "startedAt": "2026-04-12T15:27:32.651Z",
-    "finishedAt": "2026-04-12T15:35:06.404Z",
-    "durationMs": 453753,
+    "id": "2026-09-06T13:11:02.363Z",
+    "startedAt": "2026-09-06T13:11:02.363Z",
+    "finishedAt": "2026-09-06T13:11:48.213Z",
+    "durationMs": 45850,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3068,18 +2283,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T14:33:30.455Z",
-    "startedAt": "2026-04-12T14:33:30.456Z",
-    "finishedAt": "2026-04-12T14:40:25.668Z",
-    "durationMs": 415212,
+    "id": "2026-09-06T13:01:15.639Z",
+    "startedAt": "2026-09-06T13:01:15.639Z",
+    "finishedAt": "2026-09-06T13:02:05.811Z",
+    "durationMs": 50172,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3087,18 +2304,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T13:53:23.665Z",
-    "startedAt": "2026-04-12T13:53:23.665Z",
-    "finishedAt": "2026-04-12T14:00:24.807Z",
-    "durationMs": 421142,
+    "id": "2026-09-06T12:51:02.302Z",
+    "startedAt": "2026-09-06T12:51:02.302Z",
+    "finishedAt": "2026-09-06T12:51:49.037Z",
+    "durationMs": 46735,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 342,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 342,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3106,70 +2325,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T12:36:35.196Z",
-    "startedAt": "2026-04-12T12:36:35.197Z",
-    "finishedAt": "2026-04-12T12:43:44.780Z",
-    "durationMs": 429583,
+    "id": "2026-09-06T12:40:53.563Z",
+    "startedAt": "2026-09-06T12:40:53.563Z",
+    "finishedAt": "2026-09-06T12:41:39.772Z",
+    "durationMs": 46209,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 342,
-    "cmsItemsBefore": 343,
-    "created": 0,
-    "updated": 0,
-    "deleted": 1,
-    "unchanged": 342,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "530227",
-        "title": "Travel Expert - Birkenhead"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-12T11:53:34.450Z",
-    "startedAt": "2026-04-12T11:53:34.450Z",
-    "finishedAt": "2026-04-12T12:01:37.961Z",
-    "durationMs": 483511,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 343,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 2,
-    "unchanged": 343,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [
-      {
-        "jobId": "529739",
-        "title": "Accounts Payable Officer - Broadbeach, QLD"
-      },
-      {
-        "jobId": "530083",
-        "title": "My Cruises After Sales Consultant - Broadbeach, QLD"
-      }
-    ],
-    "scrapeErrors": [],
-    "published": true
-  },
-  {
-    "id": "2026-04-12T11:06:28.477Z",
-    "startedAt": "2026-04-12T11:06:28.477Z",
-    "finishedAt": "2026-04-12T11:13:29.312Z",
-    "durationMs": 420835,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 345,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3177,18 +2346,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T10:29:06.165Z",
-    "startedAt": "2026-04-12T10:29:06.165Z",
-    "finishedAt": "2026-04-12T10:37:05.741Z",
-    "durationMs": 479576,
+    "id": "2026-09-06T12:31:11.175Z",
+    "startedAt": "2026-09-06T12:31:11.175Z",
+    "finishedAt": "2026-09-06T12:31:58.044Z",
+    "durationMs": 46869,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 345,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3196,18 +2367,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T09:36:40.675Z",
-    "startedAt": "2026-04-12T09:36:40.675Z",
-    "finishedAt": "2026-04-12T09:43:44.578Z",
-    "durationMs": 423903,
+    "id": "2026-09-06T12:21:05.137Z",
+    "startedAt": "2026-09-06T12:21:05.137Z",
+    "finishedAt": "2026-09-06T12:21:52.708Z",
+    "durationMs": 47571,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 345,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3215,18 +2388,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T08:36:45.895Z",
-    "startedAt": "2026-04-12T08:36:45.895Z",
-    "finishedAt": "2026-04-12T08:44:27.434Z",
-    "durationMs": 461539,
+    "id": "2026-09-06T12:10:58.252Z",
+    "startedAt": "2026-09-06T12:10:58.252Z",
+    "finishedAt": "2026-09-06T12:11:44.308Z",
+    "durationMs": 46056,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 345,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3234,18 +2409,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T07:47:59.692Z",
-    "startedAt": "2026-04-12T07:47:59.693Z",
-    "finishedAt": "2026-04-12T07:58:20.183Z",
-    "durationMs": 620490,
+    "id": "2026-09-06T12:01:16.786Z",
+    "startedAt": "2026-09-06T12:01:16.786Z",
+    "finishedAt": "2026-09-06T12:02:09.266Z",
+    "durationMs": 52480,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 345,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
@@ -3253,246 +2430,20 @@
     "published": false
   },
   {
-    "id": "2026-04-12T06:08:12.685Z",
-    "startedAt": "2026-04-12T06:08:12.685Z",
-    "finishedAt": "2026-04-12T06:15:57.579Z",
-    "durationMs": 464894,
+    "id": "2026-09-06T11:51:01.937Z",
+    "startedAt": "2026-09-06T11:51:01.937Z",
+    "finishedAt": "2026-09-06T11:51:48.942Z",
+    "durationMs": 47005,
     "status": "success",
     "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
+    "source": "manual",
+    "pageupJobsFound": 431,
+    "cmsItemsBefore": 431,
+    "liveJobsAfter": 431,
     "created": 0,
     "updated": 0,
     "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-12T04:24:11.571Z",
-    "startedAt": "2026-04-12T04:24:11.572Z",
-    "finishedAt": "2026-04-12T04:29:49.272Z",
-    "durationMs": 337700,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-12T01:25:11.398Z",
-    "startedAt": "2026-04-12T01:25:11.398Z",
-    "finishedAt": "2026-04-12T01:33:09.594Z",
-    "durationMs": 478196,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T23:31:30.587Z",
-    "startedAt": "2026-04-11T23:31:30.587Z",
-    "finishedAt": "2026-04-11T23:38:26.880Z",
-    "durationMs": 416293,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T22:58:24.766Z",
-    "startedAt": "2026-04-11T22:58:24.767Z",
-    "finishedAt": "2026-04-11T23:06:02.401Z",
-    "durationMs": 457634,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T22:20:25.330Z",
-    "startedAt": "2026-04-11T22:20:25.330Z",
-    "finishedAt": "2026-04-11T22:28:16.459Z",
-    "durationMs": 471129,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T21:55:06.019Z",
-    "startedAt": "2026-04-11T21:55:06.019Z",
-    "finishedAt": "2026-04-11T22:02:14.839Z",
-    "durationMs": 428820,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T21:26:10.445Z",
-    "startedAt": "2026-04-11T21:26:10.445Z",
-    "finishedAt": "2026-04-11T21:35:10.527Z",
-    "durationMs": 540082,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T20:56:48.129Z",
-    "startedAt": "2026-04-11T20:56:48.129Z",
-    "finishedAt": "2026-04-11T21:04:38.222Z",
-    "durationMs": 470093,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T20:20:47.898Z",
-    "startedAt": "2026-04-11T20:20:47.899Z",
-    "finishedAt": "2026-04-11T20:28:51.887Z",
-    "durationMs": 483988,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T19:54:00.060Z",
-    "startedAt": "2026-04-11T19:54:00.061Z",
-    "finishedAt": "2026-04-11T20:01:48.940Z",
-    "durationMs": 468879,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T19:10:41.058Z",
-    "startedAt": "2026-04-11T19:10:41.059Z",
-    "finishedAt": "2026-04-11T19:17:49.257Z",
-    "durationMs": 428198,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T18:28:43.794Z",
-    "startedAt": "2026-04-11T18:28:43.794Z",
-    "finishedAt": "2026-04-11T18:36:57.937Z",
-    "durationMs": 494143,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
+    "unchanged": 431,
     "createdJobs": [],
     "updatedJobs": [],
     "deletedJobs": [],
