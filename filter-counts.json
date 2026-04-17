@@ -1,6 +1,6 @@
 {
   "regions": {
-    "australia": 211,
+    "australia": 218,
     "asia": 67,
     "south africa": 8,
     "uk & europe": 15,
@@ -11,12 +11,13 @@
     "uae": 1
   },
   "cities": {
+    "australian capital territory": 12,
+    "queensland": 75,
+    "victoria": 31,
+    "south australia": 16,
     "new south wales": 59,
-    "queensland": 71,
-    "south australia": 15,
     "western australia": 19,
     "tokyo": 13,
-    "victoria": 30,
     "durban": 1,
     "barcelona": 4,
     "noida": 16,
@@ -66,7 +67,6 @@
     "invercargill": 1,
     "remote": 2,
     "phuket": 2,
-    "australian capital territory": 11,
     "nationwide": 1,
     "kerikeri": 1,
     "texas": 1,
@@ -77,7 +77,7 @@
     "new jersey": 1
   },
   "categories": {
-    "sales and customer service": 275,
+    "sales and customer service": 282,
     "leadership": 25,
     "operations and logistics": 38,
     "digital and technology": 27,
@@ -91,12 +91,13 @@
     "risk and compliance": 2
   },
   "cityToRegion": {
-    "new south wales": "Australia",
+    "australian capital territory": "Australia",
     "queensland": "Australia",
+    "victoria": "Australia",
     "south australia": "Australia",
+    "new south wales": "Australia",
     "western australia": "Australia",
     "tokyo": "Asia",
-    "victoria": "Australia",
     "durban": "South Africa",
     "barcelona": "UK & Europe",
     "noida": "Asia",
@@ -146,7 +147,6 @@
     "invercargill": "New Zealand",
     "remote": "Australia",
     "phuket": "Asia",
-    "australian capital territory": "Australia",
     "nationwide": "South Africa",
     "kerikeri": "New Zealand",
     "texas": "USA",
@@ -157,12 +157,13 @@
     "new jersey": "USA"
   },
   "cityDisplay": {
-    "new south wales": "New South Wales",
+    "australian capital territory": "Australian Capital Territory",
     "queensland": "Queensland",
+    "victoria": "Victoria",
     "south australia": "South Australia",
+    "new south wales": "New South Wales",
     "western australia": "Western Australia",
     "tokyo": "Tokyo",
-    "victoria": "Victoria",
     "durban": "Durban",
     "barcelona": "Barcelona",
     "noida": "Noida",
@@ -212,7 +213,6 @@
     "invercargill": "Invercargill",
     "remote": "Remote",
     "phuket": "Phuket",
-    "australian capital territory": "Australian Capital Territory",
     "nationwide": "Nationwide",
     "kerikeri": "Kerikeri",
     "texas": "Texas",

@@ -1,5 +1,61 @@
 [
   {
+    "id": "2026-04-17T05:58:05.665Z",
+    "startedAt": "2026-04-17T05:58:05.665Z",
+    "finishedAt": "2026-04-17T06:06:37.835Z",
+    "durationMs": 512170,
+    "status": "success",
+    "error": null,
+    "pageupJobsFound": 384,
+    "cmsItemsBefore": 377,
+    "created": 7,
+    "updated": 1,
+    "deleted": 0,
+    "unchanged": 376,
+    "createdJobs": [
+      {
+        "jobId": "529020",
+        "title": "Sales Travel Consultant - Adelaide South"
+      },
+      {
+        "jobId": "528835",
+        "title": "Sales Travel Consultant - Greater Logan Area"
+      },
+      {
+        "jobId": "528882",
+        "title": "Sales Travel Consultant - Mackay, QLD"
+      },
+      {
+        "jobId": "530710",
+        "title": "Sales Travel Consultant - Broadmeadows, VIC"
+      },
+      {
+        "jobId": "530714",
+        "title": "Sales Travel Consultant - Mackay, QLD"
+      },
+      {
+        "jobId": "530719",
+        "title": "Sales Travel Consultant - Beenleigh, QLD"
+      },
+      {
+        "jobId": "530782",
+        "title": "Travel Consultant ( Cruiseabout) Expression of Interest- Australia"
+      }
+    ],
+    "updatedJobs": [
+      {
+        "jobId": "528880",
+        "title": "Sales Travel Consultant - Cairns, QLD",
+        "changedFields": [
+          "name"
+        ]
+      }
+    ],
+    "deletedJobs": [],
+    "scrapeErrors": [],
+    "published": true
+  },
+  {
     "id": "2026-04-17T03:49:13.173Z",
     "startedAt": "2026-04-17T03:49:13.173Z",
     "finishedAt": "2026-04-17T03:57:03.691Z",
@@ -3396,25 +3452,6 @@
     "startedAt": "2026-04-11T17:01:38.889Z",
     "finishedAt": "2026-04-11T17:11:13.606Z",
     "durationMs": 574717,
-    "status": "success",
-    "error": null,
-    "pageupJobsFound": 345,
-    "cmsItemsBefore": 345,
-    "created": 0,
-    "updated": 0,
-    "deleted": 0,
-    "unchanged": 345,
-    "createdJobs": [],
-    "updatedJobs": [],
-    "deletedJobs": [],
-    "scrapeErrors": [],
-    "published": false
-  },
-  {
-    "id": "2026-04-11T16:24:06.298Z",
-    "startedAt": "2026-04-11T16:24:06.298Z",
-    "finishedAt": "2026-04-11T16:32:04.489Z",
-    "durationMs": 478191,
     "status": "success",
     "error": null,
     "pageupJobsFound": 345,
