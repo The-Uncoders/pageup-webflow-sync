@@ -117,7 +117,12 @@ async function fetchAllJobIds() {
   console.log('[scraper] Fetching listing page via full navigation...');
 
   // Use page.goto() + DOM extraction instead of fetch() to ensure
-  // the page fully renders with .job-link elements (WAF + JS rendering)
+  // the page fully renders with .job-link elements (WAF + JS rendering).
+  //
+  // We extract listing-level fields (title, location, brand) in addition to
+  // the job id/slug. These are used by the fast-sync diff in sync.js to skip
+  // detail-page scrapes when nothing listing-level has changed — a major
+  // speed-up for the typical "no changes" run.
   const page = await _browserContext.newPage();
   try {
     await page.goto(LISTING_URL, { waitUntil: 'networkidle', timeout: 60000 });
@@ -126,23 +131,32 @@ async function fetchAllJobIds() {
       { timeout: 30000 }
     );
 
-    // Extract job links directly from the rendered DOM
     const jobs = await page.evaluate(() => {
-      const links = document.querySelectorAll('.job-link');
       const seen = new Set();
       const results = [];
+
+      // Each job is a row in a table with columns: [title+link] [location] [brand].
+      // We walk job-link elements and climb to the enclosing <tr> to read cells.
+      const links = document.querySelectorAll('.job-link');
       for (const link of links) {
         const href = link.getAttribute('href') || '';
         const match = href.match(/\/job\/(\d+)\/(.+)/);
-        if (match && !seen.has(match[1])) {
-          seen.add(match[1]);
-          results.push({
-            jobId: match[1],
-            slug: match[2],
-            title: link.textContent.trim(),
-            href: href,
-          });
-        }
+        if (!match || seen.has(match[1])) continue;
+        seen.add(match[1]);
+
+        const row = link.closest('tr');
+        const cells = row ? row.querySelectorAll('td') : [];
+        const location = cells.length >= 2 ? (cells[1].textContent || '').trim() : '';
+        const brand = cells.length >= 3 ? (cells[2].textContent || '').trim() : '';
+
+        results.push({
+          jobId: match[1],
+          slug: match[2],
+          title: (link.textContent || '').trim(),
+          location,
+          brand,
+          href,
+        });
       }
       return results;
     });

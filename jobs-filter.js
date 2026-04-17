@@ -47,7 +47,10 @@
   var currentPage = 1;
 
   var _cardTemplate = null;  // cloned from first CMS card
-  var _collectionPrefix = ''; // e.g. '/jobs/' — extracted from first CMS card's link
+  // Default to '/jobs/' — overridden by captureCardTemplate if the Webflow template
+  // includes a linked card. Without the fallback, cards become unclickable when the
+  // Designer template doesn't wrap the card in a link-block.
+  var _collectionPrefix = '/jobs/';
   var _allCounts = null;     // derived from allJobs: regions, cities, brands, categories, lookup maps
   var _totalJobs = 0;
 
@@ -521,13 +524,44 @@
 
     // Link — Since cards are rendered from JSON (not CMS-bound), we must set
     // the href. The collection prefix (e.g. "/jobs/") was extracted from the
-    // first CMS card in captureCardTemplate(), so it auto-adapts if the
-    // Webflow CMS collection slug ever changes.
+    // first CMS card in captureCardTemplate(); falls back to "/jobs/".
     var jobHref = job.s ? (_collectionPrefix + job.s) : '';
     if (jobHref) {
       var links = card.querySelectorAll('a');
-      for (var li = 0; li < links.length; li++) links[li].href = jobHref;
-      if (card.tagName === 'A') card.href = jobHref;
+      var wiredViaAnchor = false;
+      for (var li = 0; li < links.length; li++) {
+        links[li].href = jobHref;
+        wiredViaAnchor = true;
+      }
+      if (card.tagName === 'A') {
+        card.href = jobHref;
+        wiredViaAnchor = true;
+      }
+
+      // Fallback: when the Webflow template has no <a> wrapper on the card
+      // (which is the current state of the /jobs template), clicking produces
+      // no navigation. Make the card element itself act as a link, keeping
+      // keyboard accessibility and right-click "Open in new tab" support via
+      // a hidden overlay anchor.
+      if (!wiredViaAnchor) {
+        card.style.position = card.style.position || 'relative';
+        card.style.cursor = 'pointer';
+
+        // Insert a full-card invisible anchor for right-click / middle-click
+        // semantics and SEO crawlability.
+        var overlay = document.createElement('a');
+        overlay.href = jobHref;
+        overlay.setAttribute('aria-label', job.t || 'View job');
+        overlay.style.cssText =
+          'position:absolute;inset:0;z-index:1;' +
+          'display:block;text-indent:-9999px;' +
+          'background:transparent;';
+        card.appendChild(overlay);
+
+        // Ensure any interactive children (e.g. tag pills) stay above the overlay
+        // if the Designer adds them later.
+        card.setAttribute('data-job-href', jobHref);
+      }
     }
 
     return card;

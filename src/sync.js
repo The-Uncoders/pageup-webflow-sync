@@ -249,6 +249,32 @@ function hasChanged(existing, newData) {
   return changed.length > 0 ? changed : false;
 }
 
+/**
+ * Quick listing-level comparison that avoids an expensive detail-page scrape.
+ * Returns true if the PageUp listing row's stable fields differ from the CMS
+ * item. "Stable" means fields that come straight from the listing table and
+ * aren't transformed by our resolvers:
+ *   - title  → matches fieldData.name exactly
+ *   - location → matches fieldData.location exactly
+ *
+ * Brand is intentionally NOT compared here: our resolveBrand() uses hashtags
+ * as a fallback, so the CMS brand-name may legitimately differ from the raw
+ * listing brand text every sync. Comparing it would cause 100% of jobs to
+ * re-scrape and defeat the purpose of this check.
+ *
+ * Empty PageUp values are not treated as changes — some listing rows don't
+ * populate every cell.
+ */
+function listingFieldsChanged(cmsItem, pageupJob) {
+  const fd = cmsItem.fieldData || {};
+  const norm = (s) => (s || '').toString().trim();
+
+  if (pageupJob.title && norm(fd.name) !== norm(pageupJob.title)) return true;
+  if (pageupJob.location && norm(fd.location) !== norm(pageupJob.location)) return true;
+
+  return false;
+}
+
 async function runSync() {
   const logger = new SyncLogger();
   logger.start();
@@ -344,40 +370,72 @@ async function runSync() {
     }
   }
 
-  // Step 8: Update existing jobs (scrape all and check for changes)
+  // Step 8: Update existing jobs — but ONLY scrape detail pages for jobs
+  // whose listing-level fields (title, location) changed. This is the main
+  // speed-up: a typical "no changes" run skips ~350 detail-page fetches and
+  // finishes in seconds rather than minutes.
+  //
+  // Fields that only live on detail pages (description, closing-date,
+  // banner-image, video, categories) are re-scraped only when the listing
+  // signals a change. We accept that an isolated description edit on PageUp
+  // won't be picked up until the job's listing also changes — tradeoff
+  // agreed with the client for sync speed.
   if (existingJobs.length > 0) {
-    console.log(`\n[sync] Checking ${existingJobs.length} existing jobs for changes...`);
-    const { results: existingDetails } = await scrapeAllJobs(existingJobs);
+    const jobsNeedingRescrape = [];
+    let skippedCount = 0;
 
-    const itemsToUpdate = [];
-    for (const detail of existingDetails) {
-      const cmsItem = cmsJobMap.get(detail.jobId);
+    for (const pageupJob of existingJobs) {
+      const cmsItem = cmsJobMap.get(pageupJob.jobId);
       if (!cmsItem) continue;
 
-      const newFieldData = buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand);
-
-      const changedFields = hasChanged(cmsItem, newFieldData);
-      if (changedFields) {
-        itemsToUpdate.push({
-          id: cmsItem.id,
-          fieldData: newFieldData,
-          _jobId: detail.jobId,
-          _title: detail.title,
-          _changedFields: changedFields,
-        });
+      const listingChanged = listingFieldsChanged(cmsItem, pageupJob);
+      if (listingChanged) {
+        jobsNeedingRescrape.push(pageupJob);
+      } else {
+        skippedCount++;
       }
     }
 
-    if (itemsToUpdate.length > 0) {
-      console.log(`[sync] Updating ${itemsToUpdate.length} changed CMS items...`);
-      logger.recordUpdated(itemsToUpdate.map(i => ({
-        jobId: i._jobId, title: i._title, changedFields: i._changedFields,
-      })));
-      const updated = await client.updateItems(COLLECTION_ID, itemsToUpdate);
-      console.log(`[sync] Updated ${updated.length} items.`);
-      changedIds.push(...updated.map(u => u.id));
+    console.log(
+      `\n[sync] Existing jobs: ${skippedCount} unchanged (skipping detail fetch), ` +
+      `${jobsNeedingRescrape.length} changed at listing level (re-scraping).`
+    );
+
+    if (jobsNeedingRescrape.length > 0) {
+      const { results: existingDetails } = await scrapeAllJobs(jobsNeedingRescrape);
+
+      const itemsToUpdate = [];
+      for (const detail of existingDetails) {
+        const cmsItem = cmsJobMap.get(detail.jobId);
+        if (!cmsItem) continue;
+
+        const newFieldData = buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand);
+
+        const changedFields = hasChanged(cmsItem, newFieldData);
+        if (changedFields) {
+          itemsToUpdate.push({
+            id: cmsItem.id,
+            fieldData: newFieldData,
+            _jobId: detail.jobId,
+            _title: detail.title,
+            _changedFields: changedFields,
+          });
+        }
+      }
+
+      if (itemsToUpdate.length > 0) {
+        console.log(`[sync] Updating ${itemsToUpdate.length} changed CMS items...`);
+        logger.recordUpdated(itemsToUpdate.map(i => ({
+          jobId: i._jobId, title: i._title, changedFields: i._changedFields,
+        })));
+        const updated = await client.updateItems(COLLECTION_ID, itemsToUpdate);
+        console.log(`[sync] Updated ${updated.length} items.`);
+        changedIds.push(...updated.map(u => u.id));
+      } else {
+        console.log('[sync] Listing-level changes detected but detail-level fields matched — no CMS updates needed.');
+      }
     } else {
-      console.log('[sync] No existing jobs have changed.');
+      console.log('[sync] No existing jobs have changed at listing level.');
     }
   }
 
@@ -443,8 +501,9 @@ async function generateFilterCounts(client, countryMap) {
     if (name) countryIdToName[item.id] = name;
   }
 
-  // Fetch all current CMS job items
-  const jobItems = await client.getAllCollectionItems(COLLECTION_ID);
+  // Fetch only LIVE (published) job items so filter counts match what
+  // visitors actually see on the site.
+  const jobItems = await client.getLiveCollectionItems(COLLECTION_ID);
 
   const regions = {};
   const cities = {};
@@ -497,7 +556,9 @@ async function generateFilterCounts(client, countryMap) {
 }
 
 async function generateAllJobsJson(client, countryMap) {
-  // Build country ID → name map (inverse of the reference map)
+  // Build country ID → name map (inverse of the reference map).
+  // Country and Brand reference collections are fetched via the staged
+  // endpoint because their entries rarely change and are always published.
   const countryItems = await client.getAllCollectionItems(COUNTRY_COLLECTION_ID);
   const countryIdToName = {};
   for (const item of countryItems) {
@@ -518,8 +579,10 @@ async function generateAllJobsJson(client, countryMap) {
   }
   console.log(`[sync] Brand logo map: ${Object.keys(brandIdToLogo).length} brands with logos`);
 
-  // Fetch all current CMS job items
-  const jobItems = await client.getAllCollectionItems(COLLECTION_ID);
+  // Fetch only LIVE (published) job items — guarantees every slug we emit
+  // actually resolves on the site. Prevents the "page not found" bug where
+  // unpublished CMS items leaked into all-jobs.json.
+  const jobItems = await client.getLiveCollectionItems(COLLECTION_ID);
   const allJobs = [];
 
   for (const item of jobItems) {

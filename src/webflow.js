@@ -171,25 +171,49 @@ class WebflowClient {
   }
 
   async publishSite() {
-    try {
-      // Get site domains
-      const site = await this.request('GET', `/sites/${this.siteId}`);
-      const domainIds = (site.customDomains || []).map(d => d.id);
-      if (domainIds.length === 0) {
-        console.warn('[webflow] No custom domains found, skipping publish.');
-        return;
-      }
-      await this.request('POST', `/sites/${this.siteId}/publish`, {
-        customDomains: domainIds,
-      });
-      console.log(`[webflow] Site published to ${domainIds.length} domain(s).`);
-    } catch (err) {
-      console.error(`[webflow] Failed to publish site: ${err.message.substring(0, 200)}`);
-    }
+    // Publishes to BOTH custom domains (production) and the Webflow subdomain
+    // (staging). Previously only custom domains were published, so the
+    // *.webflow.io subdomain drifted out of sync and returned 404s for newly
+    // created jobs.
+    //
+    // Failures are thrown — we do NOT want to regenerate all-jobs.json on top
+    // of a failed publish, because that leaves unpublished slugs in the JSON
+    // and produces the exact "page not found" bug Steven reported.
+    const site = await this.request('GET', `/sites/${this.siteId}`);
+    const domainIds = (site.customDomains || []).map(d => d.id);
+
+    const body = { publishToWebflowSubdomain: true };
+    if (domainIds.length > 0) body.customDomains = domainIds;
+
+    await this.request('POST', `/sites/${this.siteId}/publish`, body);
+    console.log(
+      `[webflow] Site published to ${domainIds.length} custom domain(s) + webflow subdomain.`
+    );
   }
 
-  async getCollectionItems(collectionId) {
-    return this.getAllCollectionItems(collectionId);
+  /**
+   * Fetch only LIVE (published) items from a collection.
+   * Used for generating all-jobs.json — guarantees we never emit slugs that
+   * exist in the CMS but haven't been published to the site yet.
+   */
+  async getLiveCollectionItems(collectionId) {
+    console.log('[webflow] Fetching live (published) CMS items...');
+    const items = [];
+    let offset = 0;
+    const limit = 100;
+
+    while (true) {
+      const data = await this.request('GET',
+        `/collections/${collectionId}/items/live?limit=${limit}&offset=${offset}`
+      );
+      if (data.items) items.push(...data.items);
+      if (!data.items || data.items.length < limit) break;
+      offset += limit;
+      console.log(`[webflow] Fetched ${items.length} live items so far...`);
+    }
+
+    console.log(`[webflow] Total live CMS items: ${items.length}`);
+    return items;
   }
 }
 
