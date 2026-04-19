@@ -498,17 +498,20 @@ async function runSync() {
     await client.publishSite();
     logger.recordPublished(true);
 
-    // Wait for CMS changes to propagate in the Webflow API before regenerating JSON.
-    // Without this delay, getAllCollectionItems may return stale data that excludes
-    // newly created items, causing them to be missing from all-jobs.json.
-    console.log('[sync] Waiting 10s for CMS changes to propagate...');
-    await new Promise(resolve => setTimeout(resolve, 10000));
+    // Wait for the /items/live endpoint to reflect the publish before
+    // regenerating JSON. 10s was not always enough — observed at 21:30
+    // UTC 2026-04-19 where a newly-created item didn't appear in live
+    // until well after a 10s wait. 30s is a safer default; still a
+    // rounding error compared to the sync's overall duration.
+    console.log('[sync] Waiting 30s for CMS changes to propagate to live endpoint...');
+    await new Promise(resolve => setTimeout(resolve, 30000));
   }
 
   // Step 11: Regenerate all-jobs.json + filter-counts.json
   console.log(`\n[sync] Regenerating all-jobs.json and filter-counts.json...`);
-  await generateAllJobsJson(client, countryMap);
+  const liveJobsCount = await generateAllJobsJson(client, countryMap);
   await generateFilterCounts(client, countryMap);
+  logger.recordLiveJobsAfter(liveJobsCount);
 
   // Cleanup browser
   await closeBrowser();
@@ -707,6 +710,7 @@ async function generateAllJobsJson(client, countryMap) {
   const outPath = path.join(__dirname, '..', 'all-jobs.json');
   fs.writeFileSync(outPath, JSON.stringify(allJobs));
   console.log(`[sync] all-jobs.json written (${allJobs.length} jobs)`);
+  return allJobs.length;
 }
 
 module.exports = { runSync };

@@ -34,6 +34,7 @@ class SyncLogger {
       source: detectSource(),
       pageupJobsFound: 0,
       cmsItemsBefore: 0,
+      liveJobsAfter: 0,
       created: 0,
       updated: 0,
       deleted: 0,
@@ -99,6 +100,13 @@ class SyncLogger {
 
   recordPublished(success) {
     this.record.published = success;
+  }
+
+  // Records the actual count of jobs on the live site after the sync
+  // finished (post-publish, post-JSON-regen). This is the count visitors
+  // see — independent of whatever PageUp returned during scraping.
+  recordLiveJobsAfter(count) {
+    this.record.liveJobsAfter = count;
   }
 
   async finish(status = 'success', error = null) {
