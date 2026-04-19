@@ -12,6 +12,16 @@ const DATA_DIR = fs.existsSync(path.dirname(ICLOUD_DATA_DIR)) ? ICLOUD_DATA_DIR 
 const LOG_FILE = path.join(DATA_DIR, 'sync-log.json');
 const MAX_ENTRIES = 100;
 
+// Derive sync source from the CI environment so the dashboard can
+// distinguish automatic (cron) from manual (dashboard/API) runs.
+function detectSource() {
+  var event = process.env.GITHUB_EVENT_NAME;
+  if (event === 'schedule') return 'scheduled';
+  if (event === 'workflow_dispatch' || event === 'repository_dispatch') return 'manual';
+  if (process.env.GITHUB_ACTIONS === 'true') return 'ci'; // unknown CI trigger
+  return 'local';
+}
+
 class SyncLogger {
   constructor() {
     this.record = {
@@ -21,6 +31,7 @@ class SyncLogger {
       durationMs: 0,
       status: 'running',
       error: null,
+      source: detectSource(),
       pageupJobsFound: 0,
       cmsItemsBefore: 0,
       created: 0,

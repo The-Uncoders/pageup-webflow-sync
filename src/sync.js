@@ -644,8 +644,18 @@ async function generateAllJobsJson(client, countryMap) {
     Object.values(countryIdToName).map(n => (n || '').toLowerCase())
   );
 
+  // Defensive: skip items without a valid job-id and deduplicate by job-id
+  // so the public JSON is always a clean 1:1 of unique PageUp jobs.
+  const seenJobIds = new Set();
+  let skippedNoId = 0;
+  let skippedDupe = 0;
+
   for (const item of jobItems) {
     const fd = item.fieldData || {};
+    const jobId = (fd['job-id'] || '').toString().trim();
+    if (!jobId) { skippedNoId++; continue; }
+    if (seenJobIds.has(jobId)) { skippedDupe++; continue; }
+    seenJobIds.add(jobId);
 
     // Resolve country reference to region, with a safety net that recovers
     // the country from the city value when the CMS country is empty but
@@ -685,6 +695,13 @@ async function generateAllJobsJson(client, countryMap) {
       ju: (fd['job-url'] || ''),           // job URL
       l: logoUrl,                          // brand logo URL
     });
+  }
+
+  if (skippedNoId > 0) {
+    console.warn(`[sync] WARNING: ${skippedNoId} CMS item(s) skipped during JSON generation — missing job-id field. These are "ghost" items that aren't in PageUp sync; consider cleaning them up in the CMS.`);
+  }
+  if (skippedDupe > 0) {
+    console.warn(`[sync] WARNING: ${skippedDupe} CMS item(s) skipped during JSON generation — duplicate job-id. Two CMS items share the same PageUp job ID; consider cleaning up the older duplicate.`);
   }
 
   const outPath = path.join(__dirname, '..', 'all-jobs.json');
