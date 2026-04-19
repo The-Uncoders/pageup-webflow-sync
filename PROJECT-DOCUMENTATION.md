@@ -27,24 +27,29 @@ The sync pipeline scrapes PageUp (via Playwright, because the listing sits behin
                           └────────────┬────────────┘
                                        │  Playwright scrape
                                        ▼
-              ┌────────────────────────────────────────────────┐
-              │  GitHub Actions — runs every 20 min on main   │
-              │                                                │
-              │  1. Scrape listing page (title + location +    │
-              │     brand for every job)                       │
-              │  2. Fetch all CMS items                        │
-              │  3. Diff:                                       │
-              │     - New  → scrape detail, create              │
-              │     - Listing-level change → scrape detail,    │
-              │       update                                    │
-              │     - Unchanged → SKIP detail scrape           │
-              │     - Removed → delete CMS item                 │
-              │  4. Publish site to custom domain + webflow.io │
-              │  5. Regenerate all-jobs.json + filter-counts   │
-              │     from /items/live (published only)          │
-              │  6. Amend single commit on `data` branch       │
-              │  7. Purge jsDelivr CDN for @data URLs          │
-              └───────────────┬───────────────────┬────────────┘
+              ┌──────────────────────────────────────────────────┐
+              │  GitHub Actions — runs every 20 min on main     │
+              │                                                  │
+              │  0. Seed local sync-log.json from data branch    │
+              │  1. Scrape listing page (title + location +      │
+              │     brand for every job)                         │
+              │  2. Fetch all CMS items                          │
+              │  3. Diff:                                         │
+              │     - New  → scrape detail, create                │
+              │     - Listing-level change → scrape detail,      │
+              │       update (slug NOT re-written — immutable)   │
+              │     - Unchanged → SKIP detail scrape             │
+              │     - Removed → delete CMS item                   │
+              │  4. Publish site to custom domain + webflow.io   │
+              │  5. Wait 30s for /items/live to propagate        │
+              │  6. Regenerate all-jobs.json + filter-counts     │
+              │     from /items/live (published only),           │
+              │     dedup by job-id, drop items without job-id,  │
+              │     reconcile city/country for orphan regions    │
+              │  7. Record liveJobsAfter + source in sync-log    │
+              │  8. Amend single commit on `data` branch         │
+              │  9. Purge jsDelivr CDN for @data URLs            │
+              └───────────────┬───────────────────┬──────────────┘
                               │                   │
                               ▼                   ▼
               ┌───────────────────────┐  ┌─────────────────────┐
@@ -316,6 +321,22 @@ A typical sync run completes in **under a minute** when nothing has changed, dow
 
 **Known trade-off:** if PageUp edits only a description or closing date on an existing job (without changing title or location), our fast-sync won't detect the change until the title or location also changes. This is an acceptable compromise for the speed improvement. If field-accuracy becomes more important than speed, add a periodic full rescrape (e.g. randomly sample 5% of unchanged jobs per run).
 
+### Slug immutability on updates
+
+`buildCmsFieldData()` generates a slug from the title on every call, but the update flow in `runSync()` explicitly deletes `newFieldData.slug` before sending a PATCH. Rationale: if PageUp renames a job into a title whose slugified form collides with another CMS item (e.g. two jobs ending up as `sales-travel-consultant-cairns-qld`), Webflow rejects the whole PATCH with a slug-collision error. The symptom is an infinite update loop — every sync detects the name change, tries to patch, Webflow rejects, next sync tries again forever.
+
+Keeping slugs immutable once created also gives us stable URLs for bookmarks and SEO. Webflow auto-disambiguates on create (appending `-2`, `-3`, etc.) if a brand new item would collide.
+
+### City/country reconciliation in JSON generation
+
+PageUp occasionally surfaces a job with a location string that has no comma (e.g. just `"New Zealand"` or `"Missouri"`). The scraper's comma-split parse stores the whole string as `city` and leaves `country` empty. On the dashboard this used to show up as orphan checkboxes at the top of the Locations filter because the JSON had `ci="New Zealand"`, `co=""`, `r="Multiple Locations"`.
+
+`reconcileCityAndCountry()` in `src/sync.js` is a safety net applied during `generateAllJobsJson` and `generateFilterCounts`. If the CMS country is empty but the city value is a known country name OR a mapped state in `location-to-country.json`, it:
+- Recovers the country (e.g. `"Missouri"` → `"United States"`)
+- Clears the city field (because the raw value wasn't really a city)
+
+This fixes existing orphaned CMS items at JSON-generation time without needing to re-scrape.
+
 ### Brand resolution — 3 tiers
 
 `resolveBrand()` in `src/sync.js`:
@@ -366,9 +387,23 @@ await this.request('POST', `/sites/${this.siteId}/publish`, {
 
 Previously only custom domains were published, so staging drifted out of sync and returned 404s for newly-added jobs.
 
-### JSON generation — live items only
+### JSON generation — live items only, defensively cleaned
 
 `generateAllJobsJson()` and `generateFilterCounts()` call `client.getLiveCollectionItems()`, which hits `/collections/{id}/items/live`. This returns only items that are actually published on the site, so unpublished/staged-only slugs never leak into `all-jobs.json`.
+
+The regeneration happens **30 seconds** after a publish (bumped from 10s after observing `/items/live` lag behind a publish by ~9 minutes in one case). `all-jobs.json` is additionally hardened against dirty CMS state:
+
+- Items without a `job-id` field are skipped (shouldn't exist, but logged as a warning so operators can clean up)
+- Items are deduplicated by `job-id` so two CMS rows sharing the same PageUp job ID only produce one entry
+
+### `liveJobsAfter` — recorded per sync run
+
+Each sync log entry records two counts:
+
+- `pageupJobsFound` — what PageUp's listing returned at scrape time (can drift from run to run)
+- `liveJobsAfter` — the final count in `all-jobs.json` after this run completed
+
+The dashboard shows both in the history table ("PageUp" and "Live" columns) so the distinction is explicit — no more confusion when PageUp had a transient hiccup and its snapshot didn't match what ended up live on the site.
 
 ---
 
@@ -386,11 +421,30 @@ Previously only custom domains were published, so staging drifted out of sync an
 1. Checkout main
 2. Setup Node + install deps
 3. Install Playwright Chromium
-4. Run `npm run sync` (the whole pipeline described above)
-5. **Publish artifacts to data branch** — uses `git worktree add /tmp/data-branch origin/data`, copies generated JSONs in, then:
+4. **Seed local sync-log from data branch** — `curl raw.githubusercontent.com/.../data/sync-log.json > data/sync-log.json` so the logger appends to the real accumulating history rather than starting from an empty array every run (main doesn't track this file)
+5. Run `npm run sync` (the whole pipeline described above)
+6. **Publish artifacts to data branch** — uses `git worktree add /tmp/data-branch origin/data`, copies generated JSONs in, then:
    - If the last commit on `data` was by `github-actions[bot]`: `git commit --amend --no-edit` + `git push --force-with-lease` (single moving commit)
    - Else: normal commit + push
-6. Purge jsDelivr CDN cache for `@data/all-jobs.json`, `@data/filter-counts.json`, `@data/sync-log.json`
+7. Purge jsDelivr CDN cache for `@data/all-jobs.json`, `@data/filter-counts.json`, `@data/sync-log.json`
+
+### Scheduled-run caveat — GitHub Actions cron is best-effort
+
+The cron is set to `*/20 * * * *` but GitHub Actions explicitly does not guarantee on-time delivery of scheduled workflows. During high-load periods the scheduler skips runs entirely. In practice this site sees 15–25 scheduled runs per day instead of the targeted ~72 — roughly one per hour. If guaranteed cadence becomes important, migrate the trigger source to Cloudflare Cron Triggers (using the existing Worker) or another scheduler. Manual triggers via the dashboard and API dispatch always run on-demand.
+
+### Sync source detection
+
+`src/sync-logger.js` reads `GITHUB_EVENT_NAME` and records a `source` field on every run:
+
+| Trigger | `source` value |
+|---|---|
+| `schedule` (cron) | `"scheduled"` |
+| `workflow_dispatch` (dashboard / API) | `"manual"` |
+| `repository_dispatch` | `"manual"` |
+| Other CI events | `"ci"` |
+| No CI env (local) | `"local"` |
+
+The dashboard's history table uses this to show a "Trigger" badge per run (Scheduled / Manual / Local).
 
 ### Required secrets
 
@@ -459,10 +513,18 @@ If a Link Block is added around the card in Designer in the future, the script a
 ### Webflow-hosted (production)
 
 - **Page:** `/internal/jobs-dashboard` (password protected)
-- **Implementation:** single code embed fetching data from jsDelivr
-- **URLs the embed reads:** `@data/sync-log.json` and `@data/all-jobs.json`
-- **"Run Sync Now" button** → POST to the Cloudflare Worker → workflow_dispatch on GitHub Actions
-- **Cache-bust window:** 20 min, matching the sync cadence
+- **Implementation:** single code embed (HTML + CSS + inline script) on that page's custom code
+- **Data sources:**
+  - Initial load & refresh button: `@data/sync-log.json` + `@data/all-jobs.json` via jsDelivr (fast-cached)
+  - Background poller and post-sync refresh: **raw.githubusercontent.com** (bypasses CDN, always fresh)
+  - Run status polling: public GitHub Actions API (`/repos/{...}/actions/runs?event=workflow_dispatch`) — no auth needed since the repo is public
+
+**UI features:**
+- Status cards: Health / Total Jobs / Last Sync / Next Sync — updated live as new sync log entries land
+- **Run tracker panel** (visible only while a manual sync is in flight) — shows real phase transitions (`Triggering` → `Queued` → `Running for 0:42 (typical ~1:15)` → `Sync complete` / `Sync failed`). Progress bar fills proportionally to the median of the last 15 successful runs; switches to an animated striped pattern if the run exceeds the median.
+- **Background polling every 60 seconds** — detects new automatic (cron) syncs and refreshes the dashboard without user action. Pauses while a manual sync is being tracked to avoid conflicts.
+- **Sync history table** — seven columns: Time, Status, Duration, **PageUp** (scrape-time count), **Live** (post-sync `liveJobsAfter`), Changes (+N / N upd / -N), Trigger (Scheduled / Manual / Local)
+- Click an "active" row to expand created/updated/deleted job titles
 
 ### Local (development)
 
@@ -529,14 +591,28 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 | "All jobs" back button does nothing | Loader snippet missing from `/jobs/{slug}` template, or button missing `id="all-jobs-button"` | Verify both |
 | Sync run takes >5 min | Either many new jobs or a genuine sync failure | Check the dashboard sync history; inspect Actions log |
 | Jobs count drops suddenly | WAF challenge failed; 0-job guard may trigger | Manual trigger from dashboard once PageUp responds normally |
+| Dashboard "PageUp" and "Live" columns differ | Normal — PageUp had a transient hiccup at scrape time, or a publish is still propagating | Resolves on the next sync. If persistent, inspect the CMS for an orphan item with no matching PageUp job-id |
+| Same job shows as "updated" every sync | Slug collision — two CMS items produce the same slug after `slugify()` | Already handled (updates don't send slug). If still recurring, dig into the duplicate CMS entry manually |
+| A location appears ungrouped at the top of the Locations filter | CMS item's `city` field is a country/state name; country ref is empty | Reconciliation runs at JSON generation time — should self-heal on the next sync. If not, add the value to `location-to-country.json` |
+| Sync history has gaps / fewer runs than expected | GitHub Actions scheduled cron is best-effort — skips runs under load | Expected behaviour. To get guaranteed cadence, migrate trigger to Cloudflare Cron |
+| Sync log shows "Scheduled" for a manual run | Run happened before commit `dc55f97` (source-tracking) landed in main | One-time artifact. Newer runs record source correctly |
 
 ---
 
 ## Key change history
 
-### Fresh foundation (April 17, 2026)
+### Dashboard & robustness pass (April 19–20, 2026)
 
-Today's consolidation. Everything below describes the current state; previous architecture is archived in git history.
+- **Slug immutability on updates:** PATCHes no longer send the `slug` field, eliminating an infinite update-loop bug triggered by title changes whose slugified form collides with another CMS item (real case: job 528880 renamed into the slug already owned by 530625).
+- **City/country reconciliation:** new `reconcileCityAndCountry()` safety net in `generateAllJobsJson` / `generateFilterCounts`. Fixes jobs whose PageUp location was a bare country/state name (e.g. `"New Zealand"`, `"Missouri"`) and ended up orphaned in the Locations filter. `missouri` added to `location-to-country.json`.
+- **Sync-log fix:** `data/sync-log.json` was still tracked on main from the pre-split era, so every CI run was appending to a stale April-17 base instead of the real history. File untracked from main; workflow now pulls the live `sync-log.json` from the `data` branch via `raw.githubusercontent.com` **before** running the sync so the logger appends cleanly.
+- **Source field:** `SyncLogger` records a `source` from `GITHUB_EVENT_NAME` — `scheduled`, `manual`, `ci`, or `local`. Dashboard shows distinct badges per trigger type.
+- **Defensive JSON gen:** `generateAllJobsJson` skips items missing a `job-id` and dedupes by `job-id`, with warnings when either case is hit — prevents a single dirty CMS row from inflating the public count.
+- **Propagation wait 10s → 30s:** `/items/live` can lag behind a publish; 30s covers the vast majority of cases.
+- **`liveJobsAfter`** field added to each sync log entry — the post-sync live count, independent of PageUp's scrape-time snapshot. Dashboard shows it as a "Live" column alongside "PageUp" for per-row clarity.
+- **Dashboard rewrite:** Run Sync Now now polls the public GitHub Actions API for real run status (`queued` → `in_progress` → `completed`). Background poller (60s) auto-refreshes the dashboard when any sync — automatic or manual — lands. Progress bar calibrated to the median duration of the last 15 successful runs. All GitHub-facing copy removed from the UI.
+
+### Fresh foundation (April 17, 2026)
 
 - **Bug fix:** "click does nothing" on `/jobs` cards — `jobs-filter.js` now injects a full-card overlay anchor when the Webflow CMS card has no `<a>` wrapper
 - **Bug fix:** "page not found" on staging — `publishSite()` now publishes both custom domain and Webflow subdomain, AND throws on failure. `generateAllJobsJson()` now uses `/items/live` so unpublished slugs can't leak into the JSON
@@ -582,4 +658,4 @@ No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHu
 
 ---
 
-*Last rewritten: April 17, 2026 — consolidated documentation after the architectural cleanup. Previous revisions are in git history.*
+*Last updated: April 20, 2026 — dashboard overhaul, slug-immutability fix, city/country reconciliation, sync-log history repair, source tracking, post-sync `liveJobsAfter` field, and expanded troubleshooting table. Previous revisions are in git history.*
