@@ -6,6 +6,41 @@ const { initBrowser, closeBrowser, fetchAllJobIds, scrapeAllJobs } = require('./
 const { WebflowClient } = require('./webflow');
 const { SyncLogger } = require('./sync-logger');
 const regionMap = require('../region-map.json');
+const locationToCountry = require('../location-to-country.json');
+
+/**
+ * Safety net for JSON generation: PageUp occasionally surfaces a location
+ * with no comma like "New Zealand" or "Missouri". The scraper's comma-split
+ * parse then treats the whole string as the city and leaves the country
+ * empty — so region falls back to "Multiple Locations" and the value
+ * "New Zealand" shows up as a city in the Locations filter.
+ *
+ * Here we try to recover the country from the city value. If the city is
+ * itself a known country name OR a known state/region mapping, we return
+ * the resolved country and clear the city (it isn't really a city).
+ *
+ * Returns { city, countryName } — both strings, either may be empty.
+ */
+function reconcileCityAndCountry(rawCity, rawCountryName, knownCountryNames) {
+  const city = (rawCity || '').trim();
+  let countryName = (rawCountryName || '').trim();
+  if (countryName || !city) return { city, countryName };
+
+  const cityLower = city.toLowerCase();
+  if (knownCountryNames.has(cityLower)) {
+    // City is actually a country name (e.g. "New Zealand")
+    // Use the canonical casing from the known set by scanning.
+    for (const name of knownCountryNames) {
+      if (name === cityLower) { countryName = city; break; }
+    }
+    return { city: '', countryName: city };
+  }
+  const mapped = locationToCountry[cityLower];
+  if (mapped) {
+    return { city: '', countryName: mapped };
+  }
+  return { city, countryName };
+}
 
 // Configuration
 const COLLECTION_ID = process.env.WEBFLOW_COLLECTION_ID || '69a6a25d0ee880903952732b';
@@ -513,6 +548,11 @@ async function generateFilterCounts(client, countryMap) {
   // visitors actually see on the site.
   const jobItems = await client.getLiveCollectionItems(COLLECTION_ID);
 
+  // Set of known country names (lowercase) for the city/country reconciliation
+  const knownCountryNames = new Set(
+    Object.values(countryIdToName).map(n => (n || '').toLowerCase())
+  );
+
   const regions = {};
   const cities = {};
   const categories = {};
@@ -523,9 +563,15 @@ async function generateFilterCounts(client, countryMap) {
   for (const item of jobItems) {
     const fd = item.fieldData || {};
 
-    // Resolve country reference to region
+    // Resolve country reference to region, with a safety net: if the CMS
+    // country is empty but the city value is itself a country/state name,
+    // recover the country from that.
     const countryRef = fd.country;
-    const countryName = countryRef ? (countryIdToName[countryRef] || '') : '';
+    const rawCountryName = countryRef ? (countryIdToName[countryRef] || '') : '';
+    const { city, countryName } = reconcileCityAndCountry(
+      fd.city, rawCountryName, knownCountryNames
+    );
+
     let regionName = '';
     if (countryName) {
       regionName = regionMap[countryName.toLowerCase()] || 'Multiple Locations';
@@ -536,8 +582,8 @@ async function generateFilterCounts(client, countryMap) {
     const rk = regionName.toLowerCase();
     regions[rk] = (regions[rk] || 0) + 1;
 
-    // City
-    const city = (fd.city || '').trim();
+    // City — only counted if we have a real city (reconcile clears it when
+    // the CMS city value was actually a country or state name)
     if (city) {
       const ck = city.toLowerCase();
       cities[ck] = (cities[ck] || 0) + 1;
@@ -593,12 +639,24 @@ async function generateAllJobsJson(client, countryMap) {
   const jobItems = await client.getLiveCollectionItems(COLLECTION_ID);
   const allJobs = [];
 
+  // Set of known country names (lowercase) for city/country reconciliation
+  const knownCountryNames = new Set(
+    Object.values(countryIdToName).map(n => (n || '').toLowerCase())
+  );
+
   for (const item of jobItems) {
     const fd = item.fieldData || {};
 
-    // Resolve country reference to region
+    // Resolve country reference to region, with a safety net that recovers
+    // the country from the city value when the CMS country is empty but
+    // the city text is itself a country name (e.g. "New Zealand") or a
+    // mapped state (e.g. "Missouri" → United States).
     const countryRef = fd.country;
-    const countryName = countryRef ? (countryIdToName[countryRef] || '') : '';
+    const rawCountryName = countryRef ? (countryIdToName[countryRef] || '') : '';
+    const { city, countryName } = reconcileCityAndCountry(
+      fd.city, rawCountryName, knownCountryNames
+    );
+
     let region = '';
     if (countryName) {
       region = regionMap[countryName.toLowerCase()] || 'Multiple Locations';
@@ -615,7 +673,9 @@ async function generateAllJobsJson(client, countryMap) {
     allJobs.push({
       t: (fd.name || '').trim(),           // title
       s: (fd.slug || ''),                  // slug
-      ci: (fd.city || '').trim(),          // city
+      ci: city,                            // city (reconciled — empty when
+                                           //   the raw city was actually a
+                                           //   country/state name)
       co: countryName,                     // country name
       r: region,                           // region
       b: brand,                            // brand
