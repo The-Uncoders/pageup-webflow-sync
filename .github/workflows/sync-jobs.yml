@@ -34,6 +34,18 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Seed local sync-log from data branch
+        # The logger on main has no `data/sync-log.json` in the workspace
+        # (rightly so — data lives on the `data` branch). Fetch the current
+        # log into place so the sync appends a new entry to the real history
+        # rather than starting fresh from an empty array every run.
+        run: |
+          mkdir -p data
+          curl -sfL \
+            "https://raw.githubusercontent.com/The-Uncoders/pageup-webflow-sync/data/sync-log.json" \
+            -o data/sync-log.json \
+            || echo '[]' > data/sync-log.json
+
       - name: Run job sync
         env:
           WEBFLOW_API_TOKEN: ${{ secrets.WEBFLOW_API_TOKEN }}
