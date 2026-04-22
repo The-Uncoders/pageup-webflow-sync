@@ -275,13 +275,31 @@ function cleanDescription(html) {
   } while (clean !== prev);
 
   // ── 3. Consolidate fragmented PageUp list structures ──
-  clean = clean.replace(/<div>\s*<ul>/gi, '<ul>');
+  clean = clean.replace(/<div[^>]*>\s*<ul/gi, '<ul');
   clean = clean.replace(/<\/ul>\s*<\/div>/gi, '</ul>');
-  clean = clean.replace(/<\/ul>\s*<ul>/gi, '');
-  clean = clean.replace(/<div>\s*(<p[^>]*>)/gi, '$1');
+  clean = clean.replace(/<\/ul>\s*<ul/gi, '<ul');
+  clean = clean.replace(/<div[^>]*>\s*(<p[^>]*>)/gi, '$1');
   clean = clean.replace(/(<\/p>)\s*<\/div>/gi, '$1');
 
-  // Strip any remaining <div> tags (Webflow RichText doesn't support them)
+  // Convert any remaining <div>inline-content</div> to <p>inline-content</p>.
+  // PageUp's WYSIWYG often wraps each line in its own bare <div> (e.g. the
+  // emoji-bulleted benefits list we hit on the BSP Creditor job). Stripping
+  // those divs without replacing them destroys the only paragraph signal
+  // and flattens every line into one inline blob.
+  //
+  // We iterate to handle nested divs: each pass converts the innermost
+  // divs whose content has no other div inside them. Converged within a
+  // few passes for any real PageUp payload.
+  let divPrev;
+  do {
+    divPrev = clean;
+    clean = clean.replace(
+      /<div[^>]*>((?:(?!<\/?div)[\s\S])*?)<\/div>/gi,
+      '<p>$1</p>'
+    );
+  } while (clean !== divPrev);
+
+  // Any stray <div> tags that couldn't be paired (malformed HTML) — strip
   clean = clean.replace(/<\/?div[^>]*>/gi, '');
 
   // ── 4. Convert "pseudo paragraph break" patterns to markers ──
