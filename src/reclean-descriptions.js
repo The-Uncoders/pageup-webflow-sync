@@ -9,31 +9,34 @@
  * actually change.
  *
  * Usage:
- *   node src/reclean-descriptions.js              # dry-run — prints diff summary, no writes
+ *   node src/reclean-descriptions.js              # dry-run — prints diff summary
  *   node src/reclean-descriptions.js --apply      # writes PATCHes + publishes
  *   node src/reclean-descriptions.js --limit 5    # only process first N items
- *   node src/reclean-descriptions.js --sample 3   # show before/after snippets for N items
+ *   node src/reclean-descriptions.js --sample 3   # show before/after snippets
+ *   node src/reclean-descriptions.js --restore <path>
+ *                                                 # restore descriptions from
+ *                                                 # a backup JSON file
  *
  * Safety:
  *   - Dry-run is the default. --apply is required to write anything.
+ *   - Before any --apply run, writes a full backup of the current
+ *     description for every live item to backups/reclean-backup-<ts>.json.
+ *     If anything looks wrong, restore with:
+ *         node src/reclean-descriptions.js --restore backups/reclean-backup-<ts>.json
  *   - Reads LIVE items (/items/live) so we see what visitors actually see.
- *   - Patches via PATCH /items — description only, never touches slug or
- *     any other field.
+ *   - PATCHes `description` only. Never touches slug or any other field.
  *   - Rate-limited by the WebflowClient's built-in 1.1s throttle.
- *   - After PATCHing, publishes to both custom domains + subdomain.
+ *   - After PATCHing, publishes to both custom domains + Webflow subdomain.
  */
 
 try { require('dotenv').config(); } catch (_) { /* dotenv optional */ }
 
+const fs = require('fs');
 const path = require('path');
 const { WebflowClient } = require('./webflow');
 
 // Expose cleanDescription from sync.js by temporarily monkey-requiring it.
-// sync.js doesn't export it, so we use the trick of loading the file and
-// grabbing the function from its internal scope via a re-require with an
-// augmented module.exports.
 function loadCleanDescription() {
-  const fs = require('fs');
   const src = fs.readFileSync(path.join(__dirname, 'sync.js'), 'utf8');
   const tmpPath = path.join(__dirname, '_sync_reclean_tmp.js');
   const augmented = src.replace(
@@ -44,7 +47,6 @@ function loadCleanDescription() {
   try {
     return require(tmpPath).cleanDescription;
   } finally {
-    // Clean up temp file immediately — module is cached in memory
     try { fs.unlinkSync(tmpPath); } catch (_) { /* best effort */ }
   }
 }
@@ -52,16 +54,18 @@ function loadCleanDescription() {
 const COLLECTION_ID = process.env.WEBFLOW_COLLECTION_ID || '69a6a25d0ee880903952732b';
 const WEBFLOW_API_TOKEN = process.env.WEBFLOW_API_TOKEN;
 const WEBFLOW_SITE_ID = process.env.WEBFLOW_SITE_ID || '691f361688f213d69817ead2';
+const BACKUP_DIR = path.join(__dirname, '..', 'backups');
 
 function parseArgs(argv) {
-  const args = { apply: false, limit: Infinity, sample: 3 };
+  const args = { apply: false, limit: Infinity, sample: 3, restore: null };
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--apply') args.apply = true;
     else if (a === '--limit') args.limit = parseInt(argv[++i], 10);
     else if (a === '--sample') args.sample = parseInt(argv[++i], 10);
+    else if (a === '--restore') args.restore = argv[++i];
     else if (a === '--help' || a === '-h') {
-      console.log(`Usage: node src/reclean-descriptions.js [--apply] [--limit N] [--sample N]`);
+      console.log('Usage: node src/reclean-descriptions.js [--apply] [--limit N] [--sample N] [--restore <path>]');
       process.exit(0);
     }
   }
@@ -74,8 +78,92 @@ function truncate(s, n = 220) {
   return flat.length <= n ? flat : flat.slice(0, n) + '…';
 }
 
+function writeBackup(items) {
+  if (!fs.existsSync(BACKUP_DIR)) {
+    fs.mkdirSync(BACKUP_DIR, { recursive: true });
+  }
+  const ts = new Date().toISOString().replace(/[:.]/g, '-');
+  const file = path.join(BACKUP_DIR, `reclean-backup-${ts}.json`);
+  const payload = {
+    timestamp: new Date().toISOString(),
+    siteId: WEBFLOW_SITE_ID,
+    collectionId: COLLECTION_ID,
+    itemCount: items.length,
+    items: items.map((it) => ({
+      id: it.id,
+      slug: it.fieldData?.slug || '',
+      name: it.fieldData?.name || '',
+      description: it.fieldData?.description || '',
+    })),
+  };
+  fs.writeFileSync(file, JSON.stringify(payload, null, 2));
+  return file;
+}
+
+async function runRestore(restorePath) {
+  if (!WEBFLOW_API_TOKEN) {
+    console.error('ERROR: WEBFLOW_API_TOKEN required');
+    process.exit(1);
+  }
+  if (!fs.existsSync(restorePath)) {
+    console.error(`ERROR: backup file not found: ${restorePath}`);
+    process.exit(1);
+  }
+  const backup = JSON.parse(fs.readFileSync(restorePath, 'utf8'));
+  if (!backup.items || !Array.isArray(backup.items)) {
+    console.error('ERROR: backup file malformed — no items[] array');
+    process.exit(1);
+  }
+
+  console.log('─'.repeat(72));
+  console.log(`RESTORE from ${restorePath}`);
+  console.log(`Backup timestamp:  ${backup.timestamp}`);
+  console.log(`Backup items:      ${backup.itemCount}`);
+  console.log('─'.repeat(72));
+
+  const client = new WebflowClient(WEBFLOW_API_TOKEN, backup.siteId || WEBFLOW_SITE_ID);
+
+  // Get current items to only PATCH items whose description differs from the backup
+  console.log('Fetching current live items to diff against backup…');
+  const current = await client.getLiveCollectionItems(backup.collectionId || COLLECTION_ID);
+  const currentById = new Map(current.map((i) => [i.id, i]));
+
+  const toPatch = [];
+  let missing = 0;
+  let identical = 0;
+  for (const b of backup.items) {
+    const cur = currentById.get(b.id);
+    if (!cur) { missing++; continue; }
+    const now = cur.fieldData?.description || '';
+    if (now === b.description) { identical++; continue; }
+    toPatch.push({ id: b.id, fieldData: { description: b.description } });
+  }
+
+  console.log(`Matched to current CMS: ${backup.itemCount - missing}`);
+  console.log(`Already match backup:   ${identical}`);
+  console.log(`Would restore:          ${toPatch.length}`);
+  if (missing > 0) console.log(`Missing (no longer in CMS): ${missing}`);
+
+  if (toPatch.length === 0) {
+    console.log('Nothing to restore.');
+    return;
+  }
+
+  console.log(`Restoring ${toPatch.length} items…`);
+  const updated = await client.updateItems(backup.collectionId || COLLECTION_ID, toPatch);
+  console.log(`Webflow confirmed ${updated.length} restores.`);
+
+  console.log('Publishing site…');
+  await client.publishSite();
+  console.log('Restore complete.');
+}
+
 async function main() {
   const args = parseArgs(process.argv);
+
+  if (args.restore) {
+    return runRestore(args.restore);
+  }
 
   if (!WEBFLOW_API_TOKEN) {
     console.error('ERROR: WEBFLOW_API_TOKEN environment variable is required');
@@ -98,11 +186,20 @@ async function main() {
   const items = await client.getLiveCollectionItems(COLLECTION_ID);
   console.log(`Fetched ${items.length} live items.`);
 
+  // Always write a backup when we're about to --apply, before anything else
+  let backupPath = null;
+  if (args.apply) {
+    backupPath = writeBackup(items);
+    console.log(`Backup written to: ${backupPath}`);
+    console.log(`  → to rollback: node src/reclean-descriptions.js --restore ${path.relative(path.join(__dirname, '..'), backupPath)}`);
+    console.log('');
+  }
+
   const limitN = Math.min(items.length, args.limit);
   let changedCount = 0;
   let unchangedCount = 0;
   let emptyCount = 0;
-  const diffs = []; // { id, title, before, after }
+  const diffs = [];
   const toPatch = [];
 
   for (let i = 0; i < limitN; i++) {
@@ -111,33 +208,22 @@ async function main() {
     const name = fd.name || '(no title)';
     const original = fd.description || '';
 
-    if (!original.trim()) {
-      emptyCount++;
-      continue;
-    }
+    if (!original.trim()) { emptyCount++; continue; }
 
     const cleaned = cleanDescription(original);
-    if (cleaned === original) {
-      unchangedCount++;
-      continue;
-    }
+    if (cleaned === original) { unchangedCount++; continue; }
 
     changedCount++;
     diffs.push({ id: item.id, title: name, before: original, after: cleaned });
-    toPatch.push({
-      id: item.id,
-      fieldData: { description: cleaned },
-    });
+    toPatch.push({ id: item.id, fieldData: { description: cleaned } });
   }
 
-  console.log('');
   console.log(`Checked:        ${limitN} items`);
   console.log(`Would change:   ${changedCount}`);
   console.log(`Already clean:  ${unchangedCount}`);
   console.log(`Empty:          ${emptyCount}`);
   console.log('');
 
-  // Sample a few diffs for eyeballing
   const toShow = diffs.slice(0, Math.max(0, args.sample));
   if (toShow.length) {
     console.log(`Showing ${toShow.length} sample diff${toShow.length === 1 ? '' : 's'}:`);
@@ -172,6 +258,9 @@ async function main() {
   console.log('');
   console.log('Done. Allow ~30s for /items/live to reflect the publish.');
   console.log('The next regular sync will purge the jsDelivr CDN caches.');
+  console.log('');
+  console.log(`If anything looks wrong, rollback with:`);
+  console.log(`    node src/reclean-descriptions.js --restore ${path.relative(path.join(__dirname, '..'), backupPath)}`);
 }
 
 main().catch((err) => {

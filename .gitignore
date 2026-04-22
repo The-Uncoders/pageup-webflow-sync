@@ -7,3 +7,4 @@ data/
 # output but they must not be committed to main.
 all-jobs.json
 filter-counts.json
+backups/
