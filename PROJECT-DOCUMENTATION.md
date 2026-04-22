@@ -347,17 +347,55 @@ This fixes existing orphaned CMS items at JSON-generation time without needing t
 
 Adding or retagging a brand is a CMS-only change — no code edits needed.
 
-### Description cleanup
+### Description cleanup and paragraph normalisation
 
-`cleanDescription()` in `src/sync.js` normalises PageUp's inconsistent HTML:
+`cleanDescription()` in `src/sync.js` does two jobs:
 
-- Strips PageUp-hosted images (Webflow rejects their `image/x-png` MIME type)
-- Removes white-text hashtag lines (LinkedIn tracking tags)
-- Strips inline `font-size` / `font-family` so Webflow typography wins
-- Removes empty `<p>&nbsp;</p>` spacers
-- Consolidates fragmented `<ul>` lists (each bullet arrives wrapped in `<div><ul><li>`)
-- Strips all `<div>` tags (Webflow RichText doesn't support them; leftovers break the CMS template grid)
-- Collapses multiple consecutive `<br>` tags
+**1. Strip content Webflow can't handle:**
+- PageUp-hosted images (Webflow rejects their `image/x-png` MIME type)
+- White-text LinkedIn hashtag lines (`#LI-xxx`, brand tags)
+- Inline `font-size` / `font-family` styles (so Webflow typography wins)
+- `<div>` wrappers after paragraph conversion (Webflow RichText doesn't support them)
+
+**2. Converge on consistent `<p>`-block structure:**
+PageUp's WYSIWYG export is wildly inconsistent across recruiters. Some produce proper `<p>` structure; others produce inline spans with `&nbsp;` separators; others wrap every line in its own bare `<div>`. `cleanDescription()` detects the "pseudo paragraph break" patterns below, converts them to an internal marker, then uses `node-html-parser` to walk the HTML and wrap every orphan inline run into a proper `<p>` block. Already-structured blocks (`<p>`, `<ul>`, `<h1-6>`, `<blockquote>`, `<figure>`, `<table>`, `<pre>`, `<hr>`) pass through unchanged.
+
+Patterns treated as paragraph breaks:
+- `<p>&nbsp;</p>` and `<p><span>&nbsp;</span></p>` (spacer paragraphs)
+- `<br>(&nbsp;)+<br>` (inline spacer)
+- Line containing only `&nbsp;` between newlines (`\n&nbsp;\n` — common PageUp export)
+- 2+ consecutive newlines
+- 2+ consecutive `&nbsp;` entities
+- 2+ consecutive `<br>` tags (at top level only; inside existing `<p>` they collapse to a single `<br>`)
+
+`<div>` wrappers get special treatment: `<div>...<ul>...</ul>...</div>` consolidates to just the `<ul>`; `<div>...<p>...</p>...</div>` unwraps to the `<p>`; any remaining `<div>inline</div>` becomes `<p>inline</p>` (iterative, innermost first, so nested divs collapse predictably). This handles PageUp's "one line per bare div" export pattern that would otherwise flatten into one inline blob when divs were stripped.
+
+The function is **idempotent** — running it twice on any input produces the same output. New jobs and rescrapes both converge on the same canonical HTML.
+
+### Back-filling existing descriptions after cleanDescription changes
+
+Fast-sync skips detail-scraping for unchanged jobs, so improvements to `cleanDescription()` don't automatically propagate to existing CMS items. When you change the cleanup logic in a way that needs to reach the existing catalog, use the one-shot `src/rescrape-descriptions.js`:
+
+```bash
+# Dry-run — logs what would change, no writes
+node src/rescrape-descriptions.js
+
+# Apply — writes a backup, PATCHes changed items, publishes
+node src/rescrape-descriptions.js --apply
+
+# Restore from a backup (idempotent — only PATCHes items that drifted from backup)
+node src/rescrape-descriptions.js --restore backups/rescrape-backup-<timestamp>.json
+```
+
+The script:
+1. Fetches all live CMS items
+2. Writes a backup of current descriptions to `backups/rescrape-backup-<timestamp>.json` (gitignored)
+3. Uses the existing scraper to pull fresh HTML from PageUp for each job
+4. Runs the current `cleanDescription()` against the fresh HTML
+5. PATCHes only items whose cleaned output differs from the current CMS
+6. Publishes to both custom domains + Webflow subdomain
+
+Why rescrape and not re-clean in place? Each run of `cleanDescription()` can strip information that later improvements need (e.g. `<div>` wrappers that signal paragraph boundaries). Once stripped, a pure re-clean can't recover it. Going back to PageUp's source HTML is always correct.
 
 ### Safety guards
 
@@ -627,7 +665,8 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 ### Earlier milestones
 
 - **Brand hashtag resolution** (April 1, 2026): 3-tier `resolveBrand()` — PageUp brand field → LinkedIn hashtag → `Flight Centre Travel Group` default. Data-driven; adding new brands is CMS-only
-- **Description HTML cleanup** (April 1, 2026): `cleanDescription()` normalises PageUp's inconsistent HTML so Webflow RichText renders correctly
+- **Paragraph normalisation for PageUp descriptions** (April 20-22, 2026): `cleanDescription()` converges inconsistent PageUp HTML exports onto a uniform `<p>`-block structure — handles inline spans separated by `&nbsp;`, `\n&nbsp;\n` blank-line separators, `<br><br>` at the top level, and (April 22) bare `<div>` per line (the BSP Creditor benefits-list pattern). Idempotent. Back-fill of existing CMS items via `src/rescrape-descriptions.js`.
+- **Description HTML cleanup** (April 1, 2026): First pass of `cleanDescription()` — strips PageUp images, LinkedIn tracking hashtags, inline fonts, and `<div>` tags
 - **Banner image link** (April 1, 2026): Workaround for Webflow rejecting PageUp's `image/x-png` MIME type — store URL in a Link field, render via code embed
 - **Sync propagation delay** (April 4, 2026): Publish site → wait 10s → regenerate JSON. Prevents "page not found" for newly-added jobs
 - **Change detection refinement** (April 4, 2026): Excluded `description` and `banner-image-link` from `hasChanged()` to prevent Webflow's HTML/link normalisation from triggering false updates
@@ -658,4 +697,4 @@ No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHu
 
 ---
 
-*Last updated: April 20, 2026 — dashboard overhaul, slug-immutability fix, city/country reconciliation, sync-log history repair, source tracking, post-sync `liveJobsAfter` field, and expanded troubleshooting table. Previous revisions are in git history.*
+*Last updated: April 22, 2026 — `cleanDescription()` paragraph normalisation (inline `&nbsp;`, `\n&nbsp;\n`, `<br><br>`, and bare `<div>` patterns), introduction of `src/rescrape-descriptions.js` for one-shot CMS back-fills (replacing the earlier in-place reclean approach). Previous revisions are in git history.*
