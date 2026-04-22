@@ -1,49 +1,55 @@
 #!/usr/bin/env node
 /**
- * One-shot: re-clean description HTML for existing CMS items.
+ * One-shot: re-scrape every live CMS item's description from PageUp and
+ * apply the current cleanDescription().
  *
- * Fast-sync skips detail-scraping for unchanged jobs, so improvements to
- * cleanDescription() only get applied to NEW jobs. This script back-fills
- * the existing catalog by running the current cleanDescription() against
- * each CMS item's stored `description` and PATCHing only items that
- * actually change.
+ * Why re-scrape (and not just re-clean the CMS content)?
+ *   Each run of cleanDescription() can strip information (e.g. <div>
+ *   wrappers). If that information is later needed to determine paragraph
+ *   structure, it's lost once the cleaned HTML is back in the CMS — a pure
+ *   re-clean pass can't recover it. Going back to PageUp's source-of-truth
+ *   HTML is always safe and correct.
  *
  * Usage:
- *   node src/reclean-descriptions.js              # dry-run — prints diff summary
- *   node src/reclean-descriptions.js --apply      # writes PATCHes + publishes
- *   node src/reclean-descriptions.js --limit 5    # only process first N items
- *   node src/reclean-descriptions.js --sample 3   # show before/after snippets
- *   node src/reclean-descriptions.js --restore <path>
- *                                                 # restore descriptions from
- *                                                 # a backup JSON file
+ *   node src/rescrape-descriptions.js              # dry-run, no writes
+ *   node src/rescrape-descriptions.js --apply      # scrape + patch + publish
+ *   node src/rescrape-descriptions.js --limit 10   # only process first N items
+ *   node src/rescrape-descriptions.js --sample 3   # show N before/after previews
+ *   node src/rescrape-descriptions.js --restore <path>
+ *                                                  # restore descriptions from
+ *                                                  # a backup JSON file
  *
  * Safety:
  *   - Dry-run is the default. --apply is required to write anything.
- *   - Before any --apply run, writes a full backup of the current
- *     description for every live item to backups/reclean-backup-<ts>.json.
- *     If anything looks wrong, restore with:
- *         node src/reclean-descriptions.js --restore backups/reclean-backup-<ts>.json
- *   - Reads LIVE items (/items/live) so we see what visitors actually see.
- *   - PATCHes `description` only. Never touches slug or any other field.
- *   - Rate-limited by the WebflowClient's built-in 1.1s throttle.
- *   - After PATCHing, publishes to both custom domains + Webflow subdomain.
+ *   - Before any --apply run, writes a full backup of current CMS
+ *     descriptions to backups/rescrape-backup-<ts>.json. If anything
+ *     looks wrong, restore with --restore.
+ *   - Reads LIVE items (/items/live) so the diff is against what
+ *     visitors actually see.
+ *   - PATCHes `description` ONLY. Slug, job-id, brand, etc. are never
+ *     touched.
+ *   - Rate-limited by the WebflowClient's 1.1s throttle between API calls.
+ *   - After PATCHing, publishes to both custom domains + webflow subdomain.
  */
 
 try { require('dotenv').config(); } catch (_) { /* dotenv optional */ }
 
 const fs = require('fs');
 const path = require('path');
+const { initBrowser, closeBrowser, scrapeAllJobs } = require('./scraper');
 const { WebflowClient } = require('./webflow');
 
-// Expose cleanDescription from sync.js by temporarily monkey-requiring it.
+// Pull cleanDescription out of sync.js via a temporary augmented module.exports.
 function loadCleanDescription() {
   const src = fs.readFileSync(path.join(__dirname, 'sync.js'), 'utf8');
-  const tmpPath = path.join(__dirname, '_sync_reclean_tmp.js');
-  const augmented = src.replace(
-    'module.exports = { runSync };',
-    'module.exports = { runSync, cleanDescription };'
+  const tmpPath = path.join(__dirname, '_sync_rescrape_tmp.js');
+  fs.writeFileSync(
+    tmpPath,
+    src.replace(
+      'module.exports = { runSync };',
+      'module.exports = { runSync, cleanDescription };'
+    )
   );
-  fs.writeFileSync(tmpPath, augmented);
   try {
     return require(tmpPath).cleanDescription;
   } finally {
@@ -65,25 +71,23 @@ function parseArgs(argv) {
     else if (a === '--sample') args.sample = parseInt(argv[++i], 10);
     else if (a === '--restore') args.restore = argv[++i];
     else if (a === '--help' || a === '-h') {
-      console.log('Usage: node src/reclean-descriptions.js [--apply] [--limit N] [--sample N] [--restore <path>]');
+      console.log('Usage: node src/rescrape-descriptions.js [--apply] [--limit N] [--sample N] [--restore <path>]');
       process.exit(0);
     }
   }
   return args;
 }
 
-function truncate(s, n = 220) {
+function truncate(s, n = 260) {
   if (!s) return '';
   const flat = s.replace(/\s+/g, ' ');
   return flat.length <= n ? flat : flat.slice(0, n) + '…';
 }
 
 function writeBackup(items) {
-  if (!fs.existsSync(BACKUP_DIR)) {
-    fs.mkdirSync(BACKUP_DIR, { recursive: true });
-  }
+  if (!fs.existsSync(BACKUP_DIR)) fs.mkdirSync(BACKUP_DIR, { recursive: true });
   const ts = new Date().toISOString().replace(/[:.]/g, '-');
-  const file = path.join(BACKUP_DIR, `reclean-backup-${ts}.json`);
+  const file = path.join(BACKUP_DIR, `rescrape-backup-${ts}.json`);
   const payload = {
     timestamp: new Date().toISOString(),
     siteId: WEBFLOW_SITE_ID,
@@ -123,14 +127,12 @@ async function runRestore(restorePath) {
 
   const client = new WebflowClient(WEBFLOW_API_TOKEN, backup.siteId || WEBFLOW_SITE_ID);
 
-  // Get current items to only PATCH items whose description differs from the backup
   console.log('Fetching current live items to diff against backup…');
   const current = await client.getLiveCollectionItems(backup.collectionId || COLLECTION_ID);
   const currentById = new Map(current.map((i) => [i.id, i]));
 
   const toPatch = [];
-  let missing = 0;
-  let identical = 0;
+  let missing = 0, identical = 0;
   for (const b of backup.items) {
     const cur = currentById.get(b.id);
     if (!cur) { missing++; continue; }
@@ -144,10 +146,7 @@ async function runRestore(restorePath) {
   console.log(`Would restore:          ${toPatch.length}`);
   if (missing > 0) console.log(`Missing (no longer in CMS): ${missing}`);
 
-  if (toPatch.length === 0) {
-    console.log('Nothing to restore.');
-    return;
-  }
+  if (toPatch.length === 0) { console.log('Nothing to restore.'); return; }
 
   console.log(`Restoring ${toPatch.length} items…`);
   const updated = await client.updateItems(backup.collectionId || COLLECTION_ID, toPatch);
@@ -161,9 +160,7 @@ async function runRestore(restorePath) {
 async function main() {
   const args = parseArgs(process.argv);
 
-  if (args.restore) {
-    return runRestore(args.restore);
-  }
+  if (args.restore) return runRestore(args.restore);
 
   if (!WEBFLOW_API_TOKEN) {
     console.error('ERROR: WEBFLOW_API_TOKEN environment variable is required');
@@ -179,62 +176,93 @@ async function main() {
   const client = new WebflowClient(WEBFLOW_API_TOKEN, WEBFLOW_SITE_ID);
 
   console.log('─'.repeat(72));
-  console.log(`reclean-descriptions — mode: ${args.apply ? 'APPLY (writes)' : 'DRY-RUN (no writes)'}`);
+  console.log(`rescrape-descriptions — mode: ${args.apply ? 'APPLY (writes)' : 'DRY-RUN (no writes)'}`);
   console.log('─'.repeat(72));
 
   console.log('Fetching live CMS items…');
   const items = await client.getLiveCollectionItems(COLLECTION_ID);
   console.log(`Fetched ${items.length} live items.`);
 
-  // Always write a backup when we're about to --apply, before anything else
+  // Build list of jobs to scrape, keyed to CMS IDs
+  const limitN = Math.min(items.length, args.limit);
+  const jobsToScrape = [];
+  for (let i = 0; i < limitN; i++) {
+    const fd = items[i].fieldData || {};
+    const jobId = fd['job-id'];
+    const slug = fd.slug;
+    if (!jobId || !slug) continue;
+    jobsToScrape.push({
+      jobId,
+      slug,
+      title: fd.name,
+      cmsId: items[i].id,
+      currentDescription: fd.description || '',
+    });
+  }
+  console.log(`Will scrape ${jobsToScrape.length} PageUp detail pages (skipped ${limitN - jobsToScrape.length} items missing job-id or slug).`);
+
+  // Backup BEFORE any scraping/patching
   let backupPath = null;
   if (args.apply) {
     backupPath = writeBackup(items);
     console.log(`Backup written to: ${backupPath}`);
-    console.log(`  → to rollback: node src/reclean-descriptions.js --restore ${path.relative(path.join(__dirname, '..'), backupPath)}`);
+    console.log(`  → to rollback: node src/rescrape-descriptions.js --restore ${path.relative(path.join(__dirname, '..'), backupPath)}`);
     console.log('');
   }
 
-  const limitN = Math.min(items.length, args.limit);
-  let changedCount = 0;
-  let unchangedCount = 0;
-  let emptyCount = 0;
+  console.log('Initializing browser (solves WAF challenge)…');
+  await initBrowser();
+
+  console.log('Scraping detail pages from PageUp…');
+  const { results } = await scrapeAllJobs(jobsToScrape);
+  console.log(`Scraped ${results.length} detail pages.`);
+
+  // Build map of jobId → fresh descriptionHtml
+  const freshDescriptionByJobId = new Map();
+  for (const r of results) {
+    if (r.jobId && r.descriptionHtml) {
+      freshDescriptionByJobId.set(r.jobId, r.descriptionHtml);
+    }
+  }
+
+  await closeBrowser();
+
+  // Compute diffs: compare cleanDescription(freshHTML) vs current CMS description
+  let changedCount = 0, unchangedCount = 0, emptyFresh = 0;
   const diffs = [];
   const toPatch = [];
 
-  for (let i = 0; i < limitN; i++) {
-    const item = items[i];
-    const fd = item.fieldData || {};
-    const name = fd.name || '(no title)';
-    const original = fd.description || '';
-
-    if (!original.trim()) { emptyCount++; continue; }
-
-    const cleaned = cleanDescription(original);
-    if (cleaned === original) { unchangedCount++; continue; }
-
+  for (const job of jobsToScrape) {
+    const fresh = freshDescriptionByJobId.get(job.jobId);
+    if (!fresh) { emptyFresh++; continue; }
+    const cleaned = cleanDescription(fresh);
+    if (cleaned === job.currentDescription) { unchangedCount++; continue; }
     changedCount++;
-    diffs.push({ id: item.id, title: name, before: original, after: cleaned });
-    toPatch.push({ id: item.id, fieldData: { description: cleaned } });
+    diffs.push({
+      id: job.cmsId, title: job.title, slug: job.slug,
+      before: job.currentDescription, after: cleaned,
+    });
+    toPatch.push({ id: job.cmsId, fieldData: { description: cleaned } });
   }
 
-  console.log(`Checked:        ${limitN} items`);
+  console.log('');
+  console.log(`Checked:        ${jobsToScrape.length} items`);
   console.log(`Would change:   ${changedCount}`);
-  console.log(`Already clean:  ${unchangedCount}`);
-  console.log(`Empty:          ${emptyCount}`);
+  console.log(`Already match:  ${unchangedCount}`);
+  if (emptyFresh > 0) console.log(`Scrape empty:   ${emptyFresh}`);
   console.log('');
 
   const toShow = diffs.slice(0, Math.max(0, args.sample));
   if (toShow.length) {
     console.log(`Showing ${toShow.length} sample diff${toShow.length === 1 ? '' : 's'}:`);
-    console.log('');
     for (const d of toShow) {
-      console.log('  ╭─ ' + d.title);
-      console.log('  │ BEFORE: ' + truncate(d.before, 260));
-      console.log('  │ AFTER:  ' + truncate(d.after, 260));
-      console.log('  ╰─');
       console.log('');
+      console.log('  ╭─ ' + d.title + ' (slug: ' + d.slug + ')');
+      console.log('  │ BEFORE: ' + truncate(d.before));
+      console.log('  │ AFTER:  ' + truncate(d.after));
+      console.log('  ╰─');
     }
+    console.log('');
   }
 
   if (!args.apply) {
@@ -242,10 +270,7 @@ async function main() {
     return;
   }
 
-  if (toPatch.length === 0) {
-    console.log('Nothing to patch.');
-    return;
-  }
+  if (toPatch.length === 0) { console.log('Nothing to patch.'); return; }
 
   console.log(`Applying ${toPatch.length} PATCHes…`);
   const updated = await client.updateItems(COLLECTION_ID, toPatch);
@@ -260,11 +285,12 @@ async function main() {
   console.log('The next regular sync will purge the jsDelivr CDN caches.');
   console.log('');
   console.log(`If anything looks wrong, rollback with:`);
-  console.log(`    node src/reclean-descriptions.js --restore ${path.relative(path.join(__dirname, '..'), backupPath)}`);
+  console.log(`    node src/rescrape-descriptions.js --restore ${path.relative(path.join(__dirname, '..'), backupPath)}`);
 }
 
-main().catch((err) => {
+main().catch(async (err) => {
   console.error('FATAL:', err.message);
   console.error(err.stack);
+  try { await closeBrowser(); } catch (_) { /* best effort */ }
   process.exit(1);
 });

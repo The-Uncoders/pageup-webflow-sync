@@ -8,3 +8,4 @@ data/
 all-jobs.json
 filter-counts.json
 backups/
+.claude/
