@@ -44,6 +44,19 @@
   var workType = '';
   var sortMode = 'default';
 
+  // URL query-param names for shareable filtered links. Every filter toggle
+  // updates window.location via history.replaceState(), and on initial load
+  // applyFiltersFromURL() parses these back into state.
+  var URL_PARAM = {
+    keyword:  'q',
+    region:   'region',
+    city:     'city',
+    brand:    'brand',
+    category: 'category',
+    workType: 'type',
+    sortMode: 'sort'
+  };
+
   var allJobs = [];        // all jobs from CDN JSON
   var filteredJobs = [];   // filtered subset
   var currentPage = 1;
@@ -182,8 +195,11 @@
       bindSort();
       bindClear(resetEls);
 
-      // Restore any saved filter state (e.g. returning from a job template page)
-      restoreFilterState();
+      // URL query params take precedence — they're how shareable filtered
+      // links work. Fall back to sessionStorage only when the URL is empty
+      // (e.g. user clicked "All Jobs" back button from a job post).
+      var urlApplied = applyFiltersFromURL();
+      if (!urlApplied) restoreFilterState();
 
       applyFilters();
 
@@ -314,6 +330,7 @@
     setEmpty(filteredJobs.length === 0);
     renderTags();
     saveFilterState();
+    serializeFiltersToURL();
   }
 
   // ── Category matching (handles comma-separated) ──
@@ -1258,6 +1275,96 @@
 
   // ── Session storage: save/restore filter state ──
   var STORAGE_KEY = 'fctg_filters';
+
+  // ── URL-as-filter-state (shareable filtered links) ────────────
+  // Parses query params → applies to state + reflects in UI. Returns true
+  // if any filter param was present so the caller can decide precedence
+  // over sessionStorage-based restoration.
+  function applyFiltersFromURL() {
+    try {
+      if (!window.URLSearchParams) return false; // old browser, skip gracefully
+      var params = new URLSearchParams(window.location.search);
+      var applied = false;
+
+      var q = params.get(URL_PARAM.keyword);
+      if (q) {
+        keyword = q;
+        var inp = document.querySelector('.filters1_keyword-search input');
+        if (inp) inp.value = keyword;
+        applied = true;
+      }
+
+      var multi = [
+        [URL_PARAM.region,   activeRegions],
+        [URL_PARAM.city,     activeCities],
+        [URL_PARAM.brand,    activeBrands],
+        [URL_PARAM.category, activeCategories]
+      ];
+      for (var i = 0; i < multi.length; i++) {
+        var raw = params.get(multi[i][0]);
+        if (!raw) continue;
+        var keys = raw.split(',')
+          .map(function (k) { return k.trim().toLowerCase(); })
+          .filter(Boolean);
+        for (var j = 0; j < keys.length; j++) multi[i][1][keys[j]] = true;
+        if (keys.length) applied = true;
+      }
+
+      var wt = params.get(URL_PARAM.workType);
+      if (wt) { workType = wt; applied = true; }
+
+      var sm = params.get(URL_PARAM.sortMode);
+      if (sm) { sortMode = sm; applied = true; }
+
+      // Reflect state in the UI (checkboxes / radios)
+      if (applied) {
+        restoreCheckboxGroup('city',     activeCities);
+        restoreCheckboxGroup('region',   activeRegions);
+        restoreCheckboxGroup('brand',    activeBrands);
+        restoreCheckboxGroup('category', activeCategories);
+        if (workType) {
+          document.querySelectorAll('input[name="Filter-Two"]').forEach(function (r) {
+            var lbl = getRadioLabel(r);
+            if (lbl && lbl.toLowerCase() === workType.toLowerCase()) r.checked = true;
+          });
+        }
+      }
+      return applied;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Writes current filter state into window.location via replaceState (no
+  // history entries — keeps browser back/forward intuitive). Invoked from
+  // applyFilters() so every filter change updates the URL.
+  function serializeFiltersToURL() {
+    try {
+      if (!window.URLSearchParams || !window.history || !history.replaceState) return;
+      var params = new URLSearchParams();
+
+      if (keyword) params.set(URL_PARAM.keyword, keyword);
+
+      var multi = [
+        [URL_PARAM.region,   activeRegions],
+        [URL_PARAM.city,     activeCities],
+        [URL_PARAM.brand,    activeBrands],
+        [URL_PARAM.category, activeCategories]
+      ];
+      for (var i = 0; i < multi.length; i++) {
+        var keys = Object.keys(multi[i][1]);
+        if (keys.length) params.set(multi[i][0], keys.join(','));
+      }
+
+      if (workType) params.set(URL_PARAM.workType, workType);
+      if (sortMode && sortMode !== 'default') params.set(URL_PARAM.sortMode, sortMode);
+
+      var qs = params.toString();
+      var newUrl = window.location.pathname + (qs ? '?' + qs : '') + window.location.hash;
+      var currentUrl = window.location.pathname + window.location.search + window.location.hash;
+      if (newUrl !== currentUrl) history.replaceState(null, '', newUrl);
+    } catch (e) { /* private mode / old browser — no-op */ }
+  }
 
   function saveFilterState() {
     try {
