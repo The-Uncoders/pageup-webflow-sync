@@ -2,6 +2,7 @@ try { require('dotenv').config(); } catch (_) { /* dotenv optional in CI */ }
 
 const fs = require('fs');
 const path = require('path');
+const { parse: parseHtml } = require('node-html-parser');
 const { initBrowser, closeBrowser, fetchAllJobIds, scrapeAllJobs } = require('./scraper');
 const { WebflowClient } = require('./webflow');
 const { SyncLogger } = require('./sync-logger');
@@ -139,28 +140,120 @@ function resolveBrand(jobDetail, brandMap, hashtagToBrand) {
   return { id: fctgRef, name: FCTG_DEFAULT_BRAND };
 }
 
+// Unique marker used internally during cleaning to mark paragraph boundaries
+// that originated as "pseudo breaks" (e.g. <p>&nbsp;</p>, <br><br>, nbsp×2).
+// Chosen so it never collides with anything a recruiter would paste.
+const PARAGRAPH_BREAK = '⟪FCTG_BREAK⟫';
+
+// Block-level tags preserved as-is during orphan wrapping. Anything else at
+// the top level (text nodes, spans, strong, em, a, br) gets grouped into a
+// <p> block — with PARAGRAPH_BREAK markers splitting each group into
+// separate paragraphs.
+const BLOCK_TAGS = new Set([
+  'p', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+  'blockquote', 'figure', 'table', 'pre', 'hr'
+]);
+
+/**
+ * Wrap top-level inline content into <p> blocks, respecting PARAGRAPH_BREAK
+ * markers as paragraph boundaries. Block-level elements already present at
+ * the top level are preserved verbatim.
+ *
+ * The goal: whatever PageUp exports — proper <p> structure, inline-only text
+ * with <br>/&nbsp; separators, or a messy mix — converge on a consistent
+ * <p>…</p><p>…</p> layout that Webflow's RichText renders with uniform
+ * paragraph spacing.
+ */
+function wrapOrphanContent(html) {
+  const root = parseHtml('<fctg-root>' + html + '</fctg-root>');
+  const container = root.querySelector('fctg-root');
+  if (!container) return html;
+
+  const output = [];
+  let buffer = '';
+
+  // Split on either PARAGRAPH_BREAK markers or 2+ consecutive <br> tags
+  // (double-br at top level = paragraph break, inside a <p> it's handled
+  // separately in the residual cleanup pass).
+  const SPLIT_REGEX = new RegExp(
+    PARAGRAPH_BREAK + '|(?:<br\\s*\\/?\\s*>\\s*){2,}',
+    'g'
+  );
+
+  const flushBuffer = () => {
+    if (!buffer) return;
+    const parts = buffer.split(SPLIT_REGEX);
+    for (const part of parts) {
+      const trimmed = part
+        // Trim leading/trailing whitespace, nbsp entities, and bare <br>s
+        .replace(/^(?:\s|&nbsp;|\u00A0|<br\s*\/?\s*>)+/gi, '')
+        .replace(/(?:\s|&nbsp;|\u00A0|<br\s*\/?\s*>)+$/gi, '')
+        .trim();
+      if (trimmed) output.push(`<p>${trimmed}</p>`);
+    }
+    buffer = '';
+  };
+
+  for (const child of container.childNodes) {
+    if (child.nodeType === 3) {
+      // Text node
+      buffer += child.rawText || '';
+    } else if (child.nodeType === 1) {
+      const tag = (child.tagName || '').toLowerCase();
+      if (BLOCK_TAGS.has(tag)) {
+        flushBuffer();
+        output.push(child.toString());
+      } else {
+        // Inline element (span, strong, em, a, br, etc.) — accumulate
+        buffer += child.toString();
+      }
+    }
+  }
+  flushBuffer();
+
+  return output.join('');
+}
+
 /**
  * Clean up PageUp description HTML for consistent display in Webflow.
- * PageUp descriptions come with inconsistent formatting across regions:
- *   - Empty <p>&nbsp;</p> paragraphs creating double/triple spacing
- *   - Whitespace-only spans and paragraphs
- *   - Each bullet in its own <div><ul><li> wrapper (causes extra gaps)
- *   - White-text hashtag lines (#LI-xxx, brand tags) meant to be hidden
- *   - Inline font-size/font-family styles overriding site typography
- *   - PageUp-sourced images that Webflow can't import
+ *
+ * PageUp's WYSIWYG export is wildly inconsistent — some recruiters end up
+ * with proper <p> paragraph structure, others get inline spans separated
+ * by `&nbsp; &nbsp;` or `<br><br>` "pseudo paragraphs". Our job is to
+ * converge these into uniform <p>-wrapped blocks so Webflow RichText
+ * renders every job with the same spacing.
+ *
+ * Pipeline:
+ *   1. Remove content the CMS can't handle (PageUp images, LinkedIn white
+ *      hashtag lines, <div> wrappers, inline font overrides).
+ *   2. Drop empty <span> wrappers left behind after style stripping.
+ *   3. Detect "pseudo paragraph break" patterns and replace them with a
+ *      unique marker:
+ *        - <p>&nbsp;</p> (spacer paragraph)
+ *        - <p><span>&nbsp;</span></p> (spacer wrapped in span)
+ *        - <br>&nbsp;<br> (inline spacer)
+ *        - 2+ consecutive &nbsp; entities
+ *        - 2+ consecutive <br> tags
+ *   4. Walk the HTML with node-html-parser: preserve existing block
+ *      elements (<p>, <ul>, <h1-6>, etc.) verbatim, and wrap any orphan
+ *      text/inline runs into fresh <p> blocks, splitting at the markers.
+ *   5. Clean up residual empty paragraphs.
+ *
+ * Idempotent: already-clean HTML (Ballarat-style with proper <p>/<ul>/<li>)
+ * passes through unchanged.
  */
 function cleanDescription(html) {
   let clean = html;
 
-  // Strip PageUp-sourced images (serve image/x-png which Webflow rejects)
+  // ── 1. Strip content that Webflow can't store or shouldn't render ──
+  // PageUp-sourced images (serve image/x-png which Webflow rejects)
   clean = clean.replace(/<img[^>]*src="[^"]*pageuppeople\.com[^"]*"[^>]*\/?>/gi, '');
   clean = clean.replace(/<img[^>]*src="[^"]*publicstorage[^"]*"[^>]*\/?>/gi, '');
 
-  // Remove white-text hashtag lines (LinkedIn tracking tags like #LI-ME1#MTEV#LI-Onsite)
+  // White-text LinkedIn hashtag lines (#LI-ME1, #MTEV, etc.) meant to be hidden
   clean = clean.replace(/<span[^>]*color:\s*#(?:FFF(?:FFF)?|fff(?:fff)?|FFFFFF|ffffff)\b[^>]*>[^<]*<\/span>/gi, '');
 
-  // Strip inline font-size and font-family from style attributes so Webflow's typography applies.
-  // Do this BEFORE empty-element removal so stripped spans get cleaned up properly.
+  // Inline font-size / font-family — let Webflow's typography apply
   clean = clean.replace(/\s*style="([^"]*)"/gi, (match, styleContent) => {
     let cleaned = styleContent
       .replace(/\s*font-size:\s*[^;]+;?/gi, '')
@@ -172,32 +265,57 @@ function cleanDescription(html) {
     return cleaned ? ` style="${cleaned}"` : '';
   });
 
-  // Remove empty <span> wrappers (no attributes left after style stripping)
-  clean = clean.replace(/<span>([^<]*)<\/span>/gi, '$1');
+  // ── 2. Drop empty span wrappers (repeat until stable for nested cases) ──
+  let prev;
+  do {
+    prev = clean;
+    clean = clean.replace(/<span>([^<]*)<\/span>/gi, '$1');
+    clean = clean.replace(/<span>\s*<\/span>/gi, '');
+    clean = clean.replace(/<span>\s*<(strong|em|b|i)>\s*<\/\1>\s*<\/span>/gi, '');
+  } while (clean !== prev);
 
-  // Remove empty paragraphs: <p>&nbsp;</p>, <p> </p>, <p></p>
-  clean = clean.replace(/<p>\s*(?:&nbsp;|\u00A0)?\s*<\/p>/gi, '');
-
-  // Remove paragraphs that only contain a whitespace-only span
-  clean = clean.replace(/<p>\s*<span[^>]*>\s*(?:&nbsp;|\u00A0)?\s*<\/span>\s*<\/p>/gi, '');
-
-  // Consolidate fragmented lists: merge adjacent <div><ul>...</ul></div> blocks
+  // ── 3. Consolidate fragmented PageUp list structures ──
   clean = clean.replace(/<div>\s*<ul>/gi, '<ul>');
   clean = clean.replace(/<\/ul>\s*<\/div>/gi, '</ul>');
   clean = clean.replace(/<\/ul>\s*<ul>/gi, '');
-
-  // Unwrap unnecessary nested <div> wrappers around paragraphs
   clean = clean.replace(/<div>\s*(<p[^>]*>)/gi, '$1');
   clean = clean.replace(/(<\/p>)\s*<\/div>/gi, '$1');
 
-  // Collapse multiple consecutive <br> tags into one
-  clean = clean.replace(/(<br\s*\/?\s*>\s*){2,}/gi, '<br>');
-
-  // Strip ALL remaining <div> tags (opening and closing).
-  // Webflow rich text only supports p, ul, ol, h1-h6, blockquote, figure.
-  // Leftover <div> elements break Webflow's CMS template DOM structure,
-  // causing the brand sidebar to get swallowed into the content column.
+  // Strip any remaining <div> tags (Webflow RichText doesn't support them)
   clean = clean.replace(/<\/?div[^>]*>/gi, '');
+
+  // ── 4. Convert "pseudo paragraph break" patterns to markers ──
+  // Note: we deliberately DON'T replace <br><br>+ here. Those get handled
+  // inside wrapOrphanContent so they only split when they appear at the
+  // top level — inside existing <p> they're kept and later collapsed to
+  // a single <br> (so "Line1<br><br>Line2" stays visually broken, just
+  // with normal line-height instead of a bogus paragraph).
+
+  // Empty <p>/span paragraphs used as visual spacers
+  clean = clean.replace(/<p[^>]*>\s*(?:&nbsp;|\u00A0)?\s*<\/p>/gi, PARAGRAPH_BREAK);
+  clean = clean.replace(/<p[^>]*>\s*<span[^>]*>\s*(?:&nbsp;|\u00A0)?\s*<\/span>\s*<\/p>/gi, PARAGRAPH_BREAK);
+  // Inline spacer: <br>(&nbsp;)+<br>
+  clean = clean.replace(/<br\s*\/?\s*>\s*(?:(?:&nbsp;|\u00A0)\s*)+<br\s*\/?\s*>/gi, PARAGRAPH_BREAK);
+  // "Blank line" separator: newline, lone &nbsp;, newline (common PageUp
+  // WYSIWYG export pattern — the benefits list in Cris's Senior AI example)
+  clean = clean.replace(/\n[ \t]*(?:&nbsp;|\u00A0)[ \t]*\n/gi, PARAGRAPH_BREAK);
+  // Double (or more) newlines — generic blank-line separator
+  clean = clean.replace(/\n[ \t]*\n+/g, PARAGRAPH_BREAK);
+  // Two or more consecutive &nbsp; entities (with optional whitespace between)
+  clean = clean.replace(/(?:\s*(?:&nbsp;|\u00A0)\s*){2,}/gi, PARAGRAPH_BREAK);
+
+  // ── 5. Wrap orphan top-level inline runs into <p>, splitting at markers
+  //       OR at <br><br>+ sequences that appear at the top level ──
+  clean = wrapOrphanContent(clean);
+
+  // ── 6. Residual cleanup ──
+  // Markers that somehow ended up inside an existing block — strip them
+  clean = clean.split(PARAGRAPH_BREAK).join('');
+  // Collapse <br><br>+ remaining inside blocks to a single <br> (best-effort
+  // visual line break when we can't split the containing <p>)
+  clean = clean.replace(/(?:<br\s*\/?\s*>\s*){2,}/gi, '<br>');
+  // Empty <p>s
+  clean = clean.replace(/<p[^>]*>\s*(?:&nbsp;|\u00A0)?\s*<\/p>/gi, '');
 
   return clean.trim();
 }
