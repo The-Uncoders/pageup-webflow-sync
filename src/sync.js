@@ -275,9 +275,31 @@ function cleanDescription(html) {
   } while (clean !== prev);
 
   // ── 3. Consolidate fragmented PageUp list structures ──
+  //
+  // Wrap bare <li>...</li> (not inside <ul>/<ol>, not a sibling of another
+  // <li>) in its own <ul>. PageUp's WYSIWYG sometimes exports bullet lists
+  // as an alternating pattern of bare <li> and <ul><li></li></ul> blocks —
+  // browsers render bare <li>s without bullets or indent, visually breaking
+  // the list. Wrapping each bare <li> then letting the adjacent-<ul> merge
+  // below collapse everything into one clean <ul> is the fix.
+  //
+  // Iterate to handle back-to-back bare <li>s (after wrapping the first,
+  // the second is no longer preceded by </li> so the next pass catches it).
+  let liPrev;
+  do {
+    liPrev = clean;
+    clean = clean.replace(
+      /(?<!<ul[^>]*>\s*|<ol[^>]*>\s*|<\/li>\s*)<li(\s[^>]*|)>([\s\S]*?)<\/li>/gi,
+      '<ul><li$1>$2</li></ul>'
+    );
+  } while (clean !== liPrev);
+
   clean = clean.replace(/<div[^>]*>\s*<ul/gi, '<ul');
   clean = clean.replace(/<\/ul>\s*<\/div>/gi, '</ul>');
-  clean = clean.replace(/<\/ul>\s*<ul/gi, '<ul');
+  // Merge adjacent <ul>s by dropping the </ul><ul...> boundary entirely.
+  // (Previously this was </ul>\s*<ul → <ul which caused NESTED lists
+  // instead of a merged flat list.)
+  clean = clean.replace(/<\/ul>\s*<ul[^>]*>/gi, '');
   clean = clean.replace(/<div[^>]*>\s*(<p[^>]*>)/gi, '$1');
   clean = clean.replace(/(<\/p>)\s*<\/div>/gi, '$1');
 
