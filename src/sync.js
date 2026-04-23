@@ -2,12 +2,64 @@ try { require('dotenv').config(); } catch (_) { /* dotenv optional in CI */ }
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { parse: parseHtml } = require('node-html-parser');
 const { initBrowser, closeBrowser, fetchAllJobIds, scrapeAllJobs } = require('./scraper');
 const { WebflowClient } = require('./webflow');
 const { SyncLogger } = require('./sync-logger');
 const regionMap = require('../region-map.json');
 const locationToCountry = require('../location-to-country.json');
+
+// ── Force-full mode ──
+// When SYNC_FORCE_FULL=true, the sync bypasses the listing-level fast-diff
+// and re-scrapes every existing job's detail page. Used by the daily 02:00
+// UTC cron + the dashboard's "Force Full Rescrape" button to catch PageUp
+// edits that don't show up on the listing (category, description, banner,
+// closing date, brand). Safe default: false.
+const FORCE_FULL = process.env.SYNC_FORCE_FULL === 'true';
+
+// ── Content hash map ──
+// Per-job SHA-256 fingerprint of the cleaned CMS fieldData we'd write.
+// On each run, after scraping + cleaning, we recompute the hash. If the
+// hash matches what we stored last time, the content is genuinely
+// unchanged and we skip the Webflow PATCH. Stored in data/sync-hashes.json
+// on the `data` branch (same pattern as sync-log.json).
+const HASHES_FILE = path.join(__dirname, '..', 'data', 'sync-hashes.json');
+
+function hashFieldData(fieldData) {
+  // Canonicalise: sort keys so {a:1,b:2} and {b:2,a:1} hash identically.
+  const sortedKeys = Object.keys(fieldData).sort();
+  const canonical = JSON.stringify(sortedKeys.reduce((acc, k) => {
+    acc[k] = fieldData[k];
+    return acc;
+  }, {}));
+  return crypto.createHash('sha256').update(canonical).digest('hex');
+}
+
+function loadHashes() {
+  try {
+    if (!fs.existsSync(HASHES_FILE)) return {};
+    const raw = fs.readFileSync(HASHES_FILE, 'utf8');
+    if (!raw.trim()) return {};
+    const parsed = JSON.parse(raw);
+    return (parsed && typeof parsed === 'object') ? parsed : {};
+  } catch (err) {
+    console.warn(`[sync] Could not load hash map (${err.message}) — treating every job as changed.`);
+    return {};
+  }
+}
+
+function saveHashes(hashes) {
+  try {
+    const dir = path.dirname(HASHES_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    const tmp = HASHES_FILE + '.tmp';
+    fs.writeFileSync(tmp, JSON.stringify(hashes, null, 2));
+    fs.renameSync(tmp, HASHES_FILE);
+  } catch (err) {
+    console.warn(`[sync] Could not write hash map: ${err.message}`);
+  }
+}
 
 /**
  * Safety net for JSON generation: PageUp occasionally surfaces a location
@@ -473,12 +525,20 @@ async function runSync() {
   logger.start();
   console.log('=== PageUp → Webflow Job Sync ===');
   console.log(`Started at: ${new Date().toISOString()}`);
+  console.log(`Mode: ${FORCE_FULL ? 'FORCE FULL (every existing job re-scraped)' : 'fast-sync (listing-level diff)'}`);
 
   if (!WEBFLOW_API_TOKEN) {
     throw new Error('WEBFLOW_API_TOKEN environment variable is required');
   }
 
   const client = new WebflowClient(WEBFLOW_API_TOKEN, WEBFLOW_SITE_ID);
+
+  // Load stored content-hash map. On first run or after the file is wiped,
+  // this returns {} — every job will look "changed" at the hash layer and
+  // get hashed + PATCHed as normal, populating the map.
+  const hashes = loadHashes();
+  const hashesBefore = Object.keys(hashes).length;
+  console.log(`[sync] Loaded ${hashesBefore} stored content hashes.`);
 
   // Step 1: Initialize browser and fetch all job IDs
   await initBrowser();
@@ -549,17 +609,29 @@ async function runSync() {
     console.log(`\n[sync] Scraping ${newJobs.length} new job detail pages...`);
     const { results: newDetails } = await scrapeAllJobs(newJobs);
 
-    const itemsToCreate = newDetails.map(detail => ({
-      fieldData: buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand),
-      isArchived: false,
-      isDraft: false,
-    }));
+    // Build fieldData for each new job, keeping track of the content hash
+    // keyed by the PageUp job-id so we can record hashes for successfully-
+    // created items only.
+    const itemsToCreate = [];
+    const hashByJobId = {};
+    for (const detail of newDetails) {
+      const fieldData = buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand);
+      itemsToCreate.push({ fieldData, isArchived: false, isDraft: false });
+      if (detail.jobId) hashByJobId[detail.jobId] = hashFieldData(fieldData);
+    }
 
     if (itemsToCreate.length > 0) {
       const created = await client.createItems(COLLECTION_ID, itemsToCreate);
       console.log(`[sync] Created ${created.length} new CMS items.`);
       changedIds.push(...created.map(c => c.id));
       logger.recordCreated(newDetails.map(d => ({ jobId: d.jobId, title: d.title })));
+
+      // Record hashes only for items Webflow confirmed — failed creations
+      // won't pollute the hash map and will be re-attempted next run.
+      for (const c of created) {
+        const jobId = c.fieldData && c.fieldData['job-id'];
+        if (jobId && hashByJobId[jobId]) hashes[jobId] = hashByJobId[jobId];
+      }
     }
   }
 
@@ -575,29 +647,40 @@ async function runSync() {
   // agreed with the client for sync speed.
   if (existingJobs.length > 0) {
     const jobsNeedingRescrape = [];
-    let skippedCount = 0;
+    let listingSkippedCount = 0;
 
-    for (const pageupJob of existingJobs) {
-      const cmsItem = cmsJobMap.get(pageupJob.jobId);
-      if (!cmsItem) continue;
-
-      const listingChanged = listingFieldsChanged(cmsItem, pageupJob);
-      if (listingChanged) {
-        jobsNeedingRescrape.push(pageupJob);
-      } else {
-        skippedCount++;
+    if (FORCE_FULL) {
+      // Bypass the listing diff entirely — every existing job gets scraped.
+      jobsNeedingRescrape.push(...existingJobs);
+    } else {
+      for (const pageupJob of existingJobs) {
+        const cmsItem = cmsJobMap.get(pageupJob.jobId);
+        if (!cmsItem) continue;
+        if (listingFieldsChanged(cmsItem, pageupJob)) {
+          jobsNeedingRescrape.push(pageupJob);
+        } else {
+          listingSkippedCount++;
+        }
       }
     }
 
     console.log(
-      `\n[sync] Existing jobs: ${skippedCount} unchanged (skipping detail fetch), ` +
-      `${jobsNeedingRescrape.length} changed at listing level (re-scraping).`
+      FORCE_FULL
+        ? `\n[sync] FORCE FULL: scraping all ${jobsNeedingRescrape.length} existing jobs.`
+        : `\n[sync] Existing jobs: ${listingSkippedCount} unchanged (skipping detail fetch), ` +
+          `${jobsNeedingRescrape.length} changed at listing level (re-scraping).`
     );
 
     if (jobsNeedingRescrape.length > 0) {
       const { results: existingDetails } = await scrapeAllJobs(jobsNeedingRescrape);
 
       const itemsToUpdate = [];
+      // Map cmsItemId → { jobId, newHash } for items we're about to PATCH.
+      // After updateItems returns, we only record hashes for items Webflow
+      // confirmed as updated.
+      const pendingHashUpdates = {};
+      let hashSkippedCount = 0;
+
       for (const detail of existingDetails) {
         const cmsItem = cmsJobMap.get(detail.jobId);
         if (!cmsItem) continue;
@@ -612,16 +695,37 @@ async function runSync() {
         // fields can update cleanly.
         delete newFieldData.slug;
 
-        const changedFields = hasChanged(cmsItem, newFieldData);
-        if (changedFields) {
-          itemsToUpdate.push({
-            id: cmsItem.id,
-            fieldData: newFieldData,
-            _jobId: detail.jobId,
-            _title: detail.title,
-            _changedFields: changedFields,
-          });
+        // Content-hash gate: if the cleaned fieldData hashes to the same
+        // value we stored last time, skip the PATCH entirely. This catches
+        // the case where a recruiter re-saves a PageUp job without changing
+        // anything visible — previously we'd PATCH it every time due to
+        // Webflow normalising the description; now we don't.
+        const newHash = hashFieldData(newFieldData);
+        if (hashes[detail.jobId] === newHash) {
+          hashSkippedCount++;
+          continue;
         }
+
+        // Hash differs → actual change. hasChanged() still populates the
+        // changedFields list for the log (it excludes description and
+        // banner-image-link because Webflow normalises those; when hash
+        // differs but hasChanged returns false, the change is in one of
+        // those excluded fields — most often description).
+        const changedFields = hasChanged(cmsItem, newFieldData)
+          || ['description-or-banner'];
+
+        itemsToUpdate.push({
+          id: cmsItem.id,
+          fieldData: newFieldData,
+          _jobId: detail.jobId,
+          _title: detail.title,
+          _changedFields: changedFields,
+        });
+        pendingHashUpdates[cmsItem.id] = { jobId: detail.jobId, hash: newHash };
+      }
+
+      if (hashSkippedCount > 0) {
+        console.log(`[sync] Hash unchanged for ${hashSkippedCount} scraped jobs — no PATCH needed.`);
       }
 
       if (itemsToUpdate.length > 0) {
@@ -632,8 +736,18 @@ async function runSync() {
         const updated = await client.updateItems(COLLECTION_ID, itemsToUpdate);
         console.log(`[sync] Updated ${updated.length} items.`);
         changedIds.push(...updated.map(u => u.id));
+
+        // Record new hashes ONLY for items Webflow confirmed updated.
+        // Items that failed individually don't get their hash bumped, so
+        // they'll be re-attempted next sync.
+        for (const u of updated) {
+          const pending = pendingHashUpdates[u.id];
+          if (pending) hashes[pending.jobId] = pending.hash;
+        }
+      } else if (hashSkippedCount === existingDetails.length) {
+        console.log('[sync] All scraped jobs matched their stored hashes — nothing to update.');
       } else {
-        console.log('[sync] Listing-level changes detected but detail-level fields matched — no CMS updates needed.');
+        console.log('[sync] No CMS updates needed.');
       }
     } else {
       console.log('[sync] No existing jobs have changed at listing level.');
@@ -647,6 +761,8 @@ async function runSync() {
     const cmsIdsToDelete = removedJobIds.map(r => r.cmsId);
     const deleted = await client.deleteItems(COLLECTION_ID, cmsIdsToDelete);
     console.log(`[sync] Deleted ${deleted.length} items.`);
+    // Drop hashes for removed jobs so the map doesn't grow unbounded.
+    for (const r of removedJobIds) delete hashes[r.jobId];
   }
 
   // Step 10: Publish site if any changes were made
@@ -670,6 +786,12 @@ async function runSync() {
   const liveJobsCount = await generateAllJobsJson(client, countryMap);
   await generateFilterCounts(client, countryMap);
   logger.recordLiveJobsAfter(liveJobsCount);
+
+  // Step 12: Persist updated hash map. CI copies this file to the `data`
+  // branch alongside the JSON artefacts so future runs can read it back.
+  saveHashes(hashes);
+  const hashesAfter = Object.keys(hashes).length;
+  console.log(`[sync] Saved ${hashesAfter} content hashes (delta: ${hashesAfter - hashesBefore >= 0 ? '+' : ''}${hashesAfter - hashesBefore}).`);
 
   // Cleanup browser
   await closeBrowser();

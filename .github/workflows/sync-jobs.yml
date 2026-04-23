@@ -2,10 +2,21 @@ name: Sync PageUp Jobs to Webflow
 
 on:
   schedule:
-    # Run every 20 minutes. Fast-sync makes no-op runs finish in under a
-    # minute, so the cadence is safe.
+    # Every 20 minutes — fast-sync (listing-level diff only).
     - cron: '*/20 * * * *'
-  workflow_dispatch: # Allow manual trigger (used by dashboard "Run Sync Now")
+    # Once daily at 02:00 UTC — force-full rescrape. Catches any PageUp
+    # edit (category, banner, description, closing date) that doesn't
+    # surface on the listing page. Worst-case propagation: 24 hours.
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    # Manual trigger from dashboard "Run Sync Now". The `force_full` input
+    # lets the dashboard's "Force Full Rescrape" button bypass the
+    # listing-level diff on demand.
+    inputs:
+      force_full:
+        description: 'Re-scrape every existing job (bypass listing-level fast-diff)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -34,17 +45,21 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Seed local sync-log from data branch
-        # The logger on main has no `data/sync-log.json` in the workspace
-        # (rightly so — data lives on the `data` branch). Fetch the current
-        # log into place so the sync appends a new entry to the real history
-        # rather than starting fresh from an empty array every run.
+      - name: Seed local sync-log + sync-hashes from data branch
+        # The main branch doesn't track data/sync-log.json or
+        # data/sync-hashes.json — those live on the `data` branch. Fetch
+        # the current copies so the sync appends to real history and the
+        # hash map reflects what we stored after the previous run.
         run: |
           mkdir -p data
           curl -sfL \
             "https://raw.githubusercontent.com/The-Uncoders/pageup-webflow-sync/data/sync-log.json" \
             -o data/sync-log.json \
             || echo '[]' > data/sync-log.json
+          curl -sfL \
+            "https://raw.githubusercontent.com/The-Uncoders/pageup-webflow-sync/data/sync-hashes.json" \
+            -o data/sync-hashes.json \
+            || echo '{}' > data/sync-hashes.json
 
       - name: Run job sync
         env:
@@ -53,6 +68,9 @@ jobs:
           WEBFLOW_COLLECTION_ID: ${{ secrets.WEBFLOW_COLLECTION_ID }}
           WEBFLOW_BRAND_COLLECTION_ID: ${{ secrets.WEBFLOW_BRAND_COLLECTION_ID }}
           WEBFLOW_COUNTRY_COLLECTION_ID: ${{ secrets.WEBFLOW_COUNTRY_COLLECTION_ID }}
+          # Force-full mode: true when triggered by the daily 02:00 UTC cron
+          # OR when the dashboard sets the workflow_dispatch input to true.
+          SYNC_FORCE_FULL: ${{ github.event.schedule == '0 2 * * *' || github.event.inputs.force_full == 'true' }}
         run: npm run sync
 
       - name: Publish artifacts to data branch
@@ -73,6 +91,9 @@ jobs:
           cp "$GITHUB_WORKSPACE/filter-counts.json" /tmp/data-branch/filter-counts.json
           if [ -f "$GITHUB_WORKSPACE/data/sync-log.json" ]; then
             cp "$GITHUB_WORKSPACE/data/sync-log.json" /tmp/data-branch/sync-log.json
+          fi
+          if [ -f "$GITHUB_WORKSPACE/data/sync-hashes.json" ]; then
+            cp "$GITHUB_WORKSPACE/data/sync-hashes.json" /tmp/data-branch/sync-hashes.json
           fi
 
           cd /tmp/data-branch
