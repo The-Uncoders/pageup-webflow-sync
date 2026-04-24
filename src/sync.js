@@ -137,12 +137,34 @@ async function buildReferenceMaps(client) {
   return { brandMap, brandIdToName, countryMap, hashtagToBrand };
 }
 
-function resolveReference(name, map) {
+// Explicit PageUp-brand → CMS-brand aliases. Used for strict brand
+// resolution (see resolveBrand). Anything not an exact match or in this
+// list falls through to the Flight Centre Travel Group default — per the
+// client's "anything without a recognised brand goes to FCTG" rule.
+//
+// Keys are lowercased PageUp brand text. Values are lowercased CMS
+// brand names that must exist in the Webflow Brands CMS.
+const BRAND_ALIASES = {
+  'flight centre brand': 'flight centre',
+};
+
+function resolveReference(name, map, options) {
   if (!name) return null;
+  const opts = options || {};
   const normalized = name.toLowerCase().trim();
   if (map[normalized]) return map[normalized];
 
-  // Try partial matching for common variations
+  // Explicit alias lookup — used for brand resolution to avoid the
+  // partial-match fuzziness routing e.g. "Flight Centre Business Travel
+  // (FCBT)" to the "Flight Centre" CMS entry.
+  if (opts.aliases && opts.aliases[normalized]) {
+    const aliased = opts.aliases[normalized];
+    if (map[aliased]) return map[aliased];
+  }
+
+  // Partial matching — useful for countries ("United States of America"
+  // vs "United States"), deliberately disabled for brands.
+  if (opts.exact) return null;
   for (const [key, id] of Object.entries(map)) {
     if (key.includes(normalized) || normalized.includes(key)) return id;
   }
@@ -171,13 +193,23 @@ const FCTG_DEFAULT_BRAND = 'Flight Centre Travel Group';
  * Returns { id: Webflow item ID, name: brand display name }
  */
 function resolveBrand(jobDetail, brandMap, brandIdToName, hashtagToBrand) {
-  // Tier 1: Try the PageUp brand field (exact/partial name match against
-  // Webflow Brands CMS). We always return the CANONICAL CMS brand name,
-  // never the raw PageUp text — otherwise PageUp's inconsistent naming
-  // (e.g. "Flight Centre Brand" vs CMS "Flight Centre") creates spurious
-  // filter buckets on the site.
+  // Tier 1: STRICT match against the Webflow Brands CMS — exact name (case
+  // insensitive) OR an explicit entry in BRAND_ALIASES. Partial matching
+  // is deliberately OFF for brands: it previously routed "Flight Centre
+  // Business Travel (FCBT)" and similar to the "Flight Centre" CMS entry
+  // because the string contained "flight centre", creating confusing
+  // filter buckets. Per the client's rule — anything not an exact or
+  // aliased match falls through to the FCTG default below.
+  //
+  // When matched, we return the CANONICAL CMS brand name (never the raw
+  // PageUp text) so the brand-name text field always equals a real CMS
+  // entry and the /jobs filter never shows a stray bucket.
   if (jobDetail.brandName) {
-    const brandRef = resolveReference(jobDetail.brandName, brandMap);
+    const brandRef = resolveReference(
+      jobDetail.brandName,
+      brandMap,
+      { exact: true, aliases: BRAND_ALIASES }
+    );
     if (brandRef) {
       const canonical = brandIdToName[brandRef] || jobDetail.brandName;
       return { id: brandRef, name: canonical };
