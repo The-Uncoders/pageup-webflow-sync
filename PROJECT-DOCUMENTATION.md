@@ -445,12 +445,57 @@ The dashboard shows both in the history table ("PageUp" and "Live" columns) so t
 
 ---
 
+## Propagation beyond the listing diff — force-full + hashing
+
+Fast-sync only looks at the listing page (title + location) to decide which jobs need re-scraping. That misses edits to categories, descriptions, banners, closing dates, or brand fields on PageUp — those only surface on the detail page. Two mechanisms cover that blind spot:
+
+### Force-full mode
+
+`SYNC_FORCE_FULL=true` makes `runSync()` bypass the listing diff and scrape every existing job. Triggered three ways:
+
+| When | How | Propagation delay |
+|---|---|---|
+| Daily 02:00 UTC | Second `cron` in `sync-jobs.yml` | Worst case 24 hours |
+| On demand | Dashboard "Force Full Rescrape" button → Cloudflare Worker → `workflow_dispatch` with `force_full=true` input | Immediate (run takes ~10–15 min) |
+| Local | `SYNC_FORCE_FULL=true npm run sync` | Immediate |
+
+The 20-minute fast-sync cron continues in parallel — listing-level changes (title/location, new jobs, removed jobs) still propagate within a minute.
+
+### Content-hash gate
+
+Every Webflow PATCH is gated on SHA-256 of the cleaned fieldData we'd write, stored as `sync-hashes.json` on the `data` branch. On each run:
+
+1. Scrape PageUp, apply `cleanDescription()`, build the CMS fieldData
+2. `hashFieldData()` — sorted-keys canonical JSON → SHA-256 hex
+3. Compare to stored hash for this job-id
+4. Identical → skip the PATCH (content truly unchanged)
+5. Different → PATCH + record the new hash (only after Webflow confirms the update)
+
+Why this exists in addition to `hasChanged()`: `hasChanged()` excludes `description` and `banner-image-link` to avoid Webflow's HTML/link normalisation causing false diffs. Hashing catches changes in ANY cleaned field without that problem — `cleanDescription` is deterministic, so the hash is stable when PageUp's content is stable.
+
+Failed PATCHes do NOT update the stored hash — the next run re-attempts. Deleted jobs have their hashes dropped from the map.
+
+**Rollback:** if hashing misbehaves, delete `sync-hashes.json` on the `data` branch and trigger a sync — every job looks "changed" at the hash layer and the map repopulates cleanly.
+
+---
+
+## Back-filling existing CMS items after sync-logic changes
+
+Fast-sync + hashing skip most jobs, so improvements to `cleanDescription()` or `resolveBrand()` don't automatically reach existing CMS items. When a change needs to apply retroactively:
+
+- **Programmatic (targeted):** `node src/rescrape-descriptions.js --apply`. Backs up → rescrapes → PATCHes only items that differ → publishes. See the script's header comment for `--dry-run`, `--limit`, `--restore` flags.
+- **Interactive (preferred):** click **Force Full Rescrape** in the dashboard. Same effect, runs on CI, no local setup.
+
+Both preserve the safety rails: backup before writes, `--restore` for rollback.
+
+---
+
 ## GitHub Actions workflow
 
 `.github/workflows/sync-jobs.yml`:
 
-- **Schedule:** `*/20 * * * *` (every 20 min)
-- **Manual trigger:** `workflow_dispatch` (used by the dashboard "Run Sync Now" button)
+- **Schedules:** `*/20 * * * *` (fast-sync) + `0 2 * * *` (daily force-full)
+- **Manual trigger:** `workflow_dispatch` with `force_full` boolean input
 - **Runtime:** Node 22, Ubuntu
 - **Timeout:** 30 min
 
@@ -459,10 +504,10 @@ The dashboard shows both in the history table ("PageUp" and "Live" columns) so t
 1. Checkout main
 2. Setup Node + install deps
 3. Install Playwright Chromium
-4. **Seed local sync-log from data branch** — `curl raw.githubusercontent.com/.../data/sync-log.json > data/sync-log.json` so the logger appends to the real accumulating history rather than starting from an empty array every run (main doesn't track this file)
-5. Run `npm run sync` (the whole pipeline described above)
-6. **Publish artifacts to data branch** — uses `git worktree add /tmp/data-branch origin/data`, copies generated JSONs in, then:
-   - If the last commit on `data` was by `github-actions[bot]`: `git commit --amend --no-edit` + `git push --force-with-lease` (single moving commit)
+4. **Seed local data from data branch** — `curl` `data/sync-log.json` and `data/sync-hashes.json` from the `data` branch into the workspace. Lets the logger append to real history and the sync see the stored hash map
+5. Run `npm run sync` with `SYNC_FORCE_FULL` derived from `github.event.schedule == '0 2 * * *'` OR `github.event.inputs.force_full == 'true'`
+6. **Publish artifacts to data branch** — `git worktree add /tmp/data-branch origin/data`, copy `all-jobs.json`, `filter-counts.json`, `sync-log.json`, `sync-hashes.json` in, then:
+   - Last commit by `github-actions[bot]`? `git commit --amend --no-edit` + `git push --force-with-lease` (single moving commit)
    - Else: normal commit + push
 7. Purge jsDelivr CDN cache for `@data/all-jobs.json`, `@data/filter-counts.json`, `@data/sync-log.json`
 
@@ -650,6 +695,14 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 - **`liveJobsAfter`** field added to each sync log entry — the post-sync live count, independent of PageUp's scrape-time snapshot. Dashboard shows it as a "Live" column alongside "PageUp" for per-row clarity.
 - **Dashboard rewrite:** Run Sync Now now polls the public GitHub Actions API for real run status (`queued` → `in_progress` → `completed`). Background poller (60s) auto-refreshes the dashboard when any sync — automatic or manual — lands. Progress bar calibrated to the median duration of the last 15 successful runs. All GitHub-facing copy removed from the UI.
 
+### Propagation + filter-URL pass (April 23–24, 2026)
+
+- **Filter-URL sync:** `jobs-filter.js` reads filters from URL query params on load and writes them back via `history.replaceState()` on every change. Enables shareable filtered links (e.g. `/jobs?region=south%20africa&category=digital%20and%20technology`). URL params: `q`, `region`, `city`, `brand`, `category`, `type`, `sort`. URL takes precedence over sessionStorage on cold load.
+- **Bullet-point normalisation:** `cleanDescription()` wraps bare `<li>` (outside any `<ul>`/`<ol>`) in its own `<ul>` using a negative-lookbehind regex; the adjacent-list merge then consolidates fragments into one cohesive `<ul>`. Also fixed a regex bug where the merge was producing nested `<ul>`s instead of merged flat lists.
+- **Force-full mode:** `SYNC_FORCE_FULL=true` bypasses the listing-level diff. Triggered by a new daily 02:00 UTC cron and by the dashboard's new "Force Full Rescrape" button (via the existing Cloudflare Worker, which now forwards a `force_full` query param as a `workflow_dispatch` input).
+- **Content-hash gate:** SHA-256 of cleaned fieldData per job, stored as `sync-hashes.json` on the `data` branch. Skips Webflow PATCH when the hash matches the stored one — zero API writes for unchanged content. Catches changes to fields `hasChanged()` excludes (description, banner-image-link).
+- **Cloudflare Worker in repo:** `worker/sync-trigger.js` is now tracked so future changes are diffable. Deploy flow documented in `worker/README.md`.
+
 ### Fresh foundation (April 17, 2026)
 
 - **Bug fix:** "click does nothing" on `/jobs` cards — `jobs-filter.js` now injects a full-card overlay anchor when the Webflow CMS card has no `<a>` wrapper
@@ -697,4 +750,4 @@ No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHu
 
 ---
 
-*Last updated: April 22, 2026 — `cleanDescription()` paragraph normalisation (inline `&nbsp;`, `\n&nbsp;\n`, `<br><br>`, and bare `<div>` patterns), introduction of `src/rescrape-descriptions.js` for one-shot CMS back-fills (replacing the earlier in-place reclean approach). Previous revisions are in git history.*
+*Last updated: April 24, 2026 — added force-full mode (daily cron + dashboard button), content-hash gate for sync, shareable filtered URLs, bullet-point list normalisation, and Cloudflare Worker tracked in repo. Previous revisions are in git history.*
