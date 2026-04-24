@@ -339,13 +339,16 @@ This fixes existing orphaned CMS items at JSON-generation time without needing t
 
 ### Brand resolution — 3 tiers
 
-`resolveBrand()` in `src/sync.js`:
+`resolveBrand()` in `src/sync.js`, in priority order:
 
-1. **PageUp brand field** — exact or partial name match against Webflow Brands collection
-2. **Hashtag match** — scrapes `#TAG` patterns from the job post, matches them against `brand-tag` field on Brand CMS entries. Brand tags are comma-separated (e.g. `#CTAU,#CTCA,#CTNZ`)
-3. **Default** — `Flight Centre Travel Group` (the holding entity; individual FCTG brands like "Flight Centre" remain separate Brand CMS entries)
+1. **PageUp brand field → strict match** — lowercase exact-match against Webflow Brands CMS, OR an explicit entry in `BRAND_ALIASES` (a hard-coded map in `src/sync.js`). Partial/fuzzy matching is deliberately OFF for brands to avoid strings like "Flight Centre Business Travel (FCBT)" being routed to the "Flight Centre" CMS entry just because the string contains "flight centre". Current aliases:
+   - `"flight centre brand"` → `"flight centre"` (PageUp's naming convention vs CMS's)
+2. **Hashtag match** — scrapes `#TAG` patterns from the job-post HTML and matches them against the `brand-tag` field on each Brand CMS entry. Brand tags are comma-separated (e.g. `#CTAU,#CTCA,#CTNZ`). This is the safety net for PageUp brand text that doesn't exact-match — e.g. if PageUp sends "Corporate Traveler (US)" (with suffix) but the CMS's "Corporate Traveler" entry has `#CTUS` in its brand-tag, tier 2 catches it.
+3. **Default** — `Flight Centre Travel Group` (the holding entity; individual FCTG brands like "Flight Centre" remain separate CMS entries).
 
-Adding or retagging a brand is a CMS-only change — no code edits needed.
+On a match, `brand-name` is always written as the **canonical CMS entry name**, never the raw PageUp text — so the `/jobs` brand filter always groups by a value that corresponds to a real CMS brand.
+
+Adding a new brand or hashtag mapping is a Webflow CMS change (add entry, set `brand-tag`) — no code edits needed. Adding a new PageUp→CMS alias requires editing `BRAND_ALIASES` in `src/sync.js` plus a force-full rescrape to back-fill.
 
 ### Description cleanup and paragraph normalisation
 
@@ -706,7 +709,8 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 - **Bullet-point normalisation:** `cleanDescription()` wraps bare `<li>` (outside any `<ul>`/`<ol>`) in its own `<ul>` using a negative-lookbehind regex; the adjacent-list merge then consolidates fragments into one cohesive `<ul>`. Also fixed a regex bug where the merge was producing nested `<ul>`s instead of merged flat lists.
 - **Force-full mode:** `SYNC_FORCE_FULL=true` bypasses the listing-level diff. Triggered by a new daily 02:00 UTC cron and by the dashboard's new "Force Full Rescrape" button (via the existing Cloudflare Worker, which now forwards a `force_full` query param as a `workflow_dispatch` input).
 - **Content-hash gate:** SHA-256 of cleaned fieldData per job, stored as `sync-hashes.json` on the `data` branch. Skips Webflow PATCH when the hash matches the stored one — zero API writes for unchanged content. Catches changes to fields `hasChanged()` excludes (description, banner-image-link).
-- **Canonical brand names:** `resolveBrand()` now writes the Webflow Brands CMS entry name to `brand-name` instead of the raw PageUp text. Fixes the spurious filter buckets created by PageUp's inconsistent naming (e.g. PageUp's "Flight Centre Brand" resolved to the CMS "Flight Centre" entry for the reference but wrote the raw string to `brand-name`, creating two filter buckets for the same real brand). Requires a force-full rescrape to back-fill existing CMS items. Also largely resolves the "brands appearing out of alphabetical order" filter UI issue, since out-of-order entries were the non-CMS raw strings that jobs-filter.js dynamically appends at the end.
+- **Canonical brand names:** `resolveBrand()` now writes the Webflow Brands CMS entry name to `brand-name` instead of the raw PageUp text. Fixes the spurious filter buckets created by PageUp's inconsistent naming. Largely resolves the "brands out of alphabetical order" filter UI issue too.
+- **Strict brand matching + aliases:** Removed the partial/fuzzy matching from brand resolution (kept for country). Exact match or explicit `BRAND_ALIASES` entry only — anything else falls through to hashtag tier 2, then to FCTG default. Prevents PageUp strings like "Flight Centre Business Travel (FCBT)" fuzzy-matching to unrelated CMS entries. Adding a new alias is a one-line code change + force-full rescrape.
 - **Cloudflare Worker in repo:** `worker/sync-trigger.js` is now tracked so future changes are diffable. Deploy flow documented in `worker/README.md`.
 
 ### Fresh foundation (April 17, 2026)
