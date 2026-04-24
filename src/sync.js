@@ -106,11 +106,15 @@ async function buildReferenceMaps(client) {
   console.log('[sync] Building brand and country reference maps...');
 
   const brandItems = await client.getAllCollectionItems(BRAND_COLLECTION_ID);
-  const brandMap = {};       // brand name (lowercase) → Webflow item ID
-  const hashtagToBrand = {}; // hashtag (uppercase, e.g. "#FCM") → { id, name }
+  const brandMap = {};        // lowercased brand name → Webflow item ID
+  const brandIdToName = {};   // Webflow item ID → canonical CMS brand name
+  const hashtagToBrand = {};  // hashtag (uppercase, e.g. "#FCM") → { id, name }
   for (const item of brandItems) {
     const name = item.fieldData?.name?.trim();
-    if (name) brandMap[name.toLowerCase()] = item.id;
+    if (name) {
+      brandMap[name.toLowerCase()] = item.id;
+      brandIdToName[item.id] = name;
+    }
 
     // Build hashtag → brand mapping from the brand-tag field
     const brandTag = item.fieldData?.['brand-tag']?.trim();
@@ -130,7 +134,7 @@ async function buildReferenceMaps(client) {
   }
 
   console.log(`[sync] Loaded ${Object.keys(brandMap).length} brands, ${Object.keys(countryMap).length} countries, ${Object.keys(hashtagToBrand).length} brand hashtags.`);
-  return { brandMap, countryMap, hashtagToBrand };
+  return { brandMap, brandIdToName, countryMap, hashtagToBrand };
 }
 
 function resolveReference(name, map) {
@@ -166,16 +170,23 @@ const FCTG_DEFAULT_BRAND = 'Flight Centre Travel Group';
  *
  * Returns { id: Webflow item ID, name: brand display name }
  */
-function resolveBrand(jobDetail, brandMap, hashtagToBrand) {
-  // Tier 1: Try the PageUp brand field (exact/partial name match)
+function resolveBrand(jobDetail, brandMap, brandIdToName, hashtagToBrand) {
+  // Tier 1: Try the PageUp brand field (exact/partial name match against
+  // Webflow Brands CMS). We always return the CANONICAL CMS brand name,
+  // never the raw PageUp text — otherwise PageUp's inconsistent naming
+  // (e.g. "Flight Centre Brand" vs CMS "Flight Centre") creates spurious
+  // filter buckets on the site.
   if (jobDetail.brandName) {
     const brandRef = resolveReference(jobDetail.brandName, brandMap);
     if (brandRef) {
-      return { id: brandRef, name: jobDetail.brandName };
+      const canonical = brandIdToName[brandRef] || jobDetail.brandName;
+      return { id: brandRef, name: canonical };
     }
   }
 
-  // Tier 2: Try hashtags from the job post against brand-tag mappings
+  // Tier 2: Try hashtags from the job post against brand-tag mappings.
+  // hashtagToBrand.name is already the canonical CMS name (populated from
+  // item.fieldData.name when the map was built), so nothing to convert.
   const hashtags = jobDetail.hashtags || [];
   if (hashtags.length > 0) {
     for (const tag of hashtags) {
@@ -187,9 +198,11 @@ function resolveBrand(jobDetail, brandMap, hashtagToBrand) {
     }
   }
 
-  // Tier 3: Default to Flight Centre Travel Group
+  // Tier 3: Default to Flight Centre Travel Group (also canonical — it's
+  // a CMS entry name).
   const fctgRef = resolveReference(FCTG_DEFAULT_BRAND, brandMap);
-  return { id: fctgRef, name: FCTG_DEFAULT_BRAND };
+  const fctgName = (fctgRef && brandIdToName[fctgRef]) || FCTG_DEFAULT_BRAND;
+  return { id: fctgRef, name: fctgName };
 }
 
 // Unique marker used internally during cleaning to mark paragraph boundaries
@@ -412,9 +425,10 @@ function cleanDescription(html) {
   return clean.trim();
 }
 
-function buildCmsFieldData(jobDetail, brandMap, countryMap, hashtagToBrand) {
-  // Resolve brand using 3-tier logic
-  const resolvedBrand = resolveBrand(jobDetail, brandMap, hashtagToBrand);
+function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hashtagToBrand) {
+  // Resolve brand using 3-tier logic — returns the CANONICAL CMS brand
+  // name in `.name` (never the raw PageUp text).
+  const resolvedBrand = resolveBrand(jobDetail, brandMap, brandIdToName, hashtagToBrand);
 
   const fieldData = {
     name: jobDetail.title.substring(0, 256),
@@ -561,7 +575,7 @@ async function runSync() {
   logger.recordCmsState(cmsItems.length);
 
   // Step 4: Build reference maps (includes hashtag → brand mapping)
-  const { brandMap, countryMap, hashtagToBrand } = await buildReferenceMaps(client);
+  const { brandMap, brandIdToName, countryMap, hashtagToBrand } = await buildReferenceMaps(client);
 
   // Step 5: Build maps for diffing
   const cmsJobMap = new Map(); // jobId → CMS item
@@ -615,7 +629,7 @@ async function runSync() {
     const itemsToCreate = [];
     const hashByJobId = {};
     for (const detail of newDetails) {
-      const fieldData = buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand);
+      const fieldData = buildCmsFieldData(detail, brandMap, brandIdToName, countryMap, hashtagToBrand);
       itemsToCreate.push({ fieldData, isArchived: false, isDraft: false });
       if (detail.jobId) hashByJobId[detail.jobId] = hashFieldData(fieldData);
     }
@@ -685,7 +699,7 @@ async function runSync() {
         const cmsItem = cmsJobMap.get(detail.jobId);
         if (!cmsItem) continue;
 
-        const newFieldData = buildCmsFieldData(detail, brandMap, countryMap, hashtagToBrand);
+        const newFieldData = buildCmsFieldData(detail, brandMap, brandIdToName, countryMap, hashtagToBrand);
 
         // Slugs are immutable once created. If PageUp renames a job into a
         // title whose slugified form collides with another CMS item, Webflow
