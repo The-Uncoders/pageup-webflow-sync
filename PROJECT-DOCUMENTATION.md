@@ -624,12 +624,17 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 
 - **Worker:** `fctg-sync-trigger`
 - **URL:** `https://fctg-sync-trigger.wandering-sun-9809.workers.dev`
+- **Source:** `worker/sync-trigger.js` in the repo (tracked for auditability)
 - **Auth:** shared key via `?key=` query parameter (validated against `SYNC_KEY` secret)
-- **Action:** proxies POST to GitHub Actions `workflow_dispatch`
+- **Action:** proxies POST to GitHub Actions `workflow_dispatch` on `sync-jobs.yml`
+- **Query params accepted:**
+  - `key` (required) — matches `SYNC_KEY`
+  - `force_full` (optional) — when `true`, sets the `force_full` workflow input so the sync bypasses the listing-level fast-diff and rescrapes every job. Used by the dashboard's "Force Full Rescrape" button.
 - **Secrets (Cloudflare-managed, not in code):**
   - `GITHUB_TOKEN` — fine-grained PAT with Actions write scope for `The-Uncoders/pageup-webflow-sync`
   - `SYNC_KEY` — shared gate for dashboard auth
 - **Cloudflare account:** `Hello@uncoders.co` (ID `4a6fba0403941f5658f7287a2496ac8c`)
+- **Deploy:** no CI — edit `worker/sync-trigger.js` in the repo, paste into Cloudflare dashboard → Workers & Pages → `fctg-sync-trigger` → Edit Code → Save and Deploy. See `worker/README.md` for the smoke-test curls.
 
 ---
 
