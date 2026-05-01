@@ -882,8 +882,16 @@ async function runSync() {
 // err.code='PAGEUP_404' for a removed job, or err.code='PAGEUP_WAF' if
 // the response doesn't look like a real job page (caller should fall back
 // to the browser-context fetch).
+//
+// URL path matters: PageUp populates `sHome=` query params inside scraped
+// hrefs (notably the employee-referral link) with the URL of the page
+// being rendered. So `/en/job/...` and `/cw/en/job/...` produce HTML that
+// differs by exactly the path segment "cw/" inside those embedded URLs,
+// which propagates into a different content hash. We match the path the
+// existing full-sync scraper uses (`/cw/en/job/`) so single-job and
+// full-sync produce byte-identical fieldData.
 async function fetchSingleJobDetailDirect(jobId, slug) {
-  const url = `https://careers.fctgcareers.com/en/job/${jobId}/${slug || 'job'}`;
+  const url = `https://careers.fctgcareers.com/cw/en/job/${jobId}/${slug || 'job'}`;
   const res = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 ' +
