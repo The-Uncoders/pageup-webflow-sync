@@ -95,9 +95,17 @@ jobs:
           git fetch origin data
           git worktree add /tmp/data-branch origin/data
 
-          # Copy freshly generated artifacts from the main working tree
-          cp "$GITHUB_WORKSPACE/all-jobs.json"      /tmp/data-branch/all-jobs.json
-          cp "$GITHUB_WORKSPACE/filter-counts.json" /tmp/data-branch/filter-counts.json
+          # Copy freshly generated artifacts from the main working tree.
+          # all-jobs.json and filter-counts.json are only regenerated when
+          # the sync produced changes — single-job mode that hashes to a
+          # no-op doesn't write them. Guard the copies so a clean no-op
+          # run still publishes the updated sync-log + sync-hashes.
+          if [ -f "$GITHUB_WORKSPACE/all-jobs.json" ]; then
+            cp "$GITHUB_WORKSPACE/all-jobs.json" /tmp/data-branch/all-jobs.json
+          fi
+          if [ -f "$GITHUB_WORKSPACE/filter-counts.json" ]; then
+            cp "$GITHUB_WORKSPACE/filter-counts.json" /tmp/data-branch/filter-counts.json
+          fi
           if [ -f "$GITHUB_WORKSPACE/data/sync-log.json" ]; then
             cp "$GITHUB_WORKSPACE/data/sync-log.json" /tmp/data-branch/sync-log.json
           fi
