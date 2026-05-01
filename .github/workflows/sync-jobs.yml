@@ -11,12 +11,18 @@ on:
   workflow_dispatch:
     # Manual trigger from dashboard "Run Sync Now". The `force_full` input
     # lets the dashboard's "Force Full Rescrape" button bypass the
-    # listing-level diff on demand.
+    # listing-level diff on demand. The `job_id` input switches the run
+    # into single-job mode — only that one PageUp job is reconciled.
     inputs:
       force_full:
         description: 'Re-scrape every existing job (bypass listing-level fast-diff)'
         type: boolean
         default: false
+      job_id:
+        description: 'Single-job mode: reconcile only this PageUp job ID (leave empty for normal run)'
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -71,6 +77,9 @@ jobs:
           # Force-full mode: true when triggered by the daily 02:00 UTC cron
           # OR when the dashboard sets the workflow_dispatch input to true.
           SYNC_FORCE_FULL: ${{ github.event.schedule == '0 2 * * *' || github.event.inputs.force_full == 'true' }}
+          # Single-job mode: when set to a PageUp job ID, sync only that one
+          # job. Empty for crons and "Run Sync Now" → normal full pipeline.
+          SYNC_JOB_ID: ${{ github.event.inputs.job_id || '' }}
         run: npm run sync
 
       - name: Publish artifacts to data branch

@@ -14,6 +14,12 @@
  *                           to the workflow so the sync bypasses the
  *                           listing-level fast-diff and re-scrapes every
  *                           existing job's detail page.
+ *   job_id     (optional) — when set to a numeric PageUp job ID, switches
+ *                           the workflow into single-job mode (sync only
+ *                           that one job, ~30-60s). Used by the dashboard's
+ *                           "Force re-sync this job" button. Mutually
+ *                           exclusive with force_full — if both are sent,
+ *                           job_id wins.
  *
  * Environment variables (encrypted in Cloudflare dashboard, not in code):
  *   SYNC_KEY     — shared gate for authorised callers
@@ -48,12 +54,22 @@ export default {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    // Optional force-full flag. When true, the workflow skips the
-    // listing-level fast-diff and re-scrapes every existing job.
-    const forceFull = url.searchParams.get('force_full') === 'true';
+    // Optional flags. job_id wins over force_full if both are sent — the
+    // dashboard never sends both, this is just defensive ordering.
+    const rawJobId = (url.searchParams.get('job_id') || '').trim();
+    const jobId = /^[0-9]+$/.test(rawJobId) ? rawJobId : '';
+    if (rawJobId && !jobId) {
+      return Response.json(
+        { ok: false, message: 'job_id must be numeric' },
+        { status: 400, headers: { 'Access-Control-Allow-Origin': '*' } }
+      );
+    }
+    const forceFull = !jobId && url.searchParams.get('force_full') === 'true';
 
     const dispatchBody = { ref: 'main' };
-    if (forceFull) {
+    if (jobId) {
+      dispatchBody.inputs = { job_id: jobId };
+    } else if (forceFull) {
       // GitHub workflow_dispatch expects boolean inputs as string "true"/"false".
       dispatchBody.inputs = { force_full: 'true' };
     }
@@ -75,14 +91,16 @@ export default {
     const corsHeaders = { 'Access-Control-Allow-Origin': '*' };
 
     if (res.status === 204) {
+      let message;
+      if (jobId) {
+        message = `Single-job sync triggered for job ${jobId} — typically completes in 30-60 seconds.`;
+      } else if (forceFull) {
+        message = 'Force-full sync triggered — runs through every job, ~10-15 minutes.';
+      } else {
+        message = 'Sync triggered — typical completion under a minute.';
+      }
       return Response.json(
-        {
-          ok: true,
-          forceFull,
-          message: forceFull
-            ? 'Force-full sync triggered — runs through every job, ~10-15 minutes.'
-            : 'Sync triggered — typical completion under a minute.',
-        },
+        { ok: true, mode: jobId ? 'single-job' : (forceFull ? 'force-full' : 'fast-sync'), jobId: jobId || null, message },
         { headers: corsHeaders }
       );
     }

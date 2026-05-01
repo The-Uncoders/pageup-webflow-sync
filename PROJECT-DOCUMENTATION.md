@@ -465,6 +465,25 @@ Fast-sync only looks at the listing page (title + location) to decide which jobs
 
 The 20-minute fast-sync cron continues in parallel — listing-level changes (title/location, new jobs, removed jobs) still propagate within a minute.
 
+### Single-job mode
+
+`SYNC_JOB_ID=<numeric-id>` short-circuits `runSync()` into `runSingleJobSync()`, which reconciles only that one PageUp job against the CMS. Triggered by the dashboard's "Force re-sync this job" button (one-click per row). Reuses the existing scraper, `cleanDescription()`, fieldData builders, hash gate and Webflow client — produces an identical result to a force-full's effect on this one job, just much faster (~30–60s vs ~10 min).
+
+| When | How | Propagation delay |
+|---|---|---|
+| On demand (one job) | Dashboard "Force re-sync this job" button → Cloudflare Worker `?job_id=…` → `workflow_dispatch` with `job_id` input | Immediate (run takes ~30–60s) |
+| Local | `SYNC_JOB_ID=529346 npm run sync` | Immediate |
+
+Optimisation: PageUp's job detail pages don't sit behind the WAF challenge, so single-job mode tries a plain `fetch()` first and only falls back to the Playwright/browser-context fetch if the response looks like a challenge page. This saves ~10–15s of browser-init overhead on the typical run. The scraping output, cleaning pipeline and CMS write are identical to the full-sync path.
+
+Edge cases handled:
+- **Job 404'd on PageUp** (deleted in Sourcing) → CMS item deleted, hash dropped from map.
+- **Job in PageUp but not in CMS** → standard insert path (rare; happens if someone clicks the button on a brand-new job before fast-sync caught it).
+- **Hash unchanged** → no PATCH, no publish, no JSON regen — fast no-op.
+- **All other failure modes** → identical to full-sync (idempotent PATCH, hash only updated after Webflow confirms write, next run retries).
+
+Mutually exclusive with `force_full`: if both inputs are passed, `job_id` wins. The Worker validates this defensively so dashboards can't accidentally trigger a 10-minute force-full when they meant per-job.
+
 ### Content-hash gate
 
 Every Webflow PATCH is gated on SHA-256 of the cleaned fieldData we'd write, stored as `sync-hashes.json` on the `data` branch. On each run:
@@ -499,7 +518,7 @@ Both preserve the safety rails: backup before writes, `--restore` for rollback.
 `.github/workflows/sync-jobs.yml`:
 
 - **Schedules:** `*/20 * * * *` (fast-sync) + `0 2 * * *` (daily force-full)
-- **Manual trigger:** `workflow_dispatch` with `force_full` boolean input
+- **Manual triggers:** `workflow_dispatch` with `force_full` boolean input (force-full mode) or `job_id` string input (single-job mode)
 - **Runtime:** Node 22, Ubuntu
 - **Timeout:** 30 min
 
@@ -509,7 +528,7 @@ Both preserve the safety rails: backup before writes, `--restore` for rollback.
 2. Setup Node + install deps
 3. Install Playwright Chromium
 4. **Seed local data from data branch** — `curl` `data/sync-log.json` and `data/sync-hashes.json` from the `data` branch into the workspace. Lets the logger append to real history and the sync see the stored hash map
-5. Run `npm run sync` with `SYNC_FORCE_FULL` derived from `github.event.schedule == '0 2 * * *'` OR `github.event.inputs.force_full == 'true'`
+5. Run `npm run sync` with `SYNC_FORCE_FULL` derived from `github.event.schedule == '0 2 * * *'` OR `github.event.inputs.force_full == 'true'`, and `SYNC_JOB_ID` set from `github.event.inputs.job_id` (empty for crons and force-full)
 6. **Publish artifacts to data branch** — `git worktree add /tmp/data-branch origin/data`, copy `all-jobs.json`, `filter-counts.json`, `sync-log.json`, `sync-hashes.json` in, then:
    - Last commit by `github-actions[bot]`? `git commit --amend --no-edit` + `git push --force-with-lease` (single moving commit)
    - Else: normal commit + push
@@ -634,6 +653,7 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 - **Query params accepted:**
   - `key` (required) — matches `SYNC_KEY`
   - `force_full` (optional) — when `true`, sets the `force_full` workflow input so the sync bypasses the listing-level fast-diff and rescrapes every job. Used by the dashboard's "Force Full Rescrape" button.
+  - `job_id` (optional) — when set to a numeric PageUp job ID, sets the `job_id` workflow input so the sync runs in single-job mode (only that one job is reconciled, ~30–60s). Used by the dashboard's "Force re-sync this job" per-row button. Mutually exclusive with `force_full` — Worker rejects non-numeric values with HTTP 400 and prefers `job_id` when both are sent.
 - **Secrets (Cloudflare-managed, not in code):**
   - `GITHUB_TOKEN` — fine-grained PAT with Actions write scope for `The-Uncoders/pageup-webflow-sync`
   - `SYNC_KEY` — shared gate for dashboard auth
@@ -764,4 +784,4 @@ No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHu
 
 ---
 
-*Last updated: May 1, 2026 — added `pickLiveBanner()` (HEAD-validates PageUp banner candidates, picks first 200 in document order) to fix the "backup banner showing despite a configured PageUp banner" class of issues; added H1–H5 → H6 demotion in `cleanDescription()` so recruiter-styled section headings render at body-bold size in Webflow instead of Webflow's much-larger H1/H2/H3 defaults; refreshed CSS repo references to `fctg-flight-centre-careers` (renamed from `fc-careers`) and updated the gh CLI install path. Both content fixes need a force-full rescrape to back-fill existing CMS items. April 24, 2026: added force-full mode (daily cron + dashboard button), content-hash gate for sync, shareable filtered URLs, bullet-point list normalisation, and Cloudflare Worker tracked in repo. Previous revisions are in git history.*
+*Last updated: May 1, 2026 — added single-job sync mode (`runSingleJobSync()` gated on `SYNC_JOB_ID` env var, plus `job_id` workflow input and Worker `?job_id=` query param) for per-row "Force re-sync this job" actions from the dashboard, ~30–60s per run. Added `pickLiveBanner()` (HEAD-validates PageUp banner candidates, picks first 200 in document order) to fix the "backup banner showing despite a configured PageUp banner" class of issues; added H1–H5 → H6 demotion in `cleanDescription()` so recruiter-styled section headings render at body-bold size in Webflow instead of Webflow's much-larger H1/H2/H3 defaults; refreshed CSS repo references to `fctg-flight-centre-careers` (renamed from `fc-careers`) and updated the gh CLI install path. Banner + heading content fixes need a force-full rescrape to back-fill existing CMS items. April 24, 2026: added force-full mode (daily cron + dashboard button), content-hash gate for sync, shareable filtered URLs, bullet-point list normalisation, and Cloudflare Worker tracked in repo. Previous revisions are in git history.*

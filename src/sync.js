@@ -18,6 +18,13 @@ const locationToCountry = require('../location-to-country.json');
 // closing date, brand). Safe default: false.
 const FORCE_FULL = process.env.SYNC_FORCE_FULL === 'true';
 
+// ── Single-job mode ──
+// When SYNC_JOB_ID is set to a PageUp job ID, the sync skips the full
+// listing scrape and only reconciles that one job. Used by the dashboard's
+// "Force re-sync this job" button. The full pipeline (cron + force-full)
+// is unaffected when this env var is empty.
+const SYNC_JOB_ID = process.env.SYNC_JOB_ID || '';
+
 // ── Content hash map ──
 // Per-job SHA-256 fingerprint of the cleaned CMS fieldData we'd write.
 // On each run, after scraping + cleaning, we recompute the hash. If the
@@ -579,6 +586,14 @@ function listingFieldsChanged(cmsItem, pageupJob) {
 }
 
 async function runSync() {
+  // Single-job mode short-circuits the full pipeline. Only triggered when
+  // SYNC_JOB_ID is explicitly set (dashboard "Force re-sync this job"
+  // button). All existing trigger paths leave this env var empty, so the
+  // full runSync below runs untouched for them.
+  if (SYNC_JOB_ID) {
+    return runSingleJobSync(SYNC_JOB_ID);
+  }
+
   const logger = new SyncLogger();
   logger.start();
   console.log('=== PageUp → Webflow Job Sync ===');
@@ -858,6 +873,190 @@ async function runSync() {
   const updatedCount = Math.max(0, changedIds.length - newJobs.length);
   console.log(`Summary: ${newJobs.length} created, ${removedJobIds.length} removed, ${updatedCount} updated`);
 
+  await logger.finish('success');
+}
+
+// Plain HTTPS fetch of a PageUp detail page. Bypasses the Playwright/WAF
+// pipeline — detail pages don't normally trigger PageUp's WAF challenge,
+// so we save the browser-init overhead in single-job mode. Throws with
+// err.code='PAGEUP_404' for a removed job, or err.code='PAGEUP_WAF' if
+// the response doesn't look like a real job page (caller should fall back
+// to the browser-context fetch).
+async function fetchSingleJobDetailDirect(jobId, slug) {
+  const url = `https://careers.fctgcareers.com/en/job/${jobId}/${slug || 'job'}`;
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 ' +
+        '(KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36',
+    },
+    redirect: 'follow',
+  });
+
+  if (res.status === 404) {
+    const err = new Error(`PageUp 404 for job ${jobId}`);
+    err.code = 'PAGEUP_404';
+    throw err;
+  }
+  if (!res.ok) {
+    throw new Error(`PageUp returned ${res.status} for job ${jobId}`);
+  }
+
+  const html = await res.text();
+  if (!/id\s*=\s*["']job-details["']/i.test(html)) {
+    const err = new Error('PageUp response did not contain job-details div (possible WAF challenge)');
+    err.code = 'PAGEUP_WAF';
+    throw err;
+  }
+
+  const { extractJobDetails, pickLiveBanner } = require('./scraper');
+  const detail = extractJobDetails(html, jobId);
+  detail.heroImage = await pickLiveBanner(detail.heroImageCandidates, jobId);
+  return detail;
+}
+
+// Single-job sync: short-circuited path that reconciles one PageUp job
+// against the CMS, used by the dashboard's "Force re-sync this job"
+// button. Reuses the existing scraper, cleanDescription, fieldData
+// builders and Webflow client so the result is identical to a full sync's
+// effect on this one job — just much faster (~30-60s vs ~10 min) since
+// it skips the listing scrape and the 304 unrelated detail-page fetches.
+async function runSingleJobSync(jobId) {
+  if (!jobId || typeof jobId !== 'string' || !/^[0-9]+$/.test(jobId.trim())) {
+    throw new Error(`SYNC_JOB_ID must be a numeric PageUp job ID, got: ${JSON.stringify(jobId)}`);
+  }
+  jobId = jobId.trim();
+
+  if (!WEBFLOW_API_TOKEN) {
+    throw new Error('WEBFLOW_API_TOKEN environment variable is required');
+  }
+
+  const logger = new SyncLogger();
+  logger.start();
+  console.log('=== PageUp → Webflow Single-Job Sync ===');
+  console.log(`Started at: ${new Date().toISOString()}`);
+  console.log(`Target job ID: ${jobId}`);
+
+  const client = new WebflowClient(WEBFLOW_API_TOKEN, WEBFLOW_SITE_ID);
+  const hashes = loadHashes();
+
+  // Look up the CMS item for this job-id. Used both to decide
+  // create-vs-update and to know which CMS row to remove if PageUp 404s.
+  const cmsItems = await client.getAllCollectionItems(COLLECTION_ID);
+  const cmsItem = cmsItems.find(i => i.fieldData?.['job-id'] === jobId);
+  if (cmsItem) {
+    console.log(`[sync] Found existing CMS item: "${cmsItem.fieldData?.name}"`);
+  } else {
+    console.log('[sync] No existing CMS item — will create if PageUp has the job.');
+  }
+  logger.recordCmsState(cmsItems.length);
+
+  // Try plain fetch first (faster, no WAF init). Fall back to browser
+  // context if the response looks like a challenge page.
+  const slugForUrl = (cmsItem && cmsItem.fieldData && cmsItem.fieldData.slug) || 'job';
+  let detail = null;
+  let pageupExists = false;
+
+  try {
+    detail = await fetchSingleJobDetailDirect(jobId, slugForUrl);
+    pageupExists = true;
+  } catch (err) {
+    if (err.code === 'PAGEUP_404') {
+      pageupExists = false;
+      console.log(`[sync] PageUp returned 404 — job ${jobId} no longer exists.`);
+    } else {
+      console.warn(`[sync] Plain fetch failed (${err.message}) — falling back to browser context.`);
+      const { fetchJobDetails } = require('./scraper');
+      await initBrowser();
+      try {
+        detail = await fetchJobDetails(jobId, slugForUrl);
+        pageupExists = true;
+      } catch (browserErr) {
+        if (String(browserErr.message).match(/\b404\b/)) {
+          pageupExists = false;
+          console.log(`[sync] PageUp 404 confirmed via browser fetch — job ${jobId} no longer exists.`);
+        } else {
+          throw browserErr;
+        }
+      }
+    }
+  }
+
+  logger.recordPageupScrape(pageupExists ? 1 : 0);
+
+  let action = 'noop';
+  let countryMap = null;
+
+  if (!pageupExists && cmsItem) {
+    console.log(`[sync] Removing job ${jobId} from CMS.`);
+    await client.deleteItems(COLLECTION_ID, [cmsItem.id]);
+    delete hashes[jobId];
+    logger.recordDeleted([{ jobId, title: cmsItem.fieldData?.name || jobId }]);
+    action = 'deleted';
+  } else if (!pageupExists && !cmsItem) {
+    console.log(`[sync] Job ${jobId} not in PageUp and not in CMS — nothing to do.`);
+  } else if (detail) {
+    const refMaps = await buildReferenceMaps(client);
+    countryMap = refMaps.countryMap;
+    const fieldData = buildCmsFieldData(
+      detail, refMaps.brandMap, refMaps.brandIdToName, countryMap, refMaps.hashtagToBrand
+    );
+    const newHash = hashFieldData(fieldData);
+
+    if (cmsItem) {
+      if (hashes[jobId] === newHash) {
+        console.log('[sync] Content hash unchanged — nothing to PATCH.');
+      } else {
+        // Slugs are immutable for existing items (see runSync rationale)
+        delete fieldData.slug;
+        const changedFields = hasChanged(cmsItem, fieldData) || ['description-or-banner'];
+        const updated = await client.updateItems(COLLECTION_ID, [{
+          id: cmsItem.id,
+          fieldData,
+        }]);
+        if (updated.length > 0) {
+          hashes[jobId] = newHash;
+          logger.recordUpdated([{ jobId, title: detail.title, changedFields }]);
+          action = 'updated';
+          console.log(`[sync] Updated CMS item. Changed fields: ${changedFields.join(', ')}`);
+        }
+      }
+    } else {
+      const created = await client.createItems(COLLECTION_ID, [{
+        fieldData,
+        isArchived: false,
+        isDraft: false,
+      }]);
+      if (created.length > 0) {
+        hashes[jobId] = newHash;
+        logger.recordCreated([{ jobId, title: detail.title }]);
+        action = 'created';
+        console.log('[sync] Created CMS item.');
+      }
+    }
+  }
+
+  if (action !== 'noop') {
+    console.log('[sync] Publishing site...');
+    await client.publishSite();
+    logger.recordPublished(true);
+
+    console.log('[sync] Waiting 30s for /items/live to propagate...');
+    await new Promise(resolve => setTimeout(resolve, 30000));
+
+    console.log('[sync] Regenerating all-jobs.json + filter-counts.json...');
+    if (!countryMap) {
+      const refMaps = await buildReferenceMaps(client);
+      countryMap = refMaps.countryMap;
+    }
+    const liveCount = await generateAllJobsJson(client, countryMap);
+    await generateFilterCounts(client, countryMap);
+    logger.recordLiveJobsAfter(liveCount);
+  }
+
+  saveHashes(hashes);
+  await closeBrowser();
+
+  console.log(`\n=== Single-Job Sync complete (action: ${action}) ===`);
   await logger.finish('success');
 }
 
