@@ -347,6 +347,18 @@ function cleanDescription(html) {
   clean = clean.replace(/<img[^>]*src="[^"]*pageuppeople\.com[^"]*"[^>]*\/?>/gi, '');
   clean = clean.replace(/<img[^>]*src="[^"]*publicstorage[^"]*"[^>]*\/?>/gi, '');
 
+  // Demote H1–H5 to H6 — PageUp's WYSIWYG wraps section headings in <h3>
+  // (or whichever level the recruiter picks from the Headings dropdown) plus
+  // an inner <span style="font-size: 14pt">. PageUp's CSS pins those headings
+  // to ~14pt visually, so the recruiter sees body-bold sized text. Webflow's
+  // RichText renders bare H1/H2/H3 at much larger default sizes, hijacking
+  // the description layout. Flattening to H6 (Webflow default ~16px bold)
+  // matches the recruiter-side rendering while preserving heading semantics
+  // for screen readers — H6 is still a heading. PageUp recruiters use
+  // heading tags as visual markers, not for nested document outlines, so
+  // collapsing to a single level loses no structure in practice.
+  clean = clean.replace(/(<\/?)h[1-5]\b/gi, '$1h6');
+
   // White-text LinkedIn hashtag lines (#LI-ME1, #MTEV, etc.) meant to be hidden
   clean = clean.replace(/<span[^>]*color:\s*#(?:FFF(?:FFF)?|fff(?:fff)?|FFFFFF|ffffff)\b[^>]*>[^<]*<\/span>/gi, '');
 

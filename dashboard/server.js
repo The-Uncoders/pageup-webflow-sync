@@ -6,13 +6,9 @@ const { spawn } = require('child_process');
 const app = express();
 app.use(express.json());
 
-// Persistent data directory — iCloud-synced project folder (works across Macs)
-const ICLOUD_DATA_DIR = path.join(
-  process.env.HOME || '/tmp',
-  'Desktop', 'Claude Central', 'Page Up Styling', 'data'
-);
-const LOCAL_DATA_DIR = path.join(__dirname, '..', 'data');
-const DATA_DIR = fs.existsSync(path.dirname(ICLOUD_DATA_DIR)) ? ICLOUD_DATA_DIR : LOCAL_DATA_DIR;
+// Persistent data directory. The repo itself lives in iCloud, so the repo-local
+// `data/` folder is iCloud-synced and works across Macs without a separate path.
+const DATA_DIR = path.join(__dirname, '..', 'data');
 const LOG_FILE = path.join(DATA_DIR, 'sync-log.json');
 const FIELD_CONFIG = path.join(DATA_DIR, 'field-config.json');
 const SYNC_INTERVAL_MS = 20 * 60 * 1000; // 20 minutes

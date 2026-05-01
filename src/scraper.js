@@ -283,18 +283,22 @@ function extractJobDetails(html, jobId) {
     }
   }
 
-  // Hero image (banner) — find the first PageUp-hosted image that looks like a banner
-  // These are hosted on publicstorage.dc2.pageuppeople.com and typically 940px wide.
-  // We take the first one found, as it's positioned at the top of the job post as the banner.
-  let heroImage = '';
+  // Hero image (banner) — collect every PageUp-hosted image candidate in
+  // document order. PageUp recruiters occasionally stack multiple banners
+  // in #job-details, some referencing revoked/dead assets that return 403
+  // from the public bucket. The async caller (fetchJobDetails) HEAD-validates
+  // these and picks the first one that loads; if every candidate fails we
+  // fall back to the first one so render-time onerror still triggers the
+  // Designer's backup banner.
+  const heroImageCandidates = [];
   const images = fcJobs.querySelectorAll('img');
   for (const img of images) {
     const src = img.getAttribute('src') || '';
     if (src.includes('publicstorage') && src.match(/\.(png|jpg|jpeg|gif|webp)/i)) {
-      heroImage = src;
-      break;
+      heroImageCandidates.push(src);
     }
   }
+  const heroImage = heroImageCandidates[0] || '';
 
   // Video
   let videoUrl = '';
@@ -381,15 +385,44 @@ function extractJobDetails(html, jobId) {
     closingDate,
     descriptionHtml,
     heroImage,
+    heroImageCandidates,
     videoUrl,
     hashtags,
   };
 }
 
+// Probe each banner candidate with a parallel HEAD request and return the
+// first one (in document order) that responds 200. Falls back to the first
+// candidate if every URL fails — render-time onerror handles the dead-link
+// case by swapping to the Designer's backup banner.
+async function pickLiveBanner(candidates, jobId) {
+  if (!candidates || candidates.length === 0) return '';
+  if (candidates.length === 1) return candidates[0];
+
+  const probes = await Promise.allSettled(
+    candidates.map(url => fetch(url, { method: 'HEAD' }).then(r => r.ok))
+  );
+
+  for (let i = 0; i < candidates.length; i++) {
+    const probe = probes[i];
+    if (probe.status === 'fulfilled' && probe.value === true) {
+      return candidates[i];
+    }
+  }
+
+  console.warn(
+    `[scraper] Job ${jobId}: all ${candidates.length} banner candidate(s) failed HEAD validation; ` +
+    `storing first candidate so onerror swap shows the backup banner.`
+  );
+  return candidates[0];
+}
+
 async function fetchJobDetails(jobId, slug) {
   const url = DETAIL_URL(jobId, slug);
   const html = await fetchWithRetry(url);
-  return extractJobDetails(html, jobId);
+  const detail = extractJobDetails(html, jobId);
+  detail.heroImage = await pickLiveBanner(detail.heroImageCandidates, jobId);
+  return detail;
 }
 
 async function scrapeAllJobs(jobsToScrape) {
@@ -438,4 +471,5 @@ module.exports = {
   fetchJobDetails,
   scrapeAllJobs,
   extractJobDetails,
+  pickLiveBanner,
 };

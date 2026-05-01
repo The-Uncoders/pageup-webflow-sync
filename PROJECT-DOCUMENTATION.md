@@ -85,7 +85,7 @@ The key design principle: **code lives on `main`, data lives on `data`**. The sy
 | all-jobs.json (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/all-jobs.json |
 | filter-counts.json (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/filter-counts.json |
 | sync-log.json (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/sync-log.json |
-| Custom CSS (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/fc-careers/pageup.css |
+| Custom CSS (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/fctg-flight-centre-careers/pageup.css |
 | Sync dashboard | https://www.fctgcareers.com/internal/jobs-dashboard (password protected) |
 | Sync trigger (Cloudflare Worker) | https://fctg-sync-trigger.wandering-sun-9809.workers.dev |
 
@@ -237,7 +237,7 @@ Generated from the three style pages and served with the Webflow site. Covers `.
 
 ### 2. Custom CSS (`pageup.css`)
 
-Hosted at `The-Uncoders/fc-careers`, served via jsDelivr. Contains only selectors Webflow can't express natively — ID selectors, positional selectors (`td:nth-child(2)`, `#job-details + p + p`), pseudo-elements, and CSS variables.
+Hosted at `The-Uncoders/fctg-flight-centre-careers`, served via jsDelivr. Contains only selectors Webflow can't express natively — ID selectors, positional selectors (`td:nth-child(2)`, `#job-details + p + p`), pseudo-elements, and CSS variables.
 
 ```css
 :root {
@@ -359,6 +359,7 @@ Adding a new brand or hashtag mapping is a Webflow CMS change (add entry, set `b
 - White-text LinkedIn hashtag lines (`#LI-xxx`, brand tags)
 - Inline `font-size` / `font-family` styles (so Webflow typography wins)
 - `<div>` wrappers after paragraph conversion (Webflow RichText doesn't support them)
+- **H1–H5 → H6 demotion**: PageUp's WYSIWYG wraps recruiter-styled section headings in `<h3>` (or whichever level the recruiter picks) plus an inner `<span style="font-size: 14pt">`. PageUp's CSS pins those tags to ~14pt visually, so the recruiter sees body-bold sized text. Webflow's RichText renders bare H1/H2/H3 at much larger default sizes, hijacking the description layout. Flattening every PageUp heading to `<h6>` (Webflow default ~16px bold) matches the recruiter-side rendering while preserving heading semantics for screen readers — H6 is still a heading. Recruiters use heading tags as visual markers, not for nested document outlines, so collapsing to a single level loses no real structure in practice.
 
 **2. Converge on consistent `<p>`-block structure:**
 PageUp's WYSIWYG export is wildly inconsistent across recruiters. Some produce proper `<p>` structure; others produce inline spans with `&nbsp;` separators; others wrap every line in its own bare `<div>`. `cleanDescription()` detects the "pseudo paragraph break" patterns below, converts them to an internal marker, then uses `node-html-parser` to walk the HTML and wrap every orphan inline run into a proper `<p>` block. Already-structured blocks (`<p>`, `<ul>`, `<h1-6>`, `<blockquote>`, `<figure>`, `<table>`, `<pre>`, `<hr>`) pass through unchanged.
@@ -652,8 +653,8 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 
 ### Making CSS changes (`pageup.css`)
 
-1. Edit `pageup.css` in `The-Uncoders/fc-careers`, push
-2. Purge: `curl https://purge.jsdelivr.net/gh/The-Uncoders/fc-careers/pageup.css`
+1. Edit `pageup.css` in `The-Uncoders/fctg-flight-centre-careers`, push
+2. Purge: `curl https://purge.jsdelivr.net/gh/The-Uncoders/fctg-flight-centre-careers/pageup.css`
 3. Publish Webflow (staging → verify → production)
 4. Visit `/refresh` on PageUp template to force its cache refresh
 5. Hard-refresh browser (Cmd+Shift+R)
@@ -679,6 +680,8 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 | 404 on a job URL | CMS item exists but wasn't published — `publishSite` may have failed | Check Actions log for publish errors; trigger manual sync |
 | Stale JSON in `/jobs` | jsDelivr edge cache hasn't expired | `curl https://purge.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/all-jobs.json` |
 | Hero banner shows broken image icon | PageUp asset returning 403 or dead | Banner embed's `onerror` should swap to default banner — check the Designer embed is up to date |
+| Job shows backup banner even though PageUp Sourcing has a banner set | Recruiter stacked multiple banners in the description and the first one in document order is a revoked asset (403) | `pickLiveBanner()` in `src/scraper.js` HEAD-validates every publicstorage candidate and picks the first 200. If all candidates fail, the scraper logs a warning and stores the first candidate so render-time `onerror` falls back to the default banner. Force-full rescrape to back-fill existing CMS items |
+| Section headings inside a job description render at huge default Webflow sizes | PageUp WYSIWYG emitted `<h1>`/`<h2>`/`<h3>` for recruiter-styled headings; PageUp's CSS makes them visually small but Webflow's H1–H3 defaults are large | `cleanDescription()` demotes H1–H5 to H6 — already applied for new scrapes; existing CMS items need a force-full rescrape to back-fill |
 | "All jobs" back button does nothing | Loader snippet missing from `/jobs/{slug}` template, or button missing `id="all-jobs-button"` | Verify both |
 | Sync run takes >5 min | Either many new jobs or a genuine sync failure | Check the dashboard sync history; inspect Actions log |
 | Jobs count drops suddenly | WAF challenge failed; 0-job guard may trigger | Manual trigger from dashboard once PageUp responds normally |
@@ -743,10 +746,11 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 
 ### GitHub CLI
 
-- Binary: `/Users/hamza/Desktop/Claude Central/tools/gh_2.89.0_macOS_arm64/bin/gh`
+- Install: `brew install gh` (Homebrew)
+- Binary: `/opt/homebrew/bin/gh` on Apple Silicon
 - Account: `The-Uncoders`
 - Scopes needed: `gist`, `read:org`, `repo`, `workflow`
-- Run `gh auth setup-git` once to hook into macOS keychain as a credential helper
+- Run `gh auth setup-git` once to register gh as the macOS Keychain credential helper for git
 
 ### Secret storage
 
@@ -760,4 +764,4 @@ No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHu
 
 ---
 
-*Last updated: April 24, 2026 — added force-full mode (daily cron + dashboard button), content-hash gate for sync, shareable filtered URLs, bullet-point list normalisation, and Cloudflare Worker tracked in repo. Previous revisions are in git history.*
+*Last updated: May 1, 2026 — added `pickLiveBanner()` (HEAD-validates PageUp banner candidates, picks first 200 in document order) to fix the "backup banner showing despite a configured PageUp banner" class of issues; added H1–H5 → H6 demotion in `cleanDescription()` so recruiter-styled section headings render at body-bold size in Webflow instead of Webflow's much-larger H1/H2/H3 defaults; refreshed CSS repo references to `fctg-flight-centre-careers` (renamed from `fc-careers`) and updated the gh CLI install path. Both content fixes need a force-full rescrape to back-fill existing CMS items. April 24, 2026: added force-full mode (daily cron + dashboard button), content-hash gate for sync, shareable filtered URLs, bullet-point list normalisation, and Cloudflare Worker tracked in repo. Previous revisions are in git history.*
