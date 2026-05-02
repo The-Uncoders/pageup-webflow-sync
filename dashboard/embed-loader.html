@@ -1,0 +1,31 @@
+<!--
+  FCTG Sync Monitor — Webflow loader (paste-once)
+  ───────────────────────────────────────────────
+  Page:  /internal/jobs-dashboard
+  Where: Page Settings → Custom Code → "Inside <body> tag"
+  Size:  ~600 chars (well under Webflow's 10K limit)
+
+  This is the ONLY thing pasted into Webflow. The actual dashboard
+  CSS and JS live in dashboard/dashboard.css and dashboard/dashboard.js
+  on the main branch and are served via jsDelivr. To update the
+  dashboard, edit those files in the repo and push — no Webflow
+  edits needed.
+
+  Cache-bust: epoch flips every 10 minutes (Date.now() / 600000).
+  For an instant force-refresh, bump the b=N marker below.
+
+  Before pasting: replace __REPLACE_WITH_SYNC_KEY__ with the
+  Cloudflare Worker SYNC_KEY (also in CF Worker Secrets).
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/dashboard/dashboard.css">
+<div id="fctg-dashboard"></div>
+<script>
+window.__FCTG_SYNC_KEY = '__REPLACE_WITH_SYNC_KEY__';
+(function(){
+  var e = Math.floor(Date.now() / 600000);
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/dashboard/dashboard.js?b=1&v=' + e;
+  s.defer = true;
+  document.body.appendChild(s);
+})();
+</script>
