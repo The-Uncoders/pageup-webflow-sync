@@ -21,9 +21,15 @@
   var SYNC_INTERVAL_MS = 20 * 60 * 1000;
 
   // ─────────────── Markup ───────────────
+  // Header heading is rendered as a <div> rather than <h1> on purpose: the
+  // FCTG Webflow site has site-wide CSS / IX2 interactions targeting <h1>
+  // elements (page-load hero animations, glitch-text effects) that leak
+  // into the embedded dashboard and produce a doubled/offset rendering.
+  // Using a div with .fd-h1 styling sidesteps every h1-targeted rule.
+  // Internal-only page → no SEO or document-outline cost.
   var DASHBOARD_HTML = [
     '<header class="fd-header">',
-      '<div><span class="fd-dot" id="fd-dot"></span><h1 style="display:inline">FCTG Careers — Sync Monitor</h1></div>',
+      '<div><span class="fd-dot" id="fd-dot"></span><div class="fd-h1">FCTG Careers — Sync Monitor</div></div>',
       '<div><span class="fd-status-msg" id="fd-status-msg">Loading…</span></div>',
     '</header>',
     '<nav class="fd-tabs">',

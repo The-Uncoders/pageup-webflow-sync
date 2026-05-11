@@ -11,7 +11,21 @@
 
 /* Header */
 #fctg-dashboard .fd-header { background: #1f2937; color: #fff; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
-#fctg-dashboard .fd-header h1 { font-size: 18px; font-weight: 600; margin: 0; }
+/* .fd-h1 is a div, not an <h1>, to dodge site-wide h1 selectors and IX2
+   interactions on the host Webflow page that produced doubled/offset
+   rendering. Inline-display so the status dot sits on the same row.
+   Defensive resets cover anything inherited that might still fire. */
+#fctg-dashboard .fd-header .fd-h1 {
+  display: inline;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  text-shadow: none;
+  animation: none !important;
+  transform: none !important;
+}
 #fctg-dashboard .fd-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 10px; vertical-align: middle; background: #6b7280; }
 #fctg-dashboard .fd-dot.healthy { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
 #fctg-dashboard .fd-dot.warning { background: #eab308; box-shadow: 0 0 6px #eab308; }
