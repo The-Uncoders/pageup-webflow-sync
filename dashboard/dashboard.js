@@ -109,6 +109,7 @@
         '<table class="fd-history">',
           '<thead><tr><th>Date</th><th>Change</th></tr></thead>',
           '<tbody>',
+            '<tr><td style="white-space:nowrap">11 May 2026</td><td><strong>Multi-location support</strong> + <strong>search-by-job-number</strong> — jobs tagged across multiple locations now surface every location on the card and are findable under each city filter (was only showing the first). Pasting a PageUp job number into the search box jumps straight to that role on both the public site and this dashboard\'s Job Comparison tab.</td></tr>',
             '<tr><td style="white-space:nowrap">1 May 2026</td><td><strong>Per-job sync</strong> + <strong>banner picker</strong> + <strong>heading consolidation (H6)</strong> — fixes stacked-broken-banner bug; description headings no longer render at huge default sizes; new "Force re-sync this job" button from Job Comparison tab.</td></tr>',
             '<tr><td style="white-space:nowrap">24 Apr 2026</td><td>Daily force-full rescrape (02:00 UTC) + content-hash gate — banner / description edits now self-propagate instead of needing a manual trigger.</td></tr>',
             '<tr><td style="white-space:nowrap">22 Apr 2026</td><td>Paragraph normalisation: handles every PageUp WYSIWYG export style consistently.</td></tr>',
@@ -343,7 +344,11 @@
       if (region && j.r !== region) return false;
       if (brand && j.b !== brand) return false;
       if (search) {
-        var hay = ((j.t || '') + ' ' + (j.b || '') + ' ' + (j.ci || '') + ' ' + (j.co || '')).toLowerCase();
+        // Include `j.ji` so recruiters can paste a PageUp job number (e.g.
+        // "529290") into the search box and locate the row directly.
+        // Mirrors the public-site search-by-number behaviour added to
+        // jobs-filter.js per Steven Elvin's 8 May 2026 request.
+        var hay = ((j.t || '') + ' ' + (j.ji || '') + ' ' + (j.b || '') + ' ' + (j.ci || '') + ' ' + (j.co || '')).toLowerCase();
         if (hay.indexOf(search) === -1) return false;
       }
       return true;

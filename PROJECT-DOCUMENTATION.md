@@ -149,8 +149,8 @@ The `data` branch is orphan (no shared history with `main`). CI amends its singl
 | Name | `name` | PlainText | ✓ | Job title |
 | Slug | `slug` | PlainText | ✓ | URL slug, generated from title |
 | Job ID | `job-id` | PlainText | ✓ | **Sync key** — matches PageUp's job ID |
-| Location | `location` | PlainText | ✓ | Used for listing-level fast diff |
-| City | `city` | PlainText | ✓ | Parsed from location |
+| Location | `location` | PlainText | ✓ | Full PageUp location string. Used for listing-level fast diff |
+| City | `city` | PlainText | ✓ | Full PageUp location string verbatim (multi-location aware) — see "Multi-location handling" below |
 | Brand Name | `brand-name` | PlainText | ✓ | Resolved via 3-tier logic |
 | Brand | `brand` | Reference | ✓ | → Brands collection |
 | Country | `country` | Reference | ✓ | → Countries collection |
@@ -594,9 +594,10 @@ Each job uses single-letter keys to minimise file size:
 {
   "t": "Job Title",
   "s": "job-slug",
-  "ci": "City Name",
-  "co": "Country Name",
-  "r": "Region",
+  "ji": "529290",
+  "ci": "New South Wales, Queensland, Victoria",
+  "co": "Australia",
+  "r": "Australia",
   "b": "Brand Name",
   "l": "https://brand-logo-url.png",
   "ca": "Category",
@@ -605,6 +606,10 @@ Each job uses single-letter keys to minimise file size:
   "ju": "https://careers.fctgcareers.com/cw/en/job/12345"
 }
 ```
+
+- `ji` is the PageUp job ID — included so recruiters can paste a job number into the keyword search and find a listing directly. Not visibly displayed on cards.
+- `ci` may be comma-separated when PageUp lists the job across multiple locations. The frontend splits on comma when matching against the city filter checkboxes (so the job appears under every city it spans).
+- `co` is the resolved country name — or `"Multiple Locations"` when the job spans more than one country. `r` is then the corresponding region.
 
 ### Card click behaviour
 
@@ -713,7 +718,37 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 
 ---
 
+## Multi-location handling
+
+PageUp lists every location a job covers in the listing column and detail page as a single comma-separated string (e.g. `"New South Wales, Queensland, Victoria"`). Per the May-2026 client decision (Steven Elvin, 10 May 2026 — *"include all cities/regions listed on a job"*), all of these surface to the public site.
+
+| Layer | Behaviour |
+|---|---|
+| `src/scraper.js` | Already returns the full `location` string verbatim on both listing and detail. Its naive `parts[0]` city / `parts[last]` country split (lines ~320-330) is now vestigial — `buildCmsFieldData` overrides both fields. Left in place for backwards compatibility with single-location flows. |
+| `buildCmsFieldData()` in `src/sync.js` | Writes the **full** location string into the `city` plaintext field (was just `parts[0]`). Resolves the `country` reference via `resolveCountryRefForLocation()`: single country if all parts map to one country, else the "Multiple Locations" CMS entry. |
+| Webflow Designer template `/jobs/{slug}` | Renders `city` plaintext as-is — multi-location strings just display naturally inside the existing card layout. |
+| `generateAllJobsJson()` | Emits `ci` as the same string. Frontend splits on comma when filtering. Also emits new `ji` field (PageUp job ID) for search-by-number. |
+| `jobs-filter.js` v3.1 | Helpers `cityPartsRaw()` / `cityPartsLower()` / `anyCityActive()` split the city string and treat each constituent location as its own filter bucket — so a job tagged across NSW/VIC/QLD is findable under all three checkboxes and counted under each. Keyword haystack also includes `j.ji` so pasting a job number into search jumps to the right listing. |
+| `dashboard/dashboard.js` | The Job Comparison tab's per-row search haystack also includes `j.ji` — same search-by-number behaviour for internal recruiters. |
+| `generateFilterCounts()` server-side | Currently produces a useless single bucket for multi-location jobs (e.g. `"new south wales, queensland, victoria": 1`) — harmless because `filter-counts.json` is not consumed by the v3 frontend (counts are derived live from `all-jobs.json` in `jobs-filter.js`). Worth tidying if a future consumer reads it. |
+
+**Region is currently single-valued.** A job that spans multiple countries (e.g. AU states + NZ) shows under the "Multiple Locations" region filter, not under "Australia" *and* "New Zealand" separately. If multi-region matching is required in future, the JSON's `r` field would need to become an array and `jobs-filter.js` would need the same any-match treatment we apply to cities.
+
+**Search by job number.** Recruiters can paste a PageUp job ID (e.g. `529290`) into the public-site search box on `/jobs` or the Job Comparison tab in the dashboard and locate the right job directly. The job ID isn't visibly displayed on cards — it just lives in the search index. Per Steven Elvin's request (8 May 2026): *"if we can have the job number searchable without it being visible that would be great"*.
+
+**Back-fill after deploy.** The fast-sync diff in `listingFieldsChanged()` only compares title + raw location string. Multi-location jobs whose location string hasn't changed since the previous sync will be skipped — which means the new city/country logic won't reach them automatically. Use the dashboard's per-row "Force re-sync this job" button (Job Comparison tab) for each affected job, or trigger a Force Full Rescrape from the Sync Status tab to back-fill everything. The content-hash gate ensures only jobs whose computed fieldData actually changes get PATCHed, so write cost stays low.
+
+---
+
 ## Key change history
+
+### Multi-location + search-by-number (May 11, 2026)
+
+- **Multi-location city writes:** `buildCmsFieldData()` now writes the full PageUp location string verbatim into the `city` plaintext field. Multi-location jobs (e.g. NSW + VIC + QLD) display all locations on the detail page and are findable under every constituent city filter on `/jobs`. Resolves the long-standing "only first state shows" issue raised by Eva Littlewood (6 May 2026) for job 529290 — the global decision was confirmed by Steven Elvin on 10 May 2026.
+- **Multi-country country reference:** new `resolveCountryRefForLocation()` helper detects when a location string spans multiple countries and routes the `country` reference to the existing "Multiple Locations" Countries CMS entry rather than arbitrarily picking one. No CMS schema change required.
+- **Search by job number:** `generateAllJobsJson()` emits a new `ji` field with the PageUp job ID. Both `jobs-filter.js` (public site) and `dashboard.js` (internal Job Comparison tab) include it in their keyword search haystacks. Per Steven Elvin's 8 May 2026 request: *"job number searchable without it being visible"*. Recruiters can paste a job number into search and jump to the listing without it cluttering the card UI.
+- **`jobs-filter.js` v3.1:** keyword + filter logic split the city string on comma via `cityPartsRaw()` / `anyCityActive()` so multi-location jobs match against any of their constituent cities. Card display already used the full string — no rendering change needed.
+- **Back-fill workflow:** uses the existing per-row "Force re-sync this job" button (single-job mode shipped 1 May 2026) on each affected job — ~30-60s each. Force Full Rescrape works too but is overkill for the small number of multi-location jobs in the catalogue. The hash gate skips writes where computed fieldData genuinely matches the stored hash.
 
 ### Dashboard & robustness pass (April 19–20, 2026)
 
@@ -784,4 +819,4 @@ No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHu
 
 ---
 
-*Last updated: May 1, 2026 — added single-job sync mode (`runSingleJobSync()` gated on `SYNC_JOB_ID` env var, plus `job_id` workflow input and Worker `?job_id=` query param) for per-row "Force re-sync this job" actions from the dashboard, ~30–60s per run. Added `pickLiveBanner()` (HEAD-validates PageUp banner candidates, picks first 200 in document order) to fix the "backup banner showing despite a configured PageUp banner" class of issues; added H1–H5 → H6 demotion in `cleanDescription()` so recruiter-styled section headings render at body-bold size in Webflow instead of Webflow's much-larger H1/H2/H3 defaults; refreshed CSS repo references to `fctg-flight-centre-careers` (renamed from `fc-careers`) and updated the gh CLI install path. Banner + heading content fixes need a force-full rescrape to back-fill existing CMS items. April 24, 2026: added force-full mode (daily cron + dashboard button), content-hash gate for sync, shareable filtered URLs, bullet-point list normalisation, and Cloudflare Worker tracked in repo. Previous revisions are in git history.*
+*Last updated: May 11, 2026 — added multi-location handling: city plaintext field now stores the full PageUp location string verbatim (was just the first comma-separated token), with `resolveCountryRefForLocation()` routing the country reference to the existing "Multiple Locations" CMS entry when a job spans more than one country. `jobs-filter.js` v3.1 splits the city string on comma so a single job can match multiple city checkboxes. New `ji` field in `all-jobs.json` lets recruiters search the public site or dashboard by PageUp job number without surfacing it visually. Resolves Eva Littlewood's job 529290 issue (6 May 2026); driven by Steven Elvin's "include all cities/regions" decision (10 May 2026) and "job number searchable without it being visible" request (8 May 2026). Back-fill via per-row "Force re-sync this job" button. May 1, 2026: added single-job sync mode (`runSingleJobSync()` gated on `SYNC_JOB_ID`), `pickLiveBanner()`, H1–H5 → H6 demotion. April 24, 2026: force-full mode, content-hash gate, shareable filtered URLs, bullet-point list normalisation, Cloudflare Worker tracked in repo. Previous revisions are in git history.*

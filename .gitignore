@@ -9,3 +9,8 @@ all-jobs.json
 filter-counts.json
 backups/
 .claude/
+
+# Local "stash on disk" snapshots created during sessions where work
+# needs to be preserved alongside the active branch (e.g. after a
+# `git stash` of WIP that won't be re-applied). Local-only.
+.preserved-patches/

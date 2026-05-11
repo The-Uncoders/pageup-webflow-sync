@@ -102,6 +102,51 @@ function reconcileCityAndCountry(rawCity, rawCountryName, knownCountryNames) {
   return { city, countryName };
 }
 
+/**
+ * Multi-location-aware country reference resolver. PageUp lists every
+ * location a job covers in a comma-separated string (e.g. "New South Wales,
+ * Queensland, Victoria"). For the Webflow Countries reference (single-value),
+ * we need to decide:
+ *   - All parts in one country → that country's CMS entry
+ *   - Parts span multiple countries → the "Multiple Locations" CMS entry
+ *   - Single-part location → trust extractJobDetails' resolved country
+ *
+ * Falls back to the scraper-side resolved country for non-comma strings or
+ * when nothing resolves (preserves existing behaviour for single-location
+ * jobs that the existing logic already handled correctly).
+ *
+ * Returns a Webflow item ID (string) or null.
+ */
+function resolveCountryRefForLocation(locationStr, jobDetailCountry, countryMap) {
+  if (!locationStr || !locationStr.includes(',')) {
+    return resolveReference(jobDetailCountry, countryMap);
+  }
+
+  const parts = locationStr.split(',').map(p => p.trim()).filter(Boolean);
+  const knownCountries = new Set(Object.keys(countryMap)); // already lowercased
+  const resolvedCountries = new Set();
+
+  for (const part of parts) {
+    const lower = part.toLowerCase();
+    if (knownCountries.has(lower)) {
+      resolvedCountries.add(lower);
+      continue;
+    }
+    const mapped = locationToCountry[lower];
+    if (mapped) resolvedCountries.add(mapped.toLowerCase());
+    // Unmappable parts (e.g. "Can be based in any global head office")
+    // are ignored — they don't contribute to country resolution.
+  }
+
+  if (resolvedCountries.size === 0) {
+    return resolveReference(jobDetailCountry, countryMap);
+  }
+  if (resolvedCountries.size === 1) {
+    return countryMap[Array.from(resolvedCountries)[0]] || null;
+  }
+  return countryMap['multiple locations'] || null;
+}
+
 // Configuration
 const COLLECTION_ID = process.env.WEBFLOW_COLLECTION_ID || '69a6a25d0ee880903952732b';
 const BRAND_COLLECTION_ID = process.env.WEBFLOW_BRAND_COLLECTION_ID || '691f361688f213d69817eb0a';
@@ -481,6 +526,13 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
   // name in `.name` (never the raw PageUp text).
   const resolvedBrand = resolveBrand(jobDetail, brandMap, brandIdToName, hashtagToBrand);
 
+  // City field holds the full PageUp location string verbatim — including
+  // every comma-separated location for multi-location jobs (e.g.
+  // "New South Wales, Queensland, Victoria"). Per the May-2026 client
+  // decision (Steven Elvin, 10 May 2026): when a job spans multiple
+  // locations, surface them all. The Webflow Designer template displays
+  // this plaintext field as-is, and jobs-filter.js splits on comma when
+  // matching against city filter checkboxes.
   const fieldData = {
     name: jobDetail.title.substring(0, 256),
     slug: slugify(jobDetail.title),
@@ -489,7 +541,7 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
     'brand-name': resolvedBrand.name,
     'summary': jobDetail.summary || '',
     'work-type': jobDetail.workType || '',
-    'city': jobDetail.city || '',
+    'city': jobDetail.location || '',
     'category': jobDetail.categories || '',
     'closing-date': jobDetail.closingDate || '',
   };
@@ -532,8 +584,12 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
     fieldData['brand'] = resolvedBrand.id;
   }
 
-  // Country reference
-  const countryRef = resolveReference(jobDetail.country, countryMap);
+  // Country reference — single-value Webflow ref. For multi-country
+  // locations (e.g. AU states + NZ), routes to the "Multiple Locations"
+  // CMS entry instead of arbitrarily picking one country.
+  const countryRef = resolveCountryRefForLocation(
+    jobDetail.location, jobDetail.country, countryMap
+  );
   if (countryRef) {
     fieldData['country'] = countryRef;
   }
@@ -1231,10 +1287,17 @@ async function generateAllJobsJson(client, countryMap) {
     allJobs.push({
       t: (fd.name || '').trim(),           // title
       s: (fd.slug || ''),                  // slug
-      ci: city,                            // city (reconciled — empty when
-                                           //   the raw city was actually a
-                                           //   country/state name)
-      co: countryName,                     // country name
+      ji: jobId,                           // PageUp job ID (search-by-number;
+                                           //   per Steven Elvin 8 May 2026
+                                           //   request — searchable, not
+                                           //   visibly displayed on cards)
+      ci: city,                            // city (may be a comma-separated
+                                           //   multi-location string per the
+                                           //   May-2026 client decision; the
+                                           //   frontend splits on comma to
+                                           //   match against filter checkboxes)
+      co: countryName,                     // country name (or "Multiple
+                                           //   Locations" for multi-country jobs)
       r: region,                           // region
       b: brand,                            // brand
       ca: (fd.category || '').trim(),      // category (may be comma-separated)

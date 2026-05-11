@@ -1,11 +1,20 @@
 /**
- * FCTG Careers - Job Filter & Sort System v3.0
+ * FCTG Careers - Job Filter & Sort System v3.1
  * Custom filtering for the /jobs page
  *
  * Handles: keyword search, city/location filter (grouped by region),
  * region filter, brand filter, category filter, work type filter,
  * sorting, active filter tags, results count, clear all, and empty state.
  *
+ * v3.1   – Multi-location support: city values may now be a comma-separated
+ *           list of locations (per the May-2026 client decision to surface
+ *           all locations on a multi-location job). All city filter logic
+ *           splits on comma so a single job can match multiple city
+ *           checkboxes and contribute to multiple location buckets.
+ *           Search-by-job-number: the keyword haystack now includes the
+ *           PageUp job ID (j.ji) so recruiters can paste a job number into
+ *           the search box and jump straight to the listing (per Steven
+ *           Elvin's 8 May 2026 request — searchable, not visibly displayed).
  * v3.0   – MAJOR: Data-driven filtering against ALL jobs (not just 30 DOM items).
  *           Fetches all-jobs.json from CDN, renders cards dynamically.
  *           Cascading cross-filter counts: selecting a filter in one dimension
@@ -86,6 +95,27 @@
     if (!source) return;
     var keys = Object.keys(source);
     for (var i = 0; i < keys.length; i++) target[keys[i]] = source[keys[i]];
+  }
+
+  // Multi-location jobs store comma-separated cities in `ci` (e.g.
+  // "New South Wales, Queensland, Victoria"). Splitting lets a single job
+  // contribute to multiple city buckets and match any selected city filter.
+  function cityPartsRaw(ci) {
+    if (!ci) return [];
+    return ci.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function cityPartsLower(ci) {
+    var parts = cityPartsRaw(ci);
+    var out = [];
+    for (var i = 0; i < parts.length; i++) out.push(parts[i].toLowerCase());
+    return out;
+  }
+  function anyCityActive(ci, activeMap) {
+    var parts = cityPartsLower(ci);
+    for (var i = 0; i < parts.length; i++) {
+      if (activeMap[parts[i]]) return true;
+    }
+    return false;
   }
 
   // ── Neutralise Finsweet ───────────────────
@@ -254,12 +284,18 @@
       var rk = j.r.toLowerCase();
       if (rk) regionCounts[rk] = (regionCounts[rk] || 0) + 1;
 
-      // Cities
-      var ck = j.ci.toLowerCase();
-      if (ck) {
+      // Cities — `ci` may be a comma-separated list for multi-location jobs.
+      // Each part contributes to its own bucket so a job tagged across NSW,
+      // VIC and QLD is findable under all three city filters and counted
+      // under each. The job's overall region (j.r) acts as the grouping
+      // parent for every constituent city.
+      var ciRaw = cityPartsRaw(j.ci);
+      for (var ciI = 0; ciI < ciRaw.length; ciI++) {
+        var cityRaw = ciRaw[ciI];
+        var ck = cityRaw.toLowerCase();
         cityCounts[ck] = (cityCounts[ck] || 0) + 1;
         if (!cityToRegion[ck]) cityToRegion[ck] = j.r;
-        if (!cityDisplay[ck]) cityDisplay[ck] = j.ci;
+        if (!cityDisplay[ck]) cityDisplay[ck] = cityRaw;
       }
 
       // Brands
@@ -308,10 +344,14 @@
       var show = true;
 
       if (show && kw) {
-        var hay = [j.t, j.ca, j.ci, j.co, j.r, j.b, j.wt, j.su].join(' ').toLowerCase();
+        // Haystack includes `j.ji` (PageUp job ID) so recruiters can paste
+        // a job number into the search box and jump straight to the result.
+        var hay = [j.t, j.ji, j.ca, j.ci, j.co, j.r, j.b, j.wt, j.su].join(' ').toLowerCase();
         show = hay.indexOf(kw) !== -1;
       }
-      if (show && hasCities) show = !!activeCities[j.ci.toLowerCase()];
+      // Multi-location jobs: any matching city in the comma-separated list
+      // counts. Same for regions (single-valued today, but treated uniformly).
+      if (show && hasCities) show = anyCityActive(j.ci, activeCities);
       if (show && hasRegions) show = !!activeRegions[j.r.toLowerCase()];
       if (show && hasBrands) show = !!activeBrands[j.b.toLowerCase()];
       if (show && hasCategories) show = matchesCategory(j.ca, activeCategories);
@@ -360,7 +400,7 @@
       // Apply keyword (always applies to all dimensions)
       var passesKeyword = true;
       if (kw) {
-        var hay = [j.t, j.ca, j.ci, j.co, j.r, j.b, j.wt, j.su].join(' ').toLowerCase();
+        var hay = [j.t, j.ji, j.ca, j.ci, j.co, j.r, j.b, j.wt, j.su].join(' ').toLowerCase();
         passesKeyword = hay.indexOf(kw) !== -1;
       }
       if (!passesKeyword) continue;
@@ -369,7 +409,7 @@
       if (wt && j.wt.toLowerCase() !== wt) continue;
 
       // Pre-compute filter matches for each dimension
-      var matchCity = !hasCities || !!activeCities[j.ci.toLowerCase()];
+      var matchCity = !hasCities || anyCityActive(j.ci, activeCities);
       var matchRegion = !hasRegions || !!activeRegions[j.r.toLowerCase()];
       var matchBrand = !hasBrands || !!activeBrands[j.b.toLowerCase()];
       var matchCategory = !hasCategories || matchesCategory(j.ca, activeCategories);
@@ -380,10 +420,15 @@
         if (rk) regionCounts[rk] = (regionCounts[rk] || 0) + 1;
       }
 
-      // City counts: apply all EXCEPT city filter
+      // City counts: apply all EXCEPT city filter. Each comma-separated
+      // part contributes to its own bucket so multi-location jobs are
+      // counted against every city they cover.
       if (matchRegion && matchBrand && matchCategory) {
-        var ck = j.ci.toLowerCase();
-        if (ck) cityCounts[ck] = (cityCounts[ck] || 0) + 1;
+        var ciList = cityPartsLower(j.ci);
+        for (var ciJ = 0; ciJ < ciList.length; ciJ++) {
+          var ck = ciList[ciJ];
+          cityCounts[ck] = (cityCounts[ck] || 0) + 1;
+        }
       }
 
       // Brand counts: apply all EXCEPT brand filter
