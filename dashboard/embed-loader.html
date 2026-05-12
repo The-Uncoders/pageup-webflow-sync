@@ -3,29 +3,73 @@
   ───────────────────────────────────────────────
   Page:  /internal/jobs-dashboard
   Where: Page Settings → Custom Code → "Inside <body> tag"
-  Size:  ~600 chars (well under Webflow's 10K limit)
+  Size:  ~1.4 KB
 
-  This is the ONLY thing pasted into Webflow. The actual dashboard
-  CSS and JS live in dashboard/dashboard.css and dashboard/dashboard.js
-  on the main branch and are served via jsDelivr. To update the
-  dashboard, edit those files in the repo and push — no Webflow
-  edits needed.
+  This is the ONLY thing pasted into Webflow. The actual dashboard CSS
+  and JS live in dashboard/dashboard.css and dashboard/dashboard.js on
+  the main branch and are served via jsDelivr. To update the dashboard,
+  edit those files in the repo and push — no Webflow edits needed.
 
-  Cache-bust: epoch flips every 10 minutes (Date.now() / 600000).
-  For an instant force-refresh, bump the b=N marker below.
+  SHA-PINNING (May 2026): we previously used a `?b=N&v=<epoch>` cache-
+  busted URL pointing at @main. jsDelivr's branch-name URL caches a
+  stale SHA reference and the public purge endpoint can't reliably
+  invalidate it (purge ACKs return status:"finished" but edges keep
+  serving stale content for 12+ hours). SHA-pinned URLs are immutable —
+  jsDelivr always serves them correctly.
 
-  Before pasting: replace __REPLACE_WITH_SYNC_KEY__ with the
-  Cloudflare Worker SYNC_KEY (also in CF Worker Secrets).
+  This loader resolves the latest commit on main via the GitHub API
+  (cached 10 min in localStorage to limit API calls), then pins
+  jsDelivr to that SHA. CSS is loaded async via the same mechanism.
+
+  GitHub API rate limit: 60 requests/hour per unauthenticated IP. With
+  10-min caching, each visitor makes at most 6 API calls/hour. Plenty
+  of headroom for an internal dashboard.
+
+  Fallback: if the GitHub API is unreachable, falls back to the @main
+  branch URLs with a static cache-bust marker.
+
+  Before pasting: replace __REPLACE_WITH_SYNC_KEY__ with the Cloudflare
+  Worker SYNC_KEY (also in CF Worker Secrets).
 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/dashboard/dashboard.css">
 <div id="fctg-dashboard"></div>
 <script>
 window.__FCTG_SYNC_KEY = '__REPLACE_WITH_SYNC_KEY__';
-(function(){
-  var e = Math.floor(Date.now() / 600000);
-  var s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/dashboard/dashboard.js?b=1&v=' + e;
-  s.defer = true;
-  document.body.appendChild(s);
+(function () {
+  var REPO = 'The-Uncoders/pageup-webflow-sync';
+  var JS_FILE = 'dashboard/dashboard.js';
+  var CSS_FILE = 'dashboard/dashboard.css';
+  var CACHE_KEY = 'fctg_dash_sha';
+  var CACHE_TTL = 10 * 60 * 1000;
+  var FALLBACK_BASE = 'https://cdn.jsdelivr.net/gh/' + REPO + '@main/';
+
+  function injectScript(url) {
+    var s = document.createElement('script');
+    s.src = url; s.defer = true; document.body.appendChild(s);
+  }
+  function injectCss(url) {
+    var l = document.createElement('link');
+    l.rel = 'stylesheet'; l.href = url; document.head.appendChild(l);
+  }
+  function loadAt(base) {
+    injectCss(base + CSS_FILE);
+    injectScript(base + JS_FILE);
+  }
+
+  try {
+    var c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (c && c.sha && c.ts && (Date.now() - c.ts < CACHE_TTL)) {
+      loadAt('https://cdn.jsdelivr.net/gh/' + REPO + '@' + c.sha + '/');
+      return;
+    }
+  } catch (e) {}
+
+  fetch('https://api.github.com/repos/' + REPO + '/commits/main')
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d.sha) throw new Error('no sha');
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ sha: d.sha, ts: Date.now() })); } catch (e) {}
+      loadAt('https://cdn.jsdelivr.net/gh/' + REPO + '@' + d.sha + '/');
+    })
+    .catch(function () { loadAt(FALLBACK_BASE); });
 })();
 </script>

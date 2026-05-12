@@ -262,15 +262,17 @@ The `jobs-filter.js` loader is pasted as custom code on both pages (NOT register
 - `/jobs` (listing)
 - `/jobs/{slug}` (template)
 
-```html
-<script>
-(function(){var e=Math.floor(Date.now()/1200000);var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/jobs-filter.js?b=2&v='+e;s.defer=true;document.body.appendChild(s);})();
-</script>
-```
+The canonical loader snippet lives in [`jobs-filter-loader.html`](./jobs-filter-loader.html) at the repo root — paste the entire contents of that file into Webflow's custom code on both pages.
 
-- 20-min epoch = cache window matches sync cadence
-- `b=2` = static marker; bump this if you need to force an immediate refetch (bypasses cached references to previous loader URLs)
-- `defer=true` = runs after HTML parse, doesn't block rendering
+The loader uses **SHA-pinned jsDelivr URLs** (May 2026): it resolves the latest commit on main via the GitHub API (cached 10 min in localStorage to limit API calls), then loads `cdn.jsdelivr.net/gh/owner/repo@<sha>/jobs-filter.js`. SHA-pinned URLs are immutable on jsDelivr, so this avoids the branch-URL stale-cache problem we hit with the `@main` URL.
+
+**Why SHA-pinning was added:** the previous loader used `@main/jobs-filter.js?b=N&v=<epoch>`. jsDelivr's branch-name URL caches a stale SHA reference and the public purge endpoint can't reliably invalidate it — observed in May 2026 where purge ACKs returned `status:"finished"` but edges kept serving stale content for 12+ hours, oscillating between intermediate SHAs without ever reaching the latest. SHA-pinned URLs sidestep that entirely.
+
+**GitHub API rate limit:** 60 requests/hour per unauthenticated IP. With 10-min localStorage caching, each visitor makes at most 6 API calls/hour. Plenty of headroom for the public careers site and the internal dashboard.
+
+**Fallback:** if the GitHub API is unreachable, the loader falls back to the `@main` URL with a static cache-bust marker (`?b=3`). Degrades to "whatever jsDelivr currently has cached" — not ideal but functional.
+
+The dashboard loader (`dashboard/embed-loader.html`) uses the same SHA-pinning pattern for both `dashboard.js` and `dashboard.css`.
 
 `jobs-filter.js` branches internally — on `/jobs` it runs the full filter/render engine; on `/jobs/{slug}` it runs only `setupBackButton()`.
 
