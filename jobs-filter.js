@@ -597,8 +597,16 @@
     updateFilterPanel('category', categoryCounts);
   }
 
+  // Updates badge counts AND deduplicates by label. When a Webflow CMS
+  // Collection List is bound to Job→Reference (e.g. one checkbox per Job's
+  // Country), the same label can appear many times (Australia × 8 because
+  // 8 jobs are Australian). We keep the first occurrence visible, hide the
+  // rest. Zero-count options are also hidden unless the user has them
+  // already checked. Filter state stores the label key, not the specific
+  // checkbox, so check/uncheck still works correctly across dedup.
   function updateFilterPanel(groupName, counts) {
     var inputs = findGroupCheckboxes(groupName);
+    var seen = {};
     for (var i = 0; i < inputs.length; i++) {
       var cb = inputs[i];
       var label = cb.closest('.w-checkbox, label');
@@ -606,14 +614,18 @@
       var key = getOptionLabel(cb).toLowerCase();
       var count = counts[key] || 0;
 
+      // Dedup: only the first checkbox per label gets shown. Subsequent
+      // duplicates are hidden regardless of count.
+      if (seen[key]) { label.style.display = 'none'; continue; }
+      seen[key] = true;
+
       var badge = label.querySelector('.filter-count');
       if (badge) badge.textContent = count;
 
-      // Hide zero-count options unless the user has them checked already.
       if (count > 0 || cb.checked) label.style.display = '';
       else label.style.display = 'none';
     }
-    if (groupName === 'city') updateLocationSubheadings(counts);
+    if (groupName === 'city' || groupName === 'location') updateLocationSubheadings(counts);
   }
 
   function updateLocationSubheadings(cityCounts) {
