@@ -149,11 +149,10 @@ The `data` branch is orphan (no shared history with `main`). CI amends its singl
 | Name | `name` | PlainText | ✓ | Job title |
 | Slug | `slug` | PlainText | ✓ | URL slug, generated from title |
 | Job ID | `job-id` | PlainText | ✓ | **Sync key** — matches PageUp's job ID |
-| Location | `location` | PlainText | ✓ | Full PageUp location string. Used for listing-level fast diff |
-| City | `city` | PlainText | ✓ | Full PageUp location string verbatim (multi-location aware) — see "Multi-location handling" below |
+| Location | `location` | PlainText | ✓ | Full PageUp location string (multi-location aware). The Designer binds `[filter="location"]` on the card directly to this field. Used for listing-level fast diff |
 | Brand Name | `brand-name` | PlainText | ✓ | Resolved via 3-tier logic |
 | Brand | `brand` | Reference | ✓ | → Brands collection |
-| Country | `country` | Reference | ✓ | → Countries collection |
+| Country | `country` | Reference | ✓ | → Countries collection. Region is sourced from `country.region` (the Country CMS has its own Region field that the recruitment team manages) — sync no longer writes a Region field on jobs |
 | Summary | `summary` | PlainText | ✓ | |
 | Description | `description` | RichText | ✓ | Cleaned via `cleanDescription()` |
 | Work Type | `work-type` | PlainText | ✓ | |
@@ -165,6 +164,8 @@ The `data` branch is orphan (no shared history with `main`). CI amends its singl
 | Hero Image | `hero-image` | Image | ✗ | Manually uploaded only |
 | Banner Image Link | `banner-image-link` | Link | ✓ | PageUp banner URL, rendered via code embed |
 | Video | `video` | VideoLink | ✓ | YouTube/Vimeo |
+| ~~City~~ | ~~`city`~~ | ~~PlainText~~ | ✗ (legacy) | Was previously written by sync (full multi-location string). Sync stopped writing it in May-2026 v4 — the Designer now binds directly to `location`. Field can be deleted from the CMS schema as cleanup |
+| ~~Region~~ | ~~`region`~~ | ~~PlainText~~ | ✗ (legacy) | Briefly written by an interim May-2026 sync change but reverted once we discovered the Country CMS already has its own Region field. Source of truth for region is `country.region` (managed by the recruitment team in Webflow). Can be deleted from the CMS schema as cleanup |
 
 ### Key pages
 
@@ -186,13 +187,61 @@ These exist so PageUp can scrape the Webflow-compiled CSS and apply the site's s
 
 ### Designer-side requirements
 
-These elements/attributes must exist in the Webflow Designer for the integration to work:
+These elements/attributes must exist in the Webflow Designer for the integration to work. Since the v4 rewrite (May 2026), the Designer owns card layout and the JS only filters via attribute lookups — see "v4 architecture" below.
+
+#### Required structure (every page)
 
 | Requirement | Where | Why |
 |---|---|---|
 | `id="all-jobs-button"` on the back button | Current Jobs Template (`/jobs/{slug}`) | `setupBackButton()` targets it by ID to wire `href="/jobs#filters"` + sessionStorage-based filter restoration |
-| `.career_list` container on `/jobs` page | `/jobs` page | `jobs-filter.js` renders cards into this element |
+| `.career_list` container on `/jobs` page | `/jobs` page | The Webflow Collection List itself (rendered by Webflow). `jobs-filter.js` queries `.career_list > .w-dyn-item` to find all cards and toggles their visibility based on filters |
+| Webflow Collection List set to **100 items per page + Pagination enabled** on `/jobs` | `/jobs` page | Webflow caps Collection Lists at 100 items. With pagination on, JS can fetch pages 2..N from Webflow and merge their cards into the live list to bypass the cap. See "Paginate-load mechanism" below |
 | Banner image embed with `onerror` fallback | Current Jobs Template | See below |
+
+#### Card attribute conventions (`filter="<dimension>"`)
+
+Each Collection Item on `/jobs` carries Designer-bound `filter` attributes on dedicated child elements. The element's text content is the filterable value (bound to a CMS field via Webflow's normal text binding). For dimensions that shouldn't show visually (job-id, region, brand-name), put them in a `card-detail hidden` combo-class wrapper — JS injects CSS to hide anything with `.hidden` inside `.career_list`.
+
+| Attribute name | Attribute value | Element binds text to | Notes |
+|---|---|---|---|
+| `filter` | `name` | Job → Name | Title slot |
+| `filter` | `location` | Job → Location | Comma-separated multi-location string. JS splits on comma to match against location filter checkboxes |
+| `filter` | `country` | Job → Country → Name | Resolved CMS country |
+| `filter` | `region` | Job → Country → **Region** | The Region field on the *Country* CMS, NOT a field on the Job. Recruitment team manages regional taxonomy in the Country CMS |
+| `filter` | `brand` | Job → Brand Name | Hidden card-detail; for filter only |
+| `filter` | `category` | Job → Category | Comma-separated; JS splits when matching |
+| `filter` | `work-type` | Job → Work Type | |
+| `filter` | `job-id` | Job → Job ID | Hidden card-detail; included in keyword search haystack so recruiters can paste a job number |
+| `filter` | `summary` | Job → Summary | Optional but improves keyword search coverage |
+
+#### Filter-panel attribute conventions
+
+Two attribute namespaces govern the filter UI:
+
+**`filter-ui="<role>"` — single-instance UI controls.** Add to one element each:
+
+| Attribute value | What JS does with it |
+|---|---|
+| `search` | Reads input value (debounced 250ms) as keyword |
+| `count` | Replaces text content with "Showing X of Y Jobs" — also accepts `id="fctg-job-count"` as a legacy alias |
+| `empty` | Shown (`display:flex`) when 0 results, hidden otherwise |
+| `clear` | Reset all filters on click |
+| `tags` | The Designer-styled chip element IS the **template**. JS hides it by default and clones it for each active filter, inserting clones as siblings. The template stays invisible |
+| `show-more` | Optional Designer-styled pagination button. JS injects a default if absent |
+
+**`filter-group="<dimension>"` — checkbox/radio group containers.** Wrap each filter accordion's checkbox container with this attribute:
+
+| Container attribute | Dimension | Notes |
+|---|---|---|
+| `filter-group="region"` | Region | |
+| `filter-group="location"` | Location (multi-location aware) | `city` accepted as alias |
+| `filter-group="brand"` | Brand | |
+| `filter-group="category"` | Category | |
+| `filter-group="work-type"` | Work Type | Treated as single-select radios |
+
+JS reads each option's user-visible label (from `.w-form-label` or the parent label's textContent) — the input's `name` / `id` attributes are irrelevant. **Duplicates are auto-hidden** by label, so a Webflow CMS Collection List bound to Job→Reference (e.g. one checkbox per Job's Country, producing many "Australia" rows) shows only the first occurrence per unique label.
+
+**`filter-source="cards"` — opt-in dynamic population.** Add alongside `filter-group="X"` when you want JS to **replace** the existing checkboxes with one per unique value found in the cards' `[filter="<dimension>"]` data. JS uses the first existing checkbox in the container as a Designer-styled template (so the generated checkboxes inherit visual styling). Useful when there's no clean CMS collection backing a dimension.
 
 **Banner image embed** (inside the conditional-visibility container that shows when `banner-image-link` is set):
 
@@ -564,20 +613,32 @@ The dashboard's history table uses this to show a "Trigger" badge per run (Sched
 
 ---
 
-## `jobs-filter.js` — the frontend engine
+## `jobs-filter.js` — the frontend engine (v4, May 2026)
 
 Loaded via the inline snippet in the `/jobs` page's "Before `</body>`" custom code block (same snippet on `/jobs/{slug}` for the back-button wiring).
 
+**Architecture:** Webflow renders the cards (Collection List with all bindings); JS only filters them via DOM-attribute lookups. No template cloning, no JSON fetch, no slot-position assumptions. Designer changes the card layout freely without breaking JS.
+
+### v4 vs v3 (what changed)
+
+| Concern | v3 (until May 11, 2026) | v4 (since May 12, 2026) |
+|---|---|---|
+| Card layout | JS clones template, sets fields by slot position | Webflow renders, JS never touches |
+| Data source | Fetched `all-jobs.json` from raw GitHub | Already in DOM (paginate-load merges Webflow's pages 2..N) |
+| Filter dimension lookup | JSON object key | `[filter="X"]` querySelector + textContent |
+| Coupling to Designer changes | High (slot positions, classes) | Low (only `[filter="X"]` attribute names) |
+| File size | ~1450 lines | ~870 lines |
+| Public-facing JSON | `all-jobs.json` (consumed by /jobs) | `all-jobs.json` (now consumed by the dashboard only — sync still writes it) |
+
 ### On `/jobs`
 
-1. Waits for `.career_list` to exist in the DOM
-2. Clones the first CMS-rendered card as a template
-3. Removes all CMS cards from the list
-4. Fetches `all-jobs.json` (20-min cache-busted)
-5. Builds filter counts (regions, cities, brands, categories) from the data
-6. Renders cards — if a card has no existing `<a>`, injects an invisible overlay anchor so the whole card is clickable (the Designer template doesn't currently wrap cards in link blocks)
-7. Binds search / filter / sort / pagination
-8. Restores sessionStorage-saved filter state on return from a detail page
+1. Waits for `.career_list` (Webflow Collection List) to exist
+2. Injects scoped CSS to hide pagination controls + any `.hidden` combo-class elements inside cards (filter-only data: job-id, region, brand-name)
+3. **Paginate-loads** pages 2..N from Webflow in parallel, merges their cards into `.career_list` (deduped by `[filter="job-id"]`). Bypasses Webflow's 100-item Collection List cap. See "Paginate-load mechanism" below
+4. Auto-populates any filter group with `filter-source="cards"` from card data (using first existing checkbox as a styled template)
+5. Binds search input, filter checkboxes, work-type radios, sort dropdown, clear button, "Show more" button
+6. Restores filters from URL query params (priority) or sessionStorage (back-button fallback)
+7. Runs `applyFilters()` — toggles `display` on each card based on which dimensions match active filters
 
 ### On `/jobs/{slug}`
 
@@ -586,9 +647,62 @@ Loaded via the inline snippet in the `/jobs` page's "Before `</body>`" custom co
    - onclick handler that sets `sessionStorage.fctg_back = '1'` before navigating
 2. Main init returns early (no `.career_list` here)
 
-### Compact JSON format (`all-jobs.json`)
+### Paginate-load mechanism
 
-Each job uses single-letter keys to minimise file size:
+Webflow Collection Lists cap at 100 items. We have 300+ jobs. With pagination enabled, Webflow exposes pages 2..N at URLs like `/jobs?<hash>_page=2`. The script:
+
+1. Reads the Next-link href to discover the page-param hash (e.g. `6389f00e_page`)
+2. **Probes pages 2..MAX_PAGES_TO_PROBE (20) in parallel** via `fetch()`
+3. Stops appending the moment a page returns 0 items (signal we've passed the last real page)
+4. Parses each response with `DOMParser` and adopts cards into the live `.career_list`, deduped by `[filter="job-id"]`
+
+We don't rely on `.w-page-count` — Webflow only renders that on certain pagination styles. The probe-until-empty approach is robust regardless. Total extra fetch on page load: 3–4 small HTML pages, parallel, ~500–800ms.
+
+### Filter engine
+
+```js
+function applyFilters() {
+  for (const card of _allCards) {
+    const show =
+      matchesKeyword(card) &&    // haystack: name, job-id, location, country, region, brand, category, work-type, summary, plus visible textContent — all lowercased
+      matchesLocation(card) &&   // splits [filter="location"] on comma; any constituent matches activeCities
+      matchesRegion(card) &&     // [filter="region"] textContent === active key
+      matchesBrand(card) &&      // [filter="brand"] textContent === active key
+      matchesCategory(card) &&   // splits [filter="category"] on comma; any matches
+      matchesWorkType(card);     // [filter="work-type"] textContent === active radio
+    card.style.display = show ? '' : 'none';
+  }
+  applyShowMoreLimit();          // hide visible cards beyond `visibleLimit`
+  setCount(visibleCount);
+  updateCrossFilterCounts();     // cascading per-dimension counts
+  renderTags();
+  serializeFiltersToURL();
+}
+```
+
+### Cross-filter counts (cascading)
+
+For each filter dimension, count jobs that pass ALL OTHER active filters. Users see how many results each option would yield if added. Implemented in `updateCrossFilterCounts()` — same iteration pattern as v3, but reading attribute values instead of JSON fields.
+
+### Dedup by label
+
+`updateFilterPanel(groupName, counts)` dedupes filter checkbox options by their lowercase label as it iterates. The first checkbox with each unique label gets shown; subsequent duplicates get `display: none`. This handles the common Webflow CMS Collection List case where each Reference (Job→Country) produces one row, leading to many "Australia" checkboxes — only the first stays visible. Filter state still keys off the lowercase label, so check/uncheck works consistently across hidden duplicates.
+
+### Tag template (`filter-ui="tags"`)
+
+The element carrying `filter-ui="tags"` IS treated as the chip template. JS hides it by default and clones it for each active filter, inserting the clones as siblings (with `data-fctg-tag-clone="1"` for cleanup tracking). The Designer-styled chip stays invisible until the user actually picks a filter, then real chips appear matching the design exactly.
+
+### Show More
+
+After filters apply, only the first `visibleLimit` (default 30) of matching cards are shown. The button (`[filter-ui="show-more"]` if Designer-provided, else JS injects a default) increments the limit by 30 each click. State is reset to 30 whenever a filter changes.
+
+### URL + sessionStorage filter sync
+
+URL query params (`q`, `region`, `city`, `brand`, `category`, `type`, `sort`) are written via `history.replaceState()` on every filter change — enables shareable filtered links. On load, URL params take precedence over sessionStorage. SessionStorage holds the last filter state for the back-button flow (return from `/jobs/{slug}`).
+
+### Compact JSON format (`all-jobs.json`) — used by the dashboard
+
+Sync continues to generate `all-jobs.json` for the **dashboard only** (the public `/jobs` page no longer fetches it in v4). Single-letter keys minimise file size:
 
 ```json
 {
@@ -607,15 +721,9 @@ Each job uses single-letter keys to minimise file size:
 }
 ```
 
-- `ji` is the PageUp job ID — included so recruiters can paste a job number into the keyword search and find a listing directly. Not visibly displayed on cards.
-- `ci` may be comma-separated when PageUp lists the job across multiple locations. The frontend splits on comma when matching against the city filter checkboxes (so the job appears under every city it spans).
-- `co` is the resolved country name — or `"Multiple Locations"` when the job spans more than one country. `r` is then the corresponding region.
-
-### Card click behaviour
-
-Current Webflow CMS cards on `/jobs` aren't wrapped in a Link Block. `jobs-filter.js` detects this and injects a full-card overlay anchor per card (`position:absolute; inset:0; z-index:1`) so clicks navigate to `/jobs/{slug}`.
-
-If a Link Block is added around the card in Designer in the future, the script auto-detects it and wires the existing anchor's `href` instead of injecting a new one — no code change required.
+- `ji` is the PageUp job ID — used by the dashboard's Job Comparison search.
+- `ci` may be comma-separated when PageUp lists the job across multiple locations.
+- `co` is the resolved country name (or "Multiple Locations" for multi-country).
 
 ---
 
@@ -718,29 +826,47 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 
 ---
 
-## Multi-location handling
+## Multi-location handling (v4)
 
 PageUp lists every location a job covers in the listing column and detail page as a single comma-separated string (e.g. `"New South Wales, Queensland, Victoria"`). Per the May-2026 client decision (Steven Elvin, 10 May 2026 — *"include all cities/regions listed on a job"*), all of these surface to the public site.
 
 | Layer | Behaviour |
 |---|---|
-| `src/scraper.js` | Already returns the full `location` string verbatim on both listing and detail. Its naive `parts[0]` city / `parts[last]` country split (lines ~320-330) is now vestigial — `buildCmsFieldData` overrides both fields. Left in place for backwards compatibility with single-location flows. |
-| `buildCmsFieldData()` in `src/sync.js` | Writes the **full** location string into the `city` plaintext field (was just `parts[0]`). Resolves the `country` reference via `resolveCountryRefForLocation()`: single country if all parts map to one country, else the "Multiple Locations" CMS entry. |
-| Webflow Designer template `/jobs/{slug}` | Renders `city` plaintext as-is — multi-location strings just display naturally inside the existing card layout. |
-| `generateAllJobsJson()` | Emits `ci` as the same string. Frontend splits on comma when filtering. Also emits new `ji` field (PageUp job ID) for search-by-number. |
-| `jobs-filter.js` v3.1 | Helpers `cityPartsRaw()` / `cityPartsLower()` / `anyCityActive()` split the city string and treat each constituent location as its own filter bucket — so a job tagged across NSW/VIC/QLD is findable under all three checkboxes and counted under each. Keyword haystack also includes `j.ji` so pasting a job number into search jumps to the right listing. |
-| `dashboard/dashboard.js` | The Job Comparison tab's per-row search haystack also includes `j.ji` — same search-by-number behaviour for internal recruiters. |
-| `generateFilterCounts()` server-side | Currently produces a useless single bucket for multi-location jobs (e.g. `"new south wales, queensland, victoria": 1`) — harmless because `filter-counts.json` is not consumed by the v3 frontend (counts are derived live from `all-jobs.json` in `jobs-filter.js`). Worth tidying if a future consumer reads it. |
+| `src/scraper.js` | Returns the full `location` string verbatim on both listing and detail. Its naive `parts[0]` city / `parts[last]` country split is vestigial — `buildCmsFieldData` overrides both. |
+| `buildCmsFieldData()` in `src/sync.js` | Writes the full location string into the `location` plaintext field. Resolves the `country` reference via `resolveCountryRefForLocation()`: single country if all parts map to one country, else the "Multiple Locations" CMS entry. **Does not write `city` or `region`** — both fields are now legacy/optional. |
+| Webflow Designer card on `/jobs` | Binds `[filter="location"]` text content to `Job → Location` directly. Renders the multi-location string verbatim. |
+| Webflow Designer template `/jobs/{slug}` | Same — binds Location plaintext directly. |
+| `jobs-filter.js` v4 | Reads `[filter="location"]` per card, splits on comma, any-matches against location filter checkboxes. So a job tagged across NSW/VIC/QLD is findable under all three checkboxes. |
+| Region (filter dimension) | Sourced from `country.region` — the Country CMS has its own Region field that the recruitment team manages in Webflow. Sync doesn't write a Region field on jobs at all. The Designer binds `[filter="region"]` to `Job → Country → Region`. |
+| `generateAllJobsJson()` (dashboard-only) | Emits `ci` as the same string and `ji` as the job ID. The dashboard's Job Comparison tab uses both. |
 
-**Region is currently single-valued.** A job that spans multiple countries (e.g. AU states + NZ) shows under the "Multiple Locations" region filter, not under "Australia" *and* "New Zealand" separately. If multi-region matching is required in future, the JSON's `r` field would need to become an array and `jobs-filter.js` would need the same any-match treatment we apply to cities.
+**Region is single-valued per job.** A job that spans multiple countries (e.g. AU states + NZ) routes its country reference to "Multiple Locations" and inherits whatever Region the recruitment team has set on that Country CMS entry. If multi-region matching is required in future, the cards would need a multi-value region attribute and the JS filter would need the same any-match treatment as location.
 
-**Search by job number.** Recruiters can paste a PageUp job ID (e.g. `529290`) into the public-site search box on `/jobs` or the Job Comparison tab in the dashboard and locate the right job directly. The job ID isn't visibly displayed on cards — it just lives in the search index. Per Steven Elvin's request (8 May 2026): *"if we can have the job number searchable without it being visible that would be great"*.
+**Search by job number.** Recruiters can paste a PageUp job ID (e.g. `529290`) into the public-site search box on `/jobs` or the Job Comparison tab in the dashboard and locate the right job directly. The job ID lives in a hidden `[filter="job-id"]` element on the card (inside `card-detail hidden`) — visible to the keyword-search haystack but not rendered visually. Per Steven Elvin's request (8 May 2026): *"if we can have the job number searchable without it being visible that would be great"*.
 
-**Back-fill after deploy.** The fast-sync diff in `listingFieldsChanged()` only compares title + raw location string. Multi-location jobs whose location string hasn't changed since the previous sync will be skipped — which means the new city/country logic won't reach them automatically. Use the dashboard's per-row "Force re-sync this job" button (Job Comparison tab) for each affected job, or trigger a Force Full Rescrape from the Sync Status tab to back-fill everything. The content-hash gate ensures only jobs whose computed fieldData actually changes get PATCHed, so write cost stays low.
+**Back-fill after deploy.** The fast-sync diff in `listingFieldsChanged()` only compares title + raw location string. Multi-location jobs whose location string hasn't changed since the previous sync will be skipped — which means new sync-logic changes (e.g. an updated `cleanDescription`) won't reach them automatically. Use the dashboard's per-row "Force re-sync this job" button (Job Comparison tab) for each affected job, or trigger a Force Full Rescrape from the Sync Status tab to back-fill everything. The content-hash gate ensures only jobs whose computed fieldData actually changes get PATCHed, so write cost stays low.
 
 ---
 
 ## Key change history
+
+### v4 architecture: Webflow renders, JS only filters (May 12, 2026)
+
+Major rewrite of `jobs-filter.js` (v3 → v4) plus a small sync revert. Driven by client preference to keep visual control in the Designer rather than coupling JS to a card template.
+
+- **`jobs-filter.js` v4 (~870 lines, down from ~1450).** Removed JSON fetch + template cloning + slot-by-position rendering (the source of the May-11 "Tokyo" bug class). Webflow now owns card layout entirely. JS finds cards via `.career_list > .w-dyn-item` and reads filterable values via `[filter="<dimension>"]` querySelectors against textContent.
+- **Designer attribute conventions:**
+  - `filter="<dimension>"` on card child elements (one per dimension: name, location, country, region, brand, category, work-type, job-id, summary). Hidden ones live in `card-detail hidden` combo-class wrappers; JS injects CSS to hide `.hidden` inside `.career_list`.
+  - `filter-group="<dimension>"` on filter-panel checkbox containers (region, location, brand, category, work-type). `city` accepted as alias for `location`.
+  - `filter-ui="<role>"` on single-instance UI controls (search, count, empty, clear, tags, show-more). `id="fctg-job-count"` accepted as legacy alias for the count display.
+  - `filter-source="cards"` opt-in: when set on a `filter-group` container, JS replaces the existing checkboxes with one per unique value found in the cards' data, using the first existing checkbox as a styled template. Useful when no clean CMS collection backs the dimension.
+- **Paginate-load mechanism:** Webflow Collection Lists cap at 100 items; we have 300+ jobs. With pagination enabled in Designer, JS probes pages 2..20 in parallel via `?<hash>_page=N` URLs, parses each response with `DOMParser`, dedupes adopted cards by `[filter="job-id"]`, and merges into the live `.career_list`. Stops on first empty page. ~500–800ms total extra fetch.
+- **Tag template (`filter-ui="tags"` on the chip itself):** Designer's tag chip is treated as the template — hidden by default, cloned for each active filter, clones inserted as siblings. Designer-styled chip stays invisible until a filter is actually picked, then real chips appear matching the design.
+- **Dedup-by-label in `updateFilterPanel()`:** Webflow CMS Collection Lists bound to Job→Reference produce one checkbox per matching combo (e.g. "Australia" × 8 because 8 Australian jobs). The first checkbox per unique lowercase label is shown; duplicates get `display: none`. Filter state still keys off the lowercase label, so check/uncheck works consistently across hidden duplicates.
+- **Region from Country.Region:** Brief interim sync change wrote a Region plaintext field to Current Jobs using `region-map.json` (FCTG taxonomy). Reverted once we discovered the Country CMS already has its own Region field that the recruitment team manages in Webflow. Source of truth for the public site is now `country.region` — sync writes nothing region-related on jobs.
+- **`location` is the canonical field name; `city` is legacy.** Sync stopped writing `city` (it duplicated `location` after the multi-location change). Both `city` and `region` plaintext fields on Current Jobs can be deleted from the CMS schema as cleanup.
+- **`all-jobs.json` is now dashboard-only.** The public `/jobs` page reads no CDN JSON — all data is in the Webflow-rendered DOM. The sync still writes `all-jobs.json` because the dashboard's Job Comparison tab consumes it.
+- **Dashboard data fetches use `raw.githubusercontent.com`** instead of jsDelivr CDN, after observing that jsDelivr's branch-name URL caches a stale SHA and the public purge endpoint can't reliably invalidate it. Code files (`dashboard.js`, `jobs-filter.js`) still load via jsDelivr — those purges DO eventually work, just sometimes with throttle delay.
 
 ### Multi-location + search-by-number (May 11, 2026)
 
@@ -819,4 +945,4 @@ No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHu
 
 ---
 
-*Last updated: May 11, 2026 — added multi-location handling: city plaintext field now stores the full PageUp location string verbatim (was just the first comma-separated token), with `resolveCountryRefForLocation()` routing the country reference to the existing "Multiple Locations" CMS entry when a job spans more than one country. `jobs-filter.js` v3.1 splits the city string on comma so a single job can match multiple city checkboxes. New `ji` field in `all-jobs.json` lets recruiters search the public site or dashboard by PageUp job number without surfacing it visually. Resolves Eva Littlewood's job 529290 issue (6 May 2026); driven by Steven Elvin's "include all cities/regions" decision (10 May 2026) and "job number searchable without it being visible" request (8 May 2026). Back-fill via per-row "Force re-sync this job" button. May 1, 2026: added single-job sync mode (`runSingleJobSync()` gated on `SYNC_JOB_ID`), `pickLiveBanner()`, H1–H5 → H6 demotion. April 24, 2026: force-full mode, content-hash gate, shareable filtered URLs, bullet-point list normalisation, Cloudflare Worker tracked in repo. Previous revisions are in git history.*
+*Last updated: May 12, 2026 — major v4 rewrite: Webflow renders the cards (Collection List with all bindings); JS only filters via DOM-attribute lookups (`filter="X"` on cards, `filter-group="X"` on panel containers, `filter-ui="X"` on UI controls). Removed JSON fetch + template cloning + slot-position rendering; eliminates the "Tokyo" coupling-bug class. New paginate-load mechanism probes Webflow's pagination URLs to bypass the 100-item Collection List cap. Tag chip auto-hides until a filter is picked. Filter checkbox dedup-by-label handles repeated CMS-bound checkboxes. Region sourced from `country.region` (recruitment team manages in Country CMS) — sync no longer writes a Region field on jobs. Legacy `city` and `region` plaintext fields on Current Jobs are now unwritten and can be deleted. May 11, 2026: multi-location handling, search-by-job-number. May 1, 2026: single-job sync mode, `pickLiveBanner()`, H1–H5 → H6 demotion. April 24, 2026: force-full mode, content-hash gate, shareable filtered URLs, bullet-point list normalisation, Cloudflare Worker tracked in repo. Previous revisions are in git history.*
