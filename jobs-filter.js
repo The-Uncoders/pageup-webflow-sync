@@ -41,8 +41,14 @@
   // Cache bust every 20 minutes (aligned to sync schedule) so visitors always see fresh data.
   // JSON artifacts live on the `data` branch — isolated from the code branch to keep
   // main's history clean. See PROJECT-DOCUMENTATION.md for the split.
+  //
+  // Source: raw.githubusercontent.com (was jsDelivr CDN). Empirically jsDelivr's
+  // @data branch URL caches a stale SHA reference and the public purge endpoint
+  // cannot reliably invalidate it (purge ACKs return status:"finished" but
+  // edges keep serving stale content for hours). raw.githubusercontent.com
+  // is always fresh and fast enough for the visitor-facing /jobs page.
   var CACHE_EPOCH = Math.floor(Date.now() / (20 * 60 * 1000));
-  var ALL_JOBS_URL = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/all-jobs.json?v=' + CACHE_EPOCH;
+  var ALL_JOBS_URL = 'https://raw.githubusercontent.com/The-Uncoders/pageup-webflow-sync/data/all-jobs.json?v=' + CACHE_EPOCH;
 
   // ── State ─────────────────────────────────
   var keyword = '';

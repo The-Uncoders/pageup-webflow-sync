@@ -14,8 +14,16 @@
   // ─────────────── Configuration ───────────────
   var WORKER_URL = 'https://fctg-sync-trigger.wandering-sun-9809.workers.dev';
   var SYNC_KEY = window.__FCTG_SYNC_KEY || '';
-  var DATA_BASE_CDN = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data';
+  // Data loading uses raw.githubusercontent.com by default. Empirically,
+  // jsDelivr's @data branch URL caches a stale SHA reference that the
+  // public purge endpoint cannot reliably invalidate (purge ACKs return
+  // status:"finished" but the edge keeps serving stale content for hours).
+  // raw.githubusercontent.com is always fresh — slower than a CDN edge but
+  // fast enough for an internal dashboard polled every 60s by a handful of
+  // recruiters. The CDN URL stays defined as a fallback for the rare case
+  // where raw is rate-limited.
   var DATA_BASE_RAW = 'https://raw.githubusercontent.com/The-Uncoders/pageup-webflow-sync/data';
+  var DATA_BASE_CDN = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data';
   var WEBFLOW_BASE = 'https://www.fctgcareers.com';
   var PAGEUP_BASE = 'https://careers.fctgcareers.com';
   var SYNC_INTERVAL_MS = 20 * 60 * 1000;
@@ -508,7 +516,8 @@
     }, 10000);
   }
 
-  setInterval(function () { loadAll(false); }, 60000);
+  // Use raw URL on the 60s poll — see DATA_BASE_RAW comment for rationale.
+  setInterval(function () { loadAll(true); }, 60000);
 
   // ─────────────── Init ───────────────
   function init() {
@@ -524,7 +533,7 @@
     bindTabs();
     bindActionButtons();
     bindFilterInputs();
-    loadAll(false);
+    loadAll(true);
   }
 
   if (document.readyState === 'loading') {
