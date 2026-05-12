@@ -200,13 +200,24 @@
     }
     if (!container) return;
 
-    // Find the first existing checkbox label as the template
+    // Find the first existing checkbox + the item template that wraps it.
+    // Prefer the .filters1_item / .w-dyn-item wrapper if present (so the
+    // clone preserves Designer styling); fall back to the bare label.
     var firstCheckbox = container.querySelector('input[type="checkbox"]');
-    var template = firstCheckbox ? firstCheckbox.closest('.w-checkbox, label') : null;
+    if (!firstCheckbox) return;
+    var itemTemplate = firstCheckbox.closest('.filters1_item, .w-dyn-item')
+                    || firstCheckbox.closest('.w-checkbox, label');
+    if (!itemTemplate) return;
+
+    // The list parent is the container that holds all the items.
+    // Clearing only this parent's children preserves the heading + accordion
+    // icon + filter-options wrapper (which sit higher up in the tree).
+    var listParent = itemTemplate.parentNode;
+    if (!listParent) return;
 
     // Collect unique values from cards (case-insensitive dedup, preserving
     // first-seen casing for display)
-    var seen = {};                  // lowercased → original casing
+    var seen = {};
     for (var j = 0; j < _allCards.length; j++) {
       var raw = dimValue(_allCards[j], cardDimension);
       if (!raw) continue;
@@ -220,34 +231,41 @@
     var values = Object.keys(seen).sort().map(function (k) { return seen[k]; });
     if (values.length === 0) return;
 
-    // Wipe existing checkboxes (keep template separately)
-    var children = Array.prototype.slice.call(container.children);
-    children.forEach(function (el) { el.remove(); });
+    // Clear only the list parent's children (existing items). Heading +
+    // accordion icon + outer wrappers stay intact.
+    while (listParent.firstChild) listParent.removeChild(listParent.firstChild);
 
-    // Generate one checkbox per value
+    // Generate one item per unique value, cloning the item template to
+    // inherit Designer styling.
     values.forEach(function (val) {
-      var clone;
-      if (template) {
-        clone = template.cloneNode(true);
-        var labelSpan = clone.querySelector('.w-form-label');
-        if (labelSpan) labelSpan.textContent = val;
-        else clone.textContent = val;
-        var cb = clone.querySelector('input[type="checkbox"]');
-        if (cb) {
-          cb.checked = false;
-          cb.removeAttribute('id');
-        }
-      } else {
-        // Fallback: minimal Webflow-style checkbox HTML
-        clone = document.createElement('label');
-        clone.className = 'w-checkbox filters1_form-checkbox1';
-        clone.innerHTML = '<div class="w-checkbox-input w-checkbox-input--inputType-custom filters1_form-checkbox1-icon"></div>' +
-                          '<input type="checkbox" style="opacity:0;position:absolute;z-index:-1">' +
-                          '<span class="filters1_form-checkbox1-label w-form-label">' + escapeHtmlSimple(val) + '</span>';
+      var clone = itemTemplate.cloneNode(true);
+      // Strip any subheading inside the cloned item (subheadings only make
+      // sense for the location dimension, not for region etc.)
+      var sub = clone.querySelector('.filters1_filter-group-subheading');
+      if (sub) sub.remove();
+
+      var labelSpan = clone.querySelector('.filters1_form-checkbox1-label, .w-form-label');
+      if (labelSpan) labelSpan.textContent = val;
+      else {
+        // No label span found — set on the closest label as fallback
+        var fallbackLabel = clone.querySelector('.w-checkbox, label');
+        if (fallbackLabel) fallbackLabel.textContent = val;
       }
-      container.appendChild(clone);
+      var cb = clone.querySelector('input[type="checkbox"]');
+      if (cb) {
+        cb.checked = false;
+        cb.removeAttribute('id');
+      }
+      // Reset count badge if present
+      var badge = clone.querySelector('.filter-count, .filter-count .text-size-regular');
+      if (badge) badge.textContent = '0';
+      listParent.appendChild(clone);
     });
   }
+
+  // Legacy escapeHtml kept for fallback paths (no longer reached after the
+  // template-based rewrite above).
+  // eslint-disable-next-line no-unused-vars
 
   function escapeHtmlSimple(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -597,6 +615,20 @@
     updateFilterPanel('category', categoryCounts);
   }
 
+  // Hide/show the WHOLE filter option element. When the checkbox lives
+  // inside a Webflow CMS Collection Item (.filters1_item / .w-dyn-item),
+  // we hide the entire item so any sibling content (e.g. subheadings,
+  // count badges) disappears with it. Falls back to hiding just the label
+  // when there's no item wrapper.
+  function hideOption(label) {
+    var wrapper = label.closest('.filters1_item, .w-dyn-item') || label;
+    wrapper.style.display = 'none';
+  }
+  function showOption(label) {
+    var wrapper = label.closest('.filters1_item, .w-dyn-item') || label;
+    wrapper.style.display = '';
+  }
+
   // Updates badge counts AND deduplicates by label. When a Webflow CMS
   // Collection List is bound to Job→Reference (e.g. one checkbox per Job's
   // Country), the same label can appear many times (Australia × 8 because
@@ -616,29 +648,52 @@
 
       // Dedup: only the first checkbox per label gets shown. Subsequent
       // duplicates are hidden regardless of count.
-      if (seen[key]) { label.style.display = 'none'; continue; }
+      if (seen[key]) { hideOption(label); continue; }
       seen[key] = true;
 
       var badge = label.querySelector('.filter-count');
       if (badge) badge.textContent = count;
 
-      if (count > 0 || cb.checked) label.style.display = '';
-      else label.style.display = 'none';
+      if (count > 0 || cb.checked) showOption(label);
+      else hideOption(label);
     }
-    if (groupName === 'city' || groupName === 'location') updateLocationSubheadings(counts);
+    if (groupName === 'city' || groupName === 'location') updateLocationSubheadings();
   }
 
-  function updateLocationSubheadings(cityCounts) {
-    var subheadings = document.querySelectorAll('.filters1_filter-group-subheading');
-    for (var i = 0; i < subheadings.length; i++) {
-      var sh = subheadings[i];
-      var hasVisible = false;
-      var next = sh.nextElementSibling;
-      while (next && !next.classList.contains('filters1_filter-group-subheading')) {
-        if (next.style.display !== 'none') { hasVisible = true; break; }
-        next = next.nextElementSibling;
+  // Show subheadings as section headers, one per region. The Designer
+  // structure (CMS Collection List of Locations) puts a subheading INSIDE
+  // each item — repeating per row. We walk visible items in DOM order and
+  // show only the FIRST subheading per unique region; the rest are hidden.
+  // Items hidden by dedup or zero-count automatically suppress their own
+  // subheadings (they're inside the hidden item wrapper).
+  //
+  // For this to look "grouped", the Locations CMS Collection List should
+  // be sorted by Region in Designer (Sort: Region A→Z). Without that, you
+  // get partial grouping — first occurrence of each region acts as a
+  // section header but items below may belong to a different region.
+  function updateLocationSubheadings() {
+    var loc = document.querySelector('[filter-group="location"]')
+           || document.querySelector('[filter-group="city"]');
+    if (!loc) return;
+
+    var seenRegions = {};
+    var items = loc.querySelectorAll('.filters1_item, .w-dyn-item');
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var subheading = item.querySelector('.filters1_filter-group-subheading');
+      if (!subheading) continue;
+
+      // If the item itself is hidden (dedup or zero count), nothing to do —
+      // the subheading is inside the hidden wrapper so it's already invisible.
+      if (item.style.display === 'none') continue;
+
+      var region = (subheading.textContent || '').trim();
+      if (!seenRegions[region]) {
+        subheading.style.display = '';
+        seenRegions[region] = true;
+      } else {
+        subheading.style.display = 'none';
       }
-      sh.style.display = hasVisible ? '' : 'none';
     }
   }
 
