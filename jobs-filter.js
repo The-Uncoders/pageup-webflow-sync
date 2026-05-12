@@ -581,12 +581,22 @@
       logoImg.style.display = 'none';
     }
 
-    // Detail wrappers: [0]=city, [1]=country, [2]=brand, [3]=workType
+    // Card layout (May-2026 Designer redesign):
+    //   .career23_detail-wrapper[0]  → clock icon  → work type (job.wt)
+    //   .career23_detail-wrapper[1]  → pin icon    → country  (job.co)
+    //   .card-detail.align_bottom    → building    → city     (job.ci, multi-location)
+    // Brand is now rendered as a logo IMAGE via job.l (handled above).
+    //
+    // Important: the city slot uses a DIFFERENT class (.card-detail) than the
+    // top-row slots — the Designer changed it during the redesign. If we don't
+    // explicitly target it here, every cloned card displays whatever city the
+    // first CMS-bound template card happened to have (commonly seen as a stray
+    // "Tokyo" or similar value baked into the template).
     var dw = card.querySelectorAll('.career23_detail-wrapper');
-    setDwText(dw[0], job.ci);
+    setDwText(dw[0], job.wt);
     setDwText(dw[1], job.co);
-    setDwText(dw[2], job.b);
-    setDwText(dw[3], job.wt);
+    var cityDetail = card.querySelector('.card-detail');
+    setDwText(cityDetail, job.ci);
 
     // Summary
     var summary = card.querySelector('.text-size-regular');
