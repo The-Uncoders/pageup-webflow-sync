@@ -99,6 +99,17 @@
     preventFormSubmits();
 
     function bindEverything() {
+      // For any filter group with `filter-source="cards"`, auto-populate
+      // checkboxes from unique values found in card data. The first existing
+      // checkbox in the group is used as a Designer-styled template; JS
+      // clones it for each unique value. Useful when there's no clean CMS
+      // collection for that dimension (region, location with multi-strings).
+      autoPopulateFromCards('region', 'region');
+      autoPopulateFromCards('location', 'location');
+      autoPopulateFromCards('city', 'location');
+      autoPopulateFromCards('brand', 'brand');
+      autoPopulateFromCards('category', 'category');
+
       bindSearch();
       bindFilterGroup('city', activeCities);
       bindFilterGroup('region', activeRegions);
@@ -134,17 +145,30 @@
   // the legacy `input[name="X"]` direct selector for sites that haven't
   // re-attributed yet. JS also supports a Webflow-rendered Collection List
   // inside the group (each .w-dyn-item containing a checkbox).
+  //
+  // The location dimension accepts either `filter-group="location"` (the
+  // canonical PageUp terminology) or `filter-group="city"` (legacy alias)
+  // — both bind to the same internal store.
+  function groupAliases(group) {
+    if (group === 'city' || group === 'location') return ['location', 'city'];
+    return [group];
+  }
+
   function findGroupCheckboxes(group) {
-    var container = document.querySelector('[filter-group="' + group + '"]');
-    if (container) {
-      return container.querySelectorAll('input[type="checkbox"]');
+    var aliases = groupAliases(group);
+    for (var i = 0; i < aliases.length; i++) {
+      var container = document.querySelector('[filter-group="' + aliases[i] + '"]');
+      if (container) return container.querySelectorAll('input[type="checkbox"]');
     }
     return document.querySelectorAll('input[name="' + group + '"]');
   }
 
   function findGroupRadios(group) {
-    var container = document.querySelector('[filter-group="' + group + '"]');
-    if (container) return container.querySelectorAll('input[type="radio"]');
+    var aliases = groupAliases(group);
+    for (var i = 0; i < aliases.length; i++) {
+      var container = document.querySelector('[filter-group="' + aliases[i] + '"]');
+      if (container) return container.querySelectorAll('input[type="radio"]');
+    }
     return [];
   }
 
@@ -156,6 +180,79 @@
     var span = label.querySelector('.w-form-label');
     if (span) return (span.textContent || '').trim();
     return (label.textContent || '').trim();
+  }
+
+  // Opt-in dynamic checkbox population. When a `[filter-group="X"]` container
+  // also has `filter-source="cards"`, JS replaces its existing checkboxes
+  // with one per unique value found in the cards' `[filter="<dim>"]` element.
+  // The first existing checkbox is used as a Designer-styled template (so the
+  // generated checkboxes inherit your visual styling).
+  //
+  // Useful when there's no clean CMS collection for a dimension — e.g. the
+  // Region field where values come from sync (FCTG region map), or Location
+  // where the multi-location strings make a CMS-rendered list incomplete.
+  function autoPopulateFromCards(groupName, cardDimension) {
+    var aliases = groupAliases(groupName);
+    var container = null;
+    for (var i = 0; i < aliases.length; i++) {
+      var c = document.querySelector('[filter-group="' + aliases[i] + '"][filter-source="cards"]');
+      if (c) { container = c; break; }
+    }
+    if (!container) return;
+
+    // Find the first existing checkbox label as the template
+    var firstCheckbox = container.querySelector('input[type="checkbox"]');
+    var template = firstCheckbox ? firstCheckbox.closest('.w-checkbox, label') : null;
+
+    // Collect unique values from cards (case-insensitive dedup, preserving
+    // first-seen casing for display)
+    var seen = {};                  // lowercased → original casing
+    for (var j = 0; j < _allCards.length; j++) {
+      var raw = dimValue(_allCards[j], cardDimension);
+      if (!raw) continue;
+      raw.split(',').forEach(function (v) {
+        var t = v.trim();
+        if (!t) return;
+        var k = t.toLowerCase();
+        if (!seen[k]) seen[k] = t;
+      });
+    }
+    var values = Object.keys(seen).sort().map(function (k) { return seen[k]; });
+    if (values.length === 0) return;
+
+    // Wipe existing checkboxes (keep template separately)
+    var children = Array.prototype.slice.call(container.children);
+    children.forEach(function (el) { el.remove(); });
+
+    // Generate one checkbox per value
+    values.forEach(function (val) {
+      var clone;
+      if (template) {
+        clone = template.cloneNode(true);
+        var labelSpan = clone.querySelector('.w-form-label');
+        if (labelSpan) labelSpan.textContent = val;
+        else clone.textContent = val;
+        var cb = clone.querySelector('input[type="checkbox"]');
+        if (cb) {
+          cb.checked = false;
+          cb.removeAttribute('id');
+        }
+      } else {
+        // Fallback: minimal Webflow-style checkbox HTML
+        clone = document.createElement('label');
+        clone.className = 'w-checkbox filters1_form-checkbox1';
+        clone.innerHTML = '<div class="w-checkbox-input w-checkbox-input--inputType-custom filters1_form-checkbox1-icon"></div>' +
+                          '<input type="checkbox" style="opacity:0;position:absolute;z-index:-1">' +
+                          '<span class="filters1_form-checkbox1-label w-form-label">' + escapeHtmlSimple(val) + '</span>';
+      }
+      container.appendChild(clone);
+    });
+  }
+
+  function escapeHtmlSimple(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
   }
 
   // ── Inject scoped styles ──────────────────
@@ -700,13 +797,24 @@
   }
 
   // ── Active filter tags ────────────────────
+  // Tags: the [filter-ui="tags"] element IS the chip template (Designer-styled
+  // pill with text + close icon). JS treats it as a template — hides the
+  // original by default, clones it for each active filter, and inserts the
+  // clones as siblings. This way the Designer-styled "Tag x" chip never
+  // shows as a placeholder, and active filters appear as styled chips that
+  // match the design exactly.
   function renderTags() {
-    var container = findTagsContainer();
-    if (!container) return;
-    // Strip any prior dynamic tags AND any static placeholder tags inside
-    // the tags container (e.g. the "Tag x" example chip from Designer).
-    var existing = container.querySelectorAll('.filters1_tag--dynamic, .filters1_tag');
-    for (var i = 0; i < existing.length; i++) existing[i].remove();
+    var template = findTagsContainer();
+    if (!template) return;
+
+    // Hide the template itself — it's never rendered as a real chip.
+    template.style.display = 'none';
+
+    // Remove prior clones (siblings of the template that we previously created).
+    var parent = template.parentNode;
+    if (parent) {
+      parent.querySelectorAll('[data-fctg-tag-clone]').forEach(function (c) { c.remove(); });
+    }
 
     var filters = [];
     if (keyword) filters.push({ type: 'keyword', label: '"' + keyword + '"' });
@@ -716,26 +824,40 @@
     Object.keys(activeBrands).forEach(function (k) { filters.push({ type: 'brand', label: k, key: k }); });
     if (workType) filters.push({ type: 'workType', label: workType });
 
-    for (var f = 0; f < filters.length; f++) container.appendChild(makeTag(filters[f]));
-  }
+    if (filters.length === 0 || !parent) return;
 
-  function makeTag(filter) {
-    var tag = document.createElement('div');
-    tag.className = 'filters1_tag filters1_tag--dynamic';
-    tag.style.display = 'flex';
+    // Insert clones after the template, in reverse so they appear in the
+    // correct order using insertBefore(clone, template.nextSibling).
+    var anchor = template.nextSibling;
+    filters.forEach(function (filter) {
+      var clone = template.cloneNode(true);
+      clone.removeAttribute('filter-ui');
+      clone.setAttribute('data-fctg-tag-clone', '1');
+      clone.style.display = '';
 
-    var textDiv = document.createElement('div');
-    textDiv.textContent = capitalize(filter.label);
-    tag.appendChild(textDiv);
+      // Find the text node — the first child that's not the close-icon.
+      // The Designer template has structure: <div>Tag</div><div class="filters1_close-icon">…</div>
+      var children = clone.children;
+      for (var i = 0; i < children.length; i++) {
+        var c = children[i];
+        if (!/filters1_close-icon|w-embed/.test(c.className) && !c.querySelector('svg')) {
+          c.textContent = capitalize(filter.label);
+          break;
+        }
+      }
 
-    var closeDiv = document.createElement('div');
-    closeDiv.className = 'filters1_close-icon w-embed';
-    closeDiv.style.cursor = 'pointer';
-    closeDiv.innerHTML = '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.13 16.77l-.35.35a.25.25 0 01-.36 0L12 12.85 7.57 17.12a.25.25 0 01-.35 0l-.35-.35a.25.25 0 010-.35L11.15 12 6.87 7.57a.25.25 0 010-.35l.35-.35a.25.25 0 01.35 0L12 11.15l4.43-4.28a.25.25 0 01.35 0l.35.35a.25.25 0 010 .35L13.15 12l4.28 4.43a.25.25 0 010 .35z" fill="currentColor"/></svg>';
-    tag.appendChild(closeDiv);
+      // Wire the close icon to remove the filter
+      var closeIcon = clone.querySelector('.filters1_close-icon, [class*="close"]') ||
+                      clone.querySelector('svg')?.parentElement;
+      if (closeIcon) {
+        closeIcon.style.cursor = 'pointer';
+        (function (f) {
+          closeIcon.addEventListener('click', function () { removeFilter(f); });
+        })(filter);
+      }
 
-    closeDiv.addEventListener('click', function () { removeFilter(filter); });
-    return tag;
+      parent.insertBefore(clone, anchor);
+    });
   }
 
   function removeFilter(f) {

@@ -591,26 +591,19 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
   // Country reference — single-value Webflow ref. For multi-country
   // locations (e.g. AU states + NZ), routes to the "Multiple Locations"
   // CMS entry instead of arbitrarily picking one country.
+  //
+  // Region for the public site is resolved by the Webflow Designer via
+  // the Country reference's own Region field — see the Countries CMS
+  // collection. The sync deliberately does NOT write a Region field on
+  // the Job; doing so would either be unused (when the card binds to
+  // country.region) or duplicate-of-truth. The Country's Region field is
+  // edited by the recruitment team in Webflow when adding new countries.
   const countryRef = resolveCountryRefForLocation(
     jobDetail.location, jobDetail.country, countryMap
   );
   if (countryRef) {
     fieldData['country'] = countryRef;
   }
-
-  // Region — derived from the resolved country. Plaintext field, written
-  // so the Webflow Designer can bind a `[filter="region"]` attribute on
-  // the card directly to the CMS value (no client-side region-map lookup
-  // needed in jobs-filter.js v4). When the country routes to "Multiple
-  // Locations" (multi-country jobs), the region is also "Multiple
-  // Locations" — keeps the filter UI bucket consistent.
-  const multiLocRef = countryMap['multiple locations'] || null;
-  let regionName = 'Multiple Locations';
-  if (countryRef && countryRef !== multiLocRef) {
-    const countryLower = (jobDetail.country || '').toLowerCase().trim();
-    regionName = regionMap[countryLower] || 'Multiple Locations';
-  }
-  fieldData['region'] = regionName;
 
   return fieldData;
 }
