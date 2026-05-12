@@ -526,13 +526,18 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
   // name in `.name` (never the raw PageUp text).
   const resolvedBrand = resolveBrand(jobDetail, brandMap, brandIdToName, hashtagToBrand);
 
-  // City field holds the full PageUp location string verbatim — including
-  // every comma-separated location for multi-location jobs (e.g.
-  // "New South Wales, Queensland, Victoria"). Per the May-2026 client
-  // decision (Steven Elvin, 10 May 2026): when a job spans multiple
-  // locations, surface them all. The Webflow Designer template displays
-  // this plaintext field as-is, and jobs-filter.js splits on comma when
-  // matching against city filter checkboxes.
+  // Location field holds the full PageUp location string verbatim —
+  // including every comma-separated location for multi-location jobs
+  // (e.g. "New South Wales, Queensland, Victoria"). Per the May-2026
+  // client decision (Steven Elvin, 10 May 2026): when a job spans
+  // multiple locations, surface them all. The Webflow Designer template
+  // displays this plaintext field as-is, and jobs-filter.js v4 splits
+  // on comma when matching against location filter checkboxes.
+  //
+  // The legacy `city` field is no longer written here — it was redundant
+  // with `location` after the multi-location change. The Designer now
+  // binds directly to `location`. The `city` field can be deleted from
+  // the CMS schema once verified working.
   const fieldData = {
     name: jobDetail.title.substring(0, 256),
     slug: slugify(jobDetail.title),
@@ -541,7 +546,6 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
     'brand-name': resolvedBrand.name,
     'summary': jobDetail.summary || '',
     'work-type': jobDetail.workType || '',
-    'city': jobDetail.location || '',
     'category': jobDetail.categories || '',
     'closing-date': jobDetail.closingDate || '',
   };
@@ -593,6 +597,20 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
   if (countryRef) {
     fieldData['country'] = countryRef;
   }
+
+  // Region — derived from the resolved country. Plaintext field, written
+  // so the Webflow Designer can bind a `[filter="region"]` attribute on
+  // the card directly to the CMS value (no client-side region-map lookup
+  // needed in jobs-filter.js v4). When the country routes to "Multiple
+  // Locations" (multi-country jobs), the region is also "Multiple
+  // Locations" — keeps the filter UI bucket consistent.
+  const multiLocRef = countryMap['multiple locations'] || null;
+  let regionName = 'Multiple Locations';
+  if (countryRef && countryRef !== multiLocRef) {
+    const countryLower = (jobDetail.country || '').toLowerCase().trim();
+    regionName = regionMap[countryLower] || 'Multiple Locations';
+  }
+  fieldData['region'] = regionName;
 
   return fieldData;
 }
@@ -1173,7 +1191,7 @@ async function generateFilterCounts(client, countryMap) {
     const countryRef = fd.country;
     const rawCountryName = countryRef ? (countryIdToName[countryRef] || '') : '';
     const { city, countryName } = reconcileCityAndCountry(
-      fd.city, rawCountryName, knownCountryNames
+      fd.location || fd.city, rawCountryName, knownCountryNames
     );
 
     let regionName = '';
@@ -1268,7 +1286,7 @@ async function generateAllJobsJson(client, countryMap) {
     const countryRef = fd.country;
     const rawCountryName = countryRef ? (countryIdToName[countryRef] || '') : '';
     const { city, countryName } = reconcileCityAndCountry(
-      fd.city, rawCountryName, knownCountryNames
+      fd.location || fd.city, rawCountryName, knownCountryNames
     );
 
     let region = '';

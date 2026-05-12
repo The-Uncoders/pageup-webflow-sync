@@ -1,54 +1,53 @@
 /**
- * FCTG Careers - Job Filter & Sort System v3.1
- * Custom filtering for the /jobs page
+ * FCTG Careers — Job Filter & Sort System v4.0
+ * Webflow renders the cards; this script only filters them.
  *
- * Handles: keyword search, city/location filter (grouped by region),
- * region filter, brand filter, category filter, work type filter,
- * sorting, active filter tags, results count, clear all, and empty state.
+ * Architecture (May 2026 rewrite):
+ *   - Webflow Collection List renders all cards (100/page + pagination enabled).
+ *   - On boot, the script fetches additional paginated pages and merges their
+ *     cards into the visible Collection List, so all 300+ cards are in the DOM.
+ *   - Each card carries Designer-bound `filter="<dimension>"` attributes on
+ *     dedicated child elements; the element's text content is the filterable
+ *     value. Dimensions: name, location, country, region, brand, category,
+ *     work-type, job-id, summary.
+ *   - The filter engine reads those attributes via `[filter="X"]` selectors
+ *     and toggles `display` on each card. No template cloning, no JSON fetch,
+ *     no slot-position assumptions — Designer changes the layout freely.
  *
- * v3.1   – Multi-location support: city values may now be a comma-separated
- *           list of locations (per the May-2026 client decision to surface
- *           all locations on a multi-location job). All city filter logic
- *           splits on comma so a single job can match multiple city
- *           checkboxes and contribute to multiple location buckets.
- *           Search-by-job-number: the keyword haystack now includes the
- *           PageUp job ID (j.ji) so recruiters can paste a job number into
- *           the search box and jump straight to the listing (per Steven
- *           Elvin's 8 May 2026 request — searchable, not visibly displayed).
- * v3.0   – MAJOR: Data-driven filtering against ALL jobs (not just 30 DOM items).
- *           Fetches all-jobs.json from CDN, renders cards dynamically.
- *           Cascading cross-filter counts: selecting a filter in one dimension
- *           updates available options and counts in all other dimensions.
- *           "Show More" pagination replaces Webflow CMS pagination.
- *           Single CDN fetch replaces 5 parallel fetches.
- * v2.0   – Fix: Region/city/category counts now from CDN (filter-counts.json)
- *           instead of DOM parsing which miscounted filter checkboxes as jobs.
- * v1.9   – Fix: Filter options now show ALL CMS items (not just first 30).
- *           New: Back button auto-scrolls to listings and opens active filter accordions.
- *           Fix: Script loader uses createElement (not HTML tag) for Webflow compatibility.
+ * Multi-location: location values may be comma-separated (e.g. "New South
+ * Wales, Queensland, Victoria"). The location matcher splits and any-matches
+ * so multi-location jobs surface under every constituent city checkbox.
+ *
+ * Search-by-job-number: job-id is hidden on the card via the `card-detail
+ * hidden` combo class but lives in the DOM and contributes to the keyword
+ * haystack. Recruiters can paste a job number into search.
+ *
+ * v4.0   – MAJOR rewrite. Removed JSON fetch + template cloning + slot-by-
+ *           position rendering (Tokyo bug class). Webflow now owns the layout
+ *           entirely. Smaller (~500 lines vs 1450), no template coupling.
+ *           Drives off Designer-bound `filter="<dimension>"` attributes.
+ *           Multi-location split + job-id search retained.
+ *           See PROJECT-DOCUMENTATION.md for the architecture rationale.
+ * v3.1   – (legacy) Multi-location + search-by-job-number support over JSON.
+ * v3.0   – (legacy) Data-driven filtering against ALL jobs, JS-rendered cards.
  */
 (function () {
   'use strict';
 
-  // Global guard – prevent double-init when Webflow includes the script twice
   if (window._fctgFilterLoaded) return;
   window._fctgFilterLoaded = true;
 
   // ── Config ────────────────────────────────
   var DEBOUNCE = 250;
   var INIT_DELAY = 300;
-  var PAGE_SIZE = 30;
-  // Cache bust every 20 minutes (aligned to sync schedule) so visitors always see fresh data.
-  // JSON artifacts live on the `data` branch — isolated from the code branch to keep
-  // main's history clean. See PROJECT-DOCUMENTATION.md for the split.
-  //
-  // Source: raw.githubusercontent.com (was jsDelivr CDN). Empirically jsDelivr's
-  // @data branch URL caches a stale SHA reference and the public purge endpoint
-  // cannot reliably invalidate it (purge ACKs return status:"finished" but
-  // edges keep serving stale content for hours). raw.githubusercontent.com
-  // is always fresh and fast enough for the visitor-facing /jobs page.
-  var CACHE_EPOCH = Math.floor(Date.now() / (20 * 60 * 1000));
-  var ALL_JOBS_URL = 'https://raw.githubusercontent.com/The-Uncoders/pageup-webflow-sync/data/all-jobs.json?v=' + CACHE_EPOCH;
+  var PAGE_SIZE = 30;            // Show More step
+  var BACK_KEY = 'fctg_back';
+  var STATE_KEY = 'fctg_filter_state';
+
+  var URL_PARAM = {
+    keyword: 'q', region: 'region', city: 'city', brand: 'brand',
+    category: 'category', workType: 'type', sortMode: 'sort'
+  };
 
   // ── State ─────────────────────────────────
   var keyword = '';
@@ -58,95 +57,13 @@
   var activeCategories = {};
   var workType = '';
   var sortMode = 'default';
+  var visibleLimit = PAGE_SIZE;
 
-  // URL query-param names for shareable filtered links. Every filter toggle
-  // updates window.location via history.replaceState(), and on initial load
-  // applyFiltersFromURL() parses these back into state.
-  var URL_PARAM = {
-    keyword:  'q',
-    region:   'region',
-    city:     'city',
-    brand:    'brand',
-    category: 'category',
-    workType: 'type',
-    sortMode: 'sort'
-  };
-
-  var allJobs = [];        // all jobs from CDN JSON
-  var filteredJobs = [];   // filtered subset
-  var currentPage = 1;
-
-  var _cardTemplate = null;  // cloned from first CMS card
-  // Default to '/jobs/' — overridden by captureCardTemplate if the Webflow template
-  // includes a linked card. Without the fallback, cards become unclickable when the
-  // Designer template doesn't wrap the card in a link-block.
-  var _collectionPrefix = '/jobs/';
-  var _allCounts = null;     // derived from allJobs: regions, cities, brands, categories, lookup maps
-  var _totalJobs = 0;
-
-  // Cached element references
-  var _rcEl = null;
-  var _icEl = null;
-  var _emptyEl = null;
-  var _allRadio = null;
+  // Cached element refs
   var _listEl = null;
-
-  // ── Helpers for preserving object references ──
-  function clearObj(obj) {
-    var keys = Object.keys(obj);
-    for (var i = 0; i < keys.length; i++) delete obj[keys[i]];
-  }
-  function copyInto(target, source) {
-    clearObj(target);
-    if (!source) return;
-    var keys = Object.keys(source);
-    for (var i = 0; i < keys.length; i++) target[keys[i]] = source[keys[i]];
-  }
-
-  // Multi-location jobs store comma-separated cities in `ci` (e.g.
-  // "New South Wales, Queensland, Victoria"). Splitting lets a single job
-  // contribute to multiple city buckets and match any selected city filter.
-  function cityPartsRaw(ci) {
-    if (!ci) return [];
-    return ci.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
-  }
-  function cityPartsLower(ci) {
-    var parts = cityPartsRaw(ci);
-    var out = [];
-    for (var i = 0; i < parts.length; i++) out.push(parts[i].toLowerCase());
-    return out;
-  }
-  function anyCityActive(ci, activeMap) {
-    var parts = cityPartsLower(ci);
-    for (var i = 0; i < parts.length; i++) {
-      if (activeMap[parts[i]]) return true;
-    }
-    return false;
-  }
-
-  // ── Neutralise Finsweet ───────────────────
-  window.fsAttributes = window.fsAttributes || [];
-  window.fsAttributes.push(['cmsfilter', function (fi) {
-    if (fi && fi.length) fi.forEach(function (inst) {
-      try { if (typeof inst.destroy === 'function') inst.destroy(); } catch (e) {}
-    });
-  }]);
-  window.fsAttributes.push(['cmssort', function (si) {
-    if (si && si.length) si.forEach(function (inst) {
-      try { if (typeof inst.destroy === 'function') inst.destroy(); } catch (e) {}
-    });
-  }]);
-
-  function stripFinsweet() {
-    var attrs = [
-      'fs-cmsfilter-element', 'fs-cmsfilter-field',
-      'fs-cmssort-element', 'fs-cmssort-field'
-    ];
-    for (var a = 0; a < attrs.length; a++) {
-      var els = document.querySelectorAll('[' + attrs[a] + ']');
-      for (var i = 0; i < els.length; i++) els[i].removeAttribute(attrs[a]);
-    }
-  }
+  var _rcEl = null, _icEl = null, _emptyEl = null, _allRadio = null;
+  var _allCards = [];          // every card in the list (after paginate-merge)
+  var _initialised = false;
 
   // ── Boot ──────────────────────────────────
   if (document.readyState === 'loading') {
@@ -155,183 +72,246 @@
     setTimeout(init, INIT_DELAY);
   }
 
-  // ── Initialise ────────────────────────────
-  var _initialised = false;
   function init() {
-    // Handle "All Jobs" back button on job template pages
     setupBackButton();
-
     if (_initialised) return;
-    _initialised = true;
 
     _listEl = document.querySelector('.career_list');
-    if (!_listEl) return;
+    if (!_listEl) return;     // not on /jobs page (e.g. on /jobs/{slug})
+    _initialised = true;
 
-    // Cache refs BEFORE stripping Finsweet attributes
+    // Cache filter-counter refs BEFORE Finsweet attributes are stripped
     _rcEl = document.querySelector('[fs-cmsfilter-element="results-count"]');
     _icEl = document.querySelector('[fs-cmsfilter-element="items-count"]');
     _emptyEl = document.querySelector('[fs-cmsfilter-element="empty"]');
-    var tpl = document.querySelector('[fs-cmsfilter-element="tag-template"]');
-    var resetEls = document.querySelectorAll('a[fs-cmsfilter-element="reset"]');
     _allRadio = document.querySelector('label[fs-cmsfilter-element="reset"] input[type="radio"]');
+    var resetEls = document.querySelectorAll('a[fs-cmsfilter-element="reset"]');
 
-    stripFinsweet();
-    setTimeout(stripFinsweet, 0);
-    setTimeout(stripFinsweet, 200);
-    setTimeout(stripFinsweet, 1000);
-    setTimeout(stripFinsweet, 3000);
-
-    var form = document.querySelector('.filters1_form-block form') ||
-               document.querySelector('.filters1_form');
-    if (form) form.addEventListener('submit', function (e) { e.preventDefault(); });
-
-    if (tpl) tpl.style.display = 'none';
-
-    // Inject minimal styles for region sub-headings in location group
     injectStyles();
+    neutraliseFinsweet();
+    preventFormSubmits();
 
-    // Capture the card template from the first CMS-rendered card
-    captureCardTemplate();
+    // Load remaining pages, then bind UI + apply filters
+    loadAllPages().then(function () {
+      hidePaginationControls();
+      _allCards = collectCards();
 
-    // Hide Webflow CMS pagination permanently (we use "Show More")
-    var pag = document.querySelector('.w-pagination-wrapper');
-    if (pag) pag.style.display = 'none';
-
-    // Fetch all jobs data from CDN, then build UI
-    fetchJSON(ALL_JOBS_URL, function (data) {
-      if (!data || !Array.isArray(data) || data.length === 0) {
-        console.warn('[fctg] all-jobs.json fetch failed or empty, falling back to DOM');
-        fallbackToDom();
-        return;
-      }
-
-      allJobs = data;
-      _totalJobs = allJobs.length;
-
-      // Derive all filter options from the data
-      buildInitialCounts();
-
-      // Ensure headings match PageUp names
-      renameHeadingsIfNeeded();
-
-      // Build filter UI
-      hideAllCountryCheckboxes();
-      buildRegionFilter();
-      groupLocationsByRegion();
-      deduplicateAndBuildBrands();
-      buildCategoryFilter();
-
-      // Bind all interactions
       bindSearch();
       bindCheckboxes('input[name="city"]', activeCities);
       bindCheckboxes('input[name="region"]', activeRegions);
       bindCheckboxes('input[name="brand"]', activeBrands);
       bindCheckboxes('input[name="category"]', activeCategories);
-      bindRadios();
+      bindWorkTypeRadios();
       bindSort();
       bindClear(resetEls);
+      bindShowMore();
 
-      // URL query params take precedence — they're how shareable filtered
-      // links work. Fall back to sessionStorage only when the URL is empty
-      // (e.g. user clicked "All Jobs" back button from a job post).
+      // URL params take precedence; sessionStorage is the fallback (back-nav).
       var urlApplied = applyFiltersFromURL();
       if (!urlApplied) restoreFilterState();
 
       applyFilters();
-
-      // If returning via "All Jobs" back button, scroll to listings and open relevant accordions
+      handleBackNavigation();
+    }).catch(function (err) {
+      console.warn('[fctg-filter] paginate-load failed, falling back to first page only:', err);
+      _allCards = collectCards();
+      bindSearch();
+      bindCheckboxes('input[name="city"]', activeCities);
+      bindCheckboxes('input[name="region"]', activeRegions);
+      bindCheckboxes('input[name="brand"]', activeBrands);
+      bindCheckboxes('input[name="category"]', activeCategories);
+      bindWorkTypeRadios();
+      bindSort();
+      bindClear(resetEls);
+      bindShowMore();
+      var urlApplied2 = applyFiltersFromURL();
+      if (!urlApplied2) restoreFilterState();
+      applyFilters();
       handleBackNavigation();
     });
   }
 
-  // ── Fallback: if CDN fetch fails, revert to DOM-only filtering (v2.0 behavior) ──
-  function fallbackToDom() {
-    var items = _listEl.querySelectorAll(':scope > .w-dyn-item');
-    if (items.length === 0) return;
-    // Show whatever CMS rendered
-    console.log('[fctg] Fallback: ' + items.length + ' DOM items');
+  // ── Inject scoped styles ──────────────────
+  // Hides the `.hidden` combo-class elements that hold filter-only data
+  // (job-id, region, brand-name) inside cards. Also pre-hides cards beyond
+  // the Show More limit so there's no flash before the first applyFilters().
+  function injectStyles() {
+    if (document.getElementById('fctg-filter-styles')) return;
+    var s = document.createElement('style');
+    s.id = 'fctg-filter-styles';
+    s.textContent =
+      '.career_list .hidden { display: none !important; }' +
+      '.career_list .w-pagination-wrapper, ' +
+      '.career_list ~ .w-pagination-wrapper, ' +
+      '.w-pagination-wrapper { display: none !important; }';
+    document.head.appendChild(s);
   }
 
-  // ── Capture card template from first CMS-rendered card ──
-  function captureCardTemplate() {
-    var firstCard = _listEl.querySelector('.w-dyn-item');
-    if (!firstCard) return;
-
-    // Extract the CMS collection path prefix from the first card's link.
-    // Webflow renders href like "/jobs/some-slug" — we grab "/jobs/" so
-    // dynamically created cards automatically match whatever collection
-    // slug is set in Webflow, with no hardcoded path.
-    var firstLink = firstCard.querySelector('a[href]');
-    if (firstLink) {
-      var href = firstLink.getAttribute('href') || '';
-      // href format: "/collection-slug/item-slug" — extract up to the last "/"
-      var lastSlash = href.lastIndexOf('/');
-      if (lastSlash > 0) {
-        _collectionPrefix = href.substring(0, lastSlash + 1); // e.g. "/jobs/"
-      }
-    }
-
-    _cardTemplate = firstCard.cloneNode(true);
-
-    // Clear all CMS items from the list (we'll render dynamically)
-    var items = _listEl.querySelectorAll(':scope > .w-dyn-item');
-    for (var i = 0; i < items.length; i++) items[i].remove();
+  function hidePaginationControls() {
+    var pags = document.querySelectorAll('.w-pagination-wrapper');
+    for (var i = 0; i < pags.length; i++) pags[i].style.display = 'none';
   }
 
-  // ── Derive all filter counts from allJobs data ──
-  function buildInitialCounts() {
-    var regionCounts = {}, cityCounts = {}, brandCounts = {}, categoryCounts = {};
-    var cityToRegion = {}, cityDisplay = {}, categoryDisplay = {}, brandDisplay = {};
+  function preventFormSubmits() {
+    var form = document.querySelector('.filters1_form-block form') ||
+               document.querySelector('.filters1_form');
+    if (form) form.addEventListener('submit', function (e) { e.preventDefault(); });
+  }
 
-    for (var i = 0; i < allJobs.length; i++) {
-      var j = allJobs[i];
-
-      // Regions
-      var rk = j.r.toLowerCase();
-      if (rk) regionCounts[rk] = (regionCounts[rk] || 0) + 1;
-
-      // Cities — `ci` may be a comma-separated list for multi-location jobs.
-      // Each part contributes to its own bucket so a job tagged across NSW,
-      // VIC and QLD is findable under all three city filters and counted
-      // under each. The job's overall region (j.r) acts as the grouping
-      // parent for every constituent city.
-      var ciRaw = cityPartsRaw(j.ci);
-      for (var ciI = 0; ciI < ciRaw.length; ciI++) {
-        var cityRaw = ciRaw[ciI];
-        var ck = cityRaw.toLowerCase();
-        cityCounts[ck] = (cityCounts[ck] || 0) + 1;
-        if (!cityToRegion[ck]) cityToRegion[ck] = j.r;
-        if (!cityDisplay[ck]) cityDisplay[ck] = cityRaw;
-      }
-
-      // Brands
-      var bk = j.b.toLowerCase();
-      if (bk) {
-        brandCounts[bk] = (brandCounts[bk] || 0) + 1;
-        if (!brandDisplay[bk]) brandDisplay[bk] = j.b;
-      }
-
-      // Categories (may be comma-separated)
-      var cats = j.ca.split(',');
-      for (var c = 0; c < cats.length; c++) {
-        var catk = cats[c].trim().toLowerCase();
-        if (catk) {
-          categoryCounts[catk] = (categoryCounts[catk] || 0) + 1;
-          if (!categoryDisplay[catk]) categoryDisplay[catk] = cats[c].trim();
+  // Removes Finsweet's filter/sort attributes so leftover script (if any
+  // ever loaded) doesn't fight us. Matches v3 behaviour.
+  function neutraliseFinsweet() {
+    window.fsAttributes = window.fsAttributes || [];
+    window.fsAttributes.push(['cmsfilter', function (fi) {
+      if (fi && fi.length) fi.forEach(function (inst) {
+        try { if (typeof inst.destroy === 'function') inst.destroy(); } catch (e) {}
+      });
+    }]);
+    var attrs = ['fs-cmsfilter-element', 'fs-cmsfilter-field', 'fs-cmssort-element', 'fs-cmssort-field'];
+    [0, 200, 1000, 3000].forEach(function (delay) {
+      setTimeout(function () {
+        for (var a = 0; a < attrs.length; a++) {
+          var els = document.querySelectorAll('[' + attrs[a] + ']');
+          for (var i = 0; i < els.length; i++) els[i].removeAttribute(attrs[a]);
         }
-      }
-    }
+      }, delay);
+    });
+  }
 
-    _allCounts = {
-      regions: regionCounts,
-      cities: cityCounts,
-      brands: brandCounts,
-      categories: categoryCounts,
-      cityToRegion: cityToRegion,
-      cityDisplay: cityDisplay,
-      categoryDisplay: categoryDisplay,
-      brandDisplay: brandDisplay
-    };
+  // ── Paginate-load: bypass Webflow's 100-item Collection List cap ──
+  // Webflow renders the first page (up to 100 items) on initial load.
+  // Subsequent pages are reachable via `?<hash>_page=N` URLs surfaced
+  // through the pagination links. We fetch them all in parallel and merge
+  // the cards into the live `.career_list`.
+  //
+  // Deduplicates by `[filter="job-id"]` value as a defensive safety net.
+  // Webflow's "Random shuffle" sort independently re-shuffles each page,
+  // so without dedup the same job can appear on multiple paginated pages
+  // (and others can be missed entirely). Recommend a deterministic sort
+  // in Designer (Default, Closing Date, or Name) — but dedup is a safety
+  // belt for any other source of duplication too.
+  function loadAllPages() {
+    return new Promise(function (resolve, reject) {
+      var nextLink = document.querySelector('.w-pagination-next');
+      if (!nextLink) return resolve();
+
+      var pageCount = readTotalPageCount();
+      if (pageCount <= 1) return resolve();
+
+      var paramName = readPageParamName(nextLink);
+      if (!paramName) return resolve();
+
+      // Track job-ids already in the DOM (from page 1) to dedupe page N.
+      var seen = {};
+      var existingCards = collectCards();
+      for (var i = 0; i < existingCards.length; i++) {
+        var jid = (existingCards[i].querySelector('[filter="job-id"]')?.textContent || '').trim();
+        if (jid) seen[jid] = true;
+      }
+
+      var urls = [];
+      var basePath = location.pathname;
+      for (var p = 2; p <= pageCount; p++) {
+        urls.push(basePath + '?' + encodeURIComponent(paramName) + '=' + p);
+      }
+
+      Promise.all(urls.map(function (u) {
+        return fetch(u, { credentials: 'same-origin' }).then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status + ' on ' + u);
+          return r.text();
+        });
+      })).then(function (htmls) {
+        var parser = new DOMParser();
+        var dupesSkipped = 0;
+        var noIdSkipped = 0;
+        for (var i = 0; i < htmls.length; i++) {
+          var doc = parser.parseFromString(htmls[i], 'text/html');
+          var items = doc.querySelectorAll('.career_list > .w-dyn-item');
+          for (var j = 0; j < items.length; j++) {
+            var item = items[j];
+            var idEl = item.querySelector('[filter="job-id"]');
+            var jobId = idEl ? (idEl.textContent || '').trim() : '';
+            if (!jobId) { noIdSkipped++; continue; }
+            if (seen[jobId]) { dupesSkipped++; continue; }
+            seen[jobId] = true;
+            _listEl.appendChild(document.adoptNode(item));
+          }
+        }
+        if (dupesSkipped > 0) {
+          console.warn('[fctg-filter] paginate-load skipped ' + dupesSkipped +
+            ' duplicate card(s). Likely cause: Designer Collection List sort = "Random shuffle". ' +
+            'Switch to Default / Closing Date / Name for stable pagination.');
+        }
+        if (noIdSkipped > 0) {
+          console.warn('[fctg-filter] paginate-load skipped ' + noIdSkipped +
+            ' card(s) missing [filter="job-id"] attribute.');
+        }
+        resolve();
+      }).catch(reject);
+    });
+  }
+
+  function readTotalPageCount() {
+    var pageCountEl = document.querySelector('.w-page-count');
+    if (!pageCountEl) return 1;
+    var m = (pageCountEl.textContent || '').match(/(\d+)\s*\/\s*(\d+)/);
+    if (m) return parseInt(m[2], 10);
+    var n = parseInt((pageCountEl.textContent || '').replace(/[^\d]/g, ''), 10);
+    return isNaN(n) ? 1 : n;
+  }
+
+  function readPageParamName(nextLink) {
+    try {
+      var u = new URL(nextLink.href, location.origin);
+      var keys = [];
+      u.searchParams.forEach(function (_, k) { if (/_page$/.test(k)) keys.push(k); });
+      return keys[0] || null;
+    } catch (e) { return null; }
+  }
+
+  // ── Card cache ────────────────────────────
+  function collectCards() {
+    return Array.prototype.slice.call(_listEl.querySelectorAll(':scope > .w-dyn-item'));
+  }
+
+  // Pulls the value of a single filter dimension from a card. The card
+  // template embeds it via Webflow custom attributes: `filter="<dim>"` on
+  // a child element, with the element's text content bound to a CMS field.
+  function dimValue(card, dim) {
+    var el = card.querySelector('[filter="' + dim + '"]');
+    return el ? (el.textContent || '').trim() : '';
+  }
+
+  function locationParts(card) {
+    var raw = dimValue(card, 'location');
+    if (!raw) return [];
+    var parts = raw.split(',');
+    var out = [];
+    for (var i = 0; i < parts.length; i++) {
+      var s = parts[i].trim();
+      if (s) out.push(s);
+    }
+    return out;
+  }
+
+  // Search haystack — combines all filterable dimensions plus the visible
+  // text. Cached per-card so we only build it once. Includes job-id so
+  // recruiters can paste a job number and find the listing immediately.
+  function haystack(card) {
+    if (!card._fctgHay) {
+      card._fctgHay = [
+        dimValue(card, 'name'),
+        dimValue(card, 'job-id'),
+        dimValue(card, 'location'),
+        dimValue(card, 'country'),
+        dimValue(card, 'region'),
+        dimValue(card, 'brand'),
+        dimValue(card, 'category'),
+        dimValue(card, 'work-type'),
+        dimValue(card, 'summary')
+      ].join(' ').toLowerCase();
+    }
+    return card._fctgHay;
   }
 
   // ── Filter engine ─────────────────────────
@@ -343,52 +323,85 @@
     var hasCategories = objSize(activeCategories) > 0;
     var wt = workType.toLowerCase();
 
-    filteredJobs = [];
-
-    for (var i = 0; i < allJobs.length; i++) {
-      var j = allJobs[i];
+    var visible = [];
+    for (var i = 0; i < _allCards.length; i++) {
+      var card = _allCards[i];
       var show = true;
 
-      if (show && kw) {
-        // Haystack includes `j.ji` (PageUp job ID) so recruiters can paste
-        // a job number into the search box and jump straight to the result.
-        var hay = [j.t, j.ji, j.ca, j.ci, j.co, j.r, j.b, j.wt, j.su].join(' ').toLowerCase();
-        show = hay.indexOf(kw) !== -1;
+      if (show && kw) show = haystack(card).indexOf(kw) !== -1;
+      if (show && hasCities) {
+        var locs = locationParts(card);
+        var any = false;
+        for (var j = 0; j < locs.length; j++) {
+          if (activeCities[locs[j].toLowerCase()]) { any = true; break; }
+        }
+        show = any;
       }
-      // Multi-location jobs: any matching city in the comma-separated list
-      // counts. Same for regions (single-valued today, but treated uniformly).
-      if (show && hasCities) show = anyCityActive(j.ci, activeCities);
-      if (show && hasRegions) show = !!activeRegions[j.r.toLowerCase()];
-      if (show && hasBrands) show = !!activeBrands[j.b.toLowerCase()];
-      if (show && hasCategories) show = matchesCategory(j.ca, activeCategories);
-      if (show && wt) show = j.wt.toLowerCase() === wt;
+      if (show && hasRegions) {
+        show = !!activeRegions[dimValue(card, 'region').toLowerCase()];
+      }
+      if (show && hasBrands) {
+        show = !!activeBrands[dimValue(card, 'brand').toLowerCase()];
+      }
+      if (show && hasCategories) {
+        show = matchesCategory(card, activeCategories);
+      }
+      if (show && wt) {
+        show = dimValue(card, 'work-type').toLowerCase() === wt;
+      }
 
-      if (show) filteredJobs.push(j);
+      if (show) visible.push(card); else card.style.display = 'none';
     }
 
-    // Sort if needed
-    sortFilteredJobs();
-
-    currentPage = 1;
-    renderCards();
+    sortVisible(visible);
+    applyShowMoreLimit(visible);
+    setCount(visible.length);
+    setEmpty(visible.length === 0);
     updateCrossFilterCounts();
-    setCount(filteredJobs.length);
-    setEmpty(filteredJobs.length === 0);
     renderTags();
     saveFilterState();
     serializeFiltersToURL();
   }
 
-  // ── Category matching (handles comma-separated) ──
-  function matchesCategory(catField, activeMap) {
-    var parts = catField.split(',');
+  function matchesCategory(card, activeMap) {
+    var raw = dimValue(card, 'category');
+    if (!raw) return false;
+    var parts = raw.split(',');
     for (var i = 0; i < parts.length; i++) {
       if (activeMap[parts[i].trim().toLowerCase()]) return true;
     }
     return false;
   }
 
-  // ── Cascading cross-filter counts ─────────
+  // Sort + Show More ──
+  // Sort is applied to the filtered set, then the first `visibleLimit`
+  // cards are shown and the rest hidden. Cards are repositioned via
+  // appendChild so their DOM order matches the sort.
+  function sortVisible(visible) {
+    if (sortMode === 'Name: A to Z') {
+      visible.sort(function (a, b) { return dimValue(a, 'name').localeCompare(dimValue(b, 'name')); });
+    } else if (sortMode === 'Name: Z to A') {
+      visible.sort(function (a, b) { return dimValue(b, 'name').localeCompare(dimValue(a, 'name')); });
+    }
+    // For non-default sort, reposition in DOM so visible cards appear in
+    // sorted order. For default, we leave existing DOM order alone.
+    if (sortMode !== 'default') {
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < visible.length; i++) frag.appendChild(visible[i]);
+      _listEl.appendChild(frag);
+    }
+  }
+
+  function applyShowMoreLimit(visible) {
+    for (var i = 0; i < visible.length; i++) {
+      visible[i].style.display = (i < visibleLimit) ? '' : 'none';
+    }
+    updateShowMoreButton(visible.length > visibleLimit, visible.length - visibleLimit);
+  }
+
+  // ── Cross-filter counts (cascading) ───────
+  // For each filter dimension, count jobs that pass ALL other filters
+  // (so users see how many results each option would yield if added).
   function updateCrossFilterCounts() {
     var kw = keyword.toLowerCase();
     var hasCities = objSize(activeCities) > 0;
@@ -397,120 +410,96 @@
     var hasCategories = objSize(activeCategories) > 0;
     var wt = workType.toLowerCase();
 
-    // For each dimension, count jobs matching all OTHER filters except that dimension
     var regionCounts = {}, cityCounts = {}, brandCounts = {}, categoryCounts = {};
 
-    for (var i = 0; i < allJobs.length; i++) {
-      var j = allJobs[i];
+    for (var i = 0; i < _allCards.length; i++) {
+      var card = _allCards[i];
 
-      // Apply keyword (always applies to all dimensions)
-      var passesKeyword = true;
-      if (kw) {
-        var hay = [j.t, j.ji, j.ca, j.ci, j.co, j.r, j.b, j.wt, j.su].join(' ').toLowerCase();
-        passesKeyword = hay.indexOf(kw) !== -1;
-      }
-      if (!passesKeyword) continue;
+      if (kw && haystack(card).indexOf(kw) === -1) continue;
+      if (wt && dimValue(card, 'work-type').toLowerCase() !== wt) continue;
 
-      // Apply workType (always applies to all dimensions)
-      if (wt && j.wt.toLowerCase() !== wt) continue;
-
-      // Pre-compute filter matches for each dimension
-      var matchCity = !hasCities || anyCityActive(j.ci, activeCities);
-      var matchRegion = !hasRegions || !!activeRegions[j.r.toLowerCase()];
-      var matchBrand = !hasBrands || !!activeBrands[j.b.toLowerCase()];
-      var matchCategory = !hasCategories || matchesCategory(j.ca, activeCategories);
+      var locs = locationParts(card);
+      var matchCity = !hasCities || (function () {
+        for (var j = 0; j < locs.length; j++) if (activeCities[locs[j].toLowerCase()]) return true;
+        return false;
+      })();
+      var region = dimValue(card, 'region').toLowerCase();
+      var matchRegion = !hasRegions || !!activeRegions[region];
+      var brand = dimValue(card, 'brand').toLowerCase();
+      var matchBrand = !hasBrands || !!activeBrands[brand];
+      var matchCategory = !hasCategories || matchesCategory(card, activeCategories);
 
       // Region counts: apply all EXCEPT region filter
       if (matchCity && matchBrand && matchCategory) {
-        var rk = j.r.toLowerCase();
-        if (rk) regionCounts[rk] = (regionCounts[rk] || 0) + 1;
+        if (region) regionCounts[region] = (regionCounts[region] || 0) + 1;
       }
-
-      // City counts: apply all EXCEPT city filter. Each comma-separated
-      // part contributes to its own bucket so multi-location jobs are
-      // counted against every city they cover.
+      // City counts: apply all EXCEPT city filter (each location part)
       if (matchRegion && matchBrand && matchCategory) {
-        var ciList = cityPartsLower(j.ci);
-        for (var ciJ = 0; ciJ < ciList.length; ciJ++) {
-          var ck = ciList[ciJ];
+        for (var k = 0; k < locs.length; k++) {
+          var ck = locs[k].toLowerCase();
           cityCounts[ck] = (cityCounts[ck] || 0) + 1;
         }
       }
-
       // Brand counts: apply all EXCEPT brand filter
       if (matchCity && matchRegion && matchCategory) {
-        var bk = j.b.toLowerCase();
-        if (bk) brandCounts[bk] = (brandCounts[bk] || 0) + 1;
+        if (brand) brandCounts[brand] = (brandCounts[brand] || 0) + 1;
       }
-
       // Category counts: apply all EXCEPT category filter
       if (matchCity && matchRegion && matchBrand) {
-        var cats = j.ca.split(',');
-        for (var c = 0; c < cats.length; c++) {
-          var catk = cats[c].trim().toLowerCase();
-          if (catk) categoryCounts[catk] = (categoryCounts[catk] || 0) + 1;
+        var rawCat = dimValue(card, 'category');
+        if (rawCat) {
+          var cats = rawCat.split(',');
+          for (var c = 0; c < cats.length; c++) {
+            var catk = cats[c].trim().toLowerCase();
+            if (catk) categoryCounts[catk] = (categoryCounts[catk] || 0) + 1;
+          }
         }
       }
     }
 
-    // Update each filter panel
     updateFilterPanel('input[name="region"]', regionCounts);
     updateFilterPanel('input[name="city"]', cityCounts);
     updateFilterPanel('input[name="brand"]', brandCounts);
     updateFilterPanel('input[name="category"]', categoryCounts);
   }
 
-  // ── Update filter panel badge counts + show/hide zero-count options ──
   function updateFilterPanel(selector, counts) {
     var inputs = document.querySelectorAll(selector);
     for (var i = 0; i < inputs.length; i++) {
       var cb = inputs[i];
       var label = cb.closest('.w-checkbox');
       if (!label) continue;
-      var badge = label.querySelector('.filter-count');
       var spanEl = label.querySelector('.w-form-label');
       var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
       var count = counts[key] || 0;
 
+      var badge = label.querySelector('.filter-count');
       if (badge) badge.textContent = count;
 
-      // Hide zero-count options, but keep checked ones visible (so user can uncheck)
-      if (count > 0 || cb.checked) {
-        label.style.display = '';
-      } else {
-        label.style.display = 'none';
-      }
+      // Hide zero-count options unless the user has them checked already.
+      if (count > 0 || cb.checked) label.style.display = '';
+      else label.style.display = 'none';
     }
-
-    // Also update region sub-headings in the Locations panel
-    if (selector === 'input[name="city"]') {
-      updateLocationSubheadings(counts);
-    }
+    if (selector === 'input[name="city"]') updateLocationSubheadings(counts);
   }
 
-  // ── Hide location sub-headings that have no visible cities ──
   function updateLocationSubheadings(cityCounts) {
     var subheadings = document.querySelectorAll('.filters1_filter-group-subheading');
     for (var i = 0; i < subheadings.length; i++) {
       var sh = subheadings[i];
-      var regionName = sh.textContent.trim();
-      // Check if any city in this region has count > 0
-      var hasVisibleCities = false;
+      var hasVisible = false;
       var next = sh.nextElementSibling;
       while (next && !next.classList.contains('filters1_filter-group-subheading')) {
-        if (next.style.display !== 'none') {
-          hasVisibleCities = true;
-          break;
-        }
+        if (next.style.display !== 'none') { hasVisible = true; break; }
         next = next.nextElementSibling;
       }
-      sh.style.display = hasVisibleCities ? '' : 'none';
+      sh.style.display = hasVisible ? '' : 'none';
     }
   }
 
-  // ── Results count ─────────────────────────
+  // ── Counts + empty state ──────────────────
   function setCount(n) {
-    var total = _totalJobs || allJobs.length;
+    var total = _allCards.length;
     if (_rcEl) _rcEl.textContent = n;
     if (_icEl) _icEl.textContent = total;
 
@@ -529,244 +518,126 @@
     if (_emptyEl) _emptyEl.style.display = flag ? 'flex' : 'none';
   }
 
-  // ── Dynamic card rendering ────────────────
-
-  function renderCards() {
-    if (!_listEl || !_cardTemplate) return;
-
-    // Clear existing cards
-    var existing = _listEl.querySelectorAll(':scope > .w-dyn-item');
-    for (var i = 0; i < existing.length; i++) existing[i].remove();
-
-    // Render current page slice
-    var end = Math.min(currentPage * PAGE_SIZE, filteredJobs.length);
-    for (var i = 0; i < end; i++) {
-      _listEl.appendChild(createCard(filteredJobs[i]));
-    }
-
-    // Show/hide "Show More" button
-    updateShowMoreButton(end < filteredJobs.length);
-
-    // NOTE: We intentionally do NOT call ix2.init() here.
-    // Calling it reinitialises ALL Webflow interactions (accordions,
-    // page-load animations, etc.) which resets their state — causing
-    // accordions to snap shut on every filter click and delayed
-    // GSAP animations to restart.  CSS-based hover effects on cards
-    // work without IX2 rebinding since the cloned elements already
-    // carry the same classes and structure.
-  }
-
-  function createCard(job) {
-    var card = _cardTemplate.cloneNode(true);
-
-    // Title
-    var heading = card.querySelector('.heading-style-h5');
-    if (heading) heading.textContent = job.t;
-
-    // Category tag
-    var tag = card.querySelector('.tag');
-    if (tag) tag.textContent = job.ca;
-
-    // Brand logo image
-    // Clear srcset to prevent Webflow's responsive image from overriding our src
-    var logoImg = card.querySelector('.career_item-header_image');
-    if (logoImg && job.l) {
-      logoImg.src = job.l;
-      logoImg.srcset = '';
-      logoImg.sizes = '';
-      logoImg.alt = job.b || '';
-      logoImg.loading = 'lazy';
-    } else if (logoImg && !job.l) {
-      // No logo available — hide the image to avoid showing wrong brand
-      logoImg.style.display = 'none';
-    }
-
-    // Card layout (May-2026 Designer redesign):
-    //   .career23_detail-wrapper[0]  → clock icon  → work type (job.wt)
-    //   .career23_detail-wrapper[1]  → pin icon    → country  (job.co)
-    //   .card-detail.align_bottom    → building    → city     (job.ci, multi-location)
-    // Brand is now rendered as a logo IMAGE via job.l (handled above).
-    //
-    // Important: the city slot uses a DIFFERENT class (.card-detail) than the
-    // top-row slots — the Designer changed it during the redesign. If we don't
-    // explicitly target it here, every cloned card displays whatever city the
-    // first CMS-bound template card happened to have (commonly seen as a stray
-    // "Tokyo" or similar value baked into the template).
-    var dw = card.querySelectorAll('.career23_detail-wrapper');
-    setDwText(dw[0], job.wt);
-    setDwText(dw[1], job.co);
-    var cityDetail = card.querySelector('.card-detail');
-    setDwText(cityDetail, job.ci);
-
-    // Summary
-    var summary = card.querySelector('.text-size-regular');
-    if (summary) summary.textContent = job.su;
-
-    // Link — Since cards are rendered from JSON (not CMS-bound), we must set
-    // the href. The collection prefix (e.g. "/jobs/") was extracted from the
-    // first CMS card in captureCardTemplate(); falls back to "/jobs/".
-    var jobHref = job.s ? (_collectionPrefix + job.s) : '';
-    if (jobHref) {
-      var links = card.querySelectorAll('a');
-      var wiredViaAnchor = false;
-      for (var li = 0; li < links.length; li++) {
-        links[li].href = jobHref;
-        wiredViaAnchor = true;
-      }
-      if (card.tagName === 'A') {
-        card.href = jobHref;
-        wiredViaAnchor = true;
-      }
-
-      // Fallback: when the Webflow template has no <a> wrapper on the card
-      // (which is the current state of the /jobs template), clicking produces
-      // no navigation. Make the card element itself act as a link, keeping
-      // keyboard accessibility and right-click "Open in new tab" support via
-      // a hidden overlay anchor.
-      if (!wiredViaAnchor) {
-        card.style.position = card.style.position || 'relative';
-        card.style.cursor = 'pointer';
-
-        // Insert a full-card invisible anchor for right-click / middle-click
-        // semantics and SEO crawlability.
-        var overlay = document.createElement('a');
-        overlay.href = jobHref;
-        overlay.setAttribute('aria-label', job.t || 'View job');
-        overlay.style.cssText =
-          'position:absolute;inset:0;z-index:1;' +
-          'display:block;text-indent:-9999px;' +
-          'background:transparent;';
-        card.appendChild(overlay);
-
-        // Ensure any interactive children (e.g. tag pills) stay above the overlay
-        // if the Designer adds them later.
-        card.setAttribute('data-job-href', jobHref);
-      }
-    }
-
-    return card;
-  }
-
-  function setDwText(wrapper, text) {
-    if (!wrapper) return;
-    var t = wrapper.querySelector('.text-size-medium');
-    if (t) t.textContent = text || '';
-  }
-
-  // ── "Show More" button ────────────────────
-  function updateShowMoreButton(hasMore) {
+  // ── Show More button ──────────────────────
+  function bindShowMore() {
     var btn = document.getElementById('fctg-show-more');
-    if (!btn && hasMore) {
-      btn = document.createElement('button');
-      btn.id = 'fctg-show-more';
-      btn.className = 'button is-secondary';
-      btn.textContent = 'Show More';
-      btn.style.cssText = 'display:block;margin:24px auto 0;';
-      btn.addEventListener('click', function () {
-        currentPage++;
-        renderCards();
-      });
-      _listEl.parentElement.insertBefore(btn, _listEl.nextSibling);
-    }
-    if (btn) btn.style.display = hasMore ? '' : 'none';
+    if (btn) return;            // already injected
+    btn = document.createElement('button');
+    btn.id = 'fctg-show-more';
+    btn.type = 'button';
+    btn.textContent = 'Show more jobs';
+    btn.style.cssText = 'display:none;margin:24px auto;padding:12px 24px;background:#000;color:#fff;border:none;border-radius:8px;font:600 14px/1 inherit;cursor:pointer;';
+    btn.addEventListener('click', function () {
+      visibleLimit += PAGE_SIZE;
+      applyFilters();
+    });
+    if (_listEl.parentElement) _listEl.parentElement.appendChild(btn);
   }
 
-  // ── Search ────────────────────────────────
+  function updateShowMoreButton(hasMore, remaining) {
+    var btn = document.getElementById('fctg-show-more');
+    if (!btn) return;
+    if (hasMore) {
+      btn.style.display = '';
+      btn.textContent = 'Show more (' + remaining + ' remaining)';
+    } else {
+      btn.style.display = 'none';
+    }
+  }
+
+  // ── Filter UI bindings ────────────────────
   function bindSearch() {
     var input = document.querySelector('.filters1_keyword-search input');
     if (!input) return;
-    var timer;
+    var t;
     input.addEventListener('input', function () {
-      clearTimeout(timer);
-      timer = setTimeout(function () {
-        keyword = input.value.trim();
+      clearTimeout(t);
+      t = setTimeout(function () {
+        keyword = (input.value || '').trim();
+        visibleLimit = PAGE_SIZE;
         applyFilters();
       }, DEBOUNCE);
     });
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); keyword = input.value.trim(); applyFilters(); }
-    });
   }
 
-  // ── Checkbox filters ──────────────────────
   function bindCheckboxes(selector, store) {
-    document.querySelectorAll(selector).forEach(function (cb) {
-      cb.addEventListener('change', function () {
-        var label = getCheckLabel(cb);
-        if (!label) return;
-        var key = label.toLowerCase();
-        if (cb.checked) store[key] = true;
-        else delete store[key];
-        applyFilters();
-      });
-    });
-  }
-
-  function getCheckLabel(cb) {
-    var wrap = cb.closest('.w-checkbox');
-    if (!wrap) return '';
-    var lbl = wrap.querySelector('.w-form-label');
-    return lbl ? lbl.textContent.trim() : '';
-  }
-
-  // ── Radio filter (work type) ──────────────
-  function bindRadios() {
-    document.querySelectorAll('input[name="Filter-Two"]').forEach(function (r) {
-      r.addEventListener('change', function () {
-        var lbl = getRadioLabel(r);
-        workType = (lbl === 'All') ? '' : lbl;
-        applyFilters();
-      });
-    });
-  }
-
-  function getRadioLabel(r) {
-    var wrap = r.closest('.w-radio');
-    if (!wrap) return '';
-    var lbl = wrap.querySelector('.w-form-label');
-    return lbl ? lbl.textContent.trim() : '';
-  }
-
-  // ── Sort ───────────────────────────────────
-  function bindSort() {
-    var dd = document.querySelector('.dropdown1_component');
-    if (!dd) return;
-    dd.querySelectorAll('.w-dropdown-link').forEach(function (link) {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        sortMode = link.textContent.trim();
-        var toggle = dd.querySelector('.w-dropdown-toggle');
-        if (toggle) {
-          var parts = toggle.querySelectorAll('div');
-          for (var i = 0; i < parts.length; i++) {
-            if (!parts[i].querySelector('svg') && !parts[i].classList.contains('w-icon-dropdown-toggle')) {
-              parts[i].textContent = sortMode; break;
-            }
-          }
-        }
-        sortFilteredJobs();
-        currentPage = 1;
-        renderCards();
-        dd.classList.remove('w--open');
-        var dl = dd.querySelector('.w-dropdown-list');
-        if (dl) dl.classList.remove('w--open');
-      });
-    });
-  }
-
-  function sortFilteredJobs() {
-    switch (sortMode) {
-      case 'Name: A to Z':
-        filteredJobs.sort(function (a, b) { return a.t.localeCompare(b.t); }); break;
-      case 'Name: Z to A':
-        filteredJobs.sort(function (a, b) { return b.t.localeCompare(a.t); }); break;
-      default:
-        // Keep original order (order from CMS/all-jobs.json)
-        break;
+    var inputs = document.querySelectorAll(selector);
+    for (var i = 0; i < inputs.length; i++) {
+      (function (cb) {
+        cb.addEventListener('change', function () {
+          var label = cb.closest('.w-checkbox');
+          var spanEl = label ? label.querySelector('.w-form-label') : null;
+          var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
+          if (!key) return;
+          if (cb.checked) store[key] = true; else delete store[key];
+          visibleLimit = PAGE_SIZE;
+          applyFilters();
+        });
+      })(inputs[i]);
     }
   }
 
-  // ── Filter tags ────────────────────────────
+  function bindWorkTypeRadios() {
+    document.querySelectorAll('input[name="Filter-Two"]').forEach(function (r) {
+      r.addEventListener('change', function () {
+        if (!r.checked) return;
+        var label = r.closest('.w-radio');
+        var spanEl = label ? label.querySelector('.w-form-label') : null;
+        var lbl = spanEl ? spanEl.textContent.trim() : '';
+        workType = (lbl === 'All') ? '' : lbl;
+        visibleLimit = PAGE_SIZE;
+        applyFilters();
+      });
+    });
+  }
+
+  function bindSort() {
+    var dropdowns = document.querySelectorAll('.w-dropdown');
+    dropdowns.forEach(function (dd) {
+      var links = dd.querySelectorAll('a');
+      links.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          var lbl = link.textContent.trim();
+          if (!/Name|Default|Newest|Oldest/i.test(lbl)) return;
+          sortMode = lbl;
+          var toggle = dd.querySelector('.w-dropdown-toggle');
+          if (toggle) {
+            var parts = toggle.querySelectorAll('div');
+            for (var i = 0; i < parts.length; i++) {
+              if (parts[i].children.length === 0) { parts[i].textContent = lbl; break; }
+            }
+          }
+          visibleLimit = PAGE_SIZE;
+          applyFilters();
+        });
+      });
+    });
+  }
+
+  function bindClear(resetEls) {
+    function clearAll(e) {
+      if (e) e.preventDefault();
+      keyword = '';
+      clearObj(activeCities);
+      clearObj(activeRegions);
+      clearObj(activeBrands);
+      clearObj(activeCategories);
+      workType = '';
+      sortMode = 'default';
+      visibleLimit = PAGE_SIZE;
+      var inp = document.querySelector('.filters1_keyword-search input');
+      if (inp) inp.value = '';
+      var cbs = document.querySelectorAll(
+        'input[name="city"], input[name="region"], input[name="brand"], input[name="category"]'
+      );
+      for (var i = 0; i < cbs.length; i++) cbs[i].checked = false;
+      if (_allRadio) _allRadio.checked = true;
+      applyFilters();
+    }
+    for (var i = 0; i < resetEls.length; i++) resetEls[i].addEventListener('click', clearAll);
+  }
+
+  // ── Active filter tags ────────────────────
   function renderTags() {
     var container = document.querySelector('.filters1_tags-wrapper');
     if (!container) return;
@@ -775,27 +646,13 @@
 
     var filters = [];
     if (keyword) filters.push({ type: 'keyword', label: '"' + keyword + '"' });
-
-    var cityKeys = Object.keys(activeCities);
-    for (var c = 0; c < cityKeys.length; c++)
-      filters.push({ type: 'city', label: cityKeys[c], key: cityKeys[c] });
-
-    var regionKeys = Object.keys(activeRegions);
-    for (var r = 0; r < regionKeys.length; r++)
-      filters.push({ type: 'region', label: regionKeys[r], key: regionKeys[r] });
-
-    var catKeys = Object.keys(activeCategories);
-    for (var t = 0; t < catKeys.length; t++)
-      filters.push({ type: 'category', label: catKeys[t], key: catKeys[t] });
-
-    var brandKeys = Object.keys(activeBrands);
-    for (var b = 0; b < brandKeys.length; b++)
-      filters.push({ type: 'brand', label: brandKeys[b], key: brandKeys[b] });
-
+    Object.keys(activeCities).forEach(function (k) { filters.push({ type: 'city', label: k, key: k }); });
+    Object.keys(activeRegions).forEach(function (k) { filters.push({ type: 'region', label: k, key: k }); });
+    Object.keys(activeCategories).forEach(function (k) { filters.push({ type: 'category', label: k, key: k }); });
+    Object.keys(activeBrands).forEach(function (k) { filters.push({ type: 'brand', label: k, key: k }); });
     if (workType) filters.push({ type: 'workType', label: workType });
 
-    for (var f = 0; f < filters.length; f++)
-      container.appendChild(makeTag(filters[f]));
+    for (var f = 0; f < filters.length; f++) container.appendChild(makeTag(filters[f]));
   }
 
   function makeTag(filter) {
@@ -804,9 +661,7 @@
     tag.style.display = 'flex';
 
     var textDiv = document.createElement('div');
-    textDiv.textContent = filter.type === 'region'
-      ? capitalizeRegion(filter.label)
-      : capitalize(filter.label);
+    textDiv.textContent = capitalize(filter.label);
     tag.appendChild(textDiv);
 
     var closeDiv = document.createElement('div');
@@ -826,664 +681,146 @@
         var inp = document.querySelector('.filters1_keyword-search input');
         if (inp) inp.value = '';
         break;
-      case 'city':
-        delete activeCities[f.key];
-        uncheckByLabel('input[name="city"]', f.key);
-        break;
-      case 'region':
-        delete activeRegions[f.key];
-        uncheckByLabel('input[name="region"]', f.key);
-        break;
-      case 'category':
-        delete activeCategories[f.key];
-        uncheckByLabel('input[name="category"]', f.key);
-        break;
-      case 'brand':
-        delete activeBrands[f.key];
-        uncheckByLabel('input[name="brand"]', f.key);
-        break;
-      case 'workType':
-        workType = '';
-        if (_allRadio) _allRadio.checked = true;
-        break;
+      case 'city':     delete activeCities[f.key];     uncheckByLabel('input[name="city"]', f.key); break;
+      case 'region':   delete activeRegions[f.key];    uncheckByLabel('input[name="region"]', f.key); break;
+      case 'category': delete activeCategories[f.key]; uncheckByLabel('input[name="category"]', f.key); break;
+      case 'brand':    delete activeBrands[f.key];     uncheckByLabel('input[name="brand"]', f.key); break;
+      case 'workType': workType = ''; if (_allRadio) _allRadio.checked = true; break;
     }
+    visibleLimit = PAGE_SIZE;
     applyFilters();
   }
 
-  function uncheckByLabel(sel, labelLower) {
-    document.querySelectorAll(sel).forEach(function (cb) {
-      var lbl = getCheckLabel(cb);
-      if (lbl && lbl.toLowerCase() === labelLower) {
-        cb.checked = false;
-        var wrap = cb.closest('.w-checkbox');
-        if (wrap) {
-          var chk = wrap.querySelector('.w-checkbox-input--inputType-custom');
-          if (chk) chk.classList.remove('w--redirected-checked');
-        }
-      }
-    });
-  }
-
-  // ── Clear all ──────────────────────────────
-  function bindClear(resetEls) {
-    if (!resetEls) return;
-    resetEls.forEach(function (btn) {
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        clearAll();
-      });
-    });
-  }
-
-  function clearAll() {
-    keyword = '';
-    clearObj(activeCities);
-    clearObj(activeRegions);
-    clearObj(activeBrands);
-    clearObj(activeCategories);
-    workType = '';
-    sortMode = 'default';
-
-    var inp = document.querySelector('.filters1_keyword-search input');
-    if (inp) inp.value = '';
-
-    document.querySelectorAll(
-      'input[name="city"], input[name="region"], input[name="brand"], input[name="category"]'
-    ).forEach(function (cb) {
-      cb.checked = false;
-      var wrap = cb.closest('.w-checkbox');
-      if (wrap) {
-        var chk = wrap.querySelector('.w-checkbox-input--inputType-custom');
-        if (chk) chk.classList.remove('w--redirected-checked');
-      }
-    });
-
-    if (_allRadio) _allRadio.checked = true;
-
-    try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
-
-    var dd = document.querySelector('.dropdown1_component');
-    if (dd) {
-      var toggle = dd.querySelector('.w-dropdown-toggle');
-      if (toggle) {
-        var parts = toggle.querySelectorAll('div');
-        for (var i = 0; i < parts.length; i++) {
-          if (!parts[i].querySelector('svg') && !parts[i].classList.contains('w-icon-dropdown-toggle')) {
-            parts[i].textContent = 'Sort by'; break;
-          }
-        }
-      }
-    }
-
-    applyFilters();
-  }
-
-  // ── Create checkbox (matches native Webflow structure) ──
-  function createCheckbox(name, labelText, count) {
-    var label = document.createElement('label');
-    label.className = 'w-checkbox filters1_form-checkbox1';
-
-    var checkDiv = document.createElement('div');
-    checkDiv.className = 'w-checkbox-input w-checkbox-input--inputType-custom filters1_form-checkbox1-icon';
-    label.appendChild(checkDiv);
-
-    var input = document.createElement('input');
-    input.type = 'checkbox';
-    input.name = name;
-    input.style.cssText = 'opacity:0;position:absolute;z-index:-1;';
-    label.appendChild(input);
-
-    var span = document.createElement('span');
-    span.className = 'filters1_form-checkbox1-label w-form-label';
-    span.textContent = labelText;
-    label.appendChild(span);
-
-    if (count !== undefined && count !== null) {
-      var badge = document.createElement('div');
-      badge.className = 'filter-count';
-      badge.textContent = count;
-      label.appendChild(badge);
-    }
-
-    return label;
-  }
-
-  // ── Hide all country checkboxes (replaced by region filter) ──
-  function hideAllCountryCheckboxes() {
-    var cbs = document.querySelectorAll('input[name="country"]');
-    for (var c = 0; c < cbs.length; c++) {
-      var wrapper = cbs[c].closest('.w-checkbox');
-      if (wrapper) wrapper.style.display = 'none';
+  function uncheckByLabel(selector, lowerLabel) {
+    var inputs = document.querySelectorAll(selector);
+    for (var i = 0; i < inputs.length; i++) {
+      var cb = inputs[i];
+      var label = cb.closest('.w-checkbox');
+      var spanEl = label ? label.querySelector('.w-form-label') : null;
+      var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
+      if (key === lowerLabel) cb.checked = false;
     }
   }
 
-  // ── Build dynamic region filter ───────────
-  function buildRegionFilter() {
-    var regionCounts = _allCounts ? _allCounts.regions : {};
-
-    var firstCountryCb = document.querySelector('input[name="country"]');
-    if (!firstCountryCb) return;
-    var container = firstCountryCb.closest('.w-checkbox');
-    if (!container) return;
-    var parent = container.parentElement;
-    if (!parent) return;
-
-    var regionNames = Object.keys(regionCounts).sort();
-    for (var ri = 0; ri < regionNames.length; ri++) {
-      var regionKey = regionNames[ri];
-      var regionLabel = capitalizeRegion(regionKey);
-      if (!regionLabel) continue;
-      parent.appendChild(createCheckbox('region', regionLabel, regionCounts[regionKey]));
-    }
-  }
-
-  // ── Group locations by region ─────────────
-  function groupLocationsByRegion() {
-    if (!_allCounts) return;
-    var cityCounts = _allCounts.cities;
-    var cityToRegion = _allCounts.cityToRegion;
-    var cityDisplay = _allCounts.cityDisplay;
-
-    var cityInput = document.querySelector('input[name="city"]');
-    if (!cityInput) return;
-    var filterGroup = cityInput.closest('.filters1_filter-group');
-    if (!filterGroup) return;
-    var optionsContainer = filterGroup.querySelector('.filters1_filter-options');
-    if (!optionsContainer) return;
-
-    // Hide the original CMS list and any CMS-rendered subheadings
-    // (our JS generates these dynamically with proper region groupings)
-    var cmsList = optionsContainer.querySelector('.w-dyn-list');
-    if (cmsList) cmsList.style.display = 'none';
-    var cmsSubheadings = optionsContainer.querySelectorAll('.filters1_list-wrapper, .filters1_filter-group-subheading');
-    for (var sh = 0; sh < cmsSubheadings.length; sh++) cmsSubheadings[sh].style.display = 'none';
-
-    // Organize cities by region
-    var regionGroups = {};
-    var cityKeys = Object.keys(cityCounts);
-    for (var c = 0; c < cityKeys.length; c++) {
-      var ck = cityKeys[c];
-      var rg = cityToRegion[ck] || 'Other';
-      if (!regionGroups[rg]) regionGroups[rg] = [];
-      regionGroups[rg].push({
-        key: ck,
-        label: cityDisplay[ck] || capitalize(ck),
-        count: cityCounts[ck]
-      });
-    }
-
-    var sortedRegions = Object.keys(regionGroups).sort();
-    var groupedContainer = document.createElement('div');
-    groupedContainer.className = 'filters1_grouped-locations';
-
-    // Render "Multiple Locations" as a standalone checkbox at the top (not inside a region group)
-    var multiLocKey = 'Multiple Locations';
-    if (regionGroups[multiLocKey]) {
-      var mlCities = regionGroups[multiLocKey];
-      for (var ml = 0; ml < mlCities.length; ml++) {
-        groupedContainer.appendChild(
-          createCheckbox('city', mlCities[ml].label, mlCities[ml].count)
-        );
-      }
-    }
-
-    for (var ri = 0; ri < sortedRegions.length; ri++) {
-      var regionName = sortedRegions[ri];
-      // Skip Multiple Locations — already rendered above
-      if (regionName === multiLocKey) continue;
-
-      var cities = regionGroups[regionName].sort(function (a, b) {
-        return a.label.localeCompare(b.label);
-      });
-
-      var subHeading = document.createElement('div');
-      subHeading.className = 'filters1_filter-group-subheading';
-      subHeading.textContent = regionName;
-      groupedContainer.appendChild(subHeading);
-
-      for (var ci = 0; ci < cities.length; ci++) {
-        groupedContainer.appendChild(
-          createCheckbox('city', cities[ci].label, cities[ci].count)
-        );
-      }
-    }
-
-    optionsContainer.appendChild(groupedContainer);
-  }
-
-  // ── Build/deduplicate brand filter ─────────
-  function deduplicateAndBuildBrands() {
-    if (!_allCounts) return;
-    var brandCounts = _allCounts.brands;
-
-    // Update existing CMS brand checkboxes with accurate counts, hide dupes/unknowns
-    var seen = {};
-    var cbs = document.querySelectorAll('input[name="brand"]');
-    for (var c = 0; c < cbs.length; c++) {
-      var cb = cbs[c];
-      var label = getCheckLabel(cb);
-      if (!label) continue;
-      var key = label.toLowerCase();
-      var wrapper = cb.closest('.w-checkbox');
-      if (!wrapper) continue;
-
-      if (seen[key] || !brandCounts[key]) {
-        wrapper.style.display = 'none';
-      } else {
-        seen[key] = true;
-        var origBadge = wrapper.querySelector('.filter-count');
-        if (origBadge) origBadge.textContent = brandCounts[key];
-      }
-    }
-
-    // Add any brands from data that aren't in the CMS-rendered checkboxes
-    var brandDisplay = _allCounts.brandDisplay;
-    var brandGroup = findFilterGroupByInputName('brand');
-    if (!brandGroup) return;
-    var optContainer = brandGroup.querySelector('.filters1_filter-options');
-    if (!optContainer) return;
-
-    var brandKeys = Object.keys(brandCounts).sort();
-    for (var b = 0; b < brandKeys.length; b++) {
-      var bk = brandKeys[b];
-      if (seen[bk]) continue;
-      optContainer.appendChild(
-        createCheckbox('brand', brandDisplay[bk] || capitalize(bk), brandCounts[bk])
-      );
-    }
-  }
-
-  // ── Build dynamic category filter ─────────
-  function buildCategoryFilter() {
-    if (!_allCounts) return;
-    var categoryCounts = _allCounts.categories;
-    var categoryDisplay = _allCounts.categoryDisplay;
-
-    var catKeys = Object.keys(categoryCounts);
-    if (catKeys.length === 0) return;
-
-    var categoryGroup = findFilterGroupByInputName('category') ||
-                        findFilterGroupByHeading('Category');
-    var optionsContainer;
-
-    if (categoryGroup) {
-      var headingEl = categoryGroup.querySelector('.text-size-medium-4');
-      if (headingEl && headingEl.textContent.trim() !== 'Category') {
-        headingEl.textContent = 'Category';
-      }
-      optionsContainer = categoryGroup.querySelector('.filters1_filter-options');
-      if (optionsContainer) {
-        var existingList = optionsContainer.querySelector('.w-dyn-list');
-        if (existingList) existingList.style.display = 'none';
-        var existingCbs = optionsContainer.querySelectorAll('input[name="category"]');
-        for (var ec = 0; ec < existingCbs.length; ec++) {
-          var existingWrap = existingCbs[ec].closest('.w-checkbox');
-          if (existingWrap) existingWrap.style.display = 'none';
-        }
-      }
-    } else {
-      categoryGroup = createFilterGroup('Category');
-      var brandsGroup = findFilterGroupByHeading('Brands') ||
-                        findFilterGroupByHeading('Work Type');
-      if (brandsGroup && brandsGroup.parentElement) {
-        brandsGroup.parentElement.insertBefore(categoryGroup, brandsGroup);
-      } else {
-        var filterForm = document.querySelector('.filters1_form-block form') ||
-                         document.querySelector('.filters1_form');
-        if (filterForm) filterForm.appendChild(categoryGroup);
-      }
-      optionsContainer = categoryGroup.querySelector('.filters1_filter-options');
-    }
-
-    if (!optionsContainer) return;
-
-    catKeys.sort();
-    for (var ci = 0; ci < catKeys.length; ci++) {
-      var ck = catKeys[ci];
-      optionsContainer.appendChild(
-        createCheckbox('category', categoryDisplay[ck] || capitalize(ck), categoryCounts[ck])
-      );
-    }
-  }
-
-  // ── Rename headings if needed ──────────────
-  function renameHeadingsIfNeeded() {
-    // Country group → "Regions"
-    var countryCb = document.querySelector('input[name="country"]');
-    if (countryCb) {
-      var g1 = countryCb.closest('.filters1_filter-group');
-      if (g1) {
-        var t1 = g1.querySelector('.text-size-medium-4');
-        if (t1 && t1.textContent.trim() !== 'Regions') t1.textContent = 'Regions';
-      }
-    }
-
-    // City group → "Locations"
-    var cityCb = document.querySelector('input[name="city"]');
-    if (cityCb) {
-      var g2 = cityCb.closest('.filters1_filter-group');
-      if (g2) {
-        var t2 = g2.querySelector('.text-size-medium-4');
-        if (t2 && t2.textContent.trim() !== 'Locations') t2.textContent = 'Locations';
-      }
-    }
-  }
-
-  // ── Filter group helpers ──────────────────
-  function findFilterGroupByInputName(name) {
-    var input = document.querySelector('input[name="' + name + '"]');
-    if (!input) return null;
-    return input.closest('.filters1_filter-group');
-  }
-
-  function findFilterGroupByHeading(headingText) {
-    var groups = document.querySelectorAll('.filters1_filter-group');
-    for (var i = 0; i < groups.length; i++) {
-      var textEl = groups[i].querySelector('.text-size-medium-4');
-      if (textEl && textEl.textContent.trim().toLowerCase() === headingText.toLowerCase()) {
-        return groups[i];
-      }
-    }
-    return null;
-  }
-
-  function createFilterGroup(heading) {
-    var existingIcon = document.querySelector('.filters1_accordion-icon');
-    var iconClone = existingIcon ? existingIcon.cloneNode(true) : null;
-
-    var group = document.createElement('div');
-    group.className = 'filters1_filter-group';
-
-    var headingEl = document.createElement('div');
-    headingEl.className = 'filters1_filter-group-heading';
-    headingEl.style.cursor = 'pointer';
-
-    var textEl = document.createElement('div');
-    textEl.className = 'text-size-medium-4';
-    textEl.textContent = heading;
-    headingEl.appendChild(textEl);
-
-    if (iconClone) headingEl.appendChild(iconClone);
-
-    group.appendChild(headingEl);
-
-    var options = document.createElement('div');
-    options.className = 'filters1_filter-options';
-    group.appendChild(options);
-
-    headingEl.addEventListener('click', function () {
-      var computed = window.getComputedStyle(options);
-      var isOpen = computed.display !== 'none' && computed.height !== '0px';
-      options.style.display = isOpen ? 'none' : '';
-      if (iconClone) {
-        iconClone.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-        iconClone.style.transition = 'transform 0.3s ease';
-      }
-    });
-
-    return group;
-  }
-
-  // ── Region name helpers ───────────────────
-  function capitalizeRegion(key) {
-    var displayNames = {
-      'asia': 'Asia', 'australia': 'Australia', 'canada': 'Canada',
-      'multiple locations': 'Multiple Locations', 'new zealand': 'New Zealand',
-      'south africa': 'South Africa', 'uae': 'UAE',
-      'uk & europe': 'UK & Europe', 'usa': 'USA'
-    };
-    return displayNames[key] || capitalize(key);
-  }
-
-  // ── Helpers ────────────────────────────────
-  function objSize(obj) {
-    var n = 0;
-    for (var k in obj) if (obj.hasOwnProperty(k)) n++;
-    return n;
-  }
-
-  function capitalize(s) {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  }
-
-  // ── "All Jobs" back button (job template pages) ──
-  // Navigates to /jobs#filters so the browser natively scrolls to the
-  // filters section without any programmatic scrolling that could
-  // interfere with Webflow page-load animations.
-  //
-  // Target is an element with ID `all-jobs-button`, set on the back button
-  // in the Webflow Designer. ID is the most stable hook — survives class
-  // renames, text changes, and restyles.
-  function setupBackButton() {
-    if (document.querySelector('.career_list')) return;
-
-    var backBtn = document.getElementById('all-jobs-button');
-    if (!backBtn) return;
-
-    backBtn.setAttribute('href', '/jobs#filters');
-    backBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      try { sessionStorage.setItem('fctg_back', '1'); } catch (err) {}
-      window.location.href = '/jobs#filters';
-    });
-  }
-
-  // ── Handle back navigation: open accordions for active filters ──
-  // Scrolling is handled natively by the #filters anchor — no JS scroll needed.
-  function handleBackNavigation() {
-    var isBack = false;
-    try {
-      isBack = sessionStorage.getItem('fctg_back') === '1';
-      sessionStorage.removeItem('fctg_back');
-    } catch (e) {}
-
-    if (isBack) {
-      setTimeout(function () {
-        openAccordionsForActiveFilters();
-      }, 600);
-    }
-  }
-
-  function openAccordionsForActiveFilters() {
-    var filterGroups = [
-      { name: 'region', store: activeRegions },
-      { name: 'city', store: activeCities },
-      { name: 'brand', store: activeBrands },
-      { name: 'category', store: activeCategories }
-    ];
-
-    for (var i = 0; i < filterGroups.length; i++) {
-      if (objSize(filterGroups[i].store) === 0) continue;
-
-      var cb = document.querySelector('input[name="' + filterGroups[i].name + '"]');
-      if (!cb) continue;
-      var group = cb.closest('.filters1_filter-group');
-      if (!group) continue;
-
-      var heading = group.querySelector('.filters1_filter-heading') ||
-                    group.querySelector('.filters1_filter-group-heading');
-      if (!heading) continue;
-
-      var options = group.querySelector('.filters1_filter-options');
-      if (options) {
-        var computed = window.getComputedStyle(options);
-        if (computed.display === 'none' || computed.height === '0px') {
-          heading.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-        }
-      }
-    }
-  }
-
-
-  // ── Inject minimal styles ─────────────────
-  // Region subheading styles are now handled by Webflow class filters1_filter-group-subheading
-  function injectStyles() {}
-
-  // ── Fetch JSON helper ───────────────────
-  function fetchJSON(url, cb) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.timeout = 10000;  // 10s timeout for larger all-jobs.json
-    xhr.onload = function () {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try { cb(JSON.parse(xhr.responseText)); } catch (e) { cb(null); }
-      } else { cb(null); }
-    };
-    xhr.onerror = function () { cb(null); };
-    xhr.ontimeout = function () { cb(null); };
-    xhr.send();
-  }
-
-  // ── Session storage: save/restore filter state ──
-  var STORAGE_KEY = 'fctg_filters';
-
-  // ── URL-as-filter-state (shareable filtered links) ────────────
-  // Parses query params → applies to state + reflects in UI. Returns true
-  // if any filter param was present so the caller can decide precedence
-  // over sessionStorage-based restoration.
+  // ── URL + sessionStorage state ────────────
   function applyFiltersFromURL() {
-    try {
-      if (!window.URLSearchParams) return false; // old browser, skip gracefully
-      var params = new URLSearchParams(window.location.search);
-      var applied = false;
+    var params = new URLSearchParams(location.search);
+    var applied = false;
 
-      var q = params.get(URL_PARAM.keyword);
-      if (q) {
-        keyword = q;
-        var inp = document.querySelector('.filters1_keyword-search input');
-        if (inp) inp.value = keyword;
-        applied = true;
+    var q = params.get(URL_PARAM.keyword);
+    if (q) {
+      keyword = q; applied = true;
+      var inp = document.querySelector('.filters1_keyword-search input');
+      if (inp) inp.value = q;
+    }
+    [
+      [URL_PARAM.city, activeCities, 'input[name="city"]'],
+      [URL_PARAM.region, activeRegions, 'input[name="region"]'],
+      [URL_PARAM.brand, activeBrands, 'input[name="brand"]'],
+      [URL_PARAM.category, activeCategories, 'input[name="category"]']
+    ].forEach(function (entry) {
+      var raw = params.get(entry[0]);
+      if (!raw) return;
+      var keys = raw.split(',');
+      for (var i = 0; i < keys.length; i++) {
+        var k = keys[i].trim().toLowerCase();
+        if (k) entry[1][k] = true;
       }
+      applied = true;
+      checkBoxesByLabels(entry[2], entry[1]);
+    });
+    var wt = params.get(URL_PARAM.workType);
+    if (wt) { workType = wt; applied = true; }
+    var sm = params.get(URL_PARAM.sortMode);
+    if (sm) { sortMode = sm; applied = true; }
+    return applied;
+  }
 
-      var multi = [
-        [URL_PARAM.region,   activeRegions],
-        [URL_PARAM.city,     activeCities],
-        [URL_PARAM.brand,    activeBrands],
-        [URL_PARAM.category, activeCategories]
-      ];
-      for (var i = 0; i < multi.length; i++) {
-        var raw = params.get(multi[i][0]);
-        if (!raw) continue;
-        var keys = raw.split(',')
-          .map(function (k) { return k.trim().toLowerCase(); })
-          .filter(Boolean);
-        for (var j = 0; j < keys.length; j++) multi[i][1][keys[j]] = true;
-        if (keys.length) applied = true;
-      }
-
-      var wt = params.get(URL_PARAM.workType);
-      if (wt) { workType = wt; applied = true; }
-
-      var sm = params.get(URL_PARAM.sortMode);
-      if (sm) { sortMode = sm; applied = true; }
-
-      // Reflect state in the UI (checkboxes / radios)
-      if (applied) {
-        restoreCheckboxGroup('city',     activeCities);
-        restoreCheckboxGroup('region',   activeRegions);
-        restoreCheckboxGroup('brand',    activeBrands);
-        restoreCheckboxGroup('category', activeCategories);
-        if (workType) {
-          document.querySelectorAll('input[name="Filter-Two"]').forEach(function (r) {
-            var lbl = getRadioLabel(r);
-            if (lbl && lbl.toLowerCase() === workType.toLowerCase()) r.checked = true;
-          });
-        }
-      }
-      return applied;
-    } catch (e) {
-      return false;
+  function checkBoxesByLabels(selector, store) {
+    var inputs = document.querySelectorAll(selector);
+    for (var i = 0; i < inputs.length; i++) {
+      var cb = inputs[i];
+      var label = cb.closest('.w-checkbox');
+      var spanEl = label ? label.querySelector('.w-form-label') : null;
+      var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
+      if (key && store[key]) cb.checked = true;
     }
   }
 
-  // Writes current filter state into window.location via replaceState (no
-  // history entries — keeps browser back/forward intuitive). Invoked from
-  // applyFilters() so every filter change updates the URL.
   function serializeFiltersToURL() {
-    try {
-      if (!window.URLSearchParams || !window.history || !history.replaceState) return;
-      var params = new URLSearchParams();
-
-      if (keyword) params.set(URL_PARAM.keyword, keyword);
-
-      var multi = [
-        [URL_PARAM.region,   activeRegions],
-        [URL_PARAM.city,     activeCities],
-        [URL_PARAM.brand,    activeBrands],
-        [URL_PARAM.category, activeCategories]
-      ];
-      for (var i = 0; i < multi.length; i++) {
-        var keys = Object.keys(multi[i][1]);
-        if (keys.length) params.set(multi[i][0], keys.join(','));
-      }
-
-      if (workType) params.set(URL_PARAM.workType, workType);
-      if (sortMode && sortMode !== 'default') params.set(URL_PARAM.sortMode, sortMode);
-
-      var qs = params.toString();
-      var newUrl = window.location.pathname + (qs ? '?' + qs : '') + window.location.hash;
-      var currentUrl = window.location.pathname + window.location.search + window.location.hash;
-      if (newUrl !== currentUrl) history.replaceState(null, '', newUrl);
-    } catch (e) { /* private mode / old browser — no-op */ }
+    var params = new URLSearchParams();
+    if (keyword) params.set(URL_PARAM.keyword, keyword);
+    var cityKeys = Object.keys(activeCities); if (cityKeys.length) params.set(URL_PARAM.city, cityKeys.join(','));
+    var regionKeys = Object.keys(activeRegions); if (regionKeys.length) params.set(URL_PARAM.region, regionKeys.join(','));
+    var brandKeys = Object.keys(activeBrands); if (brandKeys.length) params.set(URL_PARAM.brand, brandKeys.join(','));
+    var catKeys = Object.keys(activeCategories); if (catKeys.length) params.set(URL_PARAM.category, catKeys.join(','));
+    if (workType) params.set(URL_PARAM.workType, workType);
+    if (sortMode && sortMode !== 'default') params.set(URL_PARAM.sortMode, sortMode);
+    var qs = params.toString();
+    var newUrl = location.pathname + (qs ? '?' + qs : '') + location.hash;
+    if (newUrl !== location.pathname + location.search + location.hash) {
+      history.replaceState(null, '', newUrl);
+    }
   }
 
   function saveFilterState() {
     try {
-      var state = {
-        keyword: keyword,
-        activeCities: activeCities,
-        activeRegions: activeRegions,
-        activeBrands: activeBrands,
-        activeCategories: activeCategories,
-        workType: workType
-      };
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) { /* quota / private mode */ }
+      sessionStorage.setItem(STATE_KEY, JSON.stringify({
+        kw: keyword, c: activeCities, r: activeRegions, b: activeBrands,
+        ca: activeCategories, wt: workType, sm: sortMode
+      }));
+    } catch (e) {}
   }
 
   function restoreFilterState() {
     try {
-      var saved = sessionStorage.getItem(STORAGE_KEY);
-      if (!saved) return false;
-      var state = JSON.parse(saved);
-      keyword = state.keyword || '';
-      copyInto(activeCities, state.activeCities);
-      copyInto(activeRegions, state.activeRegions);
-      copyInto(activeBrands, state.activeBrands);
-      copyInto(activeCategories, state.activeCategories);
-      workType = state.workType || '';
-
-      var inp = document.querySelector('.filters1_keyword-search input');
-      if (inp && keyword) inp.value = keyword;
-
-      restoreCheckboxGroup('city', activeCities);
-      restoreCheckboxGroup('region', activeRegions);
-      restoreCheckboxGroup('brand', activeBrands);
-      restoreCheckboxGroup('category', activeCategories);
-
-      if (workType) {
-        document.querySelectorAll('input[name="Filter-Two"]').forEach(function (r) {
-          var lbl = getRadioLabel(r);
-          if (lbl && lbl.toLowerCase() === workType.toLowerCase()) r.checked = true;
-        });
+      var raw = sessionStorage.getItem(STATE_KEY);
+      if (!raw) return;
+      var s = JSON.parse(raw);
+      if (s.kw) {
+        keyword = s.kw;
+        var inp = document.querySelector('.filters1_keyword-search input');
+        if (inp) inp.value = s.kw;
       }
-      return true;
-    } catch (e) { return false; }
+      copyInto(activeCities, s.c); checkBoxesByLabels('input[name="city"]', activeCities);
+      copyInto(activeRegions, s.r); checkBoxesByLabels('input[name="region"]', activeRegions);
+      copyInto(activeBrands, s.b); checkBoxesByLabels('input[name="brand"]', activeBrands);
+      copyInto(activeCategories, s.ca); checkBoxesByLabels('input[name="category"]', activeCategories);
+      if (s.wt) workType = s.wt;
+      if (s.sm) sortMode = s.sm;
+    } catch (e) {}
   }
 
-  function restoreCheckboxGroup(name, store) {
-    var keys = Object.keys(store);
-    if (keys.length === 0) return;
-    document.querySelectorAll('input[name="' + name + '"]').forEach(function (cb) {
-      var lbl = getCheckLabel(cb);
-      if (lbl && store[lbl.toLowerCase()]) {
-        cb.checked = true;
-        var wrap = cb.closest('.w-checkbox');
-        if (wrap) {
-          var chk = wrap.querySelector('.w-checkbox-input--inputType-custom');
-          if (chk) chk.classList.add('w--redirected-checked');
-        }
-      }
+  // ── Back-button wiring (runs on /jobs/{slug} too) ──
+  // The back button on a job detail page sets sessionStorage.fctg_back so the
+  // /jobs page knows to scroll to filters and re-open the relevant accordions.
+  function setupBackButton() {
+    var btn = document.getElementById('all-jobs-button');
+    if (!btn) return;
+    btn.setAttribute('href', '/jobs#filters');
+    btn.addEventListener('click', function () {
+      try { sessionStorage.setItem(BACK_KEY, '1'); } catch (e) {}
     });
+  }
+
+  function handleBackNavigation() {
+    var fromBack = false;
+    try { fromBack = sessionStorage.getItem(BACK_KEY) === '1'; sessionStorage.removeItem(BACK_KEY); } catch (e) {}
+    if (!fromBack) return;
+    var anchor = document.getElementById('filters') || _listEl;
+    if (anchor && anchor.scrollIntoView) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Helpers ───────────────────────────────
+  function objSize(obj) { return Object.keys(obj).length; }
+  function clearObj(obj) { Object.keys(obj).forEach(function (k) { delete obj[k]; }); }
+  function copyInto(target, source) {
+    clearObj(target);
+    if (!source) return;
+    Object.keys(source).forEach(function (k) { target[k] = source[k]; });
+  }
+  function capitalize(s) {
+    if (!s) return '';
+    return s.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
   }
 })();
