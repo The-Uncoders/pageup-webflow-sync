@@ -81,54 +81,81 @@
     _initialised = true;
 
     // Cache filter-counter refs BEFORE Finsweet attributes are stripped
-    _rcEl = document.querySelector('[fs-cmsfilter-element="results-count"]');
-    _icEl = document.querySelector('[fs-cmsfilter-element="items-count"]');
-    _emptyEl = document.querySelector('[fs-cmsfilter-element="empty"]');
+    // Filter UI controls — prefer the new `filter-ui` attribute convention.
+    // Fall back to id-based shortcuts for elements the Designer commonly
+    // marks (e.g. #fctg-job-count) and to legacy Finsweet selectors so any
+    // page that hasn't been re-attributed yet keeps working.
+    _rcEl = document.querySelector('[filter-ui="count"]') ||
+            document.getElementById('fctg-job-count') ||
+            document.querySelector('[fs-cmsfilter-element="results-count"]');
+    _emptyEl = document.querySelector('[filter-ui="empty"]') ||
+               document.getElementById('fctg-empty') ||
+               document.querySelector('[fs-cmsfilter-element="empty"]');
     _allRadio = document.querySelector('label[fs-cmsfilter-element="reset"] input[type="radio"]');
-    var resetEls = document.querySelectorAll('a[fs-cmsfilter-element="reset"]');
+    var resetEls = document.querySelectorAll('[filter-ui="clear"], a[fs-cmsfilter-element="reset"]');
 
     injectStyles();
     neutraliseFinsweet();
     preventFormSubmits();
 
-    // Load remaining pages, then bind UI + apply filters
-    loadAllPages().then(function () {
-      hidePaginationControls();
-      _allCards = collectCards();
-
+    function bindEverything() {
       bindSearch();
-      bindCheckboxes('input[name="city"]', activeCities);
-      bindCheckboxes('input[name="region"]', activeRegions);
-      bindCheckboxes('input[name="brand"]', activeBrands);
-      bindCheckboxes('input[name="category"]', activeCategories);
+      bindFilterGroup('city', activeCities);
+      bindFilterGroup('region', activeRegions);
+      bindFilterGroup('brand', activeBrands);
+      bindFilterGroup('category', activeCategories);
       bindWorkTypeRadios();
       bindSort();
       bindClear(resetEls);
       bindShowMore();
 
-      // URL params take precedence; sessionStorage is the fallback (back-nav).
       var urlApplied = applyFiltersFromURL();
       if (!urlApplied) restoreFilterState();
 
       applyFilters();
       handleBackNavigation();
+    }
+
+    // Load remaining pages, then bind UI + apply filters
+    loadAllPages().then(function () {
+      hidePaginationControls();
+      _allCards = collectCards();
+      bindEverything();
     }).catch(function (err) {
       console.warn('[fctg-filter] paginate-load failed, falling back to first page only:', err);
       _allCards = collectCards();
-      bindSearch();
-      bindCheckboxes('input[name="city"]', activeCities);
-      bindCheckboxes('input[name="region"]', activeRegions);
-      bindCheckboxes('input[name="brand"]', activeBrands);
-      bindCheckboxes('input[name="category"]', activeCategories);
-      bindWorkTypeRadios();
-      bindSort();
-      bindClear(resetEls);
-      bindShowMore();
-      var urlApplied2 = applyFiltersFromURL();
-      if (!urlApplied2) restoreFilterState();
-      applyFilters();
-      handleBackNavigation();
+      bindEverything();
     });
+  }
+
+  // ── Filter-panel selector helpers ─────────
+  // Prefer the `filter-group="X"` Designer convention (a container element
+  // with this attribute, holding the dimension's checkboxes). Falls back to
+  // the legacy `input[name="X"]` direct selector for sites that haven't
+  // re-attributed yet. JS also supports a Webflow-rendered Collection List
+  // inside the group (each .w-dyn-item containing a checkbox).
+  function findGroupCheckboxes(group) {
+    var container = document.querySelector('[filter-group="' + group + '"]');
+    if (container) {
+      return container.querySelectorAll('input[type="checkbox"]');
+    }
+    return document.querySelectorAll('input[name="' + group + '"]');
+  }
+
+  function findGroupRadios(group) {
+    var container = document.querySelector('[filter-group="' + group + '"]');
+    if (container) return container.querySelectorAll('input[type="radio"]');
+    return [];
+  }
+
+  // Read a checkbox/radio's user-visible label text. Tries Webflow's
+  // .w-form-label first; falls back to the parent label's textContent.
+  function getOptionLabel(input) {
+    var label = input.closest('.w-checkbox, .w-radio, label');
+    if (!label) return '';
+    var span = label.querySelector('.w-form-label');
+    if (span) return (span.textContent || '').trim();
+    return (label.textContent || '').trim();
   }
 
   // ── Inject scoped styles ──────────────────
@@ -180,55 +207,70 @@
 
   // ── Paginate-load: bypass Webflow's 100-item Collection List cap ──
   // Webflow renders the first page (up to 100 items) on initial load.
-  // Subsequent pages are reachable via `?<hash>_page=N` URLs surfaced
-  // through the pagination links. We fetch them all in parallel and merge
-  // the cards into the live `.career_list`.
+  // Subsequent pages are reachable via `?<hash>_page=N` URLs derived from
+  // the Next pagination link. We fetch pages 2..MAX in parallel and merge
+  // their cards into the live `.career_list`.
   //
-  // Deduplicates by `[filter="job-id"]` value as a defensive safety net.
-  // Webflow's "Random shuffle" sort independently re-shuffles each page,
-  // so without dedup the same job can appear on multiple paginated pages
-  // (and others can be missed entirely). Recommend a deterministic sort
-  // in Designer (Default, Closing Date, or Name) — but dedup is a safety
-  // belt for any other source of duplication too.
+  // We don't rely on `.w-page-count` to know the total — that element only
+  // appears on certain Webflow pagination styles. Instead we probe up to
+  // MAX_PAGES in parallel and stop appending the moment a page returns
+  // zero items (signal that we've passed the last real page).
+  //
+  // Deduplicates by `[filter="job-id"]` value as a defensive safety net
+  // against shuffled-sort or other duplicate sources.
+  var MAX_PAGES_TO_PROBE = 20;   // hard ceiling: 100 × 20 = 2000 items
+
   function loadAllPages() {
     return new Promise(function (resolve, reject) {
       var nextLink = document.querySelector('.w-pagination-next');
-      if (!nextLink) return resolve();
-
-      var pageCount = readTotalPageCount();
-      if (pageCount <= 1) return resolve();
+      if (!nextLink) return resolve();   // single-page list — nothing to fetch
 
       var paramName = readPageParamName(nextLink);
       if (!paramName) return resolve();
 
-      // Track job-ids already in the DOM (from page 1) to dedupe page N.
+      // Track job-ids already in the DOM (page 1) to dedupe subsequent pages.
       var seen = {};
-      var existingCards = collectCards();
-      for (var i = 0; i < existingCards.length; i++) {
-        var jid = (existingCards[i].querySelector('[filter="job-id"]')?.textContent || '').trim();
+      collectCards().forEach(function (c) {
+        var idEl = c.querySelector('[filter="job-id"]');
+        var jid = idEl ? (idEl.textContent || '').trim() : '';
         if (jid) seen[jid] = true;
-      }
+      });
 
-      var urls = [];
       var basePath = location.pathname;
-      for (var p = 2; p <= pageCount; p++) {
-        urls.push(basePath + '?' + encodeURIComponent(paramName) + '=' + p);
+      var urls = [];
+      for (var p = 2; p <= MAX_PAGES_TO_PROBE; p++) {
+        urls.push({ p: p, url: basePath + '?' + encodeURIComponent(paramName) + '=' + p });
       }
 
-      Promise.all(urls.map(function (u) {
-        return fetch(u, { credentials: 'same-origin' }).then(function (r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status + ' on ' + u);
-          return r.text();
-        });
-      })).then(function (htmls) {
-        var parser = new DOMParser();
+      // Fetch all probe URLs in parallel. Each resolves to { p, items[] }
+      // (items already DOM-parsed). 404s and non-OK responses resolve with
+      // empty items so we don't reject the whole batch.
+      var fetches = urls.map(function (entry) {
+        return fetch(entry.url, { credentials: 'same-origin' }).then(function (r) {
+          if (!r.ok) return { p: entry.p, items: [] };
+          return r.text().then(function (html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            return { p: entry.p, items: doc.querySelectorAll('.career_list > .w-dyn-item') };
+          });
+        }).catch(function () { return { p: entry.p, items: [] }; });
+      });
+
+      Promise.all(fetches).then(function (results) {
+        // Append in page order. Stop the moment we hit an empty page
+        // (signals we've gone past the last real page — anything beyond
+        // would either also be empty or be a duplicated wrap-around).
+        results.sort(function (a, b) { return a.p - b.p; });
         var dupesSkipped = 0;
         var noIdSkipped = 0;
-        for (var i = 0; i < htmls.length; i++) {
-          var doc = parser.parseFromString(htmls[i], 'text/html');
-          var items = doc.querySelectorAll('.career_list > .w-dyn-item');
-          for (var j = 0; j < items.length; j++) {
-            var item = items[j];
+        var pagesAppended = 0;
+        var lastPage = 1;
+        for (var i = 0; i < results.length; i++) {
+          var page = results[i];
+          if (!page.items || page.items.length === 0) break;   // past end
+          pagesAppended++;
+          lastPage = page.p;
+          for (var j = 0; j < page.items.length; j++) {
+            var item = page.items[j];
             var idEl = item.querySelector('[filter="job-id"]');
             var jobId = idEl ? (idEl.textContent || '').trim() : '';
             if (!jobId) { noIdSkipped++; continue; }
@@ -236,6 +278,10 @@
             seen[jobId] = true;
             _listEl.appendChild(document.adoptNode(item));
           }
+        }
+        if (pagesAppended > 0) {
+          console.log('[fctg-filter] paginate-load: merged pages 2..' + lastPage +
+            ' (' + Object.keys(seen).length + ' unique cards in DOM)');
         }
         if (dupesSkipped > 0) {
           console.warn('[fctg-filter] paginate-load skipped ' + dupesSkipped +
@@ -249,15 +295,6 @@
         resolve();
       }).catch(reject);
     });
-  }
-
-  function readTotalPageCount() {
-    var pageCountEl = document.querySelector('.w-page-count');
-    if (!pageCountEl) return 1;
-    var m = (pageCountEl.textContent || '').match(/(\d+)\s*\/\s*(\d+)/);
-    if (m) return parseInt(m[2], 10);
-    var n = parseInt((pageCountEl.textContent || '').replace(/[^\d]/g, ''), 10);
-    return isNaN(n) ? 1 : n;
   }
 
   function readPageParamName(nextLink) {
@@ -457,20 +494,19 @@
       }
     }
 
-    updateFilterPanel('input[name="region"]', regionCounts);
-    updateFilterPanel('input[name="city"]', cityCounts);
-    updateFilterPanel('input[name="brand"]', brandCounts);
-    updateFilterPanel('input[name="category"]', categoryCounts);
+    updateFilterPanel('region', regionCounts);
+    updateFilterPanel('city', cityCounts);
+    updateFilterPanel('brand', brandCounts);
+    updateFilterPanel('category', categoryCounts);
   }
 
-  function updateFilterPanel(selector, counts) {
-    var inputs = document.querySelectorAll(selector);
+  function updateFilterPanel(groupName, counts) {
+    var inputs = findGroupCheckboxes(groupName);
     for (var i = 0; i < inputs.length; i++) {
       var cb = inputs[i];
-      var label = cb.closest('.w-checkbox');
+      var label = cb.closest('.w-checkbox, label');
       if (!label) continue;
-      var spanEl = label.querySelector('.w-form-label');
-      var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
+      var key = getOptionLabel(cb).toLowerCase();
       var count = counts[key] || 0;
 
       var badge = label.querySelector('.filter-count');
@@ -480,7 +516,7 @@
       if (count > 0 || cb.checked) label.style.display = '';
       else label.style.display = 'none';
     }
-    if (selector === 'input[name="city"]') updateLocationSubheadings(counts);
+    if (groupName === 'city') updateLocationSubheadings(counts);
   }
 
   function updateLocationSubheadings(cityCounts) {
@@ -498,19 +534,14 @@
   }
 
   // ── Counts + empty state ──────────────────
+  // Writes "Showing X of Y Jobs" into the [filter-ui="count"] element.
+  // Falls back to the legacy two-span Finsweet pattern if that's all the
+  // page has.
   function setCount(n) {
     var total = _allCards.length;
-    if (_rcEl) _rcEl.textContent = n;
-    if (_icEl) _icEl.textContent = total;
-
-    var wrapper = _rcEl ? _rcEl.parentElement : null;
-    if (wrapper && _rcEl && _icEl) {
-      while (wrapper.firstChild) wrapper.removeChild(wrapper.firstChild);
-      wrapper.appendChild(document.createTextNode('Showing '));
-      wrapper.appendChild(_rcEl);
-      wrapper.appendChild(document.createTextNode(' of '));
-      wrapper.appendChild(_icEl);
-      wrapper.appendChild(document.createTextNode(' Jobs'));
+    if (_rcEl) {
+      // Simple single-element: just replace text content.
+      _rcEl.textContent = 'Showing ' + n + ' of ' + total + ' Jobs';
     }
   }
 
@@ -519,35 +550,65 @@
   }
 
   // ── Show More button ──────────────────────
+  // Prefers a Designer-styled button with [filter-ui="show-more"] (or
+  // legacy id="fctg-show-more"). If neither exists, JS injects a minimal
+  // pill button so the feature still works out of the box.
+  function findShowMoreButton() {
+    return document.querySelector('[filter-ui="show-more"]') ||
+           document.getElementById('fctg-show-more');
+  }
+
   function bindShowMore() {
-    var btn = document.getElementById('fctg-show-more');
-    if (btn) return;            // already injected
-    btn = document.createElement('button');
-    btn.id = 'fctg-show-more';
-    btn.type = 'button';
-    btn.textContent = 'Show more jobs';
-    btn.style.cssText = 'display:none;margin:24px auto;padding:12px 24px;background:#000;color:#fff;border:none;border-radius:8px;font:600 14px/1 inherit;cursor:pointer;';
-    btn.addEventListener('click', function () {
+    var btn = findShowMoreButton();
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'fctg-show-more';
+      btn.type = 'button';
+      btn.textContent = 'Show more jobs';
+      btn.style.cssText = 'display:none;margin:24px auto;padding:12px 24px;background:#000;color:#fff;border:none;border-radius:8px;font:600 14px/1 inherit;cursor:pointer;';
+      if (_listEl.parentElement) _listEl.parentElement.appendChild(btn);
+    }
+    btn.addEventListener('click', function (e) {
+      if (btn.tagName === 'A') e.preventDefault();
       visibleLimit += PAGE_SIZE;
       applyFilters();
     });
-    if (_listEl.parentElement) _listEl.parentElement.appendChild(btn);
   }
 
   function updateShowMoreButton(hasMore, remaining) {
-    var btn = document.getElementById('fctg-show-more');
+    var btn = findShowMoreButton();
     if (!btn) return;
     if (hasMore) {
       btn.style.display = '';
-      btn.textContent = 'Show more (' + remaining + ' remaining)';
+      // Only update text if Designer hasn't provided a custom label inside.
+      // We treat the button text as Designer-owned if it has child elements;
+      // otherwise we set "Show more (N remaining)".
+      if (btn.children.length === 0) btn.textContent = 'Show more (' + remaining + ' remaining)';
     } else {
       btn.style.display = 'none';
     }
   }
 
   // ── Filter UI bindings ────────────────────
+  function findSearchInput() {
+    // Prefer the new convention; if the search-control element IS the input
+    // use it directly, otherwise look for an input inside it.
+    var ctrl = document.querySelector('[filter-ui="search"]');
+    if (ctrl) {
+      if (ctrl.tagName === 'INPUT') return ctrl;
+      var inner = ctrl.querySelector('input');
+      if (inner) return inner;
+    }
+    return document.querySelector('.filters1_keyword-search input');
+  }
+
+  function findTagsContainer() {
+    return document.querySelector('[filter-ui="tags"]') ||
+           document.querySelector('.filters1_tags-wrapper');
+  }
+
   function bindSearch() {
-    var input = document.querySelector('.filters1_keyword-search input');
+    var input = findSearchInput();
     if (!input) return;
     var t;
     input.addEventListener('input', function () {
@@ -560,14 +621,12 @@
     });
   }
 
-  function bindCheckboxes(selector, store) {
-    var inputs = document.querySelectorAll(selector);
+  function bindFilterGroup(groupName, store) {
+    var inputs = findGroupCheckboxes(groupName);
     for (var i = 0; i < inputs.length; i++) {
       (function (cb) {
         cb.addEventListener('change', function () {
-          var label = cb.closest('.w-checkbox');
-          var spanEl = label ? label.querySelector('.w-form-label') : null;
-          var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
+          var key = getOptionLabel(cb).toLowerCase();
           if (!key) return;
           if (cb.checked) store[key] = true; else delete store[key];
           visibleLimit = PAGE_SIZE;
@@ -578,13 +637,16 @@
   }
 
   function bindWorkTypeRadios() {
-    document.querySelectorAll('input[name="Filter-Two"]').forEach(function (r) {
+    var radios = findGroupRadios('work-type');
+    if (!radios || !radios.length) {
+      // Legacy fallback: Webflow's autoname-radio convention
+      radios = document.querySelectorAll('input[name="Filter-Two"]');
+    }
+    radios.forEach(function (r) {
       r.addEventListener('change', function () {
         if (!r.checked) return;
-        var label = r.closest('.w-radio');
-        var spanEl = label ? label.querySelector('.w-form-label') : null;
-        var lbl = spanEl ? spanEl.textContent.trim() : '';
-        workType = (lbl === 'All') ? '' : lbl;
+        var lbl = getOptionLabel(r);
+        workType = (lbl.toLowerCase() === 'all' || !lbl) ? '' : lbl;
         visibleLimit = PAGE_SIZE;
         applyFilters();
       });
@@ -625,12 +687,12 @@
       workType = '';
       sortMode = 'default';
       visibleLimit = PAGE_SIZE;
-      var inp = document.querySelector('.filters1_keyword-search input');
+      var inp = findSearchInput();
       if (inp) inp.value = '';
-      var cbs = document.querySelectorAll(
-        'input[name="city"], input[name="region"], input[name="brand"], input[name="category"]'
-      );
-      for (var i = 0; i < cbs.length; i++) cbs[i].checked = false;
+      ['city', 'region', 'brand', 'category'].forEach(function (g) {
+        var cbs = findGroupCheckboxes(g);
+        for (var i = 0; i < cbs.length; i++) cbs[i].checked = false;
+      });
       if (_allRadio) _allRadio.checked = true;
       applyFilters();
     }
@@ -639,9 +701,11 @@
 
   // ── Active filter tags ────────────────────
   function renderTags() {
-    var container = document.querySelector('.filters1_tags-wrapper');
+    var container = findTagsContainer();
     if (!container) return;
-    var existing = container.querySelectorAll('.filters1_tag--dynamic');
+    // Strip any prior dynamic tags AND any static placeholder tags inside
+    // the tags container (e.g. the "Tag x" example chip from Designer).
+    var existing = container.querySelectorAll('.filters1_tag--dynamic, .filters1_tag');
     for (var i = 0; i < existing.length; i++) existing[i].remove();
 
     var filters = [];
@@ -678,27 +742,24 @@
     switch (f.type) {
       case 'keyword':
         keyword = '';
-        var inp = document.querySelector('.filters1_keyword-search input');
+        var inp = findSearchInput();
         if (inp) inp.value = '';
         break;
-      case 'city':     delete activeCities[f.key];     uncheckByLabel('input[name="city"]', f.key); break;
-      case 'region':   delete activeRegions[f.key];    uncheckByLabel('input[name="region"]', f.key); break;
-      case 'category': delete activeCategories[f.key]; uncheckByLabel('input[name="category"]', f.key); break;
-      case 'brand':    delete activeBrands[f.key];     uncheckByLabel('input[name="brand"]', f.key); break;
+      case 'city':     delete activeCities[f.key];     uncheckByLabel('city', f.key); break;
+      case 'region':   delete activeRegions[f.key];    uncheckByLabel('region', f.key); break;
+      case 'category': delete activeCategories[f.key]; uncheckByLabel('category', f.key); break;
+      case 'brand':    delete activeBrands[f.key];     uncheckByLabel('brand', f.key); break;
       case 'workType': workType = ''; if (_allRadio) _allRadio.checked = true; break;
     }
     visibleLimit = PAGE_SIZE;
     applyFilters();
   }
 
-  function uncheckByLabel(selector, lowerLabel) {
-    var inputs = document.querySelectorAll(selector);
+  function uncheckByLabel(groupName, lowerLabel) {
+    var inputs = findGroupCheckboxes(groupName);
     for (var i = 0; i < inputs.length; i++) {
       var cb = inputs[i];
-      var label = cb.closest('.w-checkbox');
-      var spanEl = label ? label.querySelector('.w-form-label') : null;
-      var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
-      if (key === lowerLabel) cb.checked = false;
+      if (getOptionLabel(cb).toLowerCase() === lowerLabel) cb.checked = false;
     }
   }
 
@@ -710,14 +771,14 @@
     var q = params.get(URL_PARAM.keyword);
     if (q) {
       keyword = q; applied = true;
-      var inp = document.querySelector('.filters1_keyword-search input');
+      var inp = findSearchInput();
       if (inp) inp.value = q;
     }
     [
-      [URL_PARAM.city, activeCities, 'input[name="city"]'],
-      [URL_PARAM.region, activeRegions, 'input[name="region"]'],
-      [URL_PARAM.brand, activeBrands, 'input[name="brand"]'],
-      [URL_PARAM.category, activeCategories, 'input[name="category"]']
+      [URL_PARAM.city, activeCities, 'city'],
+      [URL_PARAM.region, activeRegions, 'region'],
+      [URL_PARAM.brand, activeBrands, 'brand'],
+      [URL_PARAM.category, activeCategories, 'category']
     ].forEach(function (entry) {
       var raw = params.get(entry[0]);
       if (!raw) return;
@@ -736,13 +797,11 @@
     return applied;
   }
 
-  function checkBoxesByLabels(selector, store) {
-    var inputs = document.querySelectorAll(selector);
+  function checkBoxesByLabels(groupName, store) {
+    var inputs = findGroupCheckboxes(groupName);
     for (var i = 0; i < inputs.length; i++) {
       var cb = inputs[i];
-      var label = cb.closest('.w-checkbox');
-      var spanEl = label ? label.querySelector('.w-form-label') : null;
-      var key = spanEl ? spanEl.textContent.trim().toLowerCase() : '';
+      var key = getOptionLabel(cb).toLowerCase();
       if (key && store[key]) cb.checked = true;
     }
   }
@@ -779,13 +838,13 @@
       var s = JSON.parse(raw);
       if (s.kw) {
         keyword = s.kw;
-        var inp = document.querySelector('.filters1_keyword-search input');
+        var inp = findSearchInput();
         if (inp) inp.value = s.kw;
       }
-      copyInto(activeCities, s.c); checkBoxesByLabels('input[name="city"]', activeCities);
-      copyInto(activeRegions, s.r); checkBoxesByLabels('input[name="region"]', activeRegions);
-      copyInto(activeBrands, s.b); checkBoxesByLabels('input[name="brand"]', activeBrands);
-      copyInto(activeCategories, s.ca); checkBoxesByLabels('input[name="category"]', activeCategories);
+      copyInto(activeCities, s.c); checkBoxesByLabels('city', activeCities);
+      copyInto(activeRegions, s.r); checkBoxesByLabels('region', activeRegions);
+      copyInto(activeBrands, s.b); checkBoxesByLabels('brand', activeBrands);
+      copyInto(activeCategories, s.ca); checkBoxesByLabels('category', activeCategories);
       if (s.wt) workType = s.wt;
       if (s.sm) sortMode = s.sm;
     } catch (e) {}
