@@ -6,9 +6,9 @@ Proxies POST requests from the dashboard to GitHub Actions `workflow_dispatch`.
 
 `https://fctg-sync-trigger.wandering-sun-9809.workers.dev`
 
-## Cloudflare account ID
+## Cloudflare account
 
-`4a6fba0403941f5658f7287a2496ac8c`
+`Hello@uncoders.co` (account ID `4a6fba0403941f5658f7287a2496ac8c`)
 
 ## Environment variables (encrypted, set in Cloudflare dashboard)
 

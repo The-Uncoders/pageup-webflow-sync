@@ -774,7 +774,7 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 - **Secrets (Cloudflare-managed, not in code):**
   - `GITHUB_TOKEN` — fine-grained PAT with Actions write scope for `The-Uncoders/pageup-webflow-sync`
   - `SYNC_KEY` — shared gate for dashboard auth
-- **Cloudflare account ID:** `4a6fba0403941f5658f7287a2496ac8c`
+- **Cloudflare account:** `Hello@uncoders.co` (ID `4a6fba0403941f5658f7287a2496ac8c`)
 - **Deploy:** no CI — edit `worker/sync-trigger.js` in the repo, paste into Cloudflare dashboard → Workers & Pages → `fctg-sync-trigger` → Edit Code → Save and Deploy. See `worker/README.md` for the smoke-test curls.
 
 ---
