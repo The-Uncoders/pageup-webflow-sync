@@ -6,9 +6,9 @@ Proxies POST requests from the dashboard to GitHub Actions `workflow_dispatch`.
 
 `https://fctg-sync-trigger.wandering-sun-9809.workers.dev`
 
-## Cloudflare account
+## Cloudflare account ID
 
-`Hello@uncoders.co` (account ID `4a6fba0403941f5658f7287a2496ac8c`)
+`4a6fba0403941f5658f7287a2496ac8c`
 
 ## Environment variables (encrypted, set in Cloudflare dashboard)
 
@@ -43,3 +43,4 @@ There's no CI for the worker. To push changes:
 |---|---|---|
 | `key` | yes | Auth gate — matches `env.SYNC_KEY` |
 | `force_full` | no | When `"true"`, the sync runs in force-full mode (bypasses listing-level diff, scrapes every job) |
+| `job_id` | no | Numeric PageUp job ID. Switches the sync to single-job mode (only that one job is reconciled, ~30–60s). Mutually exclusive with `force_full` — if both are passed, `job_id` wins. Non-numeric values rejected with HTTP 400 |

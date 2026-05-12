@@ -239,9 +239,11 @@ Two attribute namespaces govern the filter UI:
 | `filter-group="category"` | Category | |
 | `filter-group="work-type"` | Work Type | Treated as single-select radios |
 
-JS reads each option's user-visible label (from `.w-form-label` or the parent label's textContent) — the input's `name` / `id` attributes are irrelevant. **Duplicates are auto-hidden** by label, so a Webflow CMS Collection List bound to Job→Reference (e.g. one checkbox per Job's Country, producing many "Australia" rows) shows only the first occurrence per unique label.
+JS reads each option's user-visible label (from `.w-form-label` / `.filters1_form-checkbox1-label` or the parent label's textContent) — the input's `name` / `id` attributes are irrelevant. **Duplicates are auto-hidden** by label, so a Webflow CMS Collection List bound to Job→Reference (e.g. one checkbox per Job's Country, producing many "Australia" rows) shows only the first occurrence per unique label. When dedup hides a label, JS also hides its containing `.filters1_item` / `.w-dyn-item` wrapper — so any sibling content inside the item (e.g. a region subheading on the Locations accordion) disappears with it.
 
-**`filter-source="cards"` — opt-in dynamic population.** Add alongside `filter-group="X"` when you want JS to **replace** the existing checkboxes with one per unique value found in the cards' `[filter="<dimension>"]` data. JS uses the first existing checkbox in the container as a Designer-styled template (so the generated checkboxes inherit visual styling). Useful when there's no clean CMS collection backing a dimension.
+**`filter-source="cards"` — opt-in dynamic population.** Add alongside `filter-group="X"` when you want JS to **replace** the existing checkboxes with one per unique value found in the cards' `[filter="<dimension>"]` data. JS uses the first existing item template (`.filters1_item` / `.w-dyn-item` wrapping the checkbox) and clones it for each unique value, so the generated options inherit Designer styling exactly. The clear is scoped to the item's parent list — the accordion heading and accordion icon stay intact. Useful when there's no clean CMS collection backing a dimension (e.g. the Region accordion when the Country CMS doesn't deduplicate).
+
+**Locations accordion grouping.** The Designer's CMS Collection List for Locations puts a `.filters1_filter-group-subheading` element inside each `.filters1_item`, bound to that location's region (so the subheading text repeats per row). JS shows only the first subheading per unique region in DOM order, hiding the rest, which produces a "section header" effect. **For the grouping to look fully tidy, set the Locations CMS Collection List sort to "Region A→Z" in Designer** so all items of each region are consecutive in the DOM. Without that sort, you still get partial grouping but section headers may appear multiple times for the same region.
 
 **Banner image embed** (inside the conditional-visibility container that shows when `banner-image-link` is set):
 
@@ -772,7 +774,7 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 - **Secrets (Cloudflare-managed, not in code):**
   - `GITHUB_TOKEN` — fine-grained PAT with Actions write scope for `The-Uncoders/pageup-webflow-sync`
   - `SYNC_KEY` — shared gate for dashboard auth
-- **Cloudflare account:** `Hello@uncoders.co` (ID `4a6fba0403941f5658f7287a2496ac8c`)
+- **Cloudflare account ID:** `4a6fba0403941f5658f7287a2496ac8c`
 - **Deploy:** no CI — edit `worker/sync-trigger.js` in the repo, paste into Cloudflare dashboard → Workers & Pages → `fctg-sync-trigger` → Edit Code → Save and Deploy. See `worker/README.md` for the smoke-test curls.
 
 ---
@@ -851,6 +853,17 @@ PageUp lists every location a job covers in the listing column and detail page a
 ---
 
 ## Key change history
+
+### v4 polish: SHA-pinning loaders + filter-panel fixes (May 12, 2026 PM)
+
+Follow-up work after the v4 morning rewrite, addressing real-world issues uncovered during testing:
+
+- **SHA-pinning loaders** for both `/jobs` (`jobs-filter-loader.html`) and `/internal/jobs-dashboard` (`dashboard/embed-loader.html`). Previously used `cdn.jsdelivr.net/gh/owner/repo@main/file.js?b=N&v=<epoch>`. Observed (May 12) that jsDelivr's branch-name URL caches a stale SHA reference and the public purge endpoint cannot reliably invalidate it — purge ACKs returned `status:"finished"` but edges kept serving stale content for 12+ hours, oscillating between intermediate SHAs without ever reaching the latest. SHA-pinned URLs (`@<sha>/file.js`) are immutable on jsDelivr, so they always serve correctly. Loaders now resolve the latest commit SHA via the GitHub API (cached 10 min in localStorage to limit API calls), then pin jsDelivr to that SHA. Falls back to `@main` if the API is unreachable.
+- **`autoPopulateFromCards` heading-preserve fix.** The initial implementation cleared all children of the `[filter-group="X"][filter-source="cards"]` container, which stripped the accordion heading + icon along with the items. Now finds the closest `.filters1_item` / `.w-dyn-item` wrapper holding the first checkbox, clears only ITS parent (the inner CMS list), leaves the heading + accordion icon intact.
+- **Location grouping for inside-item subheadings.** Designer's CMS Collection List for Locations puts a `.filters1_filter-group-subheading` element inside each `.filters1_item` (one per row, all repeating). The original v4 `updateLocationSubheadings` walked siblings — wrong structure for this case. Now walks visible items in DOM order and shows only the first subheading per unique region; the rest are hidden. Requires the Designer CMS Collection List to be sorted by Region A→Z for fully tidy grouping.
+- **Dedup hides the entire item wrapper.** Previously dedup hid only the `.w-checkbox` label — the parent `.filters1_item` (with its subheading) stayed visible, leaking subheadings through hidden duplicates. Now hides the closest `.filters1_item` / `.w-dyn-item` wrapper.
+- **Tag template handling.** The `[filter-ui="tags"]` element on this Designer is the chip element itself (with the `.filters1_tag` class), not a wrapper. JS treats it as a template — hides it by default, clones it for each active filter, inserts clones as siblings (with `data-fctg-tag-clone="1"` for cleanup). The Designer-styled chip stays invisible until a filter is actually picked.
+- **Worker `job_id` query param documented.** The Cloudflare Worker has accepted `?job_id=<numeric>` since May 1 (single-job sync), but the README didn't list it. Now does.
 
 ### v4 architecture: Webflow renders, JS only filters (May 12, 2026)
 
@@ -947,4 +960,4 @@ No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHu
 
 ---
 
-*Last updated: May 12, 2026 — major v4 rewrite: Webflow renders the cards (Collection List with all bindings); JS only filters via DOM-attribute lookups (`filter="X"` on cards, `filter-group="X"` on panel containers, `filter-ui="X"` on UI controls). Removed JSON fetch + template cloning + slot-position rendering; eliminates the "Tokyo" coupling-bug class. New paginate-load mechanism probes Webflow's pagination URLs to bypass the 100-item Collection List cap. Tag chip auto-hides until a filter is picked. Filter checkbox dedup-by-label handles repeated CMS-bound checkboxes. Region sourced from `country.region` (recruitment team manages in Country CMS) — sync no longer writes a Region field on jobs. Legacy `city` and `region` plaintext fields on Current Jobs are now unwritten and can be deleted. May 11, 2026: multi-location handling, search-by-job-number. May 1, 2026: single-job sync mode, `pickLiveBanner()`, H1–H5 → H6 demotion. April 24, 2026: force-full mode, content-hash gate, shareable filtered URLs, bullet-point list normalisation, Cloudflare Worker tracked in repo. Previous revisions are in git history.*
+*Last updated: May 12, 2026 (PM) — v4 polish: SHA-pinning loaders for `/jobs` and `/internal/jobs-dashboard` (sidesteps jsDelivr's branch-URL stale-cache issue); `autoPopulateFromCards` now preserves the accordion heading and clears only the inner CMS list parent; `updateLocationSubheadings` handles inside-item subheading structure (shows one subheading per unique region in DOM order); dedup hides the entire `.filters1_item` wrapper so subheadings don't leak; tag template treated as the chip itself, hidden by default and cloned per active filter. Worker README documents the `job_id` query param. May 12 AM: major v4 rewrite — Webflow renders cards, JS only filters via DOM attributes (`filter`, `filter-group`, `filter-ui`, `filter-source`). Region sourced from `country.region` (recruitment team manages in Country CMS); sync stops writing the Region/city fields on jobs. May 11, 2026: multi-location handling, search-by-job-number. May 1, 2026: single-job sync mode, `pickLiveBanner()`, H1–H5 → H6 demotion. April 24, 2026: force-full mode, content-hash gate, shareable filtered URLs, bullet-point list normalisation, Cloudflare Worker tracked in repo. Previous revisions are in git history.*

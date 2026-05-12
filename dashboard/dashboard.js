@@ -101,7 +101,7 @@
       '</div>',
       '<div class="fd-section">',
         '<h2>⚙️ Active processing rules</h2>',
-        '<p>Each rule below describes one transformation we apply between PageUp and Webflow. Some are structural (always on, would break things if disabled); others are presentational. Get in touch with Singulo if you want any of these flipped — changes need a full rescrape to apply across all jobs.</p>',
+        '<p>Each rule below describes one transformation applied between PageUp and Webflow. Some are structural (always on, would break things if disabled); others are presentational. Changing one requires a full rescrape to apply across all jobs.</p>',
         '<table class="fd-rules">',
           '<thead><tr><th>Rule</th><th>What it does</th><th style="text-align:center;width:80px">Status</th></tr></thead>',
           '<tbody>',
