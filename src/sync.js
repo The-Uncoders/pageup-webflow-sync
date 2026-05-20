@@ -411,8 +411,11 @@ function cleanDescription(html) {
   // collapsing to a single level loses no structure in practice.
   clean = clean.replace(/(<\/?)h[1-5]\b/gi, '$1h6');
 
-  // White-text LinkedIn hashtag lines (#LI-ME1, #MTEV, etc.) meant to be hidden
-  clean = clean.replace(/<span[^>]*color:\s*#(?:FFF(?:FFF)?|fff(?:fff)?|FFFFFF|ffffff)\b[^>]*>[^<]*<\/span>/gi, '');
+  // White-text LinkedIn hashtag lines (#LI-ME1, #MTEV, etc.) meant to be hidden.
+  // The (?<![\w-]) lookbehind anchors `color` to a property boundary so
+  // `background-color: #FFFFFF` (a visible white highlight recruiters apply to
+  // real copy) is NOT matched and stripped — only genuine white text `color`.
+  clean = clean.replace(/<span[^>]*(?<![\w-])color:\s*#(?:FFF(?:FFF)?|fff(?:fff)?|FFFFFF|ffffff)\b[^>]*>[^<]*<\/span>/gi, '');
 
   // Inline font-size / font-family — let Webflow's typography apply
   clean = clean.replace(/\s*style="([^"]*)"/gi, (match, styleContent) => {
