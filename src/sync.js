@@ -7,7 +7,6 @@ const { parse: parseHtml } = require('node-html-parser');
 const { initBrowser, closeBrowser, fetchAllJobIds, scrapeAllJobs } = require('./scraper');
 const { WebflowClient } = require('./webflow');
 const { SyncLogger } = require('./sync-logger');
-const regionMap = require('../region-map.json');
 const locationToCountry = require('../location-to-country.json');
 
 // ── Force-full mode ──
@@ -147,10 +146,74 @@ function resolveCountryRefForLocation(locationStr, jobDetailCountry, countryMap)
   return countryMap['multiple locations'] || null;
 }
 
+// ── Canonical taxonomy resolution ──
+// Resolve a job's references strictly against the canonical CMS lists — no
+// normalisation or aliasing (the CMS mirrors the client's PageUp source 1:1,
+// duplicates and all; any cleanup is a separate, client-approved step).
+
+function dedupe(arr) {
+  const seen = new Set();
+  return arr.filter(x => (seen.has(x) ? false : (seen.add(x), true)));
+}
+
+// PageUp's location string is comma-joined, and some canonical location names
+// themselves contain commas (e.g. "Mumbai, India"). Resolve by longest-match:
+// at each position try a 2-part join first, then a single part. Canonical
+// names are at most 2 comma-parts, so 2-then-1 is sufficient. Tokens that
+// don't match are returned as `unmatched` (surfaced for troubleshooting; the
+// job still publishes, it just won't carry that location reference).
+function resolveLocationRefs(locationStr, locationMap) {
+  const ids = [], unmatched = [];
+  if (!locationStr) return { ids, unmatched };
+  const parts = locationStr.split(',').map(p => p.trim()).filter(Boolean);
+  let i = 0;
+  while (i < parts.length) {
+    let matched = false;
+    if (i + 1 < parts.length) {
+      const two = (parts[i] + ', ' + parts[i + 1]).toLowerCase();
+      if (locationMap[two]) { ids.push(locationMap[two]); i += 2; matched = true; }
+    }
+    if (!matched) {
+      const one = parts[i].toLowerCase();
+      if (locationMap[one]) ids.push(locationMap[one]);
+      else unmatched.push(parts[i]);
+      i += 1;
+    }
+  }
+  return { ids: dedupe(ids), unmatched };
+}
+
+// Distinct Region IDs for a set of Location IDs (each Location → single Region
+// reference). A job inherits every region its locations belong to.
+function resolveRegionRefs(locationIds, locationIdToRegionId) {
+  const ids = [];
+  for (const lid of locationIds) {
+    const rid = locationIdToRegionId[lid];
+    if (rid && !ids.includes(rid)) ids.push(rid);
+  }
+  return ids;
+}
+
+// PageUp work-type is a comma-joined multi-select; work-type names contain no
+// commas, so a plain split is safe.
+function resolveWorkTypeRefs(workTypeStr, workTypeMap) {
+  const ids = [], unmatched = [];
+  if (!workTypeStr) return { ids, unmatched };
+  for (const part of workTypeStr.split(',').map(p => p.trim()).filter(Boolean)) {
+    const id = workTypeMap[part.toLowerCase()];
+    if (id) ids.push(id);
+    else unmatched.push(part);
+  }
+  return { ids: dedupe(ids), unmatched };
+}
+
 // Configuration
 const COLLECTION_ID = process.env.WEBFLOW_COLLECTION_ID || '69a6a25d0ee880903952732b';
 const BRAND_COLLECTION_ID = process.env.WEBFLOW_BRAND_COLLECTION_ID || '691f361688f213d69817eb0a';
 const COUNTRY_COLLECTION_ID = process.env.WEBFLOW_COUNTRY_COLLECTION_ID || '691f361688f213d69817eb56';
+const REGION_COLLECTION_ID = process.env.WEBFLOW_REGION_COLLECTION_ID || '6a157e98d435d31b2d4ebd5a';
+const LOCATION_COLLECTION_ID = process.env.WEBFLOW_LOCATION_COLLECTION_ID || '6a157ea861886283c2071323';
+const WORKTYPE_COLLECTION_ID = process.env.WEBFLOW_WORKTYPE_COLLECTION_ID || '6a157eb962523953153b53c4';
 const WEBFLOW_API_TOKEN = process.env.WEBFLOW_API_TOKEN;
 const WEBFLOW_SITE_ID = process.env.WEBFLOW_SITE_ID || '691f361688f213d69817ead2';
 
@@ -185,8 +248,49 @@ async function buildReferenceMaps(client) {
     if (name) countryMap[name] = item.id;
   }
 
-  console.log(`[sync] Loaded ${Object.keys(brandMap).length} brands, ${Object.keys(countryMap).length} countries, ${Object.keys(hashtagToBrand).length} brand hashtags.`);
-  return { brandMap, brandIdToName, countryMap, hashtagToBrand };
+  // Canonical taxonomy collections (populated 1:1 from the client-provided
+  // PageUp source). These drive the region/location/work-type multi-reference
+  // fields on each job. Region for a job is derived from its locations: each
+  // Location carries a single Region reference, and a job inherits the
+  // distinct set of regions across all its locations.
+  const regionItems = await client.getAllCollectionItems(REGION_COLLECTION_ID);
+  const regionIdToName = {};
+  for (const item of regionItems) {
+    if (item.fieldData?.name) regionIdToName[item.id] = item.fieldData.name.trim();
+  }
+
+  const locationItems = await client.getAllCollectionItems(LOCATION_COLLECTION_ID);
+  const locationMap = {};            // lowercased location name → item ID
+  const locationIdToName = {};       // item ID → canonical name
+  const locationIdToRegionId = {};   // item ID → its single Region reference ID
+  for (const item of locationItems) {
+    const name = item.fieldData?.name?.trim();
+    if (!name) continue;
+    // Duplicate canonical names (the intentional PageUp dups, e.g. "Manchester")
+    // collapse to one ID here — harmless, since the front-end matches by label
+    // and both checkboxes resolve the same jobs.
+    locationMap[name.toLowerCase()] = item.id;
+    locationIdToName[item.id] = name;
+    const regionRef = item.fieldData?.regions; // single Reference, slug "regions"
+    if (regionRef) locationIdToRegionId[item.id] = regionRef;
+  }
+
+  const workTypeItems = await client.getAllCollectionItems(WORKTYPE_COLLECTION_ID);
+  const workTypeMap = {};            // lowercased work-type name → item ID
+  const workTypeIdToName = {};
+  for (const item of workTypeItems) {
+    const name = item.fieldData?.name?.trim();
+    if (!name) continue;
+    workTypeMap[name.toLowerCase()] = item.id;
+    workTypeIdToName[item.id] = name;
+  }
+
+  console.log(`[sync] Loaded ${Object.keys(brandMap).length} brands, ${Object.keys(countryMap).length} countries, ${Object.keys(hashtagToBrand).length} brand hashtags, ${Object.keys(locationMap).length} locations, ${Object.keys(regionIdToName).length} regions, ${Object.keys(workTypeMap).length} work types.`);
+  return {
+    brandMap, brandIdToName, countryMap, hashtagToBrand,
+    locationMap, locationIdToName, locationIdToRegionId, regionIdToName,
+    workTypeMap, workTypeIdToName,
+  };
 }
 
 // Explicit PageUp-brand → CMS-brand aliases. Used for strict brand
@@ -524,33 +628,40 @@ function cleanDescription(html) {
   return clean.trim();
 }
 
-function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hashtagToBrand) {
+function buildCmsFieldData(jobDetail, refs) {
+  const { brandMap, brandIdToName, countryMap, hashtagToBrand,
+          locationMap, locationIdToRegionId, workTypeMap } = refs;
+
   // Resolve brand using 3-tier logic — returns the CANONICAL CMS brand
   // name in `.name` (never the raw PageUp text).
   const resolvedBrand = resolveBrand(jobDetail, brandMap, brandIdToName, hashtagToBrand);
 
-  // Location field holds the full PageUp location string verbatim —
-  // including every comma-separated location for multi-location jobs
-  // (e.g. "New South Wales, Queensland, Victoria"). Per the May-2026
-  // client decision (Steven Elvin, 10 May 2026): when a job spans
-  // multiple locations, surface them all. The Webflow Designer template
-  // displays this plaintext field as-is, and jobs-filter.js v4 splits
-  // on comma when matching against location filter checkboxes.
-  //
-  // The legacy `city` field is no longer written here — it was redundant
-  // with `location` after the multi-location change. The Designer now
-  // binds directly to `location`. The `city` field can be deleted from
-  // the CMS schema once verified working.
+  // Resolve canonical references from the raw PageUp strings. Region is
+  // derived from the matched locations (each Location → one Region), so a
+  // job inherits every region its locations span.
+  const locRes = resolveLocationRefs(jobDetail.location, locationMap);
+  const regionIds = resolveRegionRefs(locRes.ids, locationIdToRegionId);
+  const wtRes = resolveWorkTypeRefs(jobDetail.workType, workTypeMap);
+  if (locRes.unmatched.length || wtRes.unmatched.length) {
+    console.warn(`[sync] Unmatched canonical values for job ${jobDetail.jobId} "${jobDetail.title}": ` +
+      `locations=[${locRes.unmatched.join('; ')}] workTypes=[${wtRes.unmatched.join('; ')}]`);
+  }
+
+  // Region, location and work type are now CMS multi-references resolved
+  // above. The legacy plaintext `location`, `work-type` and `brand-name`
+  // fields have been removed from the schema — the brand reference and the
+  // three taxonomy references carry this now. Verbatim location display on
+  // the card/detail comes from the rendered Locations reference.
   const fieldData = {
     name: jobDetail.title.substring(0, 256),
     slug: slugify(jobDetail.title),
     'job-id': jobDetail.jobId,
-    'location': jobDetail.location || '',
-    'brand-name': resolvedBrand.name,
     'summary': jobDetail.summary || '',
-    'work-type': jobDetail.workType || '',
     'category': jobDetail.categories || '',
     'closing-date': jobDetail.closingDate || '',
+    'regions': regionIds,
+    'locations': locRes.ids,
+    'work-types': wtRes.ids,
   };
 
   // Job URL
@@ -591,16 +702,10 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
     fieldData['brand'] = resolvedBrand.id;
   }
 
-  // Country reference — single-value Webflow ref. For multi-country
-  // locations (e.g. AU states + NZ), routes to the "Multiple Locations"
-  // CMS entry instead of arbitrarily picking one country.
-  //
-  // Region for the public site is resolved by the Webflow Designer via
-  // the Country reference's own Region field — see the Countries CMS
-  // collection. The sync deliberately does NOT write a Region field on
-  // the Job; doing so would either be unused (when the card binds to
-  // country.region) or duplicate-of-truth. The Country's Region field is
-  // edited by the recruitment team in Webflow when adding new countries.
+  // Country reference retained for flag/hero imagery (the Countries CMS
+  // carries images we reference). Region for the site is NO LONGER derived
+  // from country — it comes from the job's resolved location references
+  // above. Country is still resolved from the location string as before.
   const countryRef = resolveCountryRefForLocation(
     jobDetail.location, jobDetail.country, countryMap
   );
@@ -612,18 +717,27 @@ function buildCmsFieldData(jobDetail, brandMap, brandIdToName, countryMap, hasht
 }
 
 function hasChanged(existing, newData) {
-  // Compare key fields to detect real content changes.
-  // Note: description and banner-image-link are intentionally excluded — Webflow
+  // Compare key fields to detect real content changes (feeds the log's
+  // changedFields; the content-hash gate is the authoritative detector).
+  // description and banner-image-link are intentionally excluded — Webflow
   // normalizes HTML and link values on storage, causing false diffs every sync.
-  // These fields are still written correctly for new jobs and on every update.
-  const fieldsToCompare = ['name', 'location', 'work-type', 'category', 'brand-name', 'closing-date'];
   const existingFields = existing.fieldData || {};
-
   const changed = [];
-  for (const field of fieldsToCompare) {
+
+  // Remaining plaintext scalars
+  for (const field of ['name', 'category', 'closing-date']) {
     const existingVal = (existingFields[field] || '').toString().trim();
     const newVal = (newData[field] || '').toString().trim();
     if (existingVal !== newVal) changed.push(field);
+  }
+  // Single references
+  for (const field of ['brand', 'country']) {
+    if ((existingFields[field] || '') !== (newData[field] || '')) changed.push(field);
+  }
+  // Multi-references (arrays of item IDs) — compare as order-independent sets
+  const asSet = (v) => (Array.isArray(v) ? v.slice().sort().join(',') : '');
+  for (const field of ['regions', 'locations', 'work-types']) {
+    if (asSet(existingFields[field]) !== asSet(newData[field])) changed.push(field);
   }
 
   return changed.length > 0 ? changed : false;
@@ -634,23 +748,30 @@ function hasChanged(existing, newData) {
  * Returns true if the PageUp listing row's stable fields differ from the CMS
  * item. "Stable" means fields that come straight from the listing table and
  * aren't transformed by our resolvers:
- *   - title  → matches fieldData.name exactly
- *   - location → matches fieldData.location exactly
+ *   - title    → matches fieldData.name exactly
+ *   - location → the listing location string, resolved to canonical Location
+ *                IDs, matches the stored `locations` multi-reference (as a set)
  *
  * Brand is intentionally NOT compared here: our resolveBrand() uses hashtags
- * as a fallback, so the CMS brand-name may legitimately differ from the raw
- * listing brand text every sync. Comparing it would cause 100% of jobs to
- * re-scrape and defeat the purpose of this check.
+ * as a fallback, so the CMS brand may legitimately differ from the raw listing
+ * brand text every sync. Comparing it would cause 100% of jobs to re-scrape.
  *
  * Empty PageUp values are not treated as changes — some listing rows don't
  * populate every cell.
  */
-function listingFieldsChanged(cmsItem, pageupJob) {
+function listingFieldsChanged(cmsItem, pageupJob, refs) {
   const fd = cmsItem.fieldData || {};
   const norm = (s) => (s || '').toString().trim();
 
   if (pageupJob.title && norm(fd.name) !== norm(pageupJob.title)) return true;
-  if (pageupJob.location && norm(fd.location) !== norm(pageupJob.location)) return true;
+
+  // Location lives in the `locations` multi-reference now. Resolve the listing
+  // string to canonical IDs and compare to the stored set.
+  if (pageupJob.location) {
+    const { ids } = resolveLocationRefs(pageupJob.location, refs.locationMap);
+    const stored = Array.isArray(fd.locations) ? fd.locations : [];
+    if (ids.slice().sort().join(',') !== stored.slice().sort().join(',')) return true;
+  }
 
   return false;
 }
@@ -704,7 +825,7 @@ async function runSync() {
   logger.recordCmsState(cmsItems.length);
 
   // Step 4: Build reference maps (includes hashtag → brand mapping)
-  const { brandMap, brandIdToName, countryMap, hashtagToBrand } = await buildReferenceMaps(client);
+  const refs = await buildReferenceMaps(client);
 
   // Step 5: Build maps for diffing
   const cmsJobMap = new Map(); // jobId → CMS item
@@ -758,7 +879,7 @@ async function runSync() {
     const itemsToCreate = [];
     const hashByJobId = {};
     for (const detail of newDetails) {
-      const fieldData = buildCmsFieldData(detail, brandMap, brandIdToName, countryMap, hashtagToBrand);
+      const fieldData = buildCmsFieldData(detail, refs);
       itemsToCreate.push({ fieldData, isArchived: false, isDraft: false });
       if (detail.jobId) hashByJobId[detail.jobId] = hashFieldData(fieldData);
     }
@@ -799,7 +920,7 @@ async function runSync() {
       for (const pageupJob of existingJobs) {
         const cmsItem = cmsJobMap.get(pageupJob.jobId);
         if (!cmsItem) continue;
-        if (listingFieldsChanged(cmsItem, pageupJob)) {
+        if (listingFieldsChanged(cmsItem, pageupJob, refs)) {
           jobsNeedingRescrape.push(pageupJob);
         } else {
           listingSkippedCount++;
@@ -828,7 +949,7 @@ async function runSync() {
         const cmsItem = cmsJobMap.get(detail.jobId);
         if (!cmsItem) continue;
 
-        const newFieldData = buildCmsFieldData(detail, brandMap, brandIdToName, countryMap, hashtagToBrand);
+        const newFieldData = buildCmsFieldData(detail, refs);
 
         // Slugs are immutable once created. If PageUp renames a job into a
         // title whose slugified form collides with another CMS item, Webflow
@@ -926,8 +1047,8 @@ async function runSync() {
 
   // Step 11: Regenerate all-jobs.json + filter-counts.json
   console.log(`\n[sync] Regenerating all-jobs.json and filter-counts.json...`);
-  const liveJobsCount = await generateAllJobsJson(client, countryMap);
-  await generateFilterCounts(client, countryMap);
+  const liveJobsCount = await generateAllJobsJson(client);
+  await generateFilterCounts(client);
   logger.recordLiveJobsAfter(liveJobsCount);
 
   // Step 12: Persist updated hash map. CI copies this file to the `data`
@@ -1075,9 +1196,7 @@ async function runSingleJobSync(jobId) {
   } else if (detail) {
     const refMaps = await buildReferenceMaps(client);
     countryMap = refMaps.countryMap;
-    const fieldData = buildCmsFieldData(
-      detail, refMaps.brandMap, refMaps.brandIdToName, countryMap, refMaps.hashtagToBrand
-    );
+    const fieldData = buildCmsFieldData(detail, refMaps);
     const newHash = hashFieldData(fieldData);
 
     if (cmsItem) {
@@ -1126,8 +1245,8 @@ async function runSingleJobSync(jobId) {
       const refMaps = await buildReferenceMaps(client);
       countryMap = refMaps.countryMap;
     }
-    const liveCount = await generateAllJobsJson(client, countryMap);
-    await generateFilterCounts(client, countryMap);
+    const liveCount = await generateAllJobsJson(client);
+    await generateFilterCounts(client);
     logger.recordLiveJobsAfter(liveCount);
   }
 
@@ -1153,67 +1272,48 @@ if (require.main === module) {
   });
 }
 
-async function generateFilterCounts(client, countryMap) {
-  // Build country ID → name map (inverse of the reference map)
-  const countryItems = await client.getAllCollectionItems(COUNTRY_COLLECTION_ID);
-  const countryIdToName = {};
-  for (const item of countryItems) {
-    const name = item.fieldData?.name;
-    if (name) countryIdToName[item.id] = name;
+async function generateFilterCounts(client) {
+  // id → name maps for the taxonomy references, plus location → region name.
+  const regionIdToName = {}, locationIdToName = {}, locationIdToRegion = {};
+  for (const it of await client.getAllCollectionItems(REGION_COLLECTION_ID)) {
+    if (it.fieldData?.name) regionIdToName[it.id] = it.fieldData.name;
+  }
+  for (const it of await client.getAllCollectionItems(LOCATION_COLLECTION_ID)) {
+    if (!it.fieldData?.name) continue;
+    locationIdToName[it.id] = it.fieldData.name;
+    if (it.fieldData.regions) locationIdToRegion[it.id] = regionIdToName[it.fieldData.regions] || '';
   }
 
   // Fetch only LIVE (published) job items so filter counts match what
   // visitors actually see on the site.
   const jobItems = await client.getLiveCollectionItems(COLLECTION_ID);
 
-  // Set of known country names (lowercase) for the city/country reconciliation
-  const knownCountryNames = new Set(
-    Object.values(countryIdToName).map(n => (n || '').toLowerCase())
-  );
-
-  const regions = {};
-  const cities = {};
-  const categories = {};
-  const cityToRegion = {};
-  const cityDisplay = {};
-  const categoryDisplay = {};
+  const regions = {}, cities = {}, categories = {};
+  const cityToRegion = {}, cityDisplay = {}, categoryDisplay = {};
 
   for (const item of jobItems) {
     const fd = item.fieldData || {};
 
-    // Resolve country reference to region, with a safety net: if the CMS
-    // country is empty but the city value is itself a country/state name,
-    // recover the country from that.
-    const countryRef = fd.country;
-    const rawCountryName = countryRef ? (countryIdToName[countryRef] || '') : '';
-    const { city, countryName } = reconcileCityAndCountry(
-      fd.location || fd.city, rawCountryName, knownCountryNames
-    );
-
-    let regionName = '';
-    if (countryName) {
-      regionName = regionMap[countryName.toLowerCase()] || 'Multiple Locations';
-    } else {
-      regionName = 'Multiple Locations';
+    for (const rid of (Array.isArray(fd.regions) ? fd.regions : [])) {
+      const name = regionIdToName[rid];
+      if (!name) continue;
+      const rk = name.toLowerCase();
+      regions[rk] = (regions[rk] || 0) + 1;
     }
 
-    const rk = regionName.toLowerCase();
-    regions[rk] = (regions[rk] || 0) + 1;
-
-    // City — only counted if we have a real city (reconcile clears it when
-    // the CMS city value was actually a country or state name)
-    if (city) {
-      const ck = city.toLowerCase();
+    for (const lid of (Array.isArray(fd.locations) ? fd.locations : [])) {
+      const name = locationIdToName[lid];
+      if (!name) continue;
+      const ck = name.toLowerCase();
       cities[ck] = (cities[ck] || 0) + 1;
-      if (regionName && !cityToRegion[ck]) cityToRegion[ck] = regionName;
-      if (!cityDisplay[ck]) cityDisplay[ck] = city;
+      if (!cityDisplay[ck]) cityDisplay[ck] = name;
+      const reg = locationIdToRegion[lid];
+      if (reg && !cityToRegion[ck]) cityToRegion[ck] = reg;
     }
 
-    // Category
     const cat = (fd.category || '').trim();
     if (cat) {
-      const catParts = cat.split(',').map(c => c.trim()).filter(Boolean);
-      for (const cp of catParts) {
+      for (const cp of cat.split(',').map(c => c.trim()).filter(Boolean)) {
         const catk = cp.toLowerCase();
         categories[catk] = (categories[catk] || 0) + 1;
         if (!categoryDisplay[catk]) categoryDisplay[catk] = cp;
@@ -1227,29 +1327,30 @@ async function generateFilterCounts(client, countryMap) {
   console.log(`[sync] filter-counts.json written (${Object.keys(regions).length} regions, ${Object.keys(cities).length} cities, ${Object.keys(categories).length} categories)`);
 }
 
-async function generateAllJobsJson(client, countryMap) {
-  // Build country ID → name map (inverse of the reference map).
-  // Country and Brand reference collections are fetched via the staged
-  // endpoint because their entries rarely change and are always published.
-  const countryItems = await client.getAllCollectionItems(COUNTRY_COLLECTION_ID);
-  const countryIdToName = {};
-  for (const item of countryItems) {
-    const name = item.fieldData?.name;
-    if (name) countryIdToName[item.id] = name;
+async function generateAllJobsJson(client) {
+  // id → name maps for every reference the dashboard JSON needs, plus brand logos.
+  const regionIdToName = {}, locationIdToName = {}, wtIdToName = {};
+  const countryIdToName = {}, brandIdToName = {}, brandIdToLogo = {};
+  for (const it of await client.getAllCollectionItems(REGION_COLLECTION_ID)) {
+    if (it.fieldData?.name) regionIdToName[it.id] = it.fieldData.name;
   }
-
-  // Build brand ID → logo URL map
-  const brandItems = await client.getAllCollectionItems(BRAND_COLLECTION_ID);
-  const brandIdToLogo = {};
-  for (const item of brandItems) {
-    const logo = item.fieldData?.logo;
+  for (const it of await client.getAllCollectionItems(LOCATION_COLLECTION_ID)) {
+    if (it.fieldData?.name) locationIdToName[it.id] = it.fieldData.name;
+  }
+  for (const it of await client.getAllCollectionItems(WORKTYPE_COLLECTION_ID)) {
+    if (it.fieldData?.name) wtIdToName[it.id] = it.fieldData.name;
+  }
+  for (const it of await client.getAllCollectionItems(COUNTRY_COLLECTION_ID)) {
+    if (it.fieldData?.name) countryIdToName[it.id] = it.fieldData.name;
+  }
+  for (const it of await client.getAllCollectionItems(BRAND_COLLECTION_ID)) {
+    if (it.fieldData?.name) brandIdToName[it.id] = it.fieldData.name;
+    const logo = it.fieldData?.logo;
     if (logo) {
-      // Webflow Image fields return { url, alt } or sometimes just a URL string
       const logoUrl = typeof logo === 'string' ? logo : (logo.url || '');
-      if (logoUrl) brandIdToLogo[item.id] = logoUrl;
+      if (logoUrl) brandIdToLogo[it.id] = logoUrl;
     }
   }
-  console.log(`[sync] Brand logo map: ${Object.keys(brandIdToLogo).length} brands with logos`);
 
   // Fetch only LIVE (published) job items — guarantees every slug we emit
   // actually resolves on the site. Prevents the "page not found" bug where
@@ -1257,16 +1358,13 @@ async function generateAllJobsJson(client, countryMap) {
   const jobItems = await client.getLiveCollectionItems(COLLECTION_ID);
   const allJobs = [];
 
-  // Set of known country names (lowercase) for city/country reconciliation
-  const knownCountryNames = new Set(
-    Object.values(countryIdToName).map(n => (n || '').toLowerCase())
-  );
-
   // Defensive: skip items without a valid job-id and deduplicate by job-id
   // so the public JSON is always a clean 1:1 of unique PageUp jobs.
   const seenJobIds = new Set();
   let skippedNoId = 0;
   let skippedDupe = 0;
+
+  const namesOf = (arr, map) => (Array.isArray(arr) ? arr : []).map(id => map[id]).filter(Boolean);
 
   for (const item of jobItems) {
     const fd = item.fieldData || {};
@@ -1275,47 +1373,26 @@ async function generateAllJobsJson(client, countryMap) {
     if (seenJobIds.has(jobId)) { skippedDupe++; continue; }
     seenJobIds.add(jobId);
 
-    // Resolve country reference to region, with a safety net that recovers
-    // the country from the city value when the CMS country is empty but
-    // the city text is itself a country name (e.g. "New Zealand") or a
-    // mapped state (e.g. "Missouri" → United States).
-    const countryRef = fd.country;
-    const rawCountryName = countryRef ? (countryIdToName[countryRef] || '') : '';
-    const { city, countryName } = reconcileCityAndCountry(
-      fd.location || fd.city, rawCountryName, knownCountryNames
-    );
-
-    let region = '';
-    if (countryName) {
-      region = regionMap[countryName.toLowerCase()] || 'Multiple Locations';
-    } else {
-      region = 'Multiple Locations';
-    }
-
-    const brand = (fd['brand-name'] || '').trim();
-
-    // Resolve brand reference to logo URL
-    const brandRef = fd.brand;
-    const logoUrl = brandRef ? (brandIdToLogo[brandRef] || '') : '';
+    // Region, location and work type now come from the multi-reference fields.
+    // Joined into comma strings for the dashboard (multi-valued for jobs that
+    // span more than one). Country (kept for imagery) supplies `co`.
+    const regionNames = namesOf(fd.regions, regionIdToName);
+    const locationNames = namesOf(fd.locations, locationIdToName);
+    const wtNames = namesOf(fd['work-types'], wtIdToName);
+    const countryName = fd.country ? (countryIdToName[fd.country] || '') : '';
+    const brandName = fd.brand ? (brandIdToName[fd.brand] || '') : '';
+    const logoUrl = fd.brand ? (brandIdToLogo[fd.brand] || '') : '';
 
     allJobs.push({
       t: (fd.name || '').trim(),           // title
       s: (fd.slug || ''),                  // slug
-      ji: jobId,                           // PageUp job ID (search-by-number;
-                                           //   per Steven Elvin 8 May 2026
-                                           //   request — searchable, not
-                                           //   visibly displayed on cards)
-      ci: city,                            // city (may be a comma-separated
-                                           //   multi-location string per the
-                                           //   May-2026 client decision; the
-                                           //   frontend splits on comma to
-                                           //   match against filter checkboxes)
-      co: countryName,                     // country name (or "Multiple
-                                           //   Locations" for multi-country jobs)
-      r: region,                           // region
-      b: brand,                            // brand
+      ji: jobId,                           // PageUp job ID (search-by-number)
+      ci: locationNames.join(', '),        // location names (comma-joined; multi)
+      co: countryName,                     // country name (imagery reference)
+      r: regionNames.join(', '),           // region names (comma-joined; multi)
+      b: brandName,                        // brand (canonical CMS name)
       ca: (fd.category || '').trim(),      // category (may be comma-separated)
-      wt: (fd['work-type'] || '').trim(),  // work type
+      wt: wtNames.join(', '),              // work types (comma-joined; multi)
       su: (fd.summary || '').trim(),       // summary
       ju: (fd['job-url'] || ''),           // job URL
       l: logoUrl,                          // brand logo URL
@@ -1335,4 +1412,10 @@ async function generateAllJobsJson(client, countryMap) {
   return allJobs.length;
 }
 
-module.exports = { runSync };
+module.exports = {
+  runSync,
+  buildCmsFieldData,
+  resolveLocationRefs,
+  resolveRegionRefs,
+  resolveWorkTypeRefs,
+};

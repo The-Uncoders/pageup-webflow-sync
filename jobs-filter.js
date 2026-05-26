@@ -22,6 +22,11 @@
  * hidden` combo class but lives in the DOM and contributes to the keyword
  * haystack. Recruiters can paste a job number into search.
  *
+ * v5.0   – Filters read native CMS multi-reference fields (Regions, Locations,
+ *           Work Types collections). Each multi-ref renders one [filter="X"]
+ *           element per value; the engine OR-matches across them. Work type is
+ *           now multi-select. Removed autoPopulate / comma-split / JSON paths.
+ *           Dedup-by-label OFF (mirrors PageUp's duplicate entries verbatim).
  * v4.0   – MAJOR rewrite. Removed JSON fetch + template cloning + slot-by-
  *           position rendering (Tokyo bug class). Webflow now owns the layout
  *           entirely. Smaller (~500 lines vs 1450), no template coupling.
@@ -55,7 +60,7 @@
   var activeRegions = {};
   var activeBrands = {};
   var activeCategories = {};
-  var workType = '';
+  var activeWorkTypes = {};
   var sortMode = 'default';
   var visibleLimit = PAGE_SIZE;
 
@@ -99,23 +104,14 @@
     preventFormSubmits();
 
     function bindEverything() {
-      // For any filter group with `filter-source="cards"`, auto-populate
-      // checkboxes from unique values found in card data. The first existing
-      // checkbox in the group is used as a Designer-styled template; JS
-      // clones it for each unique value. Useful when there's no clean CMS
-      // collection for that dimension (region, location with multi-strings).
-      autoPopulateFromCards('region', 'region');
-      autoPopulateFromCards('location', 'location');
-      autoPopulateFromCards('city', 'location');
-      autoPopulateFromCards('brand', 'brand');
-      autoPopulateFromCards('category', 'category');
-
+      // Filter-panel checkboxes are native Webflow Collection Lists bound to
+      // the Regions / Locations / Work Types collections — no JS population.
       bindSearch();
       bindFilterGroup('city', activeCities);
       bindFilterGroup('region', activeRegions);
       bindFilterGroup('brand', activeBrands);
       bindFilterGroup('category', activeCategories);
-      bindWorkTypeRadios();
+      bindFilterGroup('work-type', activeWorkTypes);
       bindSort();
       bindClear(resetEls);
       bindShowMore();
@@ -163,15 +159,6 @@
     return document.querySelectorAll('input[name="' + group + '"]');
   }
 
-  function findGroupRadios(group) {
-    var aliases = groupAliases(group);
-    for (var i = 0; i < aliases.length; i++) {
-      var container = document.querySelector('[filter-group="' + aliases[i] + '"]');
-      if (container) return container.querySelectorAll('input[type="radio"]');
-    }
-    return [];
-  }
-
   // Read a checkbox/radio's user-visible label text. Tries Webflow's
   // .w-form-label first; falls back to the parent label's textContent.
   function getOptionLabel(input) {
@@ -180,97 +167,6 @@
     var span = label.querySelector('.w-form-label');
     if (span) return (span.textContent || '').trim();
     return (label.textContent || '').trim();
-  }
-
-  // Opt-in dynamic checkbox population. When a `[filter-group="X"]` container
-  // also has `filter-source="cards"`, JS replaces its existing checkboxes
-  // with one per unique value found in the cards' `[filter="<dim>"]` element.
-  // The first existing checkbox is used as a Designer-styled template (so the
-  // generated checkboxes inherit your visual styling).
-  //
-  // Useful when there's no clean CMS collection for a dimension — e.g. the
-  // Region field where values come from sync (FCTG region map), or Location
-  // where the multi-location strings make a CMS-rendered list incomplete.
-  function autoPopulateFromCards(groupName, cardDimension) {
-    var aliases = groupAliases(groupName);
-    var container = null;
-    for (var i = 0; i < aliases.length; i++) {
-      var c = document.querySelector('[filter-group="' + aliases[i] + '"][filter-source="cards"]');
-      if (c) { container = c; break; }
-    }
-    if (!container) return;
-
-    // Find the first existing checkbox + the item template that wraps it.
-    // Prefer the .filters1_item / .w-dyn-item wrapper if present (so the
-    // clone preserves Designer styling); fall back to the bare label.
-    var firstCheckbox = container.querySelector('input[type="checkbox"]');
-    if (!firstCheckbox) return;
-    var itemTemplate = firstCheckbox.closest('.filters1_item, .w-dyn-item')
-                    || firstCheckbox.closest('.w-checkbox, label');
-    if (!itemTemplate) return;
-
-    // The list parent is the container that holds all the items.
-    // Clearing only this parent's children preserves the heading + accordion
-    // icon + filter-options wrapper (which sit higher up in the tree).
-    var listParent = itemTemplate.parentNode;
-    if (!listParent) return;
-
-    // Collect unique values from cards (case-insensitive dedup, preserving
-    // first-seen casing for display)
-    var seen = {};
-    for (var j = 0; j < _allCards.length; j++) {
-      var raw = dimValue(_allCards[j], cardDimension);
-      if (!raw) continue;
-      raw.split(',').forEach(function (v) {
-        var t = v.trim();
-        if (!t) return;
-        var k = t.toLowerCase();
-        if (!seen[k]) seen[k] = t;
-      });
-    }
-    var values = Object.keys(seen).sort().map(function (k) { return seen[k]; });
-    if (values.length === 0) return;
-
-    // Clear only the list parent's children (existing items). Heading +
-    // accordion icon + outer wrappers stay intact.
-    while (listParent.firstChild) listParent.removeChild(listParent.firstChild);
-
-    // Generate one item per unique value, cloning the item template to
-    // inherit Designer styling.
-    values.forEach(function (val) {
-      var clone = itemTemplate.cloneNode(true);
-      // Strip any subheading inside the cloned item (subheadings only make
-      // sense for the location dimension, not for region etc.)
-      var sub = clone.querySelector('.filters1_filter-group-subheading');
-      if (sub) sub.remove();
-
-      var labelSpan = clone.querySelector('.filters1_form-checkbox1-label, .w-form-label');
-      if (labelSpan) labelSpan.textContent = val;
-      else {
-        // No label span found — set on the closest label as fallback
-        var fallbackLabel = clone.querySelector('.w-checkbox, label');
-        if (fallbackLabel) fallbackLabel.textContent = val;
-      }
-      var cb = clone.querySelector('input[type="checkbox"]');
-      if (cb) {
-        cb.checked = false;
-        cb.removeAttribute('id');
-      }
-      // Reset count badge if present
-      var badge = clone.querySelector('.filter-count, .filter-count .text-size-regular');
-      if (badge) badge.textContent = '0';
-      listParent.appendChild(clone);
-    });
-  }
-
-  // Legacy escapeHtml kept for fallback paths (no longer reached after the
-  // template-based rewrite above).
-  // eslint-disable-next-line no-unused-vars
-
-  function escapeHtmlSimple(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
   }
 
   // ── Inject scoped styles ──────────────────
@@ -434,16 +330,36 @@
     return el ? (el.textContent || '').trim() : '';
   }
 
-  function locationParts(card) {
-    var raw = dimValue(card, 'location');
-    if (!raw) return [];
-    var parts = raw.split(',');
+  // Read every value of a card dimension. Multi-reference dimensions (region,
+  // location, work-type) render one [filter="X"] element per referenced item
+  // (Webflow nested Collection List), so we collect them all. `split` is only
+  // for the plaintext category field (comma-separated in one element) — never
+  // for locations, whose canonical names can contain commas (e.g. "Mumbai,
+  // India").
+  function cardValues(card, dim, split) {
+    var els = card.querySelectorAll('[filter="' + dim + '"]');
     var out = [];
-    for (var i = 0; i < parts.length; i++) {
-      var s = parts[i].trim();
-      if (s) out.push(s);
+    for (var i = 0; i < els.length; i++) {
+      var t = (els[i].textContent || '').trim();
+      if (!t) continue;
+      if (split) {
+        t.split(',').forEach(function (p) { var s = p.trim(); if (s) out.push(s); });
+      } else {
+        out.push(t);
+      }
     }
     return out;
+  }
+
+  function anyMatch(values, activeMap) {
+    for (var i = 0; i < values.length; i++) {
+      if (activeMap[values[i].toLowerCase()]) return true;
+    }
+    return false;
+  }
+
+  function locationParts(card) {
+    return cardValues(card, 'location', false);
   }
 
   // Search haystack — combines all filterable dimensions plus the visible
@@ -452,15 +368,15 @@
   function haystack(card) {
     if (!card._fctgHay) {
       card._fctgHay = [
-        dimValue(card, 'name'),
-        dimValue(card, 'job-id'),
-        dimValue(card, 'location'),
-        dimValue(card, 'country'),
-        dimValue(card, 'region'),
-        dimValue(card, 'brand'),
-        dimValue(card, 'category'),
-        dimValue(card, 'work-type'),
-        dimValue(card, 'summary')
+        cardValues(card, 'name', false).join(' '),
+        cardValues(card, 'job-id', false).join(' '),
+        cardValues(card, 'location', false).join(' '),
+        cardValues(card, 'country', false).join(' '),
+        cardValues(card, 'region', false).join(' '),
+        cardValues(card, 'brand', false).join(' '),
+        cardValues(card, 'category', true).join(' '),
+        cardValues(card, 'work-type', false).join(' '),
+        cardValues(card, 'summary', false).join(' ')
       ].join(' ').toLowerCase();
     }
     return card._fctgHay;
@@ -473,7 +389,7 @@
     var hasRegions = objSize(activeRegions) > 0;
     var hasBrands = objSize(activeBrands) > 0;
     var hasCategories = objSize(activeCategories) > 0;
-    var wt = workType.toLowerCase();
+    var hasWorkTypes = objSize(activeWorkTypes) > 0;
 
     var visible = [];
     for (var i = 0; i < _allCards.length; i++) {
@@ -481,26 +397,11 @@
       var show = true;
 
       if (show && kw) show = haystack(card).indexOf(kw) !== -1;
-      if (show && hasCities) {
-        var locs = locationParts(card);
-        var any = false;
-        for (var j = 0; j < locs.length; j++) {
-          if (activeCities[locs[j].toLowerCase()]) { any = true; break; }
-        }
-        show = any;
-      }
-      if (show && hasRegions) {
-        show = !!activeRegions[dimValue(card, 'region').toLowerCase()];
-      }
-      if (show && hasBrands) {
-        show = !!activeBrands[dimValue(card, 'brand').toLowerCase()];
-      }
-      if (show && hasCategories) {
-        show = matchesCategory(card, activeCategories);
-      }
-      if (show && wt) {
-        show = dimValue(card, 'work-type').toLowerCase() === wt;
-      }
+      if (show && hasCities) show = anyMatch(cardValues(card, 'location', false), activeCities);
+      if (show && hasRegions) show = anyMatch(cardValues(card, 'region', false), activeRegions);
+      if (show && hasBrands) show = anyMatch(cardValues(card, 'brand', false), activeBrands);
+      if (show && hasCategories) show = anyMatch(cardValues(card, 'category', true), activeCategories);
+      if (show && hasWorkTypes) show = anyMatch(cardValues(card, 'work-type', false), activeWorkTypes);
 
       if (show) visible.push(card); else card.style.display = 'none';
     }
@@ -516,13 +417,7 @@
   }
 
   function matchesCategory(card, activeMap) {
-    var raw = dimValue(card, 'category');
-    if (!raw) return false;
-    var parts = raw.split(',');
-    for (var i = 0; i < parts.length; i++) {
-      if (activeMap[parts[i].trim().toLowerCase()]) return true;
-    }
-    return false;
+    return anyMatch(cardValues(card, 'category', true), activeMap);
   }
 
   // Sort + Show More ──
@@ -560,59 +455,45 @@
     var hasRegions = objSize(activeRegions) > 0;
     var hasBrands = objSize(activeBrands) > 0;
     var hasCategories = objSize(activeCategories) > 0;
-    var wt = workType.toLowerCase();
+    var hasWorkTypes = objSize(activeWorkTypes) > 0;
 
-    var regionCounts = {}, cityCounts = {}, brandCounts = {}, categoryCounts = {};
+    var regionCounts = {}, cityCounts = {}, brandCounts = {}, categoryCounts = {}, workTypeCounts = {};
+    var bump = function (map, values) {
+      for (var n = 0; n < values.length; n++) {
+        var k = values[n].toLowerCase();
+        if (k) map[k] = (map[k] || 0) + 1;
+      }
+    };
 
     for (var i = 0; i < _allCards.length; i++) {
       var card = _allCards[i];
-
       if (kw && haystack(card).indexOf(kw) === -1) continue;
-      if (wt && dimValue(card, 'work-type').toLowerCase() !== wt) continue;
 
-      var locs = locationParts(card);
-      var matchCity = !hasCities || (function () {
-        for (var j = 0; j < locs.length; j++) if (activeCities[locs[j].toLowerCase()]) return true;
-        return false;
-      })();
-      var region = dimValue(card, 'region').toLowerCase();
-      var matchRegion = !hasRegions || !!activeRegions[region];
-      var brand = dimValue(card, 'brand').toLowerCase();
-      var matchBrand = !hasBrands || !!activeBrands[brand];
-      var matchCategory = !hasCategories || matchesCategory(card, activeCategories);
+      var locs = cardValues(card, 'location', false);
+      var regions = cardValues(card, 'region', false);
+      var brands = cardValues(card, 'brand', false);
+      var cats = cardValues(card, 'category', true);
+      var wts = cardValues(card, 'work-type', false);
 
-      // Region counts: apply all EXCEPT region filter
-      if (matchCity && matchBrand && matchCategory) {
-        if (region) regionCounts[region] = (regionCounts[region] || 0) + 1;
-      }
-      // City counts: apply all EXCEPT city filter (each location part)
-      if (matchRegion && matchBrand && matchCategory) {
-        for (var k = 0; k < locs.length; k++) {
-          var ck = locs[k].toLowerCase();
-          cityCounts[ck] = (cityCounts[ck] || 0) + 1;
-        }
-      }
-      // Brand counts: apply all EXCEPT brand filter
-      if (matchCity && matchRegion && matchCategory) {
-        if (brand) brandCounts[brand] = (brandCounts[brand] || 0) + 1;
-      }
-      // Category counts: apply all EXCEPT category filter
-      if (matchCity && matchRegion && matchBrand) {
-        var rawCat = dimValue(card, 'category');
-        if (rawCat) {
-          var cats = rawCat.split(',');
-          for (var c = 0; c < cats.length; c++) {
-            var catk = cats[c].trim().toLowerCase();
-            if (catk) categoryCounts[catk] = (categoryCounts[catk] || 0) + 1;
-          }
-        }
-      }
+      var matchCity = !hasCities || anyMatch(locs, activeCities);
+      var matchRegion = !hasRegions || anyMatch(regions, activeRegions);
+      var matchBrand = !hasBrands || anyMatch(brands, activeBrands);
+      var matchCategory = !hasCategories || anyMatch(cats, activeCategories);
+      var matchWorkType = !hasWorkTypes || anyMatch(wts, activeWorkTypes);
+
+      // Each dimension's counts apply every OTHER active filter.
+      if (matchCity && matchBrand && matchCategory && matchWorkType) bump(regionCounts, regions);
+      if (matchRegion && matchBrand && matchCategory && matchWorkType) bump(cityCounts, locs);
+      if (matchCity && matchRegion && matchCategory && matchWorkType) bump(brandCounts, brands);
+      if (matchCity && matchRegion && matchBrand && matchWorkType) bump(categoryCounts, cats);
+      if (matchCity && matchRegion && matchBrand && matchCategory) bump(workTypeCounts, wts);
     }
 
     updateFilterPanel('region', regionCounts);
     updateFilterPanel('city', cityCounts);
     updateFilterPanel('brand', brandCounts);
     updateFilterPanel('category', categoryCounts);
+    updateFilterPanel('work-type', workTypeCounts);
   }
 
   // Hide/show the WHOLE filter option element. When the checkbox lives
@@ -638,62 +519,48 @@
   // checkbox, so check/uncheck still works correctly across dedup.
   function updateFilterPanel(groupName, counts) {
     var inputs = findGroupCheckboxes(groupName);
-    var seen = {};
     for (var i = 0; i < inputs.length; i++) {
       var cb = inputs[i];
-      var label = cb.closest('.w-checkbox, label');
+      var label = cb.closest('.w-checkbox, .w-radio, label');
       if (!label) continue;
       var key = getOptionLabel(cb).toLowerCase();
       var count = counts[key] || 0;
 
-      // Dedup: only the first checkbox per label gets shown. Subsequent
-      // duplicates are hidden regardless of count.
-      if (seen[key]) { hideOption(label); continue; }
-      seen[key] = true;
-
+      // No dedup-by-label: the canonical Locations collection intentionally
+      // mirrors PageUp's duplicates (e.g. two "Manchester" entries) and the
+      // client wants both checkboxes visible. They share a label, so they
+      // carry the same count and filter identically.
       var badge = label.querySelector('.filter-count');
       if (badge) badge.textContent = count;
 
       if (count > 0 || cb.checked) showOption(label);
       else hideOption(label);
     }
-    if (groupName === 'city' || groupName === 'location') updateLocationSubheadings();
+    if (groupName === 'city' || groupName === 'location') updateLocationRegionGroups();
   }
 
-  // Show subheadings as section headers, one per region. The Designer
-  // structure (CMS Collection List of Locations) puts a subheading INSIDE
-  // each item — repeating per row. We walk visible items in DOM order and
-  // show only the FIRST subheading per unique region; the rest are hidden.
-  // Items hidden by dedup or zero-count automatically suppress their own
-  // subheadings (they're inside the hidden item wrapper).
-  //
-  // For this to look "grouped", the Locations CMS Collection List should
-  // be sorted by Region in Designer (Sort: Region A→Z). Without that, you
-  // get partial grouping — first occurrence of each region acts as a
-  // section header but items below may belong to a different region.
-  function updateLocationSubheadings() {
-    var loc = document.querySelector('[filter-group="location"]')
-           || document.querySelector('[filter-group="city"]');
-    if (!loc) return;
-
-    var seenRegions = {};
-    var items = loc.querySelectorAll('.filters1_item, .w-dyn-item');
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i];
-      var subheading = item.querySelector('.filters1_filter-group-subheading');
-      if (!subheading) continue;
-
-      // If the item itself is hidden (dedup or zero count), nothing to do —
-      // the subheading is inside the hidden wrapper so it's already invisible.
-      if (item.style.display === 'none') continue;
-
-      var region = (subheading.textContent || '').trim();
-      if (!seenRegions[region]) {
-        subheading.style.display = '';
-        seenRegions[region] = true;
-      } else {
-        subheading.style.display = 'none';
+  // Nested region grouping: each region is an OUTER Collection List item
+  // (.w-dyn-item) holding a region header (.text-size-small.text-weight-
+  // semibold) plus a nested Collection List of that region's location
+  // checkboxes. When filtering hides every location in a region, hide the
+  // whole region group so its header doesn't linger over an empty section.
+  function updateLocationRegionGroups() {
+    var wrap = document.querySelector('[filter-group="location"]')
+            || document.querySelector('[filter-group="city"]');
+    if (!wrap) return;
+    var outerList = wrap.querySelector('.w-dyn-list');   // first = outer Regions list
+    if (!outerList) return;
+    var groups = outerList.querySelectorAll(':scope > .w-dyn-items > .w-dyn-item');
+    for (var g = 0; g < groups.length; g++) {
+      var grp = groups[g];
+      var cbs = grp.querySelectorAll('input[type="checkbox"]');
+      var anyVisible = false;
+      for (var i = 0; i < cbs.length; i++) {
+        // The location's own (inner) item wrapper — not the region group.
+        var item = cbs[i].closest('.filters1_item, .w-dyn-item');
+        if (item && item !== grp && item.style.display !== 'none') { anyVisible = true; break; }
       }
+      grp.style.display = anyVisible ? '' : 'none';
     }
   }
 
@@ -800,22 +667,6 @@
     }
   }
 
-  function bindWorkTypeRadios() {
-    var radios = findGroupRadios('work-type');
-    if (!radios || !radios.length) {
-      // Legacy fallback: Webflow's autoname-radio convention
-      radios = document.querySelectorAll('input[name="Filter-Two"]');
-    }
-    radios.forEach(function (r) {
-      r.addEventListener('change', function () {
-        if (!r.checked) return;
-        var lbl = getOptionLabel(r);
-        workType = (lbl.toLowerCase() === 'all' || !lbl) ? '' : lbl;
-        visibleLimit = PAGE_SIZE;
-        applyFilters();
-      });
-    });
-  }
 
   function bindSort() {
     var dropdowns = document.querySelectorAll('.w-dropdown');
@@ -848,12 +699,12 @@
       clearObj(activeRegions);
       clearObj(activeBrands);
       clearObj(activeCategories);
-      workType = '';
+      clearObj(activeWorkTypes);
       sortMode = 'default';
       visibleLimit = PAGE_SIZE;
       var inp = findSearchInput();
       if (inp) inp.value = '';
-      ['city', 'region', 'brand', 'category'].forEach(function (g) {
+      ['city', 'region', 'brand', 'category', 'work-type'].forEach(function (g) {
         var cbs = findGroupCheckboxes(g);
         for (var i = 0; i < cbs.length; i++) cbs[i].checked = false;
       });
@@ -889,7 +740,7 @@
     Object.keys(activeRegions).forEach(function (k) { filters.push({ type: 'region', label: k, key: k }); });
     Object.keys(activeCategories).forEach(function (k) { filters.push({ type: 'category', label: k, key: k }); });
     Object.keys(activeBrands).forEach(function (k) { filters.push({ type: 'brand', label: k, key: k }); });
-    if (workType) filters.push({ type: 'workType', label: workType });
+    Object.keys(activeWorkTypes).forEach(function (k) { filters.push({ type: 'workType', label: k, key: k }); });
 
     if (filters.length === 0 || !parent) return;
 
@@ -938,7 +789,7 @@
       case 'region':   delete activeRegions[f.key];    uncheckByLabel('region', f.key); break;
       case 'category': delete activeCategories[f.key]; uncheckByLabel('category', f.key); break;
       case 'brand':    delete activeBrands[f.key];     uncheckByLabel('brand', f.key); break;
-      case 'workType': workType = ''; if (_allRadio) _allRadio.checked = true; break;
+      case 'workType': delete activeWorkTypes[f.key]; uncheckByLabel('work-type', f.key); break;
     }
     visibleLimit = PAGE_SIZE;
     applyFilters();
@@ -980,7 +831,11 @@
       checkBoxesByLabels(entry[2], entry[1]);
     });
     var wt = params.get(URL_PARAM.workType);
-    if (wt) { workType = wt; applied = true; }
+    if (wt) {
+      wt.split(',').forEach(function (k) { k = k.trim().toLowerCase(); if (k) activeWorkTypes[k] = true; });
+      applied = true;
+      checkBoxesByLabels('work-type', activeWorkTypes);
+    }
     var sm = params.get(URL_PARAM.sortMode);
     if (sm) { sortMode = sm; applied = true; }
     return applied;
@@ -1002,7 +857,7 @@
     var regionKeys = Object.keys(activeRegions); if (regionKeys.length) params.set(URL_PARAM.region, regionKeys.join(','));
     var brandKeys = Object.keys(activeBrands); if (brandKeys.length) params.set(URL_PARAM.brand, brandKeys.join(','));
     var catKeys = Object.keys(activeCategories); if (catKeys.length) params.set(URL_PARAM.category, catKeys.join(','));
-    if (workType) params.set(URL_PARAM.workType, workType);
+    var wtKeys = Object.keys(activeWorkTypes); if (wtKeys.length) params.set(URL_PARAM.workType, wtKeys.join(','));
     if (sortMode && sortMode !== 'default') params.set(URL_PARAM.sortMode, sortMode);
     var qs = params.toString();
     var newUrl = location.pathname + (qs ? '?' + qs : '') + location.hash;
@@ -1015,7 +870,7 @@
     try {
       sessionStorage.setItem(STATE_KEY, JSON.stringify({
         kw: keyword, c: activeCities, r: activeRegions, b: activeBrands,
-        ca: activeCategories, wt: workType, sm: sortMode
+        ca: activeCategories, wt: activeWorkTypes, sm: sortMode
       }));
     } catch (e) {}
   }
@@ -1034,7 +889,7 @@
       copyInto(activeRegions, s.r); checkBoxesByLabels('region', activeRegions);
       copyInto(activeBrands, s.b); checkBoxesByLabels('brand', activeBrands);
       copyInto(activeCategories, s.ca); checkBoxesByLabels('category', activeCategories);
-      if (s.wt) workType = s.wt;
+      copyInto(activeWorkTypes, s.wt); checkBoxesByLabels('work-type', activeWorkTypes);
       if (s.sm) sortMode = s.sm;
     } catch (e) {}
   }
