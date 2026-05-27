@@ -1,13 +1,16 @@
 <!--
-  FCTG /jobs page — Webflow loader for jobs-filter.js
+  FCTG /jobs page — Webflow loader for jobs-filter.js + field-label-cap.js
   ─────────────────────────────────────────────────────
-  Page:  /jobs (and /jobs/{slug} for back-button wiring)
+  Page:  /jobs (and /jobs/{slug} for back-button wiring + label caps)
   Where: Page Settings → Custom Code → Inside <body> tag
-  Size:  ~1.1 KB
+  Size:  ~1.2 KB
 
   This is the ONLY thing pasted into Webflow for the /jobs page. The
-  actual filter engine lives in jobs-filter.js at the repo root and is
-  served via jsDelivr.
+  scripts it loads live at the repo root and are served via jsDelivr:
+    - jobs-filter.js     the faceted filter engine (full on /jobs;
+                         only the back-button wiring on /jobs/{slug})
+    - field-label-cap.js the "+N more" truncation for location/region/
+                         work-type label lists (both pages)
 
   WHY SHA-PINNING (May 2026): we previously used a `?b=N&v=<epoch>`
   cache-busted URL pointing at @main. jsDelivr's branch-name URL cached
@@ -34,22 +37,25 @@
 <script>
 (function () {
   var REPO = 'The-Uncoders/pageup-webflow-sync';
-  var FILE = 'jobs-filter.js';
+  var FILES = ['jobs-filter.js', 'field-label-cap.js'];
   var CACHE_KEY = 'fctg_jf_sha';
   var CACHE_TTL = 10 * 60 * 1000;
-  var FALLBACK = 'https://cdn.jsdelivr.net/gh/' + REPO + '@main/' + FILE + '?b=3';
+  var FALLBACK_REF = '@main';
+  var FALLBACK_SUFFIX = '?b=4';
 
-  function inject(url) {
-    var s = document.createElement('script');
-    s.src = url;
-    s.defer = true;
-    document.body.appendChild(s);
+  function injectAll(ref, suffix) {
+    FILES.forEach(function (file) {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/gh/' + REPO + ref + '/' + file + (suffix || '');
+      s.defer = true;
+      document.body.appendChild(s);
+    });
   }
 
   try {
     var c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
     if (c && c.sha && c.ts && (Date.now() - c.ts < CACHE_TTL)) {
-      inject('https://cdn.jsdelivr.net/gh/' + REPO + '@' + c.sha + '/' + FILE);
+      injectAll('@' + c.sha);
       return;
     }
   } catch (e) {}
@@ -59,8 +65,8 @@
     .then(function (d) {
       if (!d.sha) throw new Error('no sha');
       try { localStorage.setItem(CACHE_KEY, JSON.stringify({ sha: d.sha, ts: Date.now() })); } catch (e) {}
-      inject('https://cdn.jsdelivr.net/gh/' + REPO + '@' + d.sha + '/' + FILE);
+      injectAll('@' + d.sha);
     })
-    .catch(function () { inject(FALLBACK); });
+    .catch(function () { injectAll(FALLBACK_REF, FALLBACK_SUFFIX); });
 })();
 </script>
