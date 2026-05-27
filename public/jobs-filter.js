@@ -1,5 +1,5 @@
 /**
- * FCTG Careers — Job Filter & Sort v6.0
+ * FCTG Careers — Job Filter & Sort v6.1
  *
  * Webflow renders everything natively: the job cards and every filter panel
  * are CMS Collection Lists. This script does ONLY what Webflow can't do
@@ -29,6 +29,11 @@
  * regenerates it from the cards. See that function.
  *
  * Versions:
+ *   v6.1 – Fixed inverted checkbox tick. The change handler no longer calls
+ *          syncCheckboxVisual: Webflow's own delegated change handler already
+ *          toggles .w--redirected-checked once per real click, so our extra
+ *          toggle double-flipped it (tick lagged one click behind / inverted).
+ *          syncCheckboxVisual is now reserved for programmatic paths only.
  *   v6.0 – Deep clean. Attribute-driven list discovery (replaces the
  *          `.career_list` class lookup a Designer rename silently broke).
  *          Removed all Finsweet neutralizing, dead helpers (matchesCategory,
@@ -534,7 +539,16 @@
           var key = getOptionLabel(cb).toLowerCase();
           if (!key) return;
           if (cb.checked) store[key] = true; else delete store[key];
-          syncCheckboxVisual(cb);
+          // Do NOT sync the tick here. On a real click Webflow's own delegated
+          // change handler (jQuery, on document: `.w-form form
+          // input[type="checkbox"]:not(.w-checkbox-input)`) already toggles
+          // `.w--redirected-checked` once — correctly, and it covers the
+          // injected Category checkboxes too (delegation matches future nodes).
+          // Adding our own toggle on top double-flips it, leaving the tick
+          // INVERTED: empty on the click that applies the filter, filled on the
+          // click that clears it. syncCheckboxVisual is only for the programmatic
+          // paths (clear, tag-remove, URL/state restore) that set `.checked`
+          // without firing a change event, so Webflow never runs there.
           resetLimit();
           applyFilters();
         });
@@ -543,9 +557,13 @@
   }
 
   // Webflow custom checkboxes show their tick via `.w--redirected-checked` on
-  // the sibling `.w-checkbox-input`, toggled by webflow.js on user click.
-  // Checkboxes we inject after load (the rebuilt Category panel) aren't wired
-  // by webflow.js, and programmatic check/uncheck never fires it — so we sync.
+  // the sibling `.w-checkbox-input`. Webflow's delegated `change` handler
+  // toggles it on every REAL user click (and via delegation that includes the
+  // injected Category checkboxes) — so we must NOT touch it on the click path
+  // or it double-flips and inverts. This helper is for the programmatic paths
+  // ONLY (clear-all, tag-remove, URL/session restore): those set `.checked`
+  // directly, which fires no `change`, so Webflow never runs and we set the
+  // tick to match.
   function syncCheckboxVisual(cb) {
     var label = cb.closest('.w-checkbox, label');
     var box = label ? label.querySelector('.w-checkbox-input') : null;

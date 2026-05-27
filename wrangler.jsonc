@@ -8,8 +8,10 @@
   // Deploy (Model B — scoped token from 1Password, value never in context):
   //   export OP_SERVICE_ACCOUNT_TOKEN=$(security find-generic-password -a "$USER" -s op-service-account-singulo-ai -w)
   //   CLOUDFLARE_ACCOUNT_ID=4a6fba0403941f5658f7287a2496ac8c \
-  //   CLOUDFLARE_API_TOKEN="op://AI/Cloudflare Deploy Token/credential" \
+  //   CLOUDFLARE_API_TOKEN="op://AI/Cloudflare API/credential" \
   //   op run -- npx wrangler@latest deploy
+  // (1Password AI-vault item is "Cloudflare API", field `credential` —
+  //  Entire-Account scope w/ Workers Scripts:Edit.)
   //
   // The dashboard Worker name MUST equal "name" below if ever git-connected.
   "$schema": "node_modules/wrangler/config-schema.json",
