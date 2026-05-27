@@ -69,7 +69,13 @@ Display-only snippet on `/jobs` and `/jobs/{slug}`. For each `.job-post_field-la
 
 **Hard requirement — the nested Collection List "Show" must be 100, not the Webflow default of 5.** With Show=5, only 5 items render in the DOM, which (a) leaves nothing for the pill to reveal and (b) **silently truncates the FILTER's data** — a 25-location job would only match 5 of its locations. Set Show=100 on the location/region/work-type nested lists (card template + detail page). See the `cms-conventions` reference (phantom 5-item cap).
 
-The card field rows (`.card-detail`) use **`align-items: flex-start`** so the field icon top-aligns with the first label row when the list expands (with `center`, the icon floats to the vertical middle of a multi-row list).
+The card field rows (`.card-detail`) should use **`align-items: flex-start`** so the field icon top-aligns with the first label row when the list expands (with `center`, the icon floats to the vertical middle of a multi-row list). *Applied in the Designer via MCP on 27 May 2026 but **not yet published / not visually confirmed** — verify on the next Webflow publish.*
+
+### Open items (as of 27 May 2026)
+
+- **🐛 Filter checkbox click desync (OPEN — next task).** On the native CMS panels (region / location / brand / work-type), clicking a checkbox misbehaves: the **1st click applies the filter but the box doesn't fill**; the **2nd click fills the box but removes the filter** — i.e. the visual (`.w--redirected-checked`) ends up one click behind / inverted vs `input.checked`. **Hypothesis (verify with a REAL browser click, not a synthetic `input.click()`):** `syncCheckboxVisual` in `bindFilterGroup` toggles `.w--redirected-checked` to match `cb.checked`, but Webflow's own custom-checkbox handler (delegated to `document`) *also* manages that class on these CMS checkboxes and runs after — the two fight. `syncCheckboxVisual` is *needed* for the injected Category panel and for programmatic paths (URL param / state restore / clear / tag-remove fire no `change` event, so Webflow never acts), but is *harmful* on real clicks of Webflow-managed checkboxes. The fix must reconcile both. The USA+Canada dual-region job is **not** a bug — it's a legitimate PageUp tag.
+- **Taxonomy spreadsheet** `FCTG-Careers-Taxonomy.xlsx` (project root, iCloud) is built + verified against PageUp; awaiting the client's Office/SharePoint share link to embed here as the live canonical reference.
+- **Category → canonical CMS collection** still pending the hardcoded category list from Kelly (requested 27 May). Until then the panel is the client-side interim rebuild.
 
 ---
 
