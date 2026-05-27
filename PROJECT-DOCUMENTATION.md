@@ -10,11 +10,66 @@ Three surfaces make up the end-user experience:
 
 | Surface | Served by | Updated via |
 |---|---|---|
-| `/jobs` — job listings page | Webflow, with a custom client-side filter engine (`jobs-filter.js`) | Fetches `all-jobs.json` from jsDelivr on every page view |
+| `/jobs` — job listings page | Webflow renders the cards; a custom client-side engine (`jobs-filter.js`) filters them. JS served from Cloudflare Workers Static Assets. See [Current state](#current-state--serving-filters--deployment-2026-05-27). |
 | `/jobs/{slug}` — individual job post | Webflow CMS template | CMS items synced from PageUp every 20 min |
 | `careers.pageuppeople.com/889/cw/en/job/{id}` — PageUp apply flow | PageUp | — |
 
 The sync pipeline scrapes PageUp (via Playwright, because the listing sits behind a WAF challenge), diffs against the Webflow CMS, and applies creates/updates/deletes through the Webflow v2 API.
+
+---
+
+## Current state — Serving, Filters & Deployment (2026-05-27)
+
+> **This section is the authoritative current reference.** Older sections below predate the v4→v6 rewrites and the Cloudflare migration; trust this where they conflict.
+
+### Serving (how front-end code reaches the live site)
+
+- **Front-end JS is served from Cloudflare Workers Static Assets** — Worker **`fctg-careers-code`**, serving the repo's **`public/`** dir (`loader.js`, `jobs-filter.js`, `field-label-cap.js`). Config: `wrangler.jsonc` at repo root (assets-only, no `main`).
+- **Webflow references exactly ONE stable tag** on both `/jobs` and `/jobs/{slug}` (Page Settings → Custom Code → before `</body>`):
+  ```html
+  <script defer src="https://fctg-careers-code.wandering-sun-9809.workers.dev/loader.js"></script>
+  ```
+  `loader.js` holds the file list and injects its siblings from the same origin. **Add/rename a script → edit `loader.js` in git, redeploy — Webflow never changes again.**
+- **The old jsDelivr SHA-pinned loader is retired** (it caused stale-edge-cache pain; Cloudflare serves the pushed asset directly). The root-level `jobs-filter.js` / `field-label-cap.js` / `jobs-filter-loader.html` were removed — `public/` is canonical.
+- **Data JSON stays on jsDelivr `@data`** (`all-jobs.json`, `filter-counts.json`, `sync-log.json`) — the sync writes those; unchanged. CSS (`pageup.css`) also still jsDelivr.
+
+### Deployment (Model B — self-serve, compliant)
+
+GitHub is the source of truth. To ship a front-end change: edit `public/*.js` → commit/push → deploy with the scoped Cloudflare token from 1Password (value never enters the agent's context):
+```sh
+export OP_SERVICE_ACCOUNT_TOKEN=$(security find-generic-password -a "$USER" -s op-service-account-singulo-ai -w)
+cd "<repo>"
+CLOUDFLARE_ACCOUNT_ID=4a6fba0403941f5658f7287a2496ac8c \
+CLOUDFLARE_API_TOKEN="op://AI/Cloudflare API/credential" \
+op run -- npx wrangler@latest deploy
+```
+- Token: 1Password `AI` vault, item **`Cloudflare API`**, field `credential`. **Must be scoped "Entire Account" with `Workers Scripts: Edit`** — a *zone* ("All Domains") token can't deploy Workers (account-level permission). See the `cloudflare-deployment` skill for the full token-scope lesson.
+- No Webflow republish needed for script-only changes; the next page load fetches the updated file.
+
+### Filter engine (`jobs-filter.js` v6)
+
+Webflow renders the cards natively; the script **only filters** (it does NOT render cards or fetch JSON — that was the legacy v3 model). Attribute contract (targets attributes, never design classes, so a class rename can't break it):
+
+| Attribute | On | Purpose |
+|---|---|---|
+| `filter="list"` | cards Collection List wrapper (`.job-post_wrapper`) | which list to filter |
+| `filter="card"` | each card (`.job-post_item`) | marks rows (script also derives the list from `[filter="job-id"]` as a fallback) |
+| `filter="<dim>"` | a value element on the card | dims: `name`, `job-id`, `location`, `region`, `brand`, `category`, `work-type`, `summary`. Multi-value dims render one element per value; engine OR-matches |
+| `filter-group="<dim>"` | a filter panel | its checkboxes drive that dim |
+| `filter-ui="<role>"` | a control | `count` / `empty` / `clear` / `search` / `tags` / `show-more` (all optional) |
+
+Capabilities: faceted multi-select (OR within a dim, AND across dims), keyword search, cross-filter count badges, sort, active-filter tags, URL + sessionStorage state, and a **pagination-merge** that pulls pages 2..N into the DOM so all ~350 jobs are filterable at once (bypasses Webflow's 100-item render cap).
+
+- **Region is unified:** a single dual-purpose `filter="region"` label (display + match). The old hidden duplicate and the `filter="country"` display-alias were removed.
+- **Category is an interim client-side rebuild.** Its panel is bound to the Jobs collection (not a canonical Category collection), so the script rebuilds it from distinct categories across cards — deduped, complete, no combined-string options. **`Legal, Risk and Compliance` shows as two entries** (`Legal` + `Risk and Compliance`) because PageUp's per-job category field is flat comma-joined text with no delimiter; that's a documented quirk until Category becomes a canonical CMS collection (awaiting the hardcoded category list from Kelly — requested 2026-05-27).
+
+### "+N more" label cap (`field-label-cap.js`)
+
+Display-only snippet on `/jobs` and `/jobs/{slug}`. For each `.job-post_field-label_wrapper` nested list with `label-cap="5"`, it shows the first 5 labels and appends a **"+N more"** pill (cloned from a real item so styling matches; its `filter` attribute is stripped so it isn't read as a phantom filter value). Click reveals the rest.
+
+**Hard requirement — the nested Collection List "Show" must be 100, not the Webflow default of 5.** With Show=5, only 5 items render in the DOM, which (a) leaves nothing for the pill to reveal and (b) **silently truncates the FILTER's data** — a 25-location job would only match 5 of its locations. Set Show=100 on the location/region/work-type nested lists (card template + detail page). See the `cms-conventions` reference (phantom 5-item cap).
+
+The card field rows (`.card-detail`) use **`align-items: flex-start`** so the field icon top-aligns with the first label row when the list expands (with `center`, the icon floats to the vertical middle of a multi-row list).
 
 ---
 
@@ -81,7 +136,9 @@ The key design principle: **code lives on `main`, data lives on `data`**. The sy
 | Webflow staging | https://fctg-careers.webflow.io/jobs |
 | PageUp production | https://careers.pageuppeople.com/889/cw/en |
 | PageUp listing (what the scraper hits) | https://careers.fctgcareers.com/cw/en/listing/?page=1&page-items=500 |
-| jobs-filter.js (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@main/jobs-filter.js |
+| Front-end JS loader (Cloudflare) | https://fctg-careers-code.wandering-sun-9809.workers.dev/loader.js |
+| jobs-filter.js (Cloudflare) | https://fctg-careers-code.wandering-sun-9809.workers.dev/jobs-filter.js |
+| field-label-cap.js (Cloudflare) | https://fctg-careers-code.wandering-sun-9809.workers.dev/field-label-cap.js |
 | all-jobs.json (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/all-jobs.json |
 | filter-counts.json (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/filter-counts.json |
 | sync-log.json (CDN) | https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data/sync-log.json |
