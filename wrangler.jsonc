@@ -1,0 +1,21 @@
+{
+  // Static-asset-only Worker that serves the FCTG careers front-end scripts
+  // (the loader + filter engine + label-cap snippet). No Worker script / `main`
+  // — Cloudflare serves ./public directly at the *.workers.dev subdomain.
+  //
+  // Webflow references only:  https://fctg-careers-code.<subdomain>.workers.dev/loader.js
+  //
+  // Deploy (Model B — scoped token from 1Password, value never in context):
+  //   export OP_SERVICE_ACCOUNT_TOKEN=$(security find-generic-password -a "$USER" -s op-service-account-singulo-ai -w)
+  //   CLOUDFLARE_ACCOUNT_ID=4a6fba0403941f5658f7287a2496ac8c \
+  //   CLOUDFLARE_API_TOKEN="op://AI/Cloudflare Deploy Token/credential" \
+  //   op run -- npx wrangler@latest deploy
+  //
+  // The dashboard Worker name MUST equal "name" below if ever git-connected.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fctg-careers-code",
+  "compatibility_date": "2026-05-27",
+  "assets": {
+    "directory": "./public"
+  }
+}
