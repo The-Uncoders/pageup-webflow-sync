@@ -4,9 +4,20 @@
  * Deployed as a Cloudflare Worker at:
  *   https://fctg-sync-trigger.wandering-sun-9809.workers.dev
  *
- * Purpose: proxies POST requests from the sync dashboard to GitHub Actions
- * `workflow_dispatch`, which triggers the sync-jobs.yml workflow on the
- * The-Uncoders/pageup-webflow-sync repo.
+ * Purpose: triggers the sync-jobs.yml workflow on the
+ * The-Uncoders/pageup-webflow-sync repo via GitHub Actions
+ * `workflow_dispatch`. Two entry points:
+ *   - fetch()     — on-demand POSTs from the sync dashboard (Run Sync Now,
+ *                   Force Full Rescrape, per-job re-sync).
+ *   - scheduled() — Cloudflare Cron Triggers fire this on a guaranteed
+ *                   cadence and dispatch the routine syncs. This is the
+ *                   reliable scheduler that REPLACES the GitHub Actions
+ *                   `schedule:` crons, which GitHub runs best-effort and
+ *                   drops under load (observed ~10 runs/day vs a 20-min
+ *                   target, gaps up to 5 hours). Crons configured in this
+ *                   Worker's wrangler.jsonc: an every-10-minutes fast-sync
+ *                   (listing-level diff) plus a daily 02:00 UTC force-full
+ *                   rescrape.
  *
  * Query params:
  *   key        (required) — shared secret validated against env.SYNC_KEY
@@ -21,13 +32,36 @@
  *                           exclusive with force_full — if both are sent,
  *                           job_id wins.
  *
- * Environment variables (encrypted in Cloudflare dashboard, not in code):
+ * Secrets (stored on the Worker, not in code; persist across deploys):
  *   SYNC_KEY     — shared gate for authorised callers
  *   GITHUB_TOKEN — fine-grained PAT with Actions:write for the repo
  *
- * Deploy: paste this file's content into the Cloudflare dashboard →
- *   Workers & Pages → fctg-sync-trigger → Edit Code → Save & Deploy.
+ * Deploy: wrangler-managed via worker/wrangler.jsonc (code + cron triggers
+ *   in one deploy) — see that file's header for the exact command.
  */
+
+/**
+ * POST a workflow_dispatch to the sync-jobs.yml workflow.
+ * `inputs` is optional — omit for a normal fast-sync, or pass
+ * { force_full: 'true' } / { job_id: '123' } for the other modes.
+ * Returns the raw fetch Response (204 = accepted).
+ */
+async function dispatchWorkflow(env, inputs) {
+  const body = inputs ? { ref: 'main', inputs } : { ref: 'main' };
+  return fetch(
+    'https://api.github.com/repos/The-Uncoders/pageup-webflow-sync/actions/workflows/sync-jobs.yml/dispatches',
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + env.GITHUB_TOKEN,
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'fctg-sync-trigger',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    }
+  );
+}
 
 export default {
   async fetch(request, env) {
@@ -66,27 +100,15 @@ export default {
     }
     const forceFull = !jobId && url.searchParams.get('force_full') === 'true';
 
-    const dispatchBody = { ref: 'main' };
+    // GitHub workflow_dispatch expects boolean inputs as string "true"/"false".
+    let inputs;
     if (jobId) {
-      dispatchBody.inputs = { job_id: jobId };
+      inputs = { job_id: jobId };
     } else if (forceFull) {
-      // GitHub workflow_dispatch expects boolean inputs as string "true"/"false".
-      dispatchBody.inputs = { force_full: 'true' };
+      inputs = { force_full: 'true' };
     }
 
-    const res = await fetch(
-      'https://api.github.com/repos/The-Uncoders/pageup-webflow-sync/actions/workflows/sync-jobs.yml/dispatches',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + env.GITHUB_TOKEN,
-          'Accept': 'application/vnd.github.v3+json',
-          'User-Agent': 'fctg-sync-trigger',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dispatchBody),
-      }
-    );
+    const res = await dispatchWorkflow(env, inputs);
 
     const corsHeaders = { 'Access-Control-Allow-Origin': '*' };
 
@@ -109,6 +131,27 @@ export default {
     return Response.json(
       { ok: false, message: 'GitHub API error: ' + res.status, detail: errText.slice(0, 200) },
       { status: 502, headers: corsHeaders }
+    );
+  },
+
+  /**
+   * Cloudflare Cron Triggers fire here on a guaranteed cadence. This is the
+   * authoritative scheduler for the routine syncs — the GitHub Actions
+   * `schedule:` crons are removed because GitHub runs them best-effort and
+   * drops most of them under load. `event.cron` is the matched expression.
+   */
+  async scheduled(event, env, ctx) {
+    // The daily 02:00 UTC tick re-scrapes every job's detail page to catch
+    // edits that don't surface on the listing (category, banner, closing
+    // date, description). Every other tick is a normal listing-level fast-sync.
+    const inputs = event.cron === '0 2 * * *' ? { force_full: 'true' } : undefined;
+    ctx.waitUntil(
+      dispatchWorkflow(env, inputs).then(async (res) => {
+        if (res.status !== 204) {
+          const detail = await res.text().catch(() => '');
+          console.error(`[scheduled] dispatch failed: ${res.status} ${detail.slice(0, 200)}`);
+        }
+      })
     );
   },
 };

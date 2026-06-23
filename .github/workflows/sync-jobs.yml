@@ -1,13 +1,13 @@
 name: Sync PageUp Jobs to Webflow
 
 on:
-  schedule:
-    # Every 20 minutes — fast-sync (listing-level diff only).
-    - cron: '*/20 * * * *'
-    # Once daily at 02:00 UTC — force-full rescrape. Catches any PageUp
-    # edit (category, banner, description, closing date) that doesn't
-    # surface on the listing page. Worst-case propagation: 24 hours.
-    - cron: '0 2 * * *'
+  # Scheduling is driven by the `fctg-sync-trigger` Cloudflare Worker's Cron
+  # Triggers (every 10 min fast-sync + daily 02:00 UTC force-full), which
+  # workflow_dispatch into this workflow. GitHub Actions' own `schedule:` crons
+  # were removed: GitHub runs scheduled workflows best-effort and drops most of
+  # them under load (observed ~10 runs/day against a 20-min target, gaps up to
+  # 5 hours) — that lag is what made new jobs take up to 3 hours to appear.
+  # Cloudflare cron fires on time. See worker/wrangler.jsonc + worker/sync-trigger.js.
   workflow_dispatch:
     # Manual trigger from dashboard "Run Sync Now". The `force_full` input
     # lets the dashboard's "Force Full Rescrape" button bypass the
@@ -26,6 +26,16 @@ on:
 
 permissions:
   contents: write
+
+# At a 10-min cadence a run can still be in flight when the next fires (or the
+# daily force-full overlaps a fast-sync). Serialize the routine runs so they
+# don't race on the data-branch force-push. Queue rather than cancel — a
+# mid-write run must finish. Single-job dispatches get their own per-job group
+# so a recruiter's "force re-sync this job" never waits behind (or is dropped
+# by) the main cadence.
+concurrency:
+  group: sync-jobs-${{ github.event.inputs.job_id || 'main' }}
+  cancel-in-progress: false
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true

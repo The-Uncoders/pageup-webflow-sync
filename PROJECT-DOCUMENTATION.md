@@ -1,6 +1,6 @@
 # FCTG Careers — PageUp + Webflow Integration
 
-Automated pipeline that keeps Flight Centre Travel Group's careers site in sync with PageUp, their Applicant Tracking System. The public site (fctgcareers.com) is built in Webflow; PageUp is the source of truth for jobs; a GitHub Actions workflow reconciles the two every 20 minutes.
+Automated pipeline that keeps Flight Centre Travel Group's careers site in sync with PageUp, their Applicant Tracking System. The public site (fctgcareers.com) is built in Webflow; PageUp is the source of truth for jobs; a GitHub Actions workflow reconciles the two every 10 minutes (scheduled by Cloudflare cron — see "Scheduling moved to Cloudflare cron").
 
 ---
 
@@ -11,7 +11,7 @@ Three surfaces make up the end-user experience:
 | Surface | Served by | Updated via |
 |---|---|---|
 | `/jobs` — job listings page | Webflow renders the cards; a custom client-side engine (`jobs-filter.js`) filters them. JS served from Cloudflare Workers Static Assets. See [Current state](#current-state--serving-filters--deployment-2026-05-27). |
-| `/jobs/{slug}` — individual job post | Webflow CMS template | CMS items synced from PageUp every 20 min |
+| `/jobs/{slug}` — individual job post | Webflow CMS template | CMS items synced from PageUp every 10 min |
 | `careers.pageuppeople.com/889/cw/en/job/{id}` — PageUp apply flow | PageUp | — |
 
 The sync pipeline scrapes PageUp (via Playwright, because the listing sits behind a WAF challenge), diffs against the Webflow CMS, and applies creates/updates/deletes through the Webflow v2 API.
@@ -89,7 +89,7 @@ The card field rows (`.card-detail`) should use **`align-items: flex-start`** so
                                        │  Playwright scrape
                                        ▼
               ┌──────────────────────────────────────────────────┐
-              │  GitHub Actions — runs every 20 min on main     │
+              │  GitHub Actions — runs every 10 min on main     │
               │                                                  │
               │  0. Seed local sync-log.json from data branch    │
               │  1. Scrape listing page (title + location +      │
@@ -173,7 +173,8 @@ Single GitHub repo `The-Uncoders/pageup-webflow-sync`, two branches:
 | `jobs-filter.js` | Client-side filter/render engine for `/jobs` and back-button wiring for `/jobs/{slug}` |
 | `dashboard/server.js` | Optional local Express dashboard (http://localhost:3456) |
 | `dashboard/index.html` | Dashboard UI |
-| `.github/workflows/sync-jobs.yml` | 20-minute cron + `workflow_dispatch` |
+| `.github/workflows/sync-jobs.yml` | `workflow_dispatch`-only (scheduling via Cloudflare cron) |
+| `worker/sync-trigger.js` + `worker/wrangler.jsonc` | `fctg-sync-trigger` Worker: dashboard-trigger proxy + the Cloudflare Cron Triggers that schedule the sync |
 | `region-map.json` | Country → region display name |
 | `location-to-country.json` | Location fragment → country fallback |
 | `brand-map.json` | Job title → brand fallback |
@@ -575,11 +576,11 @@ Fast-sync only looks at the listing page (title + location) to decide which jobs
 
 | When | How | Propagation delay |
 |---|---|---|
-| Daily 02:00 UTC | Second `cron` in `sync-jobs.yml` | Worst case 24 hours |
+| Daily 02:00 UTC | `0 2 * * *` Cloudflare cron on `fctg-sync-trigger` → `workflow_dispatch` with `force_full=true` | Worst case 24 hours |
 | On demand | Dashboard "Force Full Rescrape" button → Cloudflare Worker → `workflow_dispatch` with `force_full=true` input | Immediate (run takes ~10–15 min) |
 | Local | `SYNC_FORCE_FULL=true npm run sync` | Immediate |
 
-The 20-minute fast-sync cron continues in parallel — listing-level changes (title/location, new jobs, removed jobs) still propagate within a minute.
+The 10-minute fast-sync continues in parallel — listing-level changes (title/location, new jobs, removed jobs) propagate within ~12 min worst case.
 
 ### Single-job mode
 
@@ -633,8 +634,9 @@ Both preserve the safety rails: backup before writes, `--restore` for rollback.
 
 `.github/workflows/sync-jobs.yml`:
 
-- **Schedules:** `*/20 * * * *` (fast-sync) + `0 2 * * *` (daily force-full)
-- **Manual triggers:** `workflow_dispatch` with `force_full` boolean input (force-full mode) or `job_id` string input (single-job mode)
+- **Scheduling:** driven externally by the `fctg-sync-trigger` Cloudflare Worker's Cron Triggers (every 10 min fast-sync + daily 02:00 UTC force-full), which `workflow_dispatch` into this workflow. The workflow has **no `schedule:` crons of its own** — see the "Scheduling moved to Cloudflare cron" section below for why.
+- **Triggers:** `workflow_dispatch` only — with `force_full` boolean input (force-full mode) or `job_id` string input (single-job mode). The Cloudflare cron, the dashboard buttons, and manual API dispatch all use this one entry point.
+- **Concurrency:** `group: sync-jobs-<job_id|main>`, `cancel-in-progress: false` — routine runs (fast-sync + daily force-full) serialize on a shared `…-main` group so they can't race on the data-branch force-push; each single-job dispatch gets its own per-job group so a recruiter's "force re-sync this job" is never queued behind the cadence.
 - **Runtime:** Node 22, Ubuntu
 - **Timeout:** 30 min
 
@@ -650,9 +652,15 @@ Both preserve the safety rails: backup before writes, `--restore` for rollback.
    - Else: normal commit + push
 7. Purge jsDelivr CDN cache for `@data/all-jobs.json`, `@data/filter-counts.json`, `@data/sync-log.json`
 
-### Scheduled-run caveat — GitHub Actions cron is best-effort
+### Scheduling moved to Cloudflare cron (June 2026) — was: GitHub Actions cron is best-effort
 
-The cron is set to `*/20 * * * *` but GitHub Actions explicitly does not guarantee on-time delivery of scheduled workflows. During high-load periods the scheduler skips runs entirely. In practice this site sees 15–25 scheduled runs per day instead of the targeted ~72 — roughly one per hour. If guaranteed cadence becomes important, migrate the trigger source to Cloudflare Cron Triggers (using the existing Worker) or another scheduler. Manual triggers via the dashboard and API dispatch always run on-demand.
+**History / why.** The workflow originally scheduled itself with `*/20 * * * *` (fast-sync) + `0 2 * * *` (force-full). But GitHub Actions does not guarantee on-time delivery of scheduled workflows — under load the scheduler **drops runs entirely**. Measured over a 6-day window in June 2026 the fast-sync fired only **~10 times/day** instead of the targeted ~72: median gap between runs **128 min**, mean **148 min**, worst **321 min (5.3 h)** — every gap exceeded 40 min. That lag was the cause of the client report that new roles took **up to 3 hours** to appear (target: ≤1 h). The daily force-full was subject to the same dropping.
+
+**Fix (deployed June 2026).** Scheduling now runs on **Cloudflare Cron Triggers**, which fire on time. The existing `fctg-sync-trigger` Worker gained a `scheduled()` handler (`worker/sync-trigger.js`) and two crons in `worker/wrangler.jsonc`: every-10-min fast-sync + `0 2 * * *` force-full. Each tick `workflow_dispatch`es this workflow. The GitHub `schedule:` crons were **removed**. Net effect: worst-case visibility dropped from 3+ h to **~12 min** (10-min cron + ~2-min run), typical ~6 min. Free — the repo is public, so Actions minutes are unlimited.
+
+> Deploy the Worker (and its crons) with `op run -- npx wrangler@latest deploy -c worker/wrangler.jsonc` (see that file's header for the full env). Secrets (`SYNC_KEY`, `GITHUB_TOKEN`) persist across deploys. After deploying, confirm a `workflow_dispatch` run appears within ~10 min and that `wrangler secret list` still shows both secrets.
+
+> **Residual latency to watch:** any remaining lag after this fix is PageUp-side (time from a recruiter publishing to the job appearing on the scraped `cw/en/listing` page), which is outside our cron. If roles still lag noticeably, measure that gap before changing anything our side.
 
 ### Sync source detection
 
@@ -667,6 +675,8 @@ The cron is set to `*/20 * * * *` but GitHub Actions explicitly does not guarant
 | No CI env (local) | `"local"` |
 
 The dashboard's history table uses this to show a "Trigger" badge per run (Scheduled / Manual / Local).
+
+> **Side effect of the Cloudflare-cron migration (June 2026):** the automated cadence now arrives as `workflow_dispatch` (the Worker dispatches it), not `schedule`, so the logger records it as `"manual"` — the same badge as a dashboard button click. The "Scheduled" badge effectively no longer appears, and automated vs human-initiated runs are no longer distinguishable in the table. This is cosmetic (it doesn't affect whether syncs run, and history timestamps still show cadence health). To restore the distinction: add a `source` workflow input, have `scheduled()` pass `source: 'scheduled'`, surface it to the sync step as an env var, and have `detectSource()` read that env var before falling back to `GITHUB_EVENT_NAME`.
 
 ### Required secrets
 
@@ -862,7 +872,7 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 ### Making sync changes (`src/sync.js`, `src/scraper.js`, `src/webflow.js`)
 
 1. Edit on `main`, `git push`
-2. Next scheduled run (within 20 min) picks up the change. Or trigger manually from the dashboard.
+2. Next scheduled run (within ~10 min) picks up the change. Or trigger manually from the dashboard.
 
 ### Making Designer changes
 
@@ -888,7 +898,7 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
 | Dashboard "PageUp" and "Live" columns differ | Normal — PageUp had a transient hiccup at scrape time, or a publish is still propagating | Resolves on the next sync. If persistent, inspect the CMS for an orphan item with no matching PageUp job-id |
 | Same job shows as "updated" every sync | Slug collision — two CMS items produce the same slug after `slugify()` | Already handled (updates don't send slug). If still recurring, dig into the duplicate CMS entry manually |
 | A location appears ungrouped at the top of the Locations filter | CMS item's `city` field is a country/state name; country ref is empty | Reconciliation runs at JSON generation time — should self-heal on the next sync. If not, add the value to `location-to-country.json` |
-| Sync history has gaps / fewer runs than expected | GitHub Actions scheduled cron is best-effort — skips runs under load | Expected behaviour. To get guaranteed cadence, migrate trigger to Cloudflare Cron |
+| Sync history has gaps / fewer runs than expected | Scheduling is now Cloudflare cron (every 10 min) — gaps mean the Worker's cron isn't firing or its `workflow_dispatch` is failing | Check `wrangler tail -c worker/wrangler.jsonc` for `[scheduled]` dispatch errors; confirm `wrangler secret list` shows `GITHUB_TOKEN` + `SYNC_KEY`; confirm the crons in `worker/wrangler.jsonc` are still registered (re-run `wrangler deploy`). (Historic gaps before June 2026 were GitHub's best-effort `schedule:` cron dropping runs — that's why scheduling moved to Cloudflare.) |
 | Sync log shows "Scheduled" for a manual run | Run happened before commit `dc55f97` (source-tracking) landed in main | One-time artifact. Newer runs record source correctly |
 
 ---

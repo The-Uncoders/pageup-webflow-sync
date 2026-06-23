@@ -1,0 +1,33 @@
+{
+  // Config for the `fctg-sync-trigger` Worker (worker/sync-trigger.js).
+  //
+  // This Worker triggers the sync-jobs.yml GitHub workflow. It runs on two
+  // entry points: on-demand fetch() (dashboard buttons) and scheduled()
+  // (Cloudflare Cron Triggers below). The crons here are the AUTHORITATIVE
+  // scheduler for routine syncs — the workflow's own `schedule:` crons were
+  // removed because GitHub Actions runs scheduled workflows best-effort and
+  // drops most of them under load (observed ~10 runs/day vs a 20-min target).
+  //
+  // `name` MUST stay "fctg-sync-trigger" so the workers.dev URL the dashboard
+  // calls is preserved. Secrets (SYNC_KEY, GITHUB_TOKEN) already live on the
+  // Worker and persist across `wrangler deploy` — set them once with
+  // `wrangler secret put <NAME> -c worker/wrangler.jsonc` if redeploying fresh.
+  //
+  // Deploy (scoped token from 1Password, value never in context):
+  //   export OP_SERVICE_ACCOUNT_TOKEN=$(security find-generic-password -a "$USER" -s op-service-account-singulo-ai -w)
+  //   CLOUDFLARE_ACCOUNT_ID=4a6fba0403941f5658f7287a2496ac8c \
+  //   CLOUDFLARE_API_TOKEN="op://AI/Cloudflare API/credential" \
+  //   op run -- npx wrangler@latest deploy -c worker/wrangler.jsonc
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "fctg-sync-trigger",
+  "main": "sync-trigger.js",
+  "compatibility_date": "2026-05-27",
+  // No public preview URL needed — this Worker is reached only by its stable
+  // workers.dev URL (dashboard) and its own cron (scheduled handler).
+  "preview_urls": false,
+  "triggers": {
+    // Fast-sync every 10 min (worst-case visibility ≈ 10 min cron + ~2 min run);
+    // daily 02:00 UTC force-full rescrape. Repo is public, so Actions are free.
+    "crons": ["*/10 * * * *", "0 2 * * *"]
+  }
+}
