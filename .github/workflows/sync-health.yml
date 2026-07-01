@@ -1,0 +1,79 @@
+name: Sync health check
+
+# Watchdog for the sync scheduler. The routine sync cadence is driven by the
+# `fctg-sync-trigger` Cloudflare Worker (Cron Triggers → workflow_dispatch
+# into sync-jobs.yml). That chain has a single quiet failure mode: the
+# Worker's GITHUB_TOKEN secret (a fine-grained PAT) stops working — expiry,
+# regeneration (regenerating a PAT invalidates the old value IMMEDIATELY),
+# or revocation — and every dispatch 401s while the cron keeps "succeeding".
+# That exact failure ran silently for 2.5 days (2026-06-29 → 2026-07-01)
+# before a recruiter noticed missing roles.
+#
+# This workflow is the backstop. On each tick it checks how long ago the
+# last sync-jobs.yml run was created. If the gap exceeds the threshold it
+# (a) re-dispatches the sync itself using the Actions-provided GITHUB_TOKEN
+#     (auto-issued per run — never expires, independent of the PAT), and
+# (b) fails, so GitHub emails the account a red-run notification.
+#
+# It deliberately runs on GitHub's own `schedule:` cron. That cron is
+# best-effort (it's why routine scheduling moved to Cloudflare — see
+# PROJECT-DOCUMENTATION.md § "Scheduling moved to Cloudflare cron"), but a
+# watchdog only needs to run *eventually*: even a few late ticks a day turns
+# a silent multi-day outage into same-day detection plus interim syncs. Do
+# NOT move the routine cadence back here; this is a safety net, not a
+# scheduler.
+
+on:
+  schedule:
+    # Nominally every 30 min; GitHub thins this out under load. Offset from
+    # :00 to dodge the top-of-hour scheduling rush.
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: write   # read run history + re-dispatch sync-jobs.yml
+
+concurrency:
+  group: sync-health
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check freshness of the last sync run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Routine cadence is 10 min. Allow for queueing and the run itself
+          # before declaring the scheduler dead.
+          MAX_AGE_MINUTES: 45
+        run: |
+          set -euo pipefail
+
+          latest=$(gh api \
+            "repos/${{ github.repository }}/actions/workflows/sync-jobs.yml/runs?per_page=1" \
+            --jq '.workflow_runs[0].created_at // empty')
+
+          if [ -z "$latest" ]; then
+            echo "::error::No sync-jobs.yml runs found at all — scheduler appears dead."
+            age_minutes=99999
+          else
+            latest_epoch=$(date -d "$latest" +%s)
+            now_epoch=$(date +%s)
+            age_minutes=$(( (now_epoch - latest_epoch) / 60 ))
+            echo "Last sync run: $latest (${age_minutes} min ago)."
+          fi
+
+          if [ "$age_minutes" -le "$MAX_AGE_MINUTES" ]; then
+            echo "Scheduler healthy (threshold ${MAX_AGE_MINUTES} min)."
+            exit 0
+          fi
+
+          echo "Sync is stale — re-dispatching sync-jobs.yml as interim cover."
+          gh api -X POST \
+            "repos/${{ github.repository }}/actions/workflows/sync-jobs.yml/dispatches" \
+            -f ref=main
+
+          echo "::error::No sync run for ${age_minutes} min (threshold ${MAX_AGE_MINUTES}). The fctg-sync-trigger Worker's dispatches are likely failing — usually a dead GITHUB_TOKEN PAT (expired or regenerated without updating the Worker secret). Fix: put the current token from 1Password (item 'GitHub Fine-Grained Access Token') onto the Worker with 'wrangler secret put GITHUB_TOKEN -c worker/wrangler.jsonc'. See PROJECT-DOCUMENTATION.md § Sync trigger Worker. An interim sync was dispatched by this watchdog."
+          exit 1
