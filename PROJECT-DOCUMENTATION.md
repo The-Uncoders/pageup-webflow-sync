@@ -962,7 +962,7 @@ Phil (PageUp) supplied the official feeds for the FCTG external careers source, 
 | Category | `Categories` / `CategoryList` | direct |
 | Closing date | `ClosingDateUtc` | .NET `/Date(ms)/` format, 67/340 populated — parse trivially |
 | Work type | `WorkType` / `WorkTypeList` | direct |
-| Brand | ⚠ NOT `Brand` | feed `Brand` is the *division* (Leisure/Corporate/Business Services/Supply/GCC), not our consumer-brand CMS taxonomy (Flight Centre, FCM, …) — keep `resolveBrand()` hashtag/title resolution, fed from `Overview` |
+| Brand | `Department` (NOT `Brand`) | verified 2026-07-11: `Department` equals the listing page's brand column **340/340 verbatim** (Flight Centre Brand, FCM, Travel Associates, …) — feed field naming is swapped vs expectation: feed `Brand` = internal *division* (Leisure/Corporate/…). Feed `Department` → `resolveBrand()` gives byte-identical input to today's scrape, so identical CMS output (raw text ≠ final CMS brand for 167/340 by design — the canonicalisation rules + hashtag fallback are ours and unchanged) |
 | Multi-location | `LocationList` | structured array of `Region\|City` pairs — *better* than the comma-string we parse today |
 | Card summary | `Summary` | 340/340 populated |
 | (bonus) | `ApplyUrl`, `EmployeeReferralUrl`, `Salary`, `OpeningDateUtc` | referral URL per job directly — feeds the `/job/{id}` redirect work |
