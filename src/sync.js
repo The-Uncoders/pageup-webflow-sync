@@ -1418,4 +1418,8 @@ module.exports = {
   resolveLocationRefs,
   resolveRegionRefs,
   resolveWorkTypeRefs,
+  // Exposed for the feed shadow harness (scripts/feed-shadow.js) so it can
+  // run the EXACT production transform + hash against feed-sourced jobs.
+  buildReferenceMaps,
+  hashFieldData,
 };

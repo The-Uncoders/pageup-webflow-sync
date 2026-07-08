@@ -1,0 +1,58 @@
+name: Feed shadow parity
+
+# Shadow harness for the PageUp JSON feed migration (scripts/feed-shadow.js).
+# READ-ONLY: makes no Webflow writes and never touches the data branch — it
+# only compares what the feed WOULD produce against what production actually
+# published, and uploads the parity report as an artifact. Runs alongside
+# production with its own concurrency group; GitHub's best-effort `schedule:`
+# cron is fine here (a shadow harness only needs to run several times a day).
+# Background: PROJECT-DOCUMENTATION.md § "PageUp JSON feed".
+
+on:
+  schedule:
+    - cron: '43 */2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: feed-shadow
+  cancel-in-progress: false
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # No Playwright here — the whole point: the feed needs no browser.
+
+      - name: Run shadow comparison
+        env:
+          WEBFLOW_API_TOKEN: ${{ secrets.WEBFLOW_API_TOKEN }}
+          WEBFLOW_SITE_ID: ${{ secrets.WEBFLOW_SITE_ID }}
+          WEBFLOW_COLLECTION_ID: ${{ secrets.WEBFLOW_COLLECTION_ID }}
+          WEBFLOW_BRAND_COLLECTION_ID: ${{ secrets.WEBFLOW_BRAND_COLLECTION_ID }}
+          WEBFLOW_COUNTRY_COLLECTION_ID: ${{ secrets.WEBFLOW_COUNTRY_COLLECTION_ID }}
+        run: node scripts/feed-shadow.js
+
+      - name: Upload parity report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: feed-parity-${{ github.run_id }}
+          path: feed-parity.json
+          retention-days: 14

@@ -175,6 +175,9 @@ Single GitHub repo `The-Uncoders/pageup-webflow-sync`, two branches:
 | `dashboard/index.html` | Dashboard UI |
 | `.github/workflows/sync-jobs.yml` | `workflow_dispatch`-only (scheduling via Cloudflare cron) |
 | `.github/workflows/sync-health.yml` | Watchdog: alerts + re-dispatches the sync if no run in 45 min (catches a dead Worker PAT) |
+| `.github/workflows/feed-shadow.yml` | Feed-migration shadow harness: read-only parity run every ~2 h, report as artifact |
+| `src/feed.js` | PageUp JSON feed adapter — feed entry → the scraper's jobDetail shape (the scraper's successor) |
+| `scripts/feed-shadow.js` | Parity comparator: feed-built fieldData vs live CMS (no writes) |
 | `worker/sync-trigger.js` + `worker/wrangler.jsonc` | `fctg-sync-trigger` Worker: dashboard-trigger proxy + the Cloudflare Cron Triggers that schedule the sync |
 | `region-map.json` | Country → region display name |
 | `location-to-country.json` | Location fragment → country fallback |
@@ -966,6 +969,12 @@ Phil (PageUp) supplied the official feeds for the FCTG external careers source, 
 | Multi-location | `LocationList` | structured array of `Region\|City` pairs — *better* than the comma-string we parse today |
 | Card summary | `Summary` | 340/340 populated |
 | (bonus) | `ApplyUrl`, `EmployeeReferralUrl`, `Salary`, `OpeningDateUtc` | referral URL per job directly — feeds the `/job/{id}` redirect work |
+
+**Shadow harness (built 2026-07-11).** `scripts/feed-shadow.js` (npm run feed-shadow; CI: `.github/workflows/feed-shadow.yml`, every ~2 h best-effort + manual dispatch) — READ-ONLY parity instrumentation, no Webflow writes, no data-branch pushes. It converts the feed via `src/feed.js` into the scraper's jobDetail shape, runs the EXACT production transform (`buildCmsFieldData` + live reference maps), and diffs the result against the live CMS items. Report: `feed-parity.json` (workflow artifact, 14-day retention).
+
+**First results (2026-07-11): 338/340 jobs byte-perfect on every hard-compared field.** The two exceptions, both understood: (1) job 531067's video is embedded outside the description on the rendered page, so the feed can't see it — at cutover existing CMS videos persist (the pipeline omits `video` when it has none, and Webflow PATCH leaves omitted fields untouched); (2) job 528682 carries a stale Country ref in the CMS — re-scraping its detail page yields the same no-country inputs the feed gives, i.e. CMS drift, not a feed gap. Advisory (expected-noise) classes, excluded from hard comparison: `description` (Webflow normalises stored HTML — compared as collapsed text instead: 0 diffs), `slug` (production never re-sends slug on updates), `refer-url` sHome tail (production appends an `&sHome=` return-param built from the job's Cloud Careers URL; PageUp's slug isn't derivable from the title — 12/340 differ — so at cutover either drop sHome or repoint it at `fctgcareers.com`; the RSS `<link>` could supply PageUp slugs if needed). Occasional `banner-image-link` diffs are HEAD-probe flakiness (same probe production runs), not data differences.
+
+**Cutover criteria:** ~a week of parity reports staying clean AND the latency question answered — `onlyInCms` entries persisting across consecutive reports would mean the feed lags the listing (blocker); `onlyInFeed` entries mean the feed is ahead (fine). Then a `SYNC_SOURCE` flag cutover with the scraper retained as instant rollback (drops Playwright + browser installs from the routine path; every 10-min tick carries full detail, so edits propagate in ~10 min and the 4-hourly force-fulls become redundant).
 
 **Not yet verified:** feed update latency (how fast a new/edited job lands in jobs.json vs the listing page) — measured empirically during the shadow phase. *Last verified: 2026-07-11.*
 

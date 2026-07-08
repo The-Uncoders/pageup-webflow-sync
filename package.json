@@ -6,7 +6,8 @@
   "scripts": {
     "sync": "node src/sync.js",
     "dashboard": "node dashboard/server.js",
-    "test-scraper": "node src/test-scraper.js"
+    "test-scraper": "node src/test-scraper.js",
+    "feed-shadow": "node scripts/feed-shadow.js"
   },
   "keywords": [],
   "author": "",
