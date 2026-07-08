@@ -59,7 +59,21 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        # Retried because `--with-deps` runs apt against the runner image's
+        # package mirrors, which fail transiently (2026-07-07: three runs died
+        # on packages.microsoft.com serving invalid InRelease data). Retries
+        # absorb blips; a mirror outage longer than ~2 min is covered by the
+        # next 10-min tick.
+        run: |
+          for attempt in 1 2 3; do
+            if npx playwright install --with-deps chromium; then
+              exit 0
+            fi
+            echo "Playwright install failed (attempt ${attempt} of 3)."
+            [ "$attempt" -lt 3 ] && sleep $((attempt * 20))
+          done
+          echo "::error::Playwright install failed after 3 attempts."
+          exit 1
 
       - name: Seed local sync-log + sync-hashes from data branch
         # The main branch doesn't track data/sync-log.json or
@@ -94,15 +108,26 @@ jobs:
 
       - name: Publish artifacts to data branch
         if: success()
+        # Retried because the push can be rejected by transient GitHub-side
+        # errors (2026-07-07: `remote: fatal error in commit_refs`). Each
+        # attempt rebuilds the worktree from a fresh fetch so the amend +
+        # force-with-lease always applies against the current remote state.
+        # The attempt body runs as its own script (fresh `bash` invocation)
+        # so its `set -e` isn't neutered by running in an `if` context.
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          cat > /tmp/publish-data.sh <<'EOF'
+          set -euo pipefail
+
           # JSON artifacts live on a dedicated `data` branch so main's history
           # stays clean. The data branch is amended in-place every run rather
           # than growing with one commit per sync.
           git fetch origin data
+          git worktree remove --force /tmp/data-branch 2>/dev/null || true
+          git worktree prune || true
           git worktree add /tmp/data-branch origin/data
 
           # Copy freshly generated artifacts from the main working tree.
@@ -140,6 +165,17 @@ jobs:
             git commit -m "chore: regenerate job data"
             git push origin HEAD:data
           fi
+          EOF
+
+          for attempt in 1 2 3; do
+            if bash /tmp/publish-data.sh; then
+              exit 0
+            fi
+            echo "Publish attempt ${attempt} of 3 failed."
+            [ "$attempt" -lt 3 ] && sleep $((attempt * 15))
+          done
+          echo "::error::Publishing artifacts to the data branch failed after 3 attempts."
+          exit 1
 
       - name: Purge jsDelivr CDN cache
         if: success()
