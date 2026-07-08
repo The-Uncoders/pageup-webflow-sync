@@ -944,6 +944,31 @@ PageUp lists every location a job covers in the listing column and detail page a
 
 ---
 
+## PageUp JSON feed (received 2026-07-11) — the scraper's designated successor
+
+Phil (PageUp) supplied the official feeds for the FCTG external careers source, and confirmed they **survive the Cloud Careers decommission** ("some work required to keep them active however it's all on the backend infrastructure side… no changes expected to how you'd consume the feeds" — not a hard guarantee, but the stated intention):
+
+- **JSON:** `https://careers.pageuppeople.com/889/cw/en/jobs.json`
+- **RSS:** `https://careers.pageuppeople.com/889/cw/en/rss`
+- Contacts: Darren Quirke (resident feed expert, covering Phil's leave), Timothy Wood.
+- PageUp also offers a **"Generic Feed" out of Search & Apply (Clinch)** — Phil activated an example on the Flight Centre *Alumni* site (different job source). Possibly the long-term format if FCTG external moves to Clinch — keep the sync's source layer adapter-shaped.
+
+**Field audit (2026-07-11, feed vs our scraper requirements):** 340 jobs — **exact ID match with the live pipeline, zero drift**. Plain `curl`, no WAF challenge, ~4.6 MB. Per job:
+
+| We need | Feed field | Notes |
+|---|---|---|
+| Full description | `Overview` | Full rich HTML (min 2.5k, median 9.2k chars, none empty) — includes the banner `<img>` and the `#LI-…` brand hashtags, so `cleanDescription()`, `pickLiveBanner()`-style validation and hashtag extraction all port over |
+| Banner image | inside `Overview` | 337/340 have `publicstorage` assets (the 3 without = default-banner fallback, as today) |
+| Category | `Categories` / `CategoryList` | direct |
+| Closing date | `ClosingDateUtc` | .NET `/Date(ms)/` format, 67/340 populated — parse trivially |
+| Work type | `WorkType` / `WorkTypeList` | direct |
+| Brand | ⚠ NOT `Brand` | feed `Brand` is the *division* (Leisure/Corporate/Business Services/Supply/GCC), not our consumer-brand CMS taxonomy (Flight Centre, FCM, …) — keep `resolveBrand()` hashtag/title resolution, fed from `Overview` |
+| Multi-location | `LocationList` | structured array of `Region\|City` pairs — *better* than the comma-string we parse today |
+| Card summary | `Summary` | 340/340 populated |
+| (bonus) | `ApplyUrl`, `EmployeeReferralUrl`, `Salary`, `OpeningDateUtc` | referral URL per job directly — feeds the `/job/{id}` redirect work |
+
+**Not yet verified:** feed update latency (how fast a new/edited job lands in jobs.json vs the listing page) — measured empirically during the shadow phase. *Last verified: 2026-07-11.*
+
 ## Key change history
 
 ### v4 polish: SHA-pinning loaders + filter-panel fixes (May 12, 2026 PM)
