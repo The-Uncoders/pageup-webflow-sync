@@ -189,13 +189,32 @@ function feedJobToDetail(job) {
 }
 
 /**
- * Fetch the feed and return fully-built jobDetails (banners HEAD-validated
- * via pickLiveBanner, batched). Mirrors scrapeAllJobs()'s result contract:
- * { details, errors }.
+ * Convert one feed entry into the listing-row shape fetchAllJobIds()
+ * returns ({ jobId, slug, title, location, brand, url }). This is what the
+ * sync's diff layer consumes; in feed mode `slug`/`url` are unused (no
+ * detail page to fetch) and left empty.
  */
-async function buildFeedJobDetails() {
-  const feedJobs = await fetchFeedJobs();
-  const details = [];
+function feedJobToListing(job) {
+  return {
+    jobId: String(job.Id),
+    slug: '',
+    title: decodeText(job.Title),
+    location: (job.LocationList || [])
+      .map(p => decodeText(String(p).split('|').pop()))
+      .filter(Boolean)
+      .join(', '),
+    brand: decodeText(job.Department),
+    url: '',
+  };
+}
+
+/**
+ * Build fully-validated jobDetails for a set of raw feed entries (banners
+ * HEAD-probed via pickLiveBanner, batched). Mirrors scrapeAllJobs()'s
+ * result contract: { results, errors }.
+ */
+async function buildDetailsForFeedJobs(feedJobs) {
+  const results = [];
   const errors = [];
 
   for (let i = 0; i < feedJobs.length; i += CONCURRENCY) {
@@ -207,7 +226,7 @@ async function buildFeedJobDetails() {
     }));
     for (let j = 0; j < settled.length; j++) {
       if (settled[j].status === 'fulfilled') {
-        details.push(settled[j].value);
+        results.push(settled[j].value);
       } else {
         errors.push({ jobId: String(batch[j].Id), error: String(settled[j].reason) });
       }
@@ -218,13 +237,25 @@ async function buildFeedJobDetails() {
     console.warn(`[feed] ${errors.length} job(s) failed to convert:`,
       errors.map(e => e.jobId).join(', '));
   }
-  return { details, errors };
+  return { results, errors };
+}
+
+/**
+ * Fetch the feed and build details for every job. Kept for the shadow
+ * harness; returns { details, errors }.
+ */
+async function buildFeedJobDetails() {
+  const feedJobs = await fetchFeedJobs();
+  const { results, errors } = await buildDetailsForFeedJobs(feedJobs);
+  return { details: results, errors };
 }
 
 module.exports = {
   FEED_URL,
   fetchFeedJobs,
   feedJobToDetail,
+  feedJobToListing,
+  buildDetailsForFeedJobs,
   buildFeedJobDetails,
   formatClosingDate,
 };

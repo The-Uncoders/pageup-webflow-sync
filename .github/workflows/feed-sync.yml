@@ -1,0 +1,71 @@
+name: Feed sync (Current Jobs JSON demo)
+
+# Runs the sync pipeline in FEED mode (SYNC_SOURCE=feed — src/feed.js, one
+# HTTP GET of PageUp's official jobs.json instead of the Playwright scrape)
+# against the PARALLEL demo collection "Current Jobs (JSON)". Production's
+# Current Jobs collection and sync-jobs.yml are untouched: this workflow
+# writes to a different WEBFLOW_COLLECTION_ID and publishes no data-branch
+# artifacts. It exists so the client can watch feed-sourced data propagate
+# on the password-protected /internal/jobs-json pages while the shadow
+# harness (feed-shadow.yml) keeps proving parity.
+#
+# Scheduling: dispatched every 10 min (offset :05 from production ticks to
+# avoid publish collisions) by the fctg-sync-trigger Cloudflare Worker —
+# same reliable scheduler as production. No GitHub `schedule:` cron.
+#
+# Change detection: the content-hash gate needs last-run hashes. This demo
+# workflow persists data/sync-hashes.json via actions/cache (NOT the data
+# branch — that file belongs to production). A cache miss just means one
+# run re-PATCHes everything; harmless.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: feed-sync
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # No Playwright — feed mode never launches a browser.
+
+      - name: Restore last run's content hashes
+        uses: actions/cache@v4
+        with:
+          path: data/sync-hashes.json
+          key: feed-sync-hashes-${{ github.run_id }}
+          restore-keys: |
+            feed-sync-hashes-
+
+      - name: Run feed sync against Current Jobs (JSON)
+        env:
+          WEBFLOW_API_TOKEN: ${{ secrets.WEBFLOW_API_TOKEN }}
+          WEBFLOW_SITE_ID: ${{ secrets.WEBFLOW_SITE_ID }}
+          # The parallel demo collection — NOT the production Current Jobs.
+          WEBFLOW_COLLECTION_ID: 6a4ec8c5386851fb85672c4a
+          WEBFLOW_BRAND_COLLECTION_ID: ${{ secrets.WEBFLOW_BRAND_COLLECTION_ID }}
+          WEBFLOW_COUNTRY_COLLECTION_ID: ${{ secrets.WEBFLOW_COUNTRY_COLLECTION_ID }}
+          SYNC_SOURCE: feed
+        run: npm run sync

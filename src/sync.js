@@ -5,6 +5,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { parse: parseHtml } = require('node-html-parser');
 const { initBrowser, closeBrowser, fetchAllJobIds, scrapeAllJobs } = require('./scraper');
+const { fetchFeedJobs, feedJobToListing, buildDetailsForFeedJobs } = require('./feed');
 const { WebflowClient } = require('./webflow');
 const { SyncLogger } = require('./sync-logger');
 const locationToCountry = require('../location-to-country.json');
@@ -23,6 +24,41 @@ const FORCE_FULL = process.env.SYNC_FORCE_FULL === 'true';
 // "Force re-sync this job" button. The full pipeline (cron + force-full)
 // is unaffected when this env var is empty.
 const SYNC_JOB_ID = process.env.SYNC_JOB_ID || '';
+
+// ── Source mode ──
+// SYNC_SOURCE=feed swaps the PageUp input from the Playwright scraper to
+// the official jobs.json feed (see src/feed.js): one HTTP GET carries every
+// job's full detail, so every run behaves like a force-full at fast-sync
+// cost — the content-hash gate does the diffing. No browser is launched in
+// feed mode. Default 'scrape' leaves every existing trigger path untouched.
+// Single-job mode (SYNC_JOB_ID) is scrape-only and ignores this flag.
+const SYNC_SOURCE = process.env.SYNC_SOURCE === 'feed' ? 'feed' : 'scrape';
+
+// Raw feed entries from the current run's fetch, keyed by jobId — lets
+// fetchSourceDetails() build details without re-fetching the feed.
+let _feedEntriesByJobId = null;
+
+/** Source-agnostic listing fetch: feed entries or the scraped listing. */
+async function fetchSourceListing() {
+  if (SYNC_SOURCE === 'feed') {
+    const feedJobs = await fetchFeedJobs();
+    _feedEntriesByJobId = new Map(feedJobs.map(j => [String(j.Id), j]));
+    return feedJobs.map(feedJobToListing);
+  }
+  await initBrowser();
+  return fetchAllJobIds();
+}
+
+/** Source-agnostic detail fetch for a set of listing rows. */
+async function fetchSourceDetails(jobs) {
+  if (SYNC_SOURCE === 'feed') {
+    const entries = jobs
+      .map(j => _feedEntriesByJobId && _feedEntriesByJobId.get(j.jobId))
+      .filter(Boolean);
+    return buildDetailsForFeedJobs(entries);
+  }
+  return scrapeAllJobs(jobs);
+}
 
 // ── Content hash map ──
 // Per-job SHA-256 fingerprint of the cleaned CMS fieldData we'd write.
@@ -789,7 +825,9 @@ async function runSync() {
   logger.start();
   console.log('=== PageUp → Webflow Job Sync ===');
   console.log(`Started at: ${new Date().toISOString()}`);
-  console.log(`Mode: ${FORCE_FULL ? 'FORCE FULL (every existing job re-scraped)' : 'fast-sync (listing-level diff)'}`);
+  console.log(`Mode: ${SYNC_SOURCE === 'feed'
+    ? 'FEED (jobs.json — full detail every run, hash-gated)'
+    : (FORCE_FULL ? 'FORCE FULL (every existing job re-scraped)' : 'fast-sync (listing-level diff)')}`);
 
   if (!WEBFLOW_API_TOKEN) {
     throw new Error('WEBFLOW_API_TOKEN environment variable is required');
@@ -804,9 +842,8 @@ async function runSync() {
   const hashesBefore = Object.keys(hashes).length;
   console.log(`[sync] Loaded ${hashesBefore} stored content hashes.`);
 
-  // Step 1: Initialize browser and fetch all job IDs
-  await initBrowser();
-  const pageupJobs = await fetchAllJobIds();
+  // Step 1: Fetch all jobs from the source (feed GET, or browser + listing scrape)
+  const pageupJobs = await fetchSourceListing();
   logger.recordPageupScrape(pageupJobs.length);
 
   // SAFETY GUARD: Abort if PageUp returns 0 jobs to prevent catastrophic deletion
@@ -870,8 +907,8 @@ async function runSync() {
 
   // Step 7: Scrape and create new jobs
   if (newJobs.length > 0) {
-    console.log(`\n[sync] Scraping ${newJobs.length} new job detail pages...`);
-    const { results: newDetails } = await scrapeAllJobs(newJobs);
+    console.log(`\n[sync] Fetching ${newJobs.length} new job details...`);
+    const { results: newDetails } = await fetchSourceDetails(newJobs);
 
     // Build fieldData for each new job, keeping track of the content hash
     // keyed by the PageUp job-id so we can record hashes for successfully-
@@ -913,8 +950,11 @@ async function runSync() {
     const jobsNeedingRescrape = [];
     let listingSkippedCount = 0;
 
-    if (FORCE_FULL) {
-      // Bypass the listing diff entirely — every existing job gets scraped.
+    if (FORCE_FULL || SYNC_SOURCE === 'feed') {
+      // Bypass the listing diff entirely. Force-full: every existing job
+      // gets re-scraped. Feed mode: details are already in hand (one GET
+      // carried everything), so every job is hash-checked every run — this
+      // is the feed's whole advantage, detail edits propagate every tick.
       jobsNeedingRescrape.push(...existingJobs);
     } else {
       for (const pageupJob of existingJobs) {
@@ -936,7 +976,7 @@ async function runSync() {
     );
 
     if (jobsNeedingRescrape.length > 0) {
-      const { results: existingDetails } = await scrapeAllJobs(jobsNeedingRescrape);
+      const { results: existingDetails } = await fetchSourceDetails(jobsNeedingRescrape);
 
       const itemsToUpdate = [];
       // Map cmsItemId → { jobId, newHash } for items we're about to PATCH.

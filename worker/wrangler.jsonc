@@ -30,8 +30,10 @@
     // force-full rescrape every 4 h (was daily 02:00 — client asked for faster
     // propagation of edits to existing jobs, which only a detail-page rescrape
     // catches; worst case drops 24 h → 4 h). Repo is public, so Actions are free.
-    // If changing the force-full expression, update the matching string in
+    // The third cron (offset :05) dispatches feed-sync.yml — the parallel
+    // Current Jobs (JSON) demo collection fed from PageUp's jobs.json.
+    // If changing any expression, update the matching strings in
     // sync-trigger.js scheduled() — it compares event.cron verbatim.
-    "crons": ["*/10 * * * *", "0 2,6,10,14,18,22 * * *"]
+    "crons": ["*/10 * * * *", "0 2,6,10,14,18,22 * * *", "5-55/10 * * * *"]
   }
 }

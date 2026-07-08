@@ -41,15 +41,15 @@
  */
 
 /**
- * POST a workflow_dispatch to the sync-jobs.yml workflow.
- * `inputs` is optional — omit for a normal fast-sync, or pass
- * { force_full: 'true' } / { job_id: '123' } for the other modes.
- * Returns the raw fetch Response (204 = accepted).
+ * POST a workflow_dispatch to a workflow in the sync repo (default:
+ * sync-jobs.yml — the production sync). `inputs` is optional — omit for a
+ * normal fast-sync, or pass { force_full: 'true' } / { job_id: '123' } for
+ * the other modes. Returns the raw fetch Response (204 = accepted).
  */
-async function dispatchWorkflow(env, inputs) {
+async function dispatchWorkflow(env, inputs, workflowFile = 'sync-jobs.yml') {
   const body = inputs ? { ref: 'main', inputs } : { ref: 'main' };
   return fetch(
-    'https://api.github.com/repos/The-Uncoders/pageup-webflow-sync/actions/workflows/sync-jobs.yml/dispatches',
+    `https://api.github.com/repos/The-Uncoders/pageup-webflow-sync/actions/workflows/${workflowFile}/dispatches`,
     {
       method: 'POST',
       headers: {
@@ -141,18 +141,28 @@ export default {
    * drops most of them under load. `event.cron` is the matched expression.
    */
   async scheduled(event, env, ctx) {
-    // The every-4-hours tick re-scrapes every job's detail page to catch
-    // edits that don't surface on the listing (category, banner, closing
-    // date, description) — fast-syncs only diff title/location, so detail
-    // edits propagate only via these force-fulls (worst case 4 h). Every
-    // other tick is a normal listing-level fast-sync. The string must match
-    // the force-full expression in wrangler.jsonc verbatim.
-    const inputs = event.cron === '0 2,6,10,14,18,22 * * *' ? { force_full: 'true' } : undefined;
+    // Three crons, matched by event.cron VERBATIM against the expressions
+    // in wrangler.jsonc (update both together):
+    //   */10        → production fast-sync (listing-level diff).
+    //   0 2,6,…     → production force-full: re-scrapes every job's detail
+    //                 page to catch edits that don't surface on the listing
+    //                 (category, banner, closing date, description).
+    //   5-55/10     → feed-sync demo (feed-sync.yml): the parallel
+    //                 Current Jobs (JSON) collection, fed from PageUp's
+    //                 official jobs.json. Offset :05 from production ticks
+    //                 so the two pipelines don't publish simultaneously.
+    let workflowFile = 'sync-jobs.yml';
+    let inputs;
+    if (event.cron === '0 2,6,10,14,18,22 * * *') {
+      inputs = { force_full: 'true' };
+    } else if (event.cron === '5-55/10 * * * *') {
+      workflowFile = 'feed-sync.yml';
+    }
     ctx.waitUntil(
-      dispatchWorkflow(env, inputs).then(async (res) => {
+      dispatchWorkflow(env, inputs, workflowFile).then(async (res) => {
         if (res.status !== 204) {
           const detail = await res.text().catch(() => '');
-          console.error(`[scheduled] dispatch failed: ${res.status} ${detail.slice(0, 200)}`);
+          console.error(`[scheduled] dispatch failed (${workflowFile}): ${res.status} ${detail.slice(0, 200)}`);
         }
       })
     );
