@@ -27,7 +27,11 @@
   "preview_urls": false,
   "triggers": {
     // Fast-sync every 10 min (worst-case visibility ≈ 10 min cron + ~2 min run);
-    // daily 02:00 UTC force-full rescrape. Repo is public, so Actions are free.
-    "crons": ["*/10 * * * *", "0 2 * * *"]
+    // force-full rescrape every 4 h (was daily 02:00 — client asked for faster
+    // propagation of edits to existing jobs, which only a detail-page rescrape
+    // catches; worst case drops 24 h → 4 h). Repo is public, so Actions are free.
+    // If changing the force-full expression, update the matching string in
+    // sync-trigger.js scheduled() — it compares event.cron verbatim.
+    "crons": ["*/10 * * * *", "0 2,6,10,14,18,22 * * *"]
   }
 }

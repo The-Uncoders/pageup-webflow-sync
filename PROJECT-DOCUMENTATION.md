@@ -577,7 +577,7 @@ Fast-sync only looks at the listing page (title + location) to decide which jobs
 
 | When | How | Propagation delay |
 |---|---|---|
-| Daily 02:00 UTC | `0 2 * * *` Cloudflare cron on `fctg-sync-trigger` → `workflow_dispatch` with `force_full=true` | Worst case 24 hours |
+| Every 4 h (02,06,10,14,18,22 UTC) | `0 2,6,10,14,18,22 * * *` Cloudflare cron on `fctg-sync-trigger` → `workflow_dispatch` with `force_full=true` | Worst case 4 hours |
 | On demand | Dashboard "Force Full Rescrape" button → Cloudflare Worker → `workflow_dispatch` with `force_full=true` input | Immediate (run takes ~10–15 min) |
 | Local | `SYNC_FORCE_FULL=true npm run sync` | Immediate |
 
@@ -635,7 +635,7 @@ Both preserve the safety rails: backup before writes, `--restore` for rollback.
 
 `.github/workflows/sync-jobs.yml`:
 
-- **Scheduling:** driven externally by the `fctg-sync-trigger` Cloudflare Worker's Cron Triggers (every 10 min fast-sync + daily 02:00 UTC force-full), which `workflow_dispatch` into this workflow. The workflow has **no `schedule:` crons of its own** — see the "Scheduling moved to Cloudflare cron" section below for why.
+- **Scheduling:** driven externally by the `fctg-sync-trigger` Cloudflare Worker's Cron Triggers (every 10 min fast-sync + every-4-hours force-full at 02,06,10,14,18,22 UTC), which `workflow_dispatch` into this workflow. The workflow has **no `schedule:` crons of its own** — see the "Scheduling moved to Cloudflare cron" section below for why.
 - **Triggers:** `workflow_dispatch` only — with `force_full` boolean input (force-full mode) or `job_id` string input (single-job mode). The Cloudflare cron, the dashboard buttons, and manual API dispatch all use this one entry point.
 - **Concurrency:** `group: sync-jobs-<job_id|main>`, `cancel-in-progress: false` — routine runs (fast-sync + daily force-full) serialize on a shared `…-main` group so they can't race on the data-branch force-push; each single-job dispatch gets its own per-job group so a recruiter's "force re-sync this job" is never queued behind the cadence.
 - **Runtime:** Node 22, Ubuntu
@@ -659,6 +659,8 @@ Both preserve the safety rails: backup before writes, `--restore` for rollback.
 
 **Fix (deployed June 2026).** Scheduling now runs on **Cloudflare Cron Triggers**, which fire on time. The existing `fctg-sync-trigger` Worker gained a `scheduled()` handler (`worker/sync-trigger.js`) and two crons in `worker/wrangler.jsonc`: every-10-min fast-sync + `0 2 * * *` force-full. Each tick `workflow_dispatch`es this workflow. The GitHub `schedule:` crons were **removed**. Net effect: worst-case visibility dropped from 3+ h to **~12 min** (10-min cron + ~2-min run), typical ~6 min. Free — the repo is public, so Actions minutes are unlimited.
 
+**Force-full cadence raised to every 4 h (2026-07-08).** The client asked for edits to *existing* jobs to propagate faster. Fast-syncs only diff listing-level fields (title/location — see `listingFieldsChanged()` in `src/sync.js`), so detail-page edits (description, category, banner, closing date, work type, brand) only propagate via force-fulls: at daily cadence that meant up to 24 h. The Worker's force-full cron is now `0 2,6,10,14,18,22 * * *` (every 4 h), dropping worst-case propagation for detail edits to **~4 h**. Costs: ~6× more full detail scrapes/day (WAF exposure — watch the failure rate), no extra Webflow writes (the content-hash gate skips unchanged jobs), Actions remain free. The truly instant path for an urgent edit remains the dashboard's per-job "Force re-sync this job" button (~30–60 s). The strategic fix stays the PageUp JSON feed migration (pending Phil) — full-field diffing every 10 min with no scraping at all.
+
 **Verified (2026-06-24, post-deploy).** Over the first 15.7 h of Cloudflare-driven scheduling — 96 consecutive `workflow_dispatch` runs, 2026-06-23 23:10 → 2026-06-24 14:50 UTC — every inter-run gap was exactly **10.0 min** (median = max = 10.0; zero gaps > 15 min): 94 `success`, 1 live, 1 benign cancellation. Zero GitHub `schedule:` events, confirming the crons are fully off GitHub's scheduler. The daily **02:00 UTC force-full fired and succeeded** (`SYNC_FORCE_FULL: true` → re-scraped all 359 jobs, ~12 min). The one cancellation was the 02:00 fast-sync colliding with the force-full: because a force-full runs ~12 min (longer than one 10-min tick), the fast-sync queued behind it on the shared `…-main` group is superseded by the next tick — the documented serialize-don't-race behaviour, no data lost. Contrast: the removed `schedule:` cron had averaged ~10 runs/day with multi-hour gaps. *Last verified: 2026-06-24.*
 
 > Deploy the Worker (and its crons) with `op run -- npx wrangler@latest deploy -c worker/wrangler.jsonc` (see that file's header for the full env). Secrets (`SYNC_KEY`, `GITHUB_TOKEN`) persist across deploys. After deploying, confirm a `workflow_dispatch` run appears within ~10 min and that `wrangler secret list` still shows both secrets.
@@ -670,7 +672,7 @@ Both preserve the safety rails: backup before writes, `--restore` for rollback.
 **Incident (2026-06-29 → 2026-07-01).** The Worker's `GITHUB_TOKEN` (fine-grained PAT `pageup-webflow-sync` on the The-Uncoders account) was **regenerated** from GitHub's expiry-warning email on 2026-06-29 07:45 UTC. Regenerating a PAT **invalidates the old value immediately** — it does not wait for the expiry date. The new value was saved to 1Password (item "GitHub Fine-Grained Access Token") but not put onto the Worker, so from 07:45 the Cloudflare cron kept firing while every `workflow_dispatch` 401'd: **zero syncs for ~2.5 days**, surfaced by the client noticing missing roles (531259, 531342, 531523). Fixed 2026-07-01 by piping the 1Password value into `wrangler secret put GITHUB_TOKEN -c worker/wrangler.jsonc`; cadence confirmed restored the same hour.
 
 **PAT lifecycle protocol (always honor):**
-1. The current PAT **expires 2026-07-29** (GitHub reuses a 30-day lifetime on regeneration). Before expiry, regenerate it in GitHub → *Settings → Developer settings → Fine-grained tokens → `pageup-webflow-sync`* and pick a **custom ~1-year expiry** to get off the 30-day treadmill. *Last verified: 2026-07-01.*
+1. The current PAT has **no expiration** (regenerated 2026-07-08 with GitHub's no-expiration option — confirmed by the absent `github-authentication-token-expiration` response header). There is no expiry treadmill anymore; this protocol applies only if the token is ever rotated or revoked. *Last verified: 2026-07-08.*
 2. **Regenerating and updating the Worker are ONE operation.** Immediately: save the new value to 1Password ("GitHub Fine-Grained Access Token", field `token`), then `op read "op://AI/GitHub Fine-Grained Access Token/token" | npx wrangler@latest secret put GITHUB_TOKEN -c worker/wrangler.jsonc` (env per wrangler.jsonc header).
 3. Verify: a `workflow_dispatch` run appears on sync-jobs.yml within ~10 min.
 
@@ -861,7 +863,7 @@ Shows local sync-log plus CI sync-log (fetched from `@data/sync-log.json`), with
   - `force_full` (optional) — when `true`, sets the `force_full` workflow input so the sync bypasses the listing-level fast-diff and rescrapes every job. Used by the dashboard's "Force Full Rescrape" button.
   - `job_id` (optional) — when set to a numeric PageUp job ID, sets the `job_id` workflow input so the sync runs in single-job mode (only that one job is reconciled, ~30–60s). Used by the dashboard's "Force re-sync this job" per-row button. Mutually exclusive with `force_full` — Worker rejects non-numeric values with HTTP 400 and prefers `job_id` when both are sent.
 - **Secrets (Cloudflare-managed, not in code):**
-  - `GITHUB_TOKEN` — fine-grained PAT with Actions write scope for `The-Uncoders/pageup-webflow-sync`. Value mirrored in 1Password (AI vault, "GitHub Fine-Grained Access Token"). **Expires 2026-07-29** — regenerating it invalidates the old value immediately, so always follow the PAT lifecycle protocol in § "PAT-regeneration outage + watchdog". *Last verified: 2026-07-01.*
+  - `GITHUB_TOKEN` — fine-grained PAT with Actions write scope for `The-Uncoders/pageup-webflow-sync`. Value mirrored in 1Password (AI vault, "GitHub Fine-Grained Access Token"). **No expiration** (regenerated 2026-07-08) — if it is ever rotated, regenerating invalidates the old value immediately, so always follow the PAT lifecycle protocol in § "PAT-regeneration outage + watchdog". *Last verified: 2026-07-08.*
   - `SYNC_KEY` — shared gate for dashboard auth
 - **Cloudflare account:** `Hello@uncoders.co` (ID `4a6fba0403941f5658f7287a2496ac8c`)
 - **Deploy:** wrangler-managed — `op run -- npx wrangler@latest deploy -c worker/wrangler.jsonc` (full env in that file's header). Code + cron triggers deploy together; secrets persist across deploys. See `worker/README.md` for the smoke-test curls.
@@ -1043,7 +1045,7 @@ Major rewrite of `jobs-filter.js` (v3 → v4) plus a small sync revert. Driven b
 | Secret | Location | Used by |
 |---|---|---|
 | Webflow API token | GitHub Actions Secrets + local `.env` | Sync pipeline (CI + local) |
-| GitHub PAT (fine-grained) | Cloudflare Worker Secrets; mirrored in 1Password (AI vault, "GitHub Fine-Grained Access Token"). Expires 2026-07-29 — see § PAT-regeneration outage + watchdog | Sync trigger proxy |
+| GitHub PAT (fine-grained) | Cloudflare Worker Secrets; mirrored in 1Password (AI vault, "GitHub Fine-Grained Access Token"). No expiration (regenerated 2026-07-08) — see § PAT-regeneration outage + watchdog | Sync trigger proxy |
 | Sync trigger key | Cloudflare Worker Secrets + dashboard embed | Dashboard auth |
 
 No secrets are in source code. Local dev uses `.env` (gitignored). CI uses GitHub Secrets. The Worker uses encrypted Cloudflare env vars.

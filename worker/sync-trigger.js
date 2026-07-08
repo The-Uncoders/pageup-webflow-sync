@@ -16,7 +16,7 @@
  *                   drops under load (observed ~10 runs/day vs a 20-min
  *                   target, gaps up to 5 hours). Crons configured in this
  *                   Worker's wrangler.jsonc: an every-10-minutes fast-sync
- *                   (listing-level diff) plus a daily 02:00 UTC force-full
+ *                   (listing-level diff) plus an every-4-hours force-full
  *                   rescrape.
  *
  * Query params:
@@ -141,10 +141,13 @@ export default {
    * drops most of them under load. `event.cron` is the matched expression.
    */
   async scheduled(event, env, ctx) {
-    // The daily 02:00 UTC tick re-scrapes every job's detail page to catch
+    // The every-4-hours tick re-scrapes every job's detail page to catch
     // edits that don't surface on the listing (category, banner, closing
-    // date, description). Every other tick is a normal listing-level fast-sync.
-    const inputs = event.cron === '0 2 * * *' ? { force_full: 'true' } : undefined;
+    // date, description) — fast-syncs only diff title/location, so detail
+    // edits propagate only via these force-fulls (worst case 4 h). Every
+    // other tick is a normal listing-level fast-sync. The string must match
+    // the force-full expression in wrangler.jsonc verbatim.
+    const inputs = event.cron === '0 2,6,10,14,18,22 * * *' ? { force_full: 'true' } : undefined;
     ctx.waitUntil(
       dispatchWorkflow(env, inputs).then(async (res) => {
         if (res.status !== 204) {
