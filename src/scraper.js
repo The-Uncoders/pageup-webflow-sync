@@ -8,6 +8,24 @@ const DETAIL_URL = (id, slug) => `${BASE_URL}/cw/en/job/${id}/${slug}`;
 const CONCURRENCY = 3;
 const REQUEST_DELAY_MS = 500;
 
+// Third-party hosts the PageUp detail pages pull in that the scraper never
+// reads: video embeds, tag managers, analytics, fonts. Blocked at the browser
+// context once the WAF cookies are in place. The YouTube player in particular
+// kept pages from ever going network-quiet on the CI runners, which is what
+// made the 45 s navigation timeouts pile up from August 2026 and pushed the
+// force-full past the workflow's 30 minute limit. The video URL is read from
+// the iframe's src attribute in the HTML, so blocking the request does not
+// change what is stored.
+const BLOCKED_HOST_PATTERN = /(^|\.)(youtube\.com|youtube-nocookie\.com|ytimg\.com|googlevideo\.com|vimeo\.com|vimeocdn\.com|doubleclick\.net|googletagmanager\.com|google-analytics\.com|googleadservices\.com|googlesyndication\.com|facebook\.net|facebook\.com|typekit\.net|linkedin\.com|licdn\.com|hotjar\.com)$/i;
+
+function isBlockedHost(url) {
+  try {
+    return BLOCKED_HOST_PATTERN.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
+
 // Shared browser context for WAF-authenticated requests
 let _browserContext = null;
 let _browser = null;
@@ -47,6 +65,10 @@ async function initBrowser(maxAttempts = 3) {
 
       if (testOk) {
         await page.close();
+        // Only now: the WAF challenge above has to load whatever it needs.
+        await context.route('**/*', route => (
+          isBlockedHost(route.request().url()) ? route.abort() : route.continue()
+        ));
         _browser = browser;
         _browserContext = context;
         return;
@@ -80,11 +102,17 @@ async function closeBrowser() {
   }
 }
 
-// Use full page navigation to fetch content (WAF requires real browser navigation)
+// Use full page navigation to fetch content (WAF requires real browser navigation).
+// Wait for the DOM and the job container, not for the network to go quiet: the
+// job content is in the server HTML, and embedded players kept the network
+// busy indefinitely. If the WAF serves its interstitial, the container appears
+// after the challenge script reloads the page, so the selector wait covers
+// that too.
 async function fetchPage(url) {
   const page = await _browserContext.newPage();
   try {
-    await page.goto(url, { waitUntil: 'networkidle', timeout: 45000 });
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await page.waitForSelector('.fc-jobs, #job-content, #job-details', { state: 'attached', timeout: 20000 });
     const html = await page.content();
 
     if (html.includes('challenge.js') && html.length < 5000) {
