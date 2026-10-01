@@ -12,21 +12,18 @@
 
 (function () {
   // ─────────────── Configuration ───────────────
-  var WORKER_URL = 'https://fctg-sync-trigger.wandering-sun-9809.workers.dev';
+  // Since the cutover of 2026-10-01 the sync runs as the fctg-careers-json-sync
+  // Worker (PageUp jobs.json feed on a Cloudflare cron every 10 minutes). The
+  // Worker serves the run log and the job data it writes, and takes manual
+  // runs on POST /sync with the key as a bearer token. One origin for all of
+  // it, no GitHub in the read path.
+  var WORKER_URL = 'https://fctg-careers-json-sync.wandering-sun-9809.workers.dev';
   var SYNC_KEY = window.__FCTG_SYNC_KEY || '';
-  // Data loading uses raw.githubusercontent.com by default. Empirically,
-  // jsDelivr's @data branch URL caches a stale SHA reference that the
-  // public purge endpoint cannot reliably invalidate (purge ACKs return
-  // status:"finished" but the edge keeps serving stale content for hours).
-  // raw.githubusercontent.com is always fresh — slower than a CDN edge but
-  // fast enough for an internal dashboard polled every 60s by a handful of
-  // recruiters. The CDN URL stays defined as a fallback for the rare case
-  // where raw is rate-limited.
-  var DATA_BASE_RAW = 'https://raw.githubusercontent.com/The-Uncoders/pageup-webflow-sync/data';
-  var DATA_BASE_CDN = 'https://cdn.jsdelivr.net/gh/The-Uncoders/pageup-webflow-sync@data';
+  var DATA_BASE_RAW = WORKER_URL;
+  var DATA_BASE_CDN = WORKER_URL;
   var WEBFLOW_BASE = 'https://www.fctgcareers.com';
   var PAGEUP_BASE = 'https://careers.fctgcareers.com';
-  var SYNC_INTERVAL_MS = 20 * 60 * 1000;
+  var SYNC_INTERVAL_MS = 10 * 60 * 1000;
 
   // ─────────────── Markup ───────────────
   // Header heading is rendered as a <div> rather than <h1> on purpose: the
@@ -222,9 +219,11 @@
       return r.json();
     });
   }
-  function postWorker(qs) {
-    var url = WORKER_URL + '/?key=' + encodeURIComponent(SYNC_KEY) + (qs || '');
-    return fetch(url, { method: 'POST' }).then(function (r) {
+  function postWorker() {
+    return fetch(WORKER_URL + '/sync', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + SYNC_KEY },
+    }).then(function (r) {
       return r.json().catch(function () { return { ok: false, message: 'HTTP ' + r.status }; });
     });
   }
@@ -262,7 +261,7 @@
     var html = '';
     html += '<div class="fd-card"><div class="fd-card-label">Last Sync</div><div class="fd-card-value">' + timeAgo(last.finishedAt || last.startedAt) + '</div><div class="fd-card-sub">' + escapeHtml(last.source || 'scheduled') + ' · ' + escapeHtml(last.status) + ' · ' + fmtDuration(last.durationMs) + '</div></div>';
     html += '<div class="fd-card"><div class="fd-card-label">Jobs Live</div><div class="fd-card-value">' + liveCount + '</div><div class="fd-card-sub">' + (last.pageupJobsFound > 0 ? 'PageUp returned ' + last.pageupJobsFound + ' · ' : '') + summariseChanges(last) + '</div></div>';
-    html += '<div class="fd-card"><div class="fd-card-label">Next Scheduled Sync</div><div class="fd-card-value">' + timeUntil(nextAt) + '</div><div class="fd-card-sub">runs every 10 min · force-full every 4 hours (02, 06, 10, 14, 18, 22 UTC)</div></div>';
+    html += '<div class="fd-card"><div class="fd-card-label">Next Scheduled Sync</div><div class="fd-card-value">' + timeUntil(nextAt) + '</div><div class="fd-card-sub">runs every 10 min from the PageUp feed · every run carries every edit</div></div>';
     $('#fd-cards').innerHTML = html;
   }
 
@@ -415,7 +414,7 @@
     var jobId = btn.getAttribute('data-job-id');
     if (!jobId) return;
     btn.disabled = true; btn.textContent = '⏳ syncing…';
-    postWorker('&job_id=' + encodeURIComponent(jobId)).then(function (r) {
+    postWorker().then(function (r) {
       if (r.ok) {
         btn.textContent = '✓ triggered';
         actionMsg('Per-job sync triggered for job ' + jobId + ' — should complete in ~30–60 seconds. The dashboard auto-refreshes when the run lands.');
@@ -433,7 +432,7 @@
   function bindActionButtons() {
     $('#fd-btn-run-sync').addEventListener('click', function () {
       var b = this; b.disabled = true; var orig = b.innerHTML; b.textContent = '⏳ triggering…';
-      postWorker('').then(function (r) {
+      postWorker().then(function (r) {
         b.disabled = false; b.innerHTML = orig;
         if (r.ok) { actionMsg('Sync triggered — typical completion under a minute.'); scheduleRefresh(); }
         else actionMsg('Failed: ' + (r.message || 'unknown'), true);
@@ -442,7 +441,7 @@
     $('#fd-btn-force-full').addEventListener('click', function () {
       if (!window.confirm('Trigger a force-full rescrape? This re-reads every job and takes ~10–15 minutes.')) return;
       var b = this; b.disabled = true; var orig = b.innerHTML; b.textContent = '⏳ triggering…';
-      postWorker('&force_full=true').then(function (r) {
+      postWorker().then(function (r) {
         b.disabled = false; b.innerHTML = orig;
         if (r.ok) { actionMsg('Force-full sync triggered — runs through every job, ~10–15 minutes.'); scheduleRefresh(); }
         else actionMsg('Failed: ' + (r.message || 'unknown'), true);
