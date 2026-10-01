@@ -96,7 +96,7 @@
     '<div class="fd-tab-panel" data-tab="about">',
       '<div class="fd-section">',
         '<h2>👋 What this app does</h2>',
-        '<p>This app keeps the Flight Centre Careers site (<strong>fctgcareers.com</strong>) in sync with PageUp every 20 minutes. PageUp is the source of truth — recruiters add and edit roles there, and the app pulls those changes onto the public site automatically. It also <strong>cleans up</strong> some of PageUp\'s exported HTML so every job ad displays consistently in the same brand layout, no matter which recruiter set it up or how they styled it.</p>',
+        '<p>This app keeps the Flight Centre Careers site (<strong>fctgcareers.com</strong>) in sync with PageUp every 10 minutes. PageUp is the source of truth — recruiters add and edit roles there, and the app pulls those changes onto the public site automatically. It also <strong>cleans up</strong> some of PageUp\'s exported HTML so every job ad displays consistently in the same brand layout, no matter which recruiter set it up or how they styled it.</p>',
         '<p>This page lets you see what\'s been synced, spot any roles that look out of date, and check what cleanup rules are active.</p>',
       '</div>',
       '<div class="fd-section">',
@@ -135,8 +135,8 @@
         '<h2>📖 Glossary</h2>',
         '<dl class="fd-glossary">',
           '<dt>Sync</dt><dd>The end-to-end pipeline that reads PageUp, transforms the data, and writes it to the Webflow CMS.</dd>',
-          '<dt>Fast-sync</dt><dd>Default 20-minute run. Looks at the listing page only. New/removed jobs and renamed/moved jobs are picked up; banner-only or description-only edits are not (those need force-full or per-job).</dd>',
-          '<dt>Force-full</dt><dd>Re-reads every job\'s detail page from scratch. Catches edits that fast-sync misses. Runs daily at 02:00 UTC; can be triggered manually from the Sync Status tab.</dd>',
+          '<dt>Fast-sync</dt><dd>Default 10-minute run. Looks at the listing page only. New/removed jobs and renamed/moved jobs are picked up; banner-only or description-only edits are not (those need force-full or per-job).</dd>',
+          '<dt>Force-full</dt><dd>Re-reads every job\'s detail page from scratch. Catches edits that fast-sync misses. Runs every 4 hours (02, 06, 10, 14, 18, 22 UTC); can be triggered manually from the Sync Status tab.</dd>',
           '<dt>Per-job sync</dt><dd>New: re-reads just one job and updates the CMS for that role only. ~30–60 seconds. Triggered from the Force re-sync this job button in the Job Comparison tab.</dd>',
           '<dt>CMS</dt><dd>The Webflow Content Management System — the database that holds every job listed on the careers site.</dd>',
           '<dt>Hash gate</dt><dd>An efficiency check: we compute a fingerprint of each job\'s cleaned data and only update the CMS when the fingerprint changes, avoiding noisy "ghost edits" that don\'t actually affect content.</dd>',
@@ -146,8 +146,8 @@
       '<div class="fd-section">',
         '<h2>❓ Common scenarios</h2>',
         '<details class="fd-faq"><summary>I\'ve updated a banner in PageUp but the site still shows the old one</summary><p>Hit <strong>Force re-sync this job</strong> on the Job Comparison tab for that role — fastest fix, ~30–60 seconds. Or use <strong>Force Full Rescrape</strong> from the Sync Status tab to catch all banner/description edits at once.</p></details>',
-        '<details class="fd-faq"><summary>I\'ve added a category to a job and it\'s not showing up</summary><p>Same as banners — category-only edits need a force-full or per-job sync, not the regular 20-minute one.</p></details>',
-        '<details class="fd-faq"><summary>A job\'s still showing on the site but it\'s been deleted in PageUp</summary><p>Wait for the next regular sync (max 20 min). Removals are caught by the fast-sync because the listing page no longer contains the role.</p></details>',
+        '<details class="fd-faq"><summary>I\'ve added a category to a job and it\'s not showing up</summary><p>Same as banners — category-only edits need a force-full or per-job sync, not the regular 10-minute one.</p></details>',
+        '<details class="fd-faq"><summary>A job\'s still showing on the site but it\'s been deleted in PageUp</summary><p>Wait for the next regular sync (max 10 min). Removals are caught by the fast-sync because the listing page no longer contains the role.</p></details>',
         '<details class="fd-faq"><summary>The brand on the job card is wrong</summary><p>Check the brand field in PageUp first. If that\'s set correctly, check the hashtag at the bottom of the description (e.g. #FCB, #CTAU) — that\'s our fallback when the PageUp brand text doesn\'t match a Webflow Brand exactly. If neither matches, the job falls back to "Flight Centre Travel Group" as a default.</p></details>',
         '<details class="fd-faq"><summary>The site shows the backup banner even though I set up a banner in PageUp</summary><p>Try Force re-sync this job from the Job Comparison tab. If that doesn\'t fix it, the actual asset URL in PageUp may be revoked — re-uploading the banner in PageUp Sourcing will fix it.</p></details>',
       '</div>',
@@ -262,7 +262,7 @@
     var html = '';
     html += '<div class="fd-card"><div class="fd-card-label">Last Sync</div><div class="fd-card-value">' + timeAgo(last.finishedAt || last.startedAt) + '</div><div class="fd-card-sub">' + escapeHtml(last.source || 'scheduled') + ' · ' + escapeHtml(last.status) + ' · ' + fmtDuration(last.durationMs) + '</div></div>';
     html += '<div class="fd-card"><div class="fd-card-label">Jobs Live</div><div class="fd-card-value">' + liveCount + '</div><div class="fd-card-sub">' + (last.pageupJobsFound > 0 ? 'PageUp returned ' + last.pageupJobsFound + ' · ' : '') + summariseChanges(last) + '</div></div>';
-    html += '<div class="fd-card"><div class="fd-card-label">Next Scheduled Sync</div><div class="fd-card-value">' + timeUntil(nextAt) + '</div><div class="fd-card-sub">runs every 20 min · daily force-full at 02:00 UTC</div></div>';
+    html += '<div class="fd-card"><div class="fd-card-label">Next Scheduled Sync</div><div class="fd-card-value">' + timeUntil(nextAt) + '</div><div class="fd-card-sub">runs every 10 min · force-full every 4 hours (02, 06, 10, 14, 18, 22 UTC)</div></div>';
     $('#fd-cards').innerHTML = html;
   }
 
