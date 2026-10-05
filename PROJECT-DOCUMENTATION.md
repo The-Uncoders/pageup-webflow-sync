@@ -1,6 +1,16 @@
 # FCTG Careers — PageUp + Webflow Integration
 
-Automated pipeline that keeps Flight Centre Travel Group's careers site in sync with PageUp, their Applicant Tracking System. The public site (fctgcareers.com) is built in Webflow; PageUp is the source of truth for jobs; a GitHub Actions workflow reconciles the two every 10 minutes (scheduled by Cloudflare cron — see "Scheduling moved to Cloudflare cron").
+> **The sync pipeline in this repo is retired (2026-10-01).** Production jobs are now synced by the `fctg-careers-json-sync` Worker in `Singulo-One/fctg-careers-json-sync`, which reads PageUp's official jobs.json feed every 10 minutes and publishes CMS items directly. Its `PROJECT-DOCUMENTATION.md` is the pipeline reference, including what ran at the cutover.
+>
+> **What is still live here:** the sync dashboard (`dashboard/dashboard.{css,js}`, which now reads its data from that Worker and triggers runs through it) and the `/jobs` filter engine and front-end code. The sections on site architecture, Designer requirements, the filter engine and the dashboard remain current.
+>
+> **What is history:** everything about the Playwright scraper, fast-sync and force-full, the `fctg-sync-trigger` Worker and its PAT, the `sync-health.yml` watchdog, and the `data` branch (frozen at the cutover). `sync-jobs.yml` and `sync-health.yml` are disabled and the trigger Worker has no crons.
+>
+> **This repo is the rollback until 2026-10-15:** re-enable `sync-jobs.yml`, restore the two crons on `fctg-sync-trigger`, and point the json-sync Worker back at its demo collection. After that date the scraper leftovers are due for deletion.
+>
+> **One behaviour change to know:** the scraper published the whole Webflow site on every job change. The Worker publishes items only, so Designer changes now go live only when someone publishes the site.
+
+Automated pipeline that kept Flight Centre Travel Group's careers site in sync with PageUp, their Applicant Tracking System, until the 2026-10-01 cutover. The public site (fctgcareers.com) is built in Webflow; PageUp is the source of truth for jobs; a GitHub Actions workflow reconciled the two every 10 minutes.
 
 ---
 
